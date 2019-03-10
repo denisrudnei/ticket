@@ -1,0 +1,28 @@
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+
+const LogSchema = new Schema({
+  _id: Schema.Types.ObjectId,
+  user: {
+    type: Object,
+    ref: 'Analyst'
+  },
+  date: {
+    type: Date,
+    default: new Date()
+  },
+  oldStatus: {
+    type: Object,
+    ref: 'Status'
+  },
+  group: {
+    type: Object,
+    ref: 'Group'
+  },
+  newStatus: {
+    type: Object,
+    ref: 'Status'
+  }
+})
+
+module.exports = new mongoose.model('Log', LogSchema)
