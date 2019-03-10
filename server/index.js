@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
 mongoose.connect(
-  'mongodb://localhost:27017/test',
+  process.env.MONGODB_URI || 'mongodb://localhost/test',
   { useNewUrlParser: true }
 )
 
