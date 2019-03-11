@@ -61,6 +61,7 @@ export default {
   },
   created() {
     this.data = this.$router.currentRoute.query
+    this.search()
   },
   methods: {
     clean(obj) {

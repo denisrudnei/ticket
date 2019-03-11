@@ -29,7 +29,7 @@
                 required
                 box
                 label="Analista"
-                disabled
+                readonly
               />
             </nuxt-link>
           </v-flex>
@@ -45,7 +45,7 @@
               required
               box
               label="Categoria"
-              disabled
+              readonly
             />
           </v-flex>
           <v-flex
@@ -59,7 +59,7 @@
               :rules="[v => !!v || 'Necessário preeencher o grupo']"
               required
               box
-              disabled
+              readonly
               label="Grupo"
             />
           </v-flex>
@@ -74,7 +74,7 @@
               :rules="[v => !!v || 'Necessário preencher status']"
               required
               box
-              disabled
+              readonly
               label="Status"
             />
           </v-flex>
@@ -87,7 +87,7 @@
               :rules="[v => !!v || 'Necessário preencher o resumo']"
               required
               box
-              disabled
+              readonly
               label="Resumo"
             />
           </v-flex>
@@ -100,7 +100,7 @@
               :rules="[v => !!v || 'Necessário preeencher o corpo deo chamado']"
               required
               box
-              disabled
+              readonly
               label="Conteúdo"
             />
           </v-flex>

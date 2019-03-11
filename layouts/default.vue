@@ -131,8 +131,7 @@ export default {
       fixed: true,
       items: [
         // TODO
-        { icon: 'apps', title: 'Home', to: '/' },
-        { icon: 'bookmarks', title: 'Chamados', to: '/ticket' },
+        { icon: 'bookmarks', title: 'Chamados', to: '/' },
         { icon: 'layers', title: 'Categorias', to: '/category' },
         { icon: 'settings_applications', title: 'Configurações', to: '/config' }
       ],
