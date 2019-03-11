@@ -34,7 +34,7 @@
           >
             <v-autocomplete
               v-model="ticket.category"
-              :items="categories.map(c => { return { text: c.fullName, value: c } })"
+              :items="categories.filter(c => { return c.subs.length === 0 }).map(c => { return { text: c.fullName, value: c } })"
               :rules="[v => !!v || 'Necessário preencher uma categoria']"
               required
               box

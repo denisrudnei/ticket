@@ -3,16 +3,20 @@
     row
     wrap
   >
-    <v-data-table
-      :items="analysts"
+    <v-flex
+      xs12
     >
-      <template
-        slot="items"
-        slot-scope="data"
+    <v-data-table
+        :items="analysts"
       >
-        <td>{{ data.item.name }}</td>
-      </template>
-    </v-data-table>
+        <template
+          slot="items"
+          slot-scope="data"
+        >
+          <td>{{ data.item.name }}</td>
+        </template>
+      </v-data-table>
+    </v-flex>
   </v-layout>
 </template>
 
