@@ -98,7 +98,10 @@
           <v-flex
             xs12
           >
-            <v-btn @click="save()">
+            <v-btn
+              @click="save()"
+              class="primary"
+            >
               {{ !search ? 'Salvar' : 'Pesquisar' }}
               <v-icon right>
                 save
@@ -109,9 +112,14 @@
             v-show="!search"
             xs12
           >
-            <v-tabs>
+            <v-tabs
+              icons-and-text
+            >
               <v-tab>
                 Logs
+                <v-icon>
+                  history
+                </v-icon>
               </v-tab>
               <v-tab-item>
                 <v-data-table
@@ -128,6 +136,9 @@
               </v-tab-item>
               <v-tab>
                 Arquivos
+                <v-icon>
+                  attach_file
+                </v-icon>
               </v-tab>
               <v-tab-item>
                 <v-btn>

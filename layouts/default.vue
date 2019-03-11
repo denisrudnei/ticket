@@ -57,6 +57,7 @@
       :clipped-left="clipped"
       fixed
       app
+      class="primary white--text"
     >
       <v-btn
         v-if="logged"
@@ -86,6 +87,7 @@
           >
             <v-btn
               to="/ticket/create"
+              class="primary"
             >
               Criar incidente
             </v-btn>
@@ -97,6 +99,7 @@
           >
             <v-btn
               to="/search"
+              class="primary"
             >
               Pesquisar
             </v-btn>
