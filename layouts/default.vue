@@ -232,15 +232,9 @@ export default {
     }
   },
   computed: mapGetters({
-    notifications: 'notification/getNotifications',
+    notifications: 'notification/getUnread',
     tickets: 'ticket/getTickets'
   }),
-  async fetch({ store, params }) {
-    const id = '5c4c6e95a5fdb240e75c8268'
-    await this.$axios.post(`api/notification/${id}`).then(response => {
-      store.commit('notification/setNotifications', response.data)
-    })
-  },
   created() {
     this.$axios.get('api/ticket').then(response => {
       this.$store.commit('ticket/setTickets', response.data)
@@ -249,13 +243,18 @@ export default {
     const socket = io()
     socket.on('notification', notification => {
       // this.$store.dispatch('ticket/insertTicket', ticket)
-      // this.tickets.push(ticket)
-      // this.updateTree()
-      this.notifications.push(notification)
+      this.updateTree()
+      this.$store.commit('notification/addNotification', notification)
     })
     const id = '5c4c6e95a5fdb240e75c8268'
     this.$axios.post(`api/notification/${id}`).then(response => {
       this.$store.commit('notification/setNotifications', response.data)
+    })
+    this.$axios.get('api/status').then(response => {
+      this.$store.commit('status/setStatus', response.data)
+    })
+    this.$axios.get('api/group').then(response => {
+      this.$store.commit('group/setGroups', response.data)
     })
   },
   methods: {

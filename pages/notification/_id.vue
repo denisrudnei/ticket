@@ -3,7 +3,23 @@
     row
     wrap
   >
-    {{ notification }}
+    <v-flex
+      xs12
+      pa-3
+    >
+      <v-card>
+        <v-card-title>
+          {{ notification.content }}
+        </v-card-title>
+        <v-card-actions>
+          <v-switch
+            v-model="notification.read"
+            readonly
+            label="Lido"
+          />
+        </v-card-actions>
+      </v-card>
+    </v-flex>
   </v-layout>
 </template>
 
@@ -14,10 +30,12 @@ export default {
       notification: {}
     }
   },
-  created() {
+  async created() {
     const id = this.$router.currentRoute.params.id
-    this.$axios.get(`api/notification/${id}`).then(response => {
+    await this.$axios.post(`api/notification/${id}/read`)
+    await this.$axios.get(`api/notification/${id}`).then(response => {
       this.notification = response.data
+      this.$store.commit('notification/updateNotification', this.notification)
     })
   }
 }

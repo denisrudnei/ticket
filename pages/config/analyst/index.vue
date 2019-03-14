@@ -6,7 +6,7 @@
     <v-flex
       xs12
     >
-    <v-data-table
+      <v-data-table
         :items="analysts"
       >
         <template

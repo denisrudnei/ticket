@@ -18,8 +18,8 @@
             v-slot:activator="{ on }"
           >
             <v-btn
-              icon
               class="primary white--text"
+              icon
               v-on="on"
             >
               <v-icon>
@@ -60,6 +60,7 @@
                   >
                     <v-form>
                       <v-select
+                        :items="groups.map(g => ({ text: g.name, value: g }))"
                         box
                         label="Para qual grupo? "
                       />
@@ -86,8 +87,8 @@
               >
                 <v-btn
                   flat
-                  v-on="on"
                   class="primary white--text"
+                  v-on="on"
                 >
                   Atualizar status
                 </v-btn>
@@ -103,6 +104,7 @@
                   >
                     <v-form>
                       <v-select
+                        :items="status.map(s => ({ text: s.name, value: s }))"
                         box
                         label="Status"
                       />
@@ -174,13 +176,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {
     tickets: {
-      type: Array
+      type: Array,
+      default: () => {
+        return []
+      }
     },
     search: {
-      type: String
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -212,6 +219,10 @@ export default {
         }
       ]
     }
-  }
+  },
+  computed: mapGetters({
+    status: 'status/getStatus',
+    groups: 'group/getGroups'
+  })
 }
 </script>

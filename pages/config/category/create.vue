@@ -68,8 +68,8 @@
               xs12
             >
               <v-checkbox
-                label="Necessário preencher?"
                 v-model="field.required"
+                label="Necessário preencher?"
               />
             </v-flex>
           </v-layout>

@@ -22,14 +22,15 @@ module.exports = (app) => {
     })
   })
 
-  app.post('/notification/read', (req, res) => {
-    Notification.findOneAndMofify({
-      _id: req.body._id
+  app.post('/notification/:id/read', (req, res) => {
+    Notification.findOneAndUpdate({
+      _id: req.params.id
     }, {
       $set: {
         read: true
       }
-    }, (err) => {
+    }, (err, result) => {
+      console.log(result)
       if (err) return res.status(500).json(err)
       return res.sendStatus(200)
     })

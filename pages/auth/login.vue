@@ -17,7 +17,9 @@
           type="password"
           placeholder="Senha"
         />
-        <v-btn>
+        <v-btn
+          class="primary white--text"
+        >
           Logar
           <v-icon right>
             person

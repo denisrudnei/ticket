@@ -105,8 +105,8 @@
             xs12
           >
             <v-btn
-              @click="save()"
               class="primary"
+              @click="save()"
             >
               {{ !search ? 'Salvar' : 'Pesquisar' }}
               <v-icon right>
