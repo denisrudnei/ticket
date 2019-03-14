@@ -10,7 +10,7 @@
     >
       <td>
         <v-menu
-          :nudge-width="200"
+          :nudge-width="350"
           :close-on-content-click="false"
           offset-x
         >
@@ -28,6 +28,13 @@
             </v-btn>
           </template>
           <v-card>
+            <v-btn
+              :to="`/ticket/${data.item._id}`"
+              class="primary white--text"
+              block
+            >
+              Ver Ticket
+            </v-btn>
             <v-menu
               :nudge-width="400"
               offset-x
@@ -39,6 +46,7 @@
               >
                 <v-btn
                   class="primary white--text"
+                  block
                   v-on="on"
                 >
                   Transferir
@@ -87,6 +95,7 @@
               >
                 <v-btn
                   flat
+                  block
                   class="primary white--text"
                   v-on="on"
                 >
