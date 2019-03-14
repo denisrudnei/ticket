@@ -28,108 +28,118 @@
             </v-btn>
           </template>
           <v-card>
-            <v-btn
-              :to="`/ticket/${data.item._id}`"
-              class="primary white--text"
-              block
+            <v-layout
+              row
+              wrap
             >
-              Ver Ticket
-            </v-btn>
-            <v-menu
-              :nudge-width="400"
-              offset-x
-              offset-y
-              :close-on-content-click="false"
-            >
-              <template
-                v-slot:activator="{ on }"
+              <v-flex
+                xs12
+                pa-2
               >
                 <v-btn
+                  :to="`/ticket/${data.item._id}`"
                   class="primary white--text"
                   block
-                  v-on="on"
                 >
-                  Transferir
-                  <v-icon
-                    right
-                  >
-                    transfer_within_a_station
-                  </v-icon>
+                  Ver Ticket
                 </v-btn>
-              </template>
-              <v-card>
-                <v-layout
-                  row
-                  wrap
+                <v-menu
+                  :nudge-width="400"
+                  offset-x
+                  offset-y
+                  :close-on-content-click="false"
                 >
-                  <v-flex
-                    xs12
-                    pa-1
+                  <template
+                    v-slot:activator="{ on }"
                   >
-                    <v-form>
-                      <v-select
-                        :items="groups.map(g => ({ text: g.name, value: g }))"
-                        box
-                        label="Para qual grupo? "
-                      />
-                      <v-btn
-                        icon
-                        class="primary white--text"
+                    <v-btn
+                      class="primary white--text"
+                      block
+                      v-on="on"
+                    >
+                      Transferir
+                      <v-icon
+                        right
                       >
-                        <v-icon>
-                          send
-                        </v-icon>
-                      </v-btn>
-                    </v-form>
-                  </v-flex>
-                </v-layout>
-              </v-card>
-            </v-menu>
-            <v-menu
-              :nudge-width="400"
-              offset-x
-              :close-on-content-click="false"
-            >
-              <template
-                v-slot:activator="{ on }"
-              >
-                <v-btn
-                  flat
-                  block
-                  class="primary white--text"
-                  v-on="on"
+                        transfer_within_a_station
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-layout
+                      row
+                      wrap
+                    >
+                      <v-flex
+                        xs12
+                        pa-1
+                      >
+                        <v-form>
+                          <v-select
+                            :items="groups.map(g => ({ text: g.name, value: g }))"
+                            box
+                            label="Para qual grupo? "
+                          />
+                          <v-btn
+                            icon
+                            class="primary white--text"
+                          >
+                            <v-icon>
+                              send
+                            </v-icon>
+                          </v-btn>
+                        </v-form>
+                      </v-flex>
+                    </v-layout>
+                  </v-card>
+                </v-menu>
+                <v-menu
+                  :nudge-width="400"
+                  offset-x
+                  :close-on-content-click="false"
                 >
-                  Atualizar status
-                </v-btn>
-              </template>
-              <v-card>
-                <v-layout
-                  row
-                  wrap
-                >
-                  <v-flex
-                    xs12
-                    pa-1
+                  <template
+                    v-slot:activator="{ on }"
                   >
-                    <v-form>
-                      <v-select
-                        :items="status.map(s => ({ text: s.name, value: s }))"
-                        box
-                        label="Status"
-                      />
-                      <v-btn
-                        icon
-                        class="primary white--text"
+                    <v-btn
+                      flat
+                      block
+                      class="primary white--text"
+                      v-on="on"
+                    >
+                      Atualizar status
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-layout
+                      row
+                      wrap
+                    >
+                      <v-flex
+                        xs12
+                        pa-1
                       >
-                        <v-icon>
-                          send
-                        </v-icon>
-                      </v-btn>
-                    </v-form>
-                  </v-flex>
-                </v-layout>
-              </v-card>
-            </v-menu>
+                        <v-form>
+                          <v-select
+                            :items="status.map(s => ({ text: s.name, value: s }))"
+                            box
+                            label="Status"
+                          />
+                          <v-btn
+                            icon
+                            class="primary white--text"
+                          >
+                            <v-icon>
+                              send
+                            </v-icon>
+                          </v-btn>
+                        </v-form>
+                      </v-flex>
+                    </v-layout>
+                  </v-card>
+                </v-menu>
+              </v-flex>
+            </v-layout>
           </v-card>
         </v-menu>
       </td>

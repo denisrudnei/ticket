@@ -1,6 +1,6 @@
 const Ticket = require('../models/Ticket')
 
-module.exports = (app) => {
+module.exports = app => {
   app.post('/search', (req, res) => {
     Ticket.find(req.body, (err, result) => {
       console.log(req.body)

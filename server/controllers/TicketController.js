@@ -3,7 +3,6 @@ const Ticket = require('../models/Ticket')
 const Notification = require('../models/Notification')
 
 module.exports = (app, io) => {
-
   app.get('/ticket', (req, res) => {
     Ticket.find({}, (err, tickets) => {
       if (err || tickets === null) return res.status(500).json(err)
