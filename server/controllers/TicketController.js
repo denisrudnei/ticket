@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
 const Ticket = require('../models/Ticket')
-const Group = require('../models/Group')
+const Notification = require('../models/Notification')
 
-module.exports = app => {
+module.exports = (app, io) => {
+
   app.get('/ticket', (req, res) => {
     Ticket.find({}, (err, tickets) => {
       if (err || tickets === null) return res.status(500).json(err)
@@ -16,8 +17,17 @@ module.exports = app => {
       ...req.body
     }
 
+    const notification = await Notification.create({
+      _id: new mongoose.Types.ObjectId(),
+      name: 'TicketCreate',
+      from: ticket.actualUser._id,
+      to: [ticket.actualUser._id],
+      content: 'Criado novo ticket'
+    })
+
     Ticket.create(ticket, (err, result) => {
       if (err) return res.status(500).json(err)
+      io.emit('notification', notification)
       return res.status(200).json(result)
     })
   })

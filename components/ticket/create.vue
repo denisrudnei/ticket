@@ -19,10 +19,11 @@
             pa-1
           >
             <v-autocomplete
-              v-model="ticket.actualUser"
+              v-model="ticketComputed.actualUser"
               :rules="[v => !!v || 'Necessário preencher']"
               :items="analysts.map(v => { return {text: v.name, value: v} })"
               required
+              :readonly="readonly"
               box
               label="Analista"
             />
@@ -33,10 +34,11 @@
             pa-1
           >
             <v-autocomplete
-              v-model="ticket.category"
+              v-model="ticketComputed.category"
               :items="categories.filter(c => { return c.subs.length === 0 }).map(c => { return { text: c.fullName, value: c } })"
               :rules="[v => !!v || 'Necessário preencher uma categoria']"
               required
+              :readonly="readonly"
               box
               label="Categoria"
             />
@@ -47,10 +49,11 @@
             pa-1
           >
             <v-autocomplete
-              v-model="ticket.group"
+              v-model="ticketComputed.group"
               :items="groups.map(g => { return { text: g.name, value: g } })"
               :rules="[v => !!v || 'Necessário preeencher o grupo']"
               required
+              :readonly="readonly"
               box
               label="Grupo"
             />
@@ -61,10 +64,11 @@
             pa-1
           >
             <v-autocomplete
-              v-model="ticket.status"
+              v-model="ticketComputed.status"
               :items="status.map(s => { return { text: s.name, value: s } })"
               :rules="[v => !!v || 'Necessário preencher status']"
               required
+              :readonly="readonly"
               box
               label="Status"
             />
@@ -75,9 +79,10 @@
             pa-1
           >
             <v-text-field
-              v-model="ticket.resume"
+              v-model="ticketComputed.resume"
               :rules="[v => !!v || 'Necessário preencher o resumo']"
               required
+              :readonly="readonly"
               box
               label="Resumo"
             />
@@ -88,9 +93,10 @@
             pa-1
           >
             <v-textarea
-              v-model="ticket.content"
+              v-model="ticketComputed.content"
               :rules="[v => !!v || 'Necessário preeencher o corpo deo chamado']"
               required
+              :readonly="readonly"
               box
               label="Conteúdo"
             />
@@ -123,7 +129,7 @@
               </v-tab>
               <v-tab-item>
                 <v-data-table
-                  :items="ticket.logs"
+                  :items="ticketComputed.logs"
                   :headers="headers"
                 >
                   <template
@@ -164,7 +170,14 @@
 <script>
 export default {
   props: {
-    search: Boolean
+    search: Boolean,
+    readonly: Boolean,
+    ticket: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
   },
   data() {
     return {
@@ -190,10 +203,18 @@ export default {
       groups: [],
       status: [],
       categories: [],
-      ticket: {
+      ticketData: {
         resume: '',
         content: ''
       }
+    }
+  },
+  computed: {
+    value() {
+      return this.ticketData
+    },
+    ticketComputed() {
+      return Object.assign(this.ticketData, this.ticket)
     }
   },
   created() {
@@ -210,14 +231,9 @@ export default {
       this.categories = result.data
     })
   },
-  computed: {
-    value() {
-      return this.ticket
-    }
-  },
   methods: {
     save() {
-      this.$emit('input', this.ticket)
+      this.$emit('input', this.ticketComputed)
       /* if (this.$refs.form.validate()) {
         this.$axios.post('api/ticket', this.ticket).then(() => {
           this.$router.push('/ticket')

@@ -6,25 +6,49 @@ const TicketSchema = new mongoose.Schema({
   _id: Schema.Types.ObjectId,
   category: {
     ref: 'Category',
-    type: Object
+    type: Object,
+    required: [
+      true,
+      'Preencha a categoria'
+    ]
   },
   resume: {
-    type: String
+    type: String,
+    required: [
+      true,
+      'Deve ter uma descrição'
+    ]
   },
   content: {
-    type: String
+    type: String,
+    required: [
+      true,
+      'Deve ter um conteúdo'
+    ]
   },
   group: {
     type: Object,
-    ref: 'Group'
+    ref: 'Group',
+    required: [
+      true,
+      'Necessário estar em um grupo'
+    ]
   },
   status: {
     ref: 'Status',
-    type: Object
+    type: Object,
+    required: [
+      true,
+      'Deve ter um status'
+    ]
   },
   actualUser: {
     type: Object,
-    ref: 'Analyst'
+    ref: 'Analyst',
+    required: [
+      true,
+      'É necessário abrir o chamado em nome de alguém'
+    ]
   },
   files: [
     {

@@ -19,9 +19,15 @@ export default {
   },
   methods: {
     create() {
-      this.$axios.post('api/ticket', this.ticket).then(() => {
-        this.$router.push('/ticket')
-      })
+      this.$axios.post('api/ticket', this.ticket).then(
+        () => {
+          this.$router.push('/')
+        },
+        err => {
+          // eslint-disable-next-line
+          console.log(err)
+        }
+      )
     }
   }
 }

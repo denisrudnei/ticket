@@ -5,6 +5,8 @@ const app = express()
 const apiRouter = express.Router()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
 
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost/test',
@@ -34,19 +36,21 @@ async function start() {
 
   app.use(bodyParser.json())
 
-  require('./controllers/TicketController')(apiRouter)
+  require('./controllers/TicketController')(apiRouter, io)
   require('./controllers/AnalystController')(apiRouter)
   require('./controllers/CategoryController')(apiRouter)
   require('./controllers/GroupController')(apiRouter)
   require('./controllers/StatusController')(apiRouter)
   require('./controllers/SearchController')(apiRouter)
+  require('./controllers/NotificationController')(apiRouter)
   app.use('/api', apiRouter)
 
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
   // Listen the server
-  app.listen(port, host)
+  //app.listen(port, host)
+  server.listen(port, host)
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true

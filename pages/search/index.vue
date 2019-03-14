@@ -9,7 +9,7 @@
       <ticket-create
         v-model="ticket"
         search
-        @input="search()"  
+        @input="searchFiltred()"  
       />
     </v-flex>
     <v-flex
@@ -18,9 +18,6 @@
       <ticket-list
         :tickets="list"
       />
-      <pre>
-        {{ list }}
-      </pre>
     </v-flex>
   </v-layout>
 </template>
@@ -54,14 +51,12 @@ export default {
   watch: {
     $route(to, from) {
       this.data = this.$router.currentRoute.query
-      this.$axios.post('api/search', this.data).then(result => {
-        this.list = result.data
-      })
+      this.search(this.data)
     }
   },
   created() {
     this.data = this.$router.currentRoute.query
-    this.search()
+    this.search(this.data)
   },
   methods: {
     clean(obj) {
@@ -72,8 +67,11 @@ export default {
       })
       return obj
     },
-    search() {
-      this.$axios.post('api/search', this.clean(this.ticket)).then(result => {
+    searchFiltred() {
+      this.search(this.clean(this.ticket))
+    },
+    search(ticket) {
+      this.$axios.post('api/search', ticket).then(result => {
         this.list = result.data
       })
     }

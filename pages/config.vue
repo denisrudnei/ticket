@@ -7,17 +7,6 @@
       xs12
     >
       <v-tabs>
-        <v-tab>
-          Incidente
-        </v-tab>
-        <v-tab-item>
-          <v-tabs>
-            <v-tab>Criar</v-tab>
-            <v-tab-item>
-              <ticket-create />
-            </v-tab-item>
-          </v-tabs>
-        </v-tab-item>
         <v-tab>Analista</v-tab>
         <v-tab-item>
           <v-tabs>
@@ -81,7 +70,6 @@
 </template>
 
 <script>
-import TicketCreate from './ticket/create'
 import CategoryCreate from './config/category/create'
 import CategoryList from './config/category/index'
 import AnalystCreate from './config/analyst/create'
@@ -93,7 +81,6 @@ import StatusList from './config/status/index'
 
 export default {
   components: {
-    TicketCreate,
     CategoryCreate,
     CategoryList,
     AnalystCreate,

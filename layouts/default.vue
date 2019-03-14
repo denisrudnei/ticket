@@ -71,6 +71,74 @@
       <v-toolbar-title
         v-text="title"
       />
+      <v-spacer />
+      <v-btn
+        flat
+        icon
+        class="primary white--text"
+        to="/profile"
+      >
+        <v-icon>
+          person
+        </v-icon>
+      </v-btn>
+      <v-menu
+        :nudge-width="200"
+        offset-y
+      >
+        <template
+          v-slot:activator="{ on }"
+        >
+          <v-btn
+            icon
+            flat
+            v-on="on"
+          >
+            <v-badge>
+              <template
+                v-slot:badge
+              >
+                <span>{{ notifications.length }}</span>
+              </template>
+              <v-icon
+                class="white--text"
+              >
+                notifications
+              </v-icon>
+            </v-badge>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-tile
+            v-for="(notification, index) in notifications"
+            :key="index"
+          >
+            <!-- <v-list-tile-title>-->
+            <v-btn
+              flat
+              block
+              :to="`/notification/${notification._id}`"
+            >
+              {{ notification.content }}
+            </v-btn>
+            <!-- </v-list-tile-title>-->
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+      <v-btn
+        flat
+        title="Configurações"
+        to="/config"
+        class="white--text"
+      >
+        Configurações
+        <v-icon
+          right
+          class="white--text"
+        >
+          settings_applications
+        </v-icon>
+      </v-btn>
     </v-toolbar>
     <v-content>
       <v-layout
@@ -110,6 +178,12 @@
       <nuxt />
       <!--</v-container>-->
     </v-content>
+    <v-snackbar
+      bottom
+      right
+    >
+      Texto de mensagem aqui
+    </v-snackbar>
     <v-footer
       :fixed="fixed"
       app
@@ -121,6 +195,8 @@
 
 <script>
 import _ from 'lodash'
+import io from 'socket.io-client'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -132,24 +208,63 @@ export default {
       items: [
         // TODO
         { icon: 'bookmarks', title: 'Chamados', to: '/' },
-        { icon: 'layers', title: 'Categorias', to: '/category' },
-        { icon: 'settings_applications', title: 'Configurações', to: '/config' }
+        { icon: 'layers', title: 'Categorias', to: '/category' }
       ],
       tree: [],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'CControl'
+      title: 'CControl',
+      treeInfo: [
+        {
+          name: 'Status',
+          group: 'status.name'
+        },
+        {
+          name: 'Grupo',
+          group: 'group.name'
+        },
+        {
+          name: 'Categoria',
+          group: 'category.name'
+        }
+      ]
     }
+  },
+  computed: mapGetters({
+    notifications: 'notification/getNotifications',
+    tickets: 'ticket/getTickets'
+  }),
+  async fetch({ store, params }) {
+    const id = '5c4c6e95a5fdb240e75c8268'
+    await this.$axios.post(`api/notification/${id}`).then(response => {
+      store.commit('notification/setNotifications', response.data)
+    })
   },
   created() {
     this.$axios.get('api/ticket').then(response => {
-      this.addToTree('Status', 'status.name', response.data)
-      this.addToTree('Grupo', 'group.name', response.data)
-      this.addToTree('Categoria', 'category.name', response.data)
+      this.$store.commit('ticket/setTickets', response.data)
+      this.updateTree()
+    })
+    const socket = io()
+    socket.on('notification', notification => {
+      // this.$store.dispatch('ticket/insertTicket', ticket)
+      // this.tickets.push(ticket)
+      // this.updateTree()
+      this.notifications.push(notification)
+    })
+    const id = '5c4c6e95a5fdb240e75c8268'
+    this.$axios.post(`api/notification/${id}`).then(response => {
+      this.$store.commit('notification/setNotifications', response.data)
     })
   },
   methods: {
+    updateTree() {
+      this.tree = []
+      this.treeInfo.forEach(leaf => {
+        this.addToTree(leaf.name, leaf.group, this.tickets)
+      })
+    },
     fetchUrl(item) {
       this.$router.push('/search/' + item.name)
     },
