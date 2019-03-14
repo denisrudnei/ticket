@@ -4,7 +4,8 @@
     wrap
   >
     <v-flex
-      xs112
+      xs12
+      pa-2
     >
       <v-form>
         <v-text-field

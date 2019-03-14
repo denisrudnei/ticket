@@ -5,12 +5,11 @@
     :headers="headers"
   >
     <template
-      slot="items"
-      slot-scope="data"
+      v-slot:items="{ item }"
     >
       <td>
         <v-menu
-          :nudge-width="350"
+          :nudge-width="300"
           :close-on-content-click="false"
           offset-x
         >
@@ -37,14 +36,13 @@
                 pa-2
               >
                 <v-btn
-                  :to="`/ticket/${data.item._id}`"
+                  :to="`/ticket/${item._id}`"
                   class="primary white--text"
                   block
                 >
                   Ver Ticket
                 </v-btn>
                 <v-menu
-                  :nudge-width="400"
                   offset-x
                   offset-y
                   :close-on-content-click="false"
@@ -94,7 +92,6 @@
                   </v-card>
                 </v-menu>
                 <v-menu
-                  :nudge-width="400"
                   offset-x
                   :close-on-content-click="false"
                 >
@@ -158,7 +155,7 @@
               flat
               v-on="on"
             >
-              {{ data.item.actualUser.name }}
+              {{ item.actualUser.name }}
             </v-btn>
           </template>
           <v-card>
@@ -170,26 +167,21 @@
                 </v-list-tile-avatar>
                 <v-list-tile-content>
                   <v-list-tile-title>
-                    {{ data.item.actualUser.name }}
+                    {{ item.actualUser.name }}
                   </v-list-tile-title>
                   <v-list-tile-sub-title>
-                    {{ data.item.actualUser.email }}
+                    {{ item.actualUser.email }}
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
           </v-card>
         </v-menu>
-        <!-- <nuxt-link
-          :to="`/ticket/${data.item._id}`"
-        >
-          {{ data.item.actualUser.name }}
-        </nuxt-link> -->
       </td>
-      <td>{{ data.item.resume }}</td>
-      <td>{{ data.item.status.name }}</td>
-      <td>{{ data.item.group.name }}</td>
-      <td>{{ data.item.category.fullName }}</td>
+      <td>{{ item.resume }}</td>
+      <td>{{ item.status.name }}</td>
+      <td>{{ item.group.name }}</td>
+      <td>{{ item.category.fullName }}</td>
     </template>
   </v-data-table>
 </template>
@@ -218,7 +210,7 @@ export default {
         },
         {
           text: 'Usuário atual',
-          value: 'actualUser'
+          value: 'actualUser.name'
         },
         {
           text: 'Resumo',
@@ -226,15 +218,15 @@ export default {
         },
         {
           text: 'Status',
-          value: 'status'
+          value: 'status.name'
         },
         {
           text: 'Grupo',
-          value: 'group'
+          value: 'group.name'
         },
         {
           text: 'Categoria',
-          value: 'category'
+          value: 'category.fullName'
         }
       ]
     }

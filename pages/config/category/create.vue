@@ -5,6 +5,7 @@
   >
     <v-flex
       xs12
+      pa-2
     >
       <v-form>
         <v-autocomplete

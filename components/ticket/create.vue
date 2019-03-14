@@ -136,7 +136,7 @@
                     slot="items"
                     slot-scope="data"
                   >
-                    <td>{{ data.item.user }}</td>
+                    <td>{{ data.item.user.name }}</td>
                   </template>
                 </v-data-table>
               </v-tab-item>
@@ -155,7 +155,6 @@
                 </v-btn>
                 <v-list>
                   <v-list-tile>
-                    Teste
                   </v-list-tile>
                 </v-list>
               </v-tab-item>
