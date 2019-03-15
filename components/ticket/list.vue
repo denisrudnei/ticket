@@ -74,6 +74,7 @@
                       >
                         <v-form>
                           <v-select
+                            v-model="currentGroup"
                             :items="groups.map(g => ({ text: g.name, value: g }))"
                             box
                             label="Para qual grupo? "
@@ -81,6 +82,7 @@
                           <v-btn
                             icon
                             class="primary white--text"
+                            @click="transferToGroup(item)"
                           >
                             <v-icon>
                               send
@@ -118,6 +120,7 @@
                       >
                         <v-form>
                           <v-select
+                            v-model="currentStatus"
                             :items="status.map(s => ({ text: s.name, value: s }))"
                             box
                             label="Status"
@@ -125,6 +128,7 @@
                           <v-btn
                             icon
                             class="primary white--text"
+                            @click="modifyStatus(item)"
                           >
                             <v-icon>
                               send
@@ -159,7 +163,6 @@
             </v-btn>
           </template>
           <v-card>
-            <!-- {{ data.item.actualUser }} -->
             <v-list>
               <v-list-tile>
                 <v-list-tile-avatar>
@@ -203,10 +206,12 @@ export default {
   },
   data() {
     return {
+      currentGroup: {},
+      currentStatus: {},
       headers: [
         {
           text: 'Ações',
-          value: 'actions'
+          sortable: false
         },
         {
           text: 'Usuário atual',
@@ -234,6 +239,22 @@ export default {
   computed: mapGetters({
     status: 'status/getStatus',
     groups: 'group/getGroups'
-  })
+  }),
+  methods: {
+    modifyStatus(ticket) {
+      // TODO
+    },
+    transferToGroup(ticket) {
+      this.$axios
+        .post(`api/ticket/transfer/${ticket._id}`, this.currentGroup)
+        .then(() => {
+          this.$store.commit('message/setText', 'Movido')
+          this.$store.commit('message/setShow', true)
+          setTimeout(() => {
+            this.$store.commit('message/setShow', false)
+          }, 5000)
+        })
+    }
+  }
 }
 </script>

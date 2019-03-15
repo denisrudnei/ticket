@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Ticket = require('../models/Ticket')
+const Group = require('../models/Group')
 const Notification = require('../models/Notification')
 
 module.exports = (app, io) => {
@@ -28,6 +29,19 @@ module.exports = (app, io) => {
       if (err) return res.status(500).json(err)
       io.emit('notification', notification)
       return res.status(200).json(result)
+    })
+  })
+
+  app.post('/ticket/transfer/:id', async (req, res) => {
+    const ticket = await Ticket.findOne({
+      _id: req.params.id
+    })
+
+    ticket.group = await Group.findOne({_id: req.body._id})
+
+    ticket.save((err, newTicket) => {
+      if (err) return res.status(500).json(err)
+      return res.status(200).json(newTicket)
     })
   })
 

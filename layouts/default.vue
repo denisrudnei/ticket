@@ -113,7 +113,6 @@
             v-for="(notification, index) in notifications"
             :key="index"
           >
-            <!-- <v-list-tile-title>-->
             <v-btn
               flat
               block
@@ -121,7 +120,6 @@
             >
               {{ notification.content }}
             </v-btn>
-            <!-- </v-list-tile-title>-->
           </v-list-tile>
         </v-list>
       </v-menu>
@@ -174,15 +172,15 @@
           </v-flex>
         </template>
       </v-layout>
-      <!--<v-container>-->
       <nuxt />
-      <!--</v-container>-->
     </v-content>
     <v-snackbar
       bottom
-      right
+      left
+      :timeout="5000"
+      :value="show"
     >
-      Texto de mensagem aqui
+      {{ snackbarText }}
     </v-snackbar>
     <v-footer
       :fixed="fixed"
@@ -233,7 +231,9 @@ export default {
   },
   computed: mapGetters({
     notifications: 'notification/getUnread',
-    tickets: 'ticket/getTickets'
+    tickets: 'ticket/getTickets',
+    snackbarText: 'message/getText',
+    show: 'message/getShow'
   }),
   created() {
     this.$axios.get('api/ticket').then(response => {

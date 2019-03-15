@@ -74,6 +74,26 @@
             />
           </v-flex>
           <v-flex
+            xs12
+            pa-2
+          >
+            <v-layout
+              row
+              wrap
+            >
+              <v-flex
+                xs6
+              >
+                <h3>Criado em: {{ ticketComputed.created | date }}</h3>
+              </v-flex>
+              <v-flex
+                xs6
+              >
+                <h3>Última modificação: {{ ticketComputed.modified | date }}</h3>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex
             v-show="!search"
             xs12
             pa-1
@@ -176,6 +196,13 @@ export default {
       default: () => {
         return {}
       }
+    }
+  },
+  filters: {
+    date(value) {
+      const newDate = new Date(value)
+      return newDate.toLocaleString()
+      // return `${newDate.getDate()}/${newDate.getMonth()}/${newDate.getFullYear()} ${newDate.getHours()}`
     }
   },
   data() {
