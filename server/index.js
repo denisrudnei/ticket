@@ -7,6 +7,13 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
+const session = require('express-session')
+
+app.use(
+  session({
+    secret: 'ccontrol_secret_key'
+  })
+)
 
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost/test',
@@ -36,13 +43,14 @@ async function start() {
 
   app.use(bodyParser.json())
 
+  require('./controllers/AuthController')(apiRouter)
   require('./controllers/TicketController')(apiRouter, io)
   require('./controllers/AnalystController')(apiRouter)
   require('./controllers/CategoryController')(apiRouter)
   require('./controllers/GroupController')(apiRouter)
   require('./controllers/StatusController')(apiRouter)
   require('./controllers/SearchController')(apiRouter)
-  require('./controllers/NotificationController')(apiRouter)
+  require('./controllers/NotificationController')(apiRouter, io)
   app.use('/api', apiRouter)
 
   // Give nuxt middleware to express

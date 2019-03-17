@@ -32,6 +32,11 @@ const TicketSchema = new mongoose.Schema({
     ref: 'Analyst',
     required: [true, 'É necessário abrir o chamado em nome de alguém']
   },
+  openedBy: {
+    type: Object,
+    ref: 'Analyst',
+    required: [true, 'É necessário abrir o chamado em nome de alguém']
+  },
   files: [
     {
       type: Object,

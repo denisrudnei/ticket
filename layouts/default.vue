@@ -27,6 +27,7 @@
       </v-list>
       <v-spacer />
       <v-treeview
+        v-show="!miniVariant"
         :items="tree"
         open-on-click
         activatable
@@ -73,6 +74,7 @@
       />
       <v-spacer />
       <v-btn
+        v-if="logged"
         flat
         icon
         class="primary white--text"
@@ -83,7 +85,8 @@
         </v-icon>
       </v-btn>
       <v-menu
-        :nudge-width="200"
+        v-if="logged"
+        :nudge-width="350"
         offset-y
       >
         <template
@@ -108,22 +111,37 @@
             </v-badge>
           </v-btn>
         </template>
-        <v-list>
+        <v-list
+          v-if="notifications.length > 0"
+          two-line
+        >
           <v-list-tile
-            v-for="(notification, index) in notifications"
-            :key="index"
+            v-for="notification in notifications"
+            :key="notification._id"
           >
-            <v-btn
-              flat
-              block
-              :to="`/notification/${notification._id}`"
-            >
-              {{ notification.content }}
-            </v-btn>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                {{ notification.content }}
+              </v-list-tile-title>
+              <v-list-tile-sub-title>
+                {{ new Date(notification.date) | date }}
+              </v-list-tile-sub-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-btn
+                icon
+                :to="`/notification/${notification._id}`"
+              >
+                <v-icon>
+                  info
+                </v-icon>
+              </v-btn>
+            </v-list-tile-action>
           </v-list-tile>
         </v-list>
       </v-menu>
       <v-btn
+        v-if="logged"
         flat
         title="Configurações"
         to="/config"
@@ -135,6 +153,18 @@
           class="white--text"
         >
           settings_applications
+        </v-icon>
+      </v-btn>
+      <v-btn
+        v-if="logged"
+        to="/auth/logout"
+        title="Fazer logoff"
+        icon
+        flat
+        class="primary white-text"
+      >
+        <v-icon>
+          exit_to_app
         </v-icon>
       </v-btn>
     </v-toolbar>
@@ -174,14 +204,6 @@
       </v-layout>
       <nuxt />
     </v-content>
-    <v-snackbar
-      bottom
-      left
-      :timeout="5000"
-      :value="show"
-    >
-      {{ snackbarText }}
-    </v-snackbar>
     <v-footer
       :fixed="fixed"
       app
@@ -193,21 +215,15 @@
 
 <script>
 import _ from 'lodash'
-import io from 'socket.io-client'
 import { mapGetters } from 'vuex'
 
 export default {
   data() {
     return {
-      logged: true,
       clipped: true,
       drawer: true,
       fixed: true,
-      items: [
-        // TODO
-        { icon: 'bookmarks', title: 'Chamados', to: '/' },
-        { icon: 'layers', title: 'Categorias', to: '/category' }
-      ],
+      items: [{ icon: 'bookmarks', title: 'Chamados', to: '/' }],
       tree: [],
       miniVariant: false,
       right: true,
@@ -229,32 +245,49 @@ export default {
       ]
     }
   },
-  computed: mapGetters({
-    notifications: 'notification/getUnread',
-    tickets: 'ticket/getTickets',
-    snackbarText: 'message/getText',
-    show: 'message/getShow'
-  }),
-  created() {
-    this.$axios.get('api/ticket').then(response => {
-      this.$store.commit('ticket/setTickets', response.data)
-      this.updateTree()
+  computed: {
+    ...mapGetters({
+      notifications: 'notification/getUnread',
+      tickets: 'ticket/getTickets',
+      logged: 'auth/getLoggedIn',
+      user: 'auth/getUser'
     })
-    const socket = io()
-    socket.on('notification', notification => {
+  },
+  async fetch({ store }) {
+    await this.$axios.get('api/ticket').then(response => {
+      store.commit('ticket/setTickets', response.data)
+    })
+    await this.$axios.get('api/status').then(response => {
+      store.commit('status/setStatus', response.data)
+    })
+    await this.$axios.get('api/group').then(response => {
+      store.commit('group/setGroups', response.data)
+    })
+  },
+  async created() {
+    this.updateTree()
+
+    await this.$axios.post('api/auth/mergeUser', this.user).then(response => {
+      this.$store.commit('auth/setUserId', response.data._id)
+    })
+
+    await this.$axios
+      .post(`api/notification/${this.user._id}`)
+      .then(response => {
+        this.$store.commit('notification/setNotifications', response.data)
+      })
+  },
+  mounted() {
+    /* eslint-disable */
+
+    this.$socket.on('notification', notification => {
       // this.$store.dispatch('ticket/insertTicket', ticket)
-      this.updateTree()
+      // this.updateTree()
       this.$store.commit('notification/addNotification', notification)
     })
-    const id = '5c4c6e95a5fdb240e75c8268'
-    this.$axios.post(`api/notification/${id}`).then(response => {
-      this.$store.commit('notification/setNotifications', response.data)
-    })
-    this.$axios.get('api/status').then(response => {
-      this.$store.commit('status/setStatus', response.data)
-    })
-    this.$axios.get('api/group').then(response => {
-      this.$store.commit('group/setGroups', response.data)
+
+    this.$socket.on('readNotification', notification => {
+      this.$store.commit('notification/updateNotification', notification)
     })
   },
   methods: {
@@ -268,6 +301,7 @@ export default {
       this.$router.push('/search/' + item.name)
     },
     addToTree(name, groupBy, data) {
+      if (!data.length > 0) return
       const base = _(data)
         .groupBy(groupBy)
         .value()

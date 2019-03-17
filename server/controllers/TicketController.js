@@ -37,7 +37,7 @@ module.exports = (app, io) => {
       _id: req.params.id
     })
 
-    ticket.group = await Group.findOne({_id: req.body._id})
+    ticket.group = await Group.findOne({ _id: req.body._id })
 
     ticket.save((err, newTicket) => {
       if (err) return res.status(500).json(err)
@@ -62,7 +62,6 @@ module.exports = (app, io) => {
       _id: req.params.id
     }).exec((err, ticket) => {
       if (err) return res.status(500).json(err)
-      console.log(ticket)
       Object.assign(ticket, req.body)
       ticket.save()
       res.sendStatus(200)

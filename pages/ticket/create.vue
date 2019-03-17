@@ -19,15 +19,16 @@ export default {
   },
   methods: {
     create() {
-      this.$axios.post('api/ticket', this.ticket).then(
-        () => {
+      this.$axios
+        .post('api/ticket', this.ticket)
+        .then(() => {
           this.$router.push('/')
-        },
-        err => {
-          // eslint-disable-next-line
-          console.log(err)
-        }
-      )
+        })
+        .catch(() => {
+          this.$toast.error(`Erro ao criar ticket`, {
+            duration: 5000
+          })
+        })
     }
   }
 }

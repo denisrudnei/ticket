@@ -33,10 +33,6 @@ export default {
   async created() {
     const id = this.$router.currentRoute.params.id
     await this.$axios.post(`api/notification/${id}/read`)
-    await this.$axios.get(`api/notification/${id}`).then(response => {
-      this.notification = response.data
-      this.$store.commit('notification/updateNotification', this.notification)
-    })
   }
 }
 </script>

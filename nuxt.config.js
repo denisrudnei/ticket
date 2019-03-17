@@ -37,7 +37,10 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: ['@/plugins/vuetify'],
+  plugins: [
+    { src: '@/plugins/vuetify' },
+    { src: '@/plugins/socketIo', ssr: false }
+  ],
 
   /*
   ** Nuxt.js modules
@@ -45,14 +48,40 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/toast',
+    '@nuxtjs/auth'
   ],
   /*
   ** Axios module configuration
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    proxy: true
+    proxy: 'true'
+  },
+
+  router: {
+    middleware: ['auth']
+  },
+
+  toast: {
+    position: 'top-left'
+  },
+
+  auth: {
+    redirect: {
+      login: '/auth/login',
+      logout: '/auth/logout',
+      callback: '/auth/callback',
+      home: '/'
+    },
+    strategies: {
+      local: false,
+      auth0: {
+        domain: 'bm-dns.auth0.com',
+        client_id: 'hHLA1yh4Ffvj1xyWhZzEzgk5Hz9GNHY2'
+      }
+    }
   },
 
   /*

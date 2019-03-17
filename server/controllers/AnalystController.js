@@ -15,8 +15,6 @@ module.exports = app => {
       ...req.body
     }
 
-    console.log(analyst)
-
     Analyst.create(analyst, (err, result) => {
       if (err) return res.status(500).json(err)
       return res.sendStatus(200)

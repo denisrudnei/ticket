@@ -13,6 +13,10 @@ const NotificationSchema = new Schema({
       ref: 'Analyst'
     }
   ],
+  date: {
+    type: Date,
+    default: new Date()
+  },
   name: String,
   content: String,
   type: String,

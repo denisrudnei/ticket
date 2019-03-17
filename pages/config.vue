@@ -80,6 +80,7 @@ import StatusCreate from './config/status/create'
 import StatusList from './config/status/index'
 
 export default {
+  middleware: 'auth',
   components: {
     CategoryCreate,
     CategoryList,

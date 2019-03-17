@@ -185,6 +185,7 @@
       <td>{{ item.status.name }}</td>
       <td>{{ item.group.name }}</td>
       <td>{{ item.category.fullName }}</td>
+      <td>{{ item.created | date }}</td>
     </template>
   </v-data-table>
 </template>
@@ -232,6 +233,10 @@ export default {
         {
           text: 'Categoria',
           value: 'category.fullName'
+        },
+        {
+          text: 'Data de criação',
+          value: 'date'
         }
       ]
     }
@@ -240,6 +245,14 @@ export default {
     status: 'status/getStatus',
     groups: 'group/getGroups'
   }),
+  created() {
+    this.$axios.get('api/group').then(response => {
+      this.$store.commit('group/setGroups', response.data)
+    })
+    this.$axios.get('api/status').then(response => {
+      this.$store.commit('status/setStatus', response.data)
+    })
+  },
   methods: {
     modifyStatus(ticket) {
       // TODO
@@ -248,11 +261,10 @@ export default {
       this.$axios
         .post(`api/ticket/transfer/${ticket._id}`, this.currentGroup)
         .then(() => {
-          this.$store.commit('message/setText', 'Movido')
-          this.$store.commit('message/setShow', true)
-          setTimeout(() => {
-            this.$store.commit('message/setShow', false)
-          }, 5000)
+          this.$toast.show(
+            `Movido com sucesso ao grupo ${this.currentGroup.name}`
+          )
+          this.$toast.show('Movido com sucesso')
         })
     }
   }

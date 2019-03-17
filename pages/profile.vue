@@ -8,17 +8,41 @@
       pa-2
     >
       <v-form>
-        <v-text-field
-          box
-          label="Nome para exibição"
-        />
-        <v-text-field
-          box
-          label="Email"
-          readonly
-        />
+        <v-layout
+          row
+          wrap
+        >
+          <v-flex
+            xs8
+            pa-2
+          >
+            <v-text-field
+              v-model="user.name"
+              box
+              label="Nome para exibição"
+            />
+            <v-text-field
+              v-model="user.email"
+              box
+              label="Email"
+              readonly
+            />
+            <v-autocomplete
+              :items="groups.map(g => ({ text: g.name, value: g }))"
+              box
+              label="Grupo principal"
+            />
+          </v-flex>
+          <v-flex
+            xs4
+            pa-2
+          >
+            <v-img
+              :src="user.picture"
+            />
+          </v-flex>
+        </v-layout>
         <v-switch
-          v-model="user.receiveEmail"
           color="primary"
           label="Receber notificações via email?"
         />
@@ -34,16 +58,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
-    return {
-      user: {
-        name: '',
-        email: '',
-        receiveEmail: false
-      }
-    }
-  }
+    return {}
+  },
+  computed: mapGetters({
+    user: 'auth/getUser',
+    groups: 'group/getGroups'
+  })
 }
 </script>
 

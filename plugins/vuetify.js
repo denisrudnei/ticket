@@ -13,3 +13,7 @@ Vue.use(Vuetify, {
     success: colors.green.accent3
   }
 })
+
+Vue.filter('date', value => {
+  return value.toLocaleString()
+})

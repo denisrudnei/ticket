@@ -8,7 +8,7 @@
       pa-5
     >
       <v-form>
-        <v-text-field
+        <!-- <v-text-field
           solo
           placeholder="Email"
         />
@@ -16,12 +16,16 @@
           solo
           type="password"
           placeholder="Senha"
-        />
+        /> -->
         <v-btn
+          large
           class="primary white--text"
+          @click="login()"
         >
           Logar
-          <v-icon right>
+          <v-icon
+            right
+          >
             person
           </v-icon>
         </v-btn>
@@ -31,7 +35,13 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    login() {
+      this.$auth.login('auth0')
+    }
+  }
+}
 </script>
 
 <style>

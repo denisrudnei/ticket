@@ -15,7 +15,22 @@
         >
           <v-flex
             xs12
-            md6
+            md4
+            pa-1
+          >
+            <v-autocomplete
+              v-model="ticketComputed.openedBy"
+              :rules="[v => !!v || 'Necessário preencher']"
+              :items="analysts.map(v => { return {text: v.name, value: v} })"
+              required
+              :readonly="readonly || !search"
+              box
+              label="Relatado por:"
+            />
+          </v-flex>
+          <v-flex
+            xs12
+            md4
             pa-1
           >
             <v-autocomplete
@@ -30,7 +45,7 @@
           </v-flex>
           <v-flex
             xs12
-            md6
+            md4
             pa-1
           >
             <v-autocomplete
@@ -45,7 +60,7 @@
           </v-flex>
           <v-flex
             xs12
-            md6
+            md4
             pa-1
           >
             <v-autocomplete
@@ -60,7 +75,7 @@
           </v-flex>
           <v-flex
             xs12
-            md6
+            md4
             pa-1
           >
             <v-autocomplete
@@ -84,12 +99,37 @@
               <v-flex
                 xs6
               >
-                <h3>Criado em: {{ ticketComputed.created | date }}</h3>
+                <h3 v-if="!search">
+                  Criado em: {{ ticketComputed.created | date }}
+                </h3>
+                <v-menu
+                  v-if="search"
+                  v-model="menuDateCreated"
+                  full-width
+                  max-width="290"
+                >
+                  <template
+                    v-slot:activator="{ on }"
+                  >
+                    <v-text-field
+                      :value="momentValue()"
+                      box
+                      label="Data em que foi aberto"
+                      readonly
+                      v-on="on"
+                    />
+                  </template>
+                  <v-date-picker
+                    v-model="created"
+                  />
+                </v-menu>
               </v-flex>
               <v-flex
                 xs6
               >
-                <h3>Última modificação: {{ ticketComputed.modified | date }}</h3>
+                <h3 v-if="!search">
+                  Última modificação: {{ ticketComputed.modified | date }}
+                </h3>
               </v-flex>
             </v-layout>
           </v-flex>
@@ -148,6 +188,45 @@
                 </v-icon>
               </v-tab>
               <v-tab-item>
+                <v-layout
+                  row
+                  wrap
+                >
+                  <v-flex
+                    xs12
+                    pa-2
+                  >
+                    <v-timeline
+                      align-top
+                    >
+                      <v-timeline-item
+                        v-for="(log, index) in ticketComputed.logs"
+                        :key="index"
+                        :left="index%2===0"
+                        :right="index%2!==0"
+                        small
+                      >
+                        <template
+                          v-slot:opposite
+                        >
+                          <span>{{ log.oldStatus.name }}</span>
+                        </template>
+                        <v-card>
+                          <v-card-title
+                            class="headline"
+                          >
+                            {{ log.group.name }}
+                          </v-card-title>
+                          <v-card-text>
+                            {{ log.oldStatus.name }}
+                            <hr>
+                            Atualizado por: {{ log.user.name }} em {{ log.date | date }}
+                          </v-card-text>
+                        </v-card>
+                      </v-timeline-item>
+                    </v-timeline>
+                  </v-flex>
+                </v-layout>
                 <v-data-table
                   :items="ticketComputed.logs"
                   :headers="headers"
@@ -157,6 +236,9 @@
                     slot-scope="data"
                   >
                     <td>{{ data.item.user.name }}</td>
+                    <td>{{ data.item.date | date }}</td>
+                    <td>{{ data.item.oldStatus.name }}</td>
+                    <td>{{ data.item.group.name }}</td>
                   </template>
                 </v-data-table>
               </v-tab-item>
@@ -174,8 +256,7 @@
                   </v-icon>
                 </v-btn>
                 <v-list>
-                  <v-list-tile>
-                  </v-list-tile>
+                  <v-list-tile />
                 </v-list>
               </v-tab-item>
             </v-tabs>
@@ -187,7 +268,17 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import moment from 'moment'
+// import { format } from 'date-fns/format'
+
 export default {
+  filters: {
+    date(value) {
+      const newDate = new Date(value)
+      return newDate.toLocaleString()
+    }
+  },
   props: {
     search: Boolean,
     readonly: Boolean,
@@ -198,15 +289,9 @@ export default {
       }
     }
   },
-  filters: {
-    date(value) {
-      const newDate = new Date(value)
-      return newDate.toLocaleString()
-      // return `${newDate.getDate()}/${newDate.getMonth()}/${newDate.getFullYear()} ${newDate.getHours()}`
-    }
-  },
   data() {
     return {
+      menuDateCreated: false,
       headers: [
         {
           text: 'Usuário',
@@ -218,24 +303,30 @@ export default {
         },
         {
           text: 'Status',
-          value: 'status'
+          value: 'status.name'
         },
         {
           text: 'Grupo',
-          value: 'group'
+          value: 'group.name'
         }
       ],
       analysts: [],
       groups: [],
       status: [],
       categories: [],
+      created: new Date().toISOString().substr(0, 10),
       ticketData: {
         resume: '',
-        content: ''
+        content: '',
+        created: new Date(),
+        modified: new Date()
       }
     }
   },
   computed: {
+    ...mapGetters({
+      user: 'auth/getUser'
+    }),
     value() {
       return this.ticketData
     },
@@ -243,8 +334,8 @@ export default {
       return Object.assign(this.ticketData, this.ticket)
     }
   },
-  created() {
-    this.$axios.get('api/analyst').then(result => {
+  async created() {
+    await this.$axios.get('api/analyst').then(result => {
       this.analysts = result.data
     })
     this.$axios.get('api/group').then(result => {
@@ -256,15 +347,25 @@ export default {
     this.$axios.get('api/category').then(result => {
       this.categories = result.data
     })
+    if (!this.search && !this.readonly) {
+      const openedBy = this.analysts.filter(a => {
+        return a.email === this.user.email
+      })[0]
+      this.ticketComputed.openedBy = openedBy
+    }
   },
   methods: {
+    momentValue() {
+      return this.ticketComputed.created
+        ? moment(this.ticketComputed.created).format('dddd, MMMM Do YYYY')
+        : ''
+    },
     save() {
-      this.$emit('input', this.ticketComputed)
-      /* if (this.$refs.form.validate()) {
-        this.$axios.post('api/ticket', this.ticket).then(() => {
-          this.$router.push('/ticket')
-        })
-      } */
+      if (!this.search && this.$refs.form.validate()) {
+        this.$emit('input', this.ticketComputed)
+      } else {
+        this.$emit('input', this.ticketComputed)
+      }
     }
   }
 }

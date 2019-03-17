@@ -1,6 +1,6 @@
 const Notification = require('../models/Notification')
 
-module.exports = app => {
+module.exports = (app, io) => {
   app.get('/notification/:id', (req, res) => {
     Notification.findOne(
       {
@@ -37,9 +37,12 @@ module.exports = app => {
           read: true
         }
       },
-      (err, result) => {
-        console.log(result)
+      (err) => {
         if (err) return res.status(500).json(err)
+        io.emit('readNotification', {
+          _id: req.params.id,
+          read: true
+        })
         return res.sendStatus(200)
       }
     )

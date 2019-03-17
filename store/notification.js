@@ -22,12 +22,11 @@ export const mutations = {
     state.notifications.push(notification)
   },
   updateNotification(state, notification) {
-    const index = state.notifications.findIndex(n => {
-      return n._id === notification._id
-    })
-    if (index !== -1) {
-      state.notifications.splice(index, 1)
-      state.notifications.push(notification)
-    }
+    state.notifications = [
+      ...state.notifications.filter(n => {
+        return n._id !== notification._id
+      }),
+      notification
+    ]
   }
 }
