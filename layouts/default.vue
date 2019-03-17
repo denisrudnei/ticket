@@ -267,15 +267,16 @@ export default {
   async created() {
     this.updateTree()
 
-    await this.$axios.post('api/auth/mergeUser', this.user).then(response => {
-      this.$store.commit('auth/setUserId', response.data._id)
-    })
-
-    await this.$axios
-      .post(`api/notification/${this.user._id}`)
-      .then(response => {
-        this.$store.commit('notification/setNotifications', response.data)
+    if (this.user !== undefined) {
+      await this.$axios.post('api/auth/mergeUser', this.user).then(response => {
+        this.$store.commit('auth/setUserId', response.data._id)
       })
+      await this.$axios
+        .post(`api/notification/${this.user._id}`)
+        .then(response => {
+          this.$store.commit('notification/setNotifications', response.data)
+        })
+    }
   },
   mounted() {
     /* eslint-disable */
