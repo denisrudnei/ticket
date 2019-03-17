@@ -111,6 +111,13 @@
             </v-badge>
           </v-btn>
         </template>
+        <v-btn
+          v-if="notifications.length > 0"
+          @click="readAllNotifications()"
+          block
+        >
+          Marcar todas como lidas
+        </v-btn>
         <v-list
           v-if="notifications.length > 0"
           two-line
@@ -292,6 +299,11 @@ export default {
     })
   },
   methods: {
+    readAllNotifications() {
+      this.notifications.forEach(n => {
+        this.$axios.post(`api/notification/${n._id}/read`)
+      })
+    },
     updateTree() {
       this.tree = []
       this.treeInfo.forEach(leaf => {

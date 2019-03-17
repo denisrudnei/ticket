@@ -185,7 +185,7 @@
       <td>{{ item.status.name }}</td>
       <td>{{ item.group.name }}</td>
       <td>{{ item.category.fullName }}</td>
-      <td>{{ item.created | date }}</td>
+      <td>{{ new Date(item.created) | date }}</td>
     </template>
   </v-data-table>
 </template>

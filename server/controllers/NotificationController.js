@@ -27,24 +27,14 @@ module.exports = (app, io) => {
     )
   })
 
-  app.post('/notification/:id/read', (req, res) => {
-    Notification.findOneAndUpdate(
-      {
-        _id: req.params.id
-      },
-      {
-        $set: {
-          read: true
-        }
-      },
-      (err) => {
-        if (err) return res.status(500).json(err)
-        io.emit('readNotification', {
-          _id: req.params.id,
-          read: true
-        })
-        return res.sendStatus(200)
-      }
-    )
+  app.post('/notification/:id/read', async (req, res) => {
+    const notification = await Notification.findOne({
+      _id: req.params.id
+    })
+
+    notification.read = true
+    io.emit('readNotification', notification)
+    notification.save()
+    return res.status(200).json(notification)
   })
 }
