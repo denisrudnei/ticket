@@ -14,6 +14,14 @@ export const mutations = {
   },
   setTickets(state, tickets) {
     state.tickets = tickets
+  },
+  updateTicket(state, ticket) {
+    state.tickets = [
+      ...state.tickets.filter(t => {
+        return t._id !== ticket._id
+      }),
+      ticket
+    ]
   }
 }
 

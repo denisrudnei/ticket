@@ -166,7 +166,7 @@
             <v-list>
               <v-list-tile>
                 <v-list-tile-avatar>
-                  <img src="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-734918.jpg">
+                  <v-img :src="item.actualUser.picture"/>
                 </v-list-tile-avatar>
                 <v-list-tile-content>
                   <v-list-tile-title>
@@ -194,12 +194,6 @@
 import { mapGetters } from 'vuex'
 export default {
   props: {
-    tickets: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
     search: {
       type: String,
       default: ''
@@ -243,7 +237,8 @@ export default {
   },
   computed: mapGetters({
     status: 'status/getStatus',
-    groups: 'group/getGroups'
+    groups: 'group/getGroups',
+    tickets: 'ticket/getTickets'
   }),
   created() {
     this.$axios.get('api/group').then(response => {
@@ -252,19 +247,30 @@ export default {
     this.$axios.get('api/status').then(response => {
       this.$store.commit('status/setStatus', response.data)
     })
+    this.$axios.get('api/ticket').then(response => {
+      this.$store.commit('ticket/setTickets', response.data)
+    })
   },
   methods: {
     modifyStatus(ticket) {
-      // TODO
+      this.$axios
+        .post(`api/ticket/updateStatus/${ticket._id}`, this.currentStatus)
+        .then(() => {
+          this.$toast.show('Status alterado', {
+            duration: 5000
+          })
+        })
     },
     transferToGroup(ticket) {
       this.$axios
         .post(`api/ticket/transfer/${ticket._id}`, this.currentGroup)
         .then(() => {
           this.$toast.show(
-            `Movido com sucesso ao grupo ${this.currentGroup.name}`
+            `Movido com sucesso ao grupo ${this.currentGroup.name}`,
+            {
+              duration: 5000
+            }
           )
-          this.$toast.show('Movido com sucesso')
         })
     }
   }

@@ -84,69 +84,7 @@
           person
         </v-icon>
       </v-btn>
-      <v-menu
-        v-if="logged"
-        :nudge-width="350"
-        offset-y
-      >
-        <template
-          v-slot:activator="{ on }"
-        >
-          <v-btn
-            icon
-            flat
-            v-on="on"
-          >
-            <v-badge>
-              <template
-                v-slot:badge
-              >
-                <span>{{ notifications.length }}</span>
-              </template>
-              <v-icon
-                class="white--text"
-              >
-                notifications
-              </v-icon>
-            </v-badge>
-          </v-btn>
-        </template>
-        <v-btn
-          v-if="notifications.length > 0"
-          @click="readAllNotifications()"
-          block
-        >
-          Marcar todas como lidas
-        </v-btn>
-        <v-list
-          v-if="notifications.length > 0"
-          two-line
-        >
-          <v-list-tile
-            v-for="notification in notifications"
-            :key="notification._id"
-          >
-            <v-list-tile-content>
-              <v-list-tile-title>
-                {{ notification.content }}
-              </v-list-tile-title>
-              <v-list-tile-sub-title>
-                {{ new Date(notification.date) | date }}
-              </v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-btn
-                icon
-                :to="`/notification/${notification._id}`"
-              >
-                <v-icon>
-                  info
-                </v-icon>
-              </v-btn>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
+      <Notification />
       <v-btn
         v-if="logged"
         flat
@@ -223,8 +161,12 @@
 <script>
 import _ from 'lodash'
 import { mapGetters } from 'vuex'
+import Notification from '@/components/notification'
 
 export default {
+  components: {
+    Notification
+  },
   data() {
     return {
       clipped: true,
@@ -254,7 +196,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      notifications: 'notification/getUnread',
       tickets: 'ticket/getTickets',
       logged: 'auth/getLoggedIn',
       user: 'auth/getUser'
@@ -286,8 +227,6 @@ export default {
     }
   },
   mounted() {
-    /* eslint-disable */
-
     this.$socket.on('notification', notification => {
       // this.$store.dispatch('ticket/insertTicket', ticket)
       // this.updateTree()
@@ -297,13 +236,12 @@ export default {
     this.$socket.on('readNotification', notification => {
       this.$store.commit('notification/updateNotification', notification)
     })
+
+    this.$socket.on('updateTicket', ticket => {
+      this.$store.commit('ticket/updateTicket', ticket)
+    })
   },
   methods: {
-    readAllNotifications() {
-      this.notifications.forEach(n => {
-        this.$axios.post(`api/notification/${n._id}/read`)
-      })
-    },
     updateTree() {
       this.tree = []
       this.treeInfo.forEach(leaf => {

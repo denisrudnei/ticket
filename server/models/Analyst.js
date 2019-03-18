@@ -20,7 +20,8 @@ const AnalystSchema = new Schema({
   active: {
     type: Boolean,
     default: false
-  }
+  },
+  picture: String
 })
 
 module.exports = new mongoose.model('Analyst', AnalystSchema)
