@@ -26,4 +26,8 @@ const NotificationSchema = new Schema({
   }
 })
 
+NotificationSchema.pre('find', function() {
+  this.populate(['to', 'from'])
+})
+
 module.exports = new mongoose.model('Notification', NotificationSchema)
