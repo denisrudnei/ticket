@@ -32,11 +32,6 @@
                   label="Email"
                   readonly
                 />
-                <v-autocomplete
-                  :items="groups.map(g => ({ text: g.name, value: g }))"
-                  box
-                  label="Grupo principal"
-                />
               </v-flex>
               <v-flex
                 xs4

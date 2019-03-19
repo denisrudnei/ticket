@@ -7,7 +7,7 @@ const CategorySchema = new Schema({
     type: String
   },
   father: {
-    type: Object,
+    type: Schema.Types.ObjectId,
     ref: 'Category'
   },
   description: {
@@ -15,17 +15,17 @@ const CategorySchema = new Schema({
   },
   subs: [
     {
-      type: Object,
+      type: Schema.Types.ObjectId,
       ref: 'Category'
     }
   ],
   defaultGroup: {
-    type: Object,
+    type: Schema.Types.ObjectId,
     ref: 'Group'
   },
   fields: [
     {
-      type: Object,
+      type: Schema.Types.ObjectId,
       ref: 'Field'
     }
   ]
@@ -34,6 +34,11 @@ const CategorySchema = new Schema({
 CategorySchema.virtual('fullName').get(function() {
   if (this.father === null || this.father === undefined) return this.name
   return `${this.father.fullName}.${this.name}`
+})
+
+CategorySchema.pre('find', function(next) {
+  this.populate('father')
+  next()
 })
 
 CategorySchema.set('toJSON', {

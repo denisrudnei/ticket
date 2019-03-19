@@ -12,5 +12,8 @@ export const getters = {
 export const mutations = {
   insert(state, analyst) {
     state.analysts.push(analyst)
+  },
+  setAnalysts(state, analysts) {
+    state.analysts = analysts
   }
 }

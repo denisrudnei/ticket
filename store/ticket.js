@@ -1,10 +1,46 @@
+/* eslint-disable */
+import _ from 'lodash'
+
 export const state = () => ({
-  tickets: []
+  tickets: [],
+  info: [
+    {
+      name: 'Status',
+      group: 'status.name'
+    },
+    {
+      name: 'Grupo',
+      group: 'group.name'
+    },
+    {
+      name: 'Categoria',
+      group: 'category.name'
+    }
+  ]
 })
 
 export const getters = {
   getTickets(state) {
     return state.tickets
+  },
+  getTree(state) {
+    return state.info.map(leaf => {
+      const base = _(state.tickets)
+        .groupBy(leaf.group)
+        .value()
+
+      const result = Object.keys(base).map(k => ({
+        id: `(${base[k].length}) ${k}`,
+        name: `(${base[k].length}) ${k}`,
+        url: `/search?${leaf.group}=${k}`,
+        children: []
+      }))
+      return {
+        id: leaf.group,
+        name: leaf.name,
+        children: result
+      }
+    })
   }
 }
 

@@ -6,7 +6,7 @@ const TicketSchema = new mongoose.Schema({
   _id: Schema.Types.ObjectId,
   category: {
     ref: 'Category',
-    type: Object,
+    type: Schema.Types.ObjectId,
     required: [true, 'Preencha a categoria']
   },
   resume: {
@@ -18,34 +18,34 @@ const TicketSchema = new mongoose.Schema({
     required: [true, 'Deve ter um conteúdo']
   },
   group: {
-    type: Object,
+    type: Schema.Types.ObjectId,
     ref: 'Group',
     required: [true, 'Necessário estar em um grupo']
   },
   status: {
     ref: 'Status',
-    type: Object,
+    type: Schema.Types.ObjectId,
     required: [true, 'Deve ter um status']
   },
   actualUser: {
-    type: Object,
+    type: Schema.Types.ObjectId,
     ref: 'Analyst',
     required: [true, 'É necessário abrir o chamado em nome de alguém']
   },
   openedBy: {
-    type: Object,
+    type: Schema.Types.ObjectId,
     ref: 'Analyst',
     required: [true, 'É necessário abrir o chamado em nome de alguém']
   },
   files: [
     {
-      type: Object,
+      type: Schema.Types.ObjectId,
       ref: 'File'
     }
   ],
   logs: [
     {
-      type: Object,
+      type: Schema.Types.ObjectId,
       ref: 'Log'
     }
   ],

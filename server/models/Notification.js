@@ -4,12 +4,12 @@ const Schema = mongoose.Schema
 const NotificationSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   from: {
-    type: Object,
+    type: Schema.Types.ObjectId,
     ref: 'Analyst'
   },
   to: [
     {
-      type: Object,
+      type: Schema.Types.ObjectId,
       ref: 'Analyst'
     }
   ],

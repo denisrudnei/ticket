@@ -29,6 +29,8 @@ module.exports = app => {
             return res.status(200).json(newAnalyst)
           })
         } else {
+          analyst.picture = req.body.picture
+          analyst.save()
           return res.status(200).json(analyst)
         }
       }

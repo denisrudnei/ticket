@@ -8,15 +8,6 @@
       pa-5
     >
       <v-form>
-        <!-- <v-text-field
-          solo
-          placeholder="Email"
-        />
-        <v-text-field
-          solo
-          type="password"
-          placeholder="Senha"
-        /> -->
         <v-btn
           large
           class="primary white--text"

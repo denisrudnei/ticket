@@ -27,6 +27,7 @@
       </v-list>
       <v-spacer />
       <v-treeview
+        v-if="tickets.length > 0"
         v-show="!miniVariant"
         :items="tree"
         open-on-click
@@ -53,6 +54,40 @@
           </nuxt-link>
         </template>
       </v-treeview>
+      <v-spacer/>
+      <v-list
+        two-line
+      >
+        <v-list-tile
+          v-for="analyst in analysts"
+          :key="analyst._id"
+        >
+          <v-list-tile-avatar>
+            <v-img
+              :src="analyst.picture"
+            />
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              {{ analyst.name }}
+            </v-list-tile-title>
+            <v-list-tile-sub-title>
+              {{ analyst.email }}
+            </v-list-tile-sub-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-btn
+              :to="`/chat/${analyst.email}`"
+              icon
+              class="green white--text"
+            >
+              <v-icon>
+                chat
+              </v-icon>
+            </v-btn>
+          </v-list-tile-action>
+        </v-list-tile>
+      </v-list>
     </v-navigation-drawer>
     <v-toolbar
       :clipped-left="clipped"
@@ -159,7 +194,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import { mapGetters } from 'vuex'
 import Notification from '@/components/notification'
 
@@ -173,48 +207,22 @@ export default {
       drawer: true,
       fixed: true,
       items: [{ icon: 'bookmarks', title: 'Chamados', to: '/' }],
-      tree: [],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'CControl',
-      treeInfo: [
-        {
-          name: 'Status',
-          group: 'status.name'
-        },
-        {
-          name: 'Grupo',
-          group: 'group.name'
-        },
-        {
-          name: 'Categoria',
-          group: 'category.name'
-        }
-      ]
+      title: 'CControl'
     }
   },
   computed: {
     ...mapGetters({
       tickets: 'ticket/getTickets',
       logged: 'auth/getLoggedIn',
-      user: 'auth/getUser'
-    })
-  },
-  async fetch({ store }) {
-    await this.$axios.get('api/ticket').then(response => {
-      store.commit('ticket/setTickets', response.data)
-    })
-    await this.$axios.get('api/status').then(response => {
-      store.commit('status/setStatus', response.data)
-    })
-    await this.$axios.get('api/group').then(response => {
-      store.commit('group/setGroups', response.data)
+      user: 'auth/getUser',
+      analysts: 'analyst/getAnalysts',
+      tree: 'ticket/getTree'
     })
   },
   async created() {
-    this.updateTree()
-
     if (this.user !== undefined) {
       await this.$axios.post('api/auth/mergeUser', this.user).then(response => {
         this.$store.commit('auth/setUserId', response.data._id)
@@ -225,11 +233,22 @@ export default {
           this.$store.commit('notification/setNotifications', response.data)
         })
     }
+    await this.$axios.get('api/ticket').then(response => {
+      this.$store.commit('ticket/setTickets', response.data)
+    })
   },
-  mounted() {
+  async mounted() {
+    await this.$axios.get('api/status').then(response => {
+      this.$store.commit('status/setStatus', response.data)
+    })
+    await this.$axios.get('api/group').then(response => {
+      this.$store.commit('group/setGroups', response.data)
+    })
+    await this.$axios.get('api/analyst').then(reponse => {
+      this.$store.commit('analyst/setAnalysts', reponse.data)
+    })
     this.$socket.on('notification', notification => {
       // this.$store.dispatch('ticket/insertTicket', ticket)
-      // this.updateTree()
       this.$store.commit('notification/addNotification', notification)
     })
 
@@ -240,19 +259,23 @@ export default {
     this.$socket.on('updateTicket', ticket => {
       this.$store.commit('ticket/updateTicket', ticket)
     })
+
+    this.$socket.on('addTicket', ticket => {
+      this.$store.commit('ticket/insertTicket', ticket)
+    })
   },
   methods: {
-    updateTree() {
+    /* updateTree() {
       this.tree = []
       this.treeInfo.forEach(leaf => {
         this.addToTree(leaf.name, leaf.group, this.tickets)
       })
-    },
+    }, */
     fetchUrl(item) {
       this.$router.push('/search/' + item.name)
-    },
-    addToTree(name, groupBy, data) {
-      if (!data.length > 0) return
+    }
+    /* addToTree(name, groupBy, data) {
+      if (data.length === 0) return
       const base = _(data)
         .groupBy(groupBy)
         .value()
@@ -269,7 +292,7 @@ export default {
         name: name,
         children: result
       })
-    }
+    } */
   }
 }
 </script>

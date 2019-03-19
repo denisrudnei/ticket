@@ -6,7 +6,13 @@ const Notification = require('../models/Notification')
 
 module.exports = (app, io) => {
   app.get('/ticket', (req, res) => {
-    Ticket.find({}, (err, tickets) => {
+    Ticket.find({}).populate([
+      'openedBy',
+      'actualUser',
+      'status',
+      'group',
+      'category'
+    ]).exec((err, tickets) => {
       if (err || tickets === null) return res.status(500).json(err)
       return res.status(200).json(tickets)
     })
@@ -29,33 +35,58 @@ module.exports = (app, io) => {
     Ticket.create(ticket, (err, result) => {
       if (err) return res.status(500).json(err)
       io.emit('notification', notification)
+      io.emit('addTicket', ticket)
       return res.status(200).json(result)
     })
   })
 
   app.post('/ticket/transfer/:id', async (req, res) => {
-    const ticket = await Ticket.findOne({
-      _id: req.params.id
-    })
+    const ticket = await Ticket.findOne({ _id: req.params.id }).populate([
+      'group',
+      'status',
+      'openedBy',
+      'actualUser',
+      'category',
+    ]).exec()
 
-    ticket.group = await Group.findOne({ _id: req.body._id })
+    const group = await Group.findOne({ _id: req.body._id })
+
+    ticket.group = group._id
+
+    const newTicket = {
+      ...ticket._doc,
+      group: group
+    }
 
     ticket.save((err) => {
       if (err) return res.status(500).json(err)
-      io.emit('updateTicket', ticket)
-      return res.status(200).json(ticket)
+      io.emit('updateTicket', newTicket)
+      return res.status(200).json(newTicket)
     })
   })
 
   app.post('/ticket/updateStatus/:id', async (req, res) => {
-    const ticket = await Ticket.findOne({ _id: req.params.id })
+    const ticket = await Ticket.findOne({ _id: req.params.id }).populate([
+      'group',
+      'status',
+      'openedBy',
+      'actualUser',
+      'category',
+    ]).exec()
 
-    ticket.status = await Status.findOne({ _id: req.body._id })
+    const status = await Status.findOne({ _id: req.body._id })
+
+    ticket.status = status._id
+
+    const newTicket = {
+      ...ticket._doc,
+      status: status
+    }
 
     ticket.save((err) => {
       if (err) return res.status(500).json(err)
-      io.emit('updateTicket', ticket)
-      return res.status(200).json(ticket)
+      io.emit('updateTicket', newTicket)
+      return res.status(200).json(newTicket)
     })
   })
 

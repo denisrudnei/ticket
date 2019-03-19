@@ -3,7 +3,7 @@ const Category = require('../models/Category')
 
 module.exports = app => {
   app.get('/category', (req, res) => {
-    Category.find({}).exec((err, categories) => {
+    Category.find({}).populate(['father', 'subs']).exec((err, categories) => {
       if (err || categories === null) return res.status(500).json(err)
       return res.status(200).json(categories)
     })
@@ -26,10 +26,14 @@ module.exports = app => {
   app.post('/category', async (req, res) => {
     const category = {
       _id: new mongoose.Types.ObjectId(),
-      ...req.body
+      name: req.body.name
     }
 
     const father = await Category.findOne({ _id: req.body.father._id }).exec()
+
+    if (father) {
+      category.father = father._id
+    }
 
     Category.create(category, (err, category) => {
       if (err || category === null) return res.status(500).json(err)

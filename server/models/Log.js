@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const LogSchema = new Schema({
   _id: Schema.Types.ObjectId,
   user: {
-    type: Object,
+    type: Schema.Types.ObjectId,
     ref: 'Analyst'
   },
   date: {
@@ -12,15 +12,15 @@ const LogSchema = new Schema({
     default: new Date()
   },
   oldStatus: {
-    type: Object,
+    type: Schema.Types.ObjectId,
     ref: 'Status'
   },
   group: {
-    type: Object,
+    type: Schema.Types.ObjectId,
     ref: 'Group'
   },
   newStatus: {
-    type: Object,
+    type: Schema.Types.ObjectId,
     ref: 'Status'
   }
 })
