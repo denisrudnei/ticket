@@ -10,6 +10,22 @@
       app
     >
       <v-list>
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-btn
+              v-if="logged"
+              icon
+              @click.stop="miniVariant = !miniVariant"
+            >
+              <v-icon
+                v-html="miniVariant ? 'chevron_right' : 'chevron_left'"
+              />
+            </v-btn>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            Ocular barra
+          </v-list-tile-content>
+        </v-list-tile>
         <v-list-tile
           v-for="(item, i) in items"
           :key="i"
@@ -54,7 +70,7 @@
           </nuxt-link>
         </template>
       </v-treeview>
-      <v-spacer/>
+      <v-spacer />
       <v-list
         two-line
       >
@@ -96,17 +112,14 @@
       class="primary white--text"
     >
       <v-btn
-        v-if="logged"
+        to="/"
         icon
-        @click.stop="miniVariant = !miniVariant"
+        class="primary white--text"
       >
-        <v-icon
-          v-html="miniVariant ? 'chevron_right' : 'chevron_left'"
-        />
+        <v-icon>
+          home
+        </v-icon>
       </v-btn>
-      <v-toolbar-title
-        v-text="title"
-      />
       <v-spacer />
       <v-btn
         v-if="logged"
@@ -207,10 +220,9 @@ export default {
       drawer: true,
       fixed: true,
       items: [{ icon: 'bookmarks', title: 'Chamados', to: '/' }],
-      miniVariant: false,
+      miniVariant: true,
       right: true,
-      rightDrawer: false,
-      title: 'CControl'
+      rightDrawer: false
     }
   },
   computed: {

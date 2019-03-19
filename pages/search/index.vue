@@ -25,6 +25,7 @@
 <script>
 import TicketCreate from '@/components/ticket/create'
 import TicketList from '@/components/ticket/list'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -48,6 +49,10 @@ export default {
       ]
     }
   },
+  computed: mapGetters({
+    status: 'status/getStatus',
+    groups: 'group/getGroups'
+  }),
   watch: {
     $route(to, from) {
       this.data = this.$router.currentRoute.query
@@ -68,11 +73,24 @@ export default {
       return obj
     },
     searchFiltred() {
-      this.search(this.clean(this.ticket))
+      this.search(this.ticket)
     },
     search(ticket) {
-      this.$axios.post('api/search', ticket).then(result => {
-        this.list = result.data
+      const newTicket = {}
+      Object.keys(ticket).forEach(k => {
+        if (ticket[k].hasOwnProperty('_id')) {
+          newTicket[k] = ticket[k]._id
+        } else {
+          newTicket[k] = ticket[k]
+        }
+      })
+      const fieldsToExclude = ['created', 'modified', 'resume', 'content']
+      fieldsToExclude.forEach(f => {
+        delete newTicket[f]
+      })
+      this.$axios.post('api/search', newTicket).then(response => {
+        this.$store.commit('ticket/setTickets', response.data)
+        // this.list = result.data
       })
     }
   }

@@ -21,13 +21,16 @@ module.exports = app => {
       },
       async (err, analyst) => {
         if (err || analyst === null) {
-          await Analyst.create({
-            _id: new mongoose.Types.ObjectId(),
-            ...req.body
-          }, (err, newAnalyst) => {
-            if (err) return res.status(500).json(err)
-            return res.status(200).json(newAnalyst)
-          })
+          await Analyst.create(
+            {
+              _id: new mongoose.Types.ObjectId(),
+              ...req.body
+            },
+            (err, newAnalyst) => {
+              if (err) return res.status(500).json(err)
+              return res.status(200).json(newAnalyst)
+            }
+          )
         } else {
           analyst.picture = req.body.picture
           analyst.save()

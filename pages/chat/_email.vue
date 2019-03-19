@@ -20,7 +20,7 @@
               <v-avatar>
                 <v-img
                   :src="c.picture"
-              />
+                />
               </v-avatar>
               <v-flex
                 pa-2

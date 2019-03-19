@@ -166,7 +166,7 @@
             <v-list>
               <v-list-tile>
                 <v-list-tile-avatar>
-                  <v-img :src="item.actualUser.picture"/>
+                  <v-img :src="item.actualUser.picture" />
                 </v-list-tile-avatar>
                 <v-list-tile-content>
                   <v-list-tile-title>

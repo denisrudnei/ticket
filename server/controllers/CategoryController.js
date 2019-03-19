@@ -3,10 +3,12 @@ const Category = require('../models/Category')
 
 module.exports = app => {
   app.get('/category', (req, res) => {
-    Category.find({}).populate(['father', 'subs']).exec((err, categories) => {
-      if (err || categories === null) return res.status(500).json(err)
-      return res.status(200).json(categories)
-    })
+    Category.find({})
+      .populate(['father', 'subs'])
+      .exec((err, categories) => {
+        if (err || categories === null) return res.status(500).json(err)
+        return res.status(200).json(categories)
+      })
   })
 
   app.get('/category/:name', (req, res) => {

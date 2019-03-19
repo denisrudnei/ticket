@@ -59,6 +59,10 @@ const TicketSchema = new mongoose.Schema({
   }
 })
 
+TicketSchema.pre('find', function() {
+  this.populate(['status', 'group', 'openedBy', 'actualUser'])
+})
+
 async function createLog(ticket) {
   const log = await Log.create({
     _id: new mongoose.Types.ObjectId(),

@@ -20,15 +20,15 @@
           </v-btn>
         </template>
         <v-card>
-          <v-card-content>
+          <v-card-text>
             <v-tabs
               icons-and-text
             >
               <v-tab>
-              Adicionar comentário
-              <v-icon>
-                chat
-              </v-icon>
+                Adicionar comentário
+                <v-icon>
+                  chat
+                </v-icon>
               </v-tab>
               <v-tab-item>
                 <v-textarea
@@ -51,17 +51,17 @@
                 </v-icon>
               </v-tab>
               <v-tab-item>
-                <input type="file" ref="filePicker" @change="selectFile()"/>
+                <input ref="filePicker" type="file" @change="selectFile()">
                 <v-layout
                   row
                   wrap
                 >
                   <v-flex
+                    v-for="file in files"
+                    :key="file.name"
                     xs12
                     md6
                     pa-3
-                    v-for="file in files"
-                    :key="file.name"
                   >
                     <v-img :src="file.data" />
                   </v-flex>
@@ -86,11 +86,9 @@
                   send
                 </v-icon>
               </v-tab>
-              <v-tab-item>
-
-              </v-tab-item>
+              <v-tab-item />
             </v-tabs>
-          </v-card-content>
+          </v-card-text>
         </v-card>
       </v-menu>
       <v-form

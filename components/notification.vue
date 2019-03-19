@@ -33,8 +33,8 @@
     <v-card>
       <v-btn
         v-if="notifications.length > 0"
-        @click="readAllNotifications()"
         block
+        @click="readAllNotifications()"
       >
         Marcar todas como lidas
       </v-btn>
@@ -96,8 +96,7 @@
       <v-tab>
         Teste
       </v-tab>
-      <v-tab-item>
-      </v-tab-item>
+      <v-tab-item />
     </v-tabs>
   </v-menu>
 </template>
