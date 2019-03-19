@@ -25,4 +25,13 @@ const LogSchema = new Schema({
   }
 })
 
+LogSchema.pre('find', function () {
+  this.populate([
+    'user',
+    'group',
+    'oldStatus',
+    'newStatus'
+  ])
+})
+
 module.exports = new mongoose.model('Log', LogSchema)

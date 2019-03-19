@@ -94,10 +94,18 @@ module.exports = (app, io) => {
     Ticket.findOne(
       {
         _id: req.params.id
-      },
-      (err, tickets) => {
+      })
+      .populate([
+        'openedBy',
+        'actualUser',
+        'category',
+        'group',
+        'status',
+        'logs'
+      ])
+      .exec((err, ticket) => {
         if (err) return res.status(500).json(err)
-        return res.status(200).json(tickets)
+        return res.status(200).json(ticket)
       }
     )
   })
