@@ -4,6 +4,95 @@
       xs12
       pa-2
     >
+      <v-menu
+        offset-y
+        :close-on-content-click="false"
+        :nudge-width="350"
+      >
+        <template
+          v-slot:activator="{ on }"
+        >
+          <v-btn
+            class="primary white--text"
+            v-on="on"
+          >
+            Ações
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-content>
+            <v-tabs
+              icons-and-text
+            >
+              <v-tab>
+              Adicionar comentário
+              <v-icon>
+                chat
+              </v-icon>
+              </v-tab>
+              <v-tab-item>
+                <v-textarea
+                  box
+                  label="Comentário"
+                />
+                <v-btn
+                  icon
+                  class="primary white--text"
+                >
+                  <v-icon>
+                    send
+                  </v-icon>
+                </v-btn>
+              </v-tab-item>
+              <v-tab>
+                Incluir arquivo
+                <v-icon>
+                  attach_file
+                </v-icon>
+              </v-tab>
+              <v-tab-item>
+                <input type="file" ref="filePicker" @change="selectFile()"/>
+                <v-layout
+                  row
+                  wrap
+                >
+                  <v-flex
+                    xs12
+                    md6
+                    pa-3
+                    v-for="file in files"
+                    :key="file.name"
+                  >
+                    <v-img :src="file.data" />
+                  </v-flex>
+                  <v-flex
+                    xs12
+                    pa-2
+                  >
+                    <v-btn
+                      icon
+                      class="primary white-text"
+                    >
+                      <v-icon>
+                        send
+                      </v-icon>
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
+              </v-tab-item>
+              <v-tab>
+                Transferir
+                <v-icon>
+                  send
+                </v-icon>
+              </v-tab>
+              <v-tab-item>
+
+              </v-tab-item>
+            </v-tabs>
+          </v-card-content>
+        </v-card>
+      </v-menu>
       <v-form
         ref="form"
         lazy-validation
@@ -292,6 +381,7 @@ export default {
   data() {
     return {
       menuDateCreated: false,
+      files: [],
       headers: [
         {
           text: 'Usuário',
@@ -366,6 +456,17 @@ export default {
       } else {
         this.$emit('input', this.ticketComputed)
       }
+    },
+    selectFile() {
+      const vue = this
+      const fileReader = new FileReader()
+      fileReader.onloadend = function() {
+        vue.files.push({
+          data: fileReader.result
+        })
+      }
+
+      fileReader.readAsDataURL(this.$refs.filePicker.files[0])
     }
   }
 }
