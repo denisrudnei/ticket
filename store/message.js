@@ -1,22 +1,18 @@
 export const state = () => ({
-  text: '',
-  show: false
+  messages: []
 })
 
 export const getters = {
-  getText(state) {
-    return state.text
-  },
-  getShow(state) {
-    return state.show
+  getMessages(state) {
+    return state.messages
   }
 }
 
 export const mutations = {
-  setText(state, text) {
-    state.text = text
+  setMessages(state, messages) {
+    state.messages = messages
   },
-  setShow(state, show) {
-    state.show = show
+  addMessage(state, message) {
+    state.messages.push(message)
   }
 }

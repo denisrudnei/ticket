@@ -51,6 +51,7 @@ async function start() {
   require('./controllers/StatusController')(apiRouter)
   require('./controllers/SearchController')(apiRouter)
   require('./controllers/NotificationController')(apiRouter, io)
+  require('./controllers/ChatController')(apiRouter, io)
   app.use('/api', apiRouter)
 
   // Give nuxt middleware to express

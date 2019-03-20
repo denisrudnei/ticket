@@ -3,6 +3,8 @@
     :items="tickets"
     :search="search"
     :headers="headers"
+    must-sort
+    :pagination.sync="pagination"
   >
     <template
       v-slot:items="{ item }"
@@ -201,6 +203,11 @@ export default {
   },
   data() {
     return {
+      pagination: {
+        sortBy: 'created',
+        descending: true,
+        rowsPerPage: -1
+      },
       currentGroup: {},
       currentStatus: {},
       headers: [
@@ -230,7 +237,7 @@ export default {
         },
         {
           text: 'Data de criação',
-          value: 'date'
+          value: 'created'
         }
       ]
     }
@@ -238,9 +245,9 @@ export default {
   computed: mapGetters({
     status: 'status/getStatus',
     groups: 'group/getGroups',
-    tickets: 'ticket/getTickets'
+    tickets: 'ticket/getSearch'
   }),
-  created() {
+  mounted() {
     this.$axios.get('api/group').then(response => {
       this.$store.commit('group/setGroups', response.data)
     })
@@ -249,6 +256,7 @@ export default {
     })
     this.$axios.get('api/ticket').then(response => {
       this.$store.commit('ticket/setTickets', response.data)
+      this.$store.commit('ticket/setSearch', response.data)
     })
   },
   methods: {

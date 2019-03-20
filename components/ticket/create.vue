@@ -5,6 +5,7 @@
       pa-2
     >
       <v-menu
+        v-if="readonly"
         offset-y
         :close-on-content-click="false"
         :nudge-width="350"
@@ -86,6 +87,36 @@
                   send
                 </v-icon>
               </v-tab>
+              <v-tab-item>
+                <v-layout
+                  row
+                  wrap
+                >
+                  <v-flex
+                    xs12
+                    pa-2
+                  >
+                    <v-autocomplete
+                      box
+                      :items="groups.map(g =>({ text: g.name, value: g }))"
+                      label="Grupo"
+                    />
+                  </v-flex>
+                  <v-flex
+                    xs12
+                    pa-2
+                  >
+                    <v-btn
+                      class="primary white--text"
+                      icon
+                    >
+                      <v-icon>
+                        send
+                      </v-icon>
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
+              </v-tab-item>
               <v-tab-item />
             </v-tabs>
           </v-card-text>

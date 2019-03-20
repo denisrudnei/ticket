@@ -1,8 +1,10 @@
 /* eslint-disable */
 import _ from 'lodash'
+import { satisfies } from 'semver';
 
 export const state = () => ({
   tickets: [],
+  search: [],
   info: [
     {
       name: 'Status',
@@ -22,6 +24,9 @@ export const state = () => ({
 export const getters = {
   getTickets(state) {
     return state.tickets
+  },
+  getSearch(state) {
+    return state.search
   },
   getTree(state) {
     return state.info.map(leaf => {
@@ -58,6 +63,17 @@ export const mutations = {
       }),
       ticket
     ]
+    if (state.search.filter(s => { return s._id === ticket._id }).length > 0) {
+      state.search = [
+        ...state.search.filter(s => {
+          return s._id !== ticket._id
+        }),
+        ticket
+      ]
+    }
+  },
+  setSearch(state, tickets) {
+    state.search = tickets
   }
 }
 

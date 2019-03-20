@@ -253,6 +253,9 @@ export default {
     await this.$axios.get('api/status').then(response => {
       this.$store.commit('status/setStatus', response.data)
     })
+    await this.$axios.get('api/category').then(response => {
+      this.$store.commit('category/setCategories', response.data)
+    })
     await this.$axios.get('api/group').then(response => {
       this.$store.commit('group/setGroups', response.data)
     })
@@ -277,34 +280,9 @@ export default {
     })
   },
   methods: {
-    /* updateTree() {
-      this.tree = []
-      this.treeInfo.forEach(leaf => {
-        this.addToTree(leaf.name, leaf.group, this.tickets)
-      })
-    }, */
     fetchUrl(item) {
       this.$router.push('/search/' + item.name)
     }
-    /* addToTree(name, groupBy, data) {
-      if (data.length === 0) return
-      const base = _(data)
-        .groupBy(groupBy)
-        .value()
-
-      const result = Object.keys(base).map(k => ({
-        id: `${k} - ${base[k].length}`,
-        name: `${k} - ${base[k].length}`,
-        url: `/search?${groupBy}=${k}`,
-        children: []
-      }))
-
-      this.tree.push({
-        id: groupBy,
-        name: name,
-        children: result
-      })
-    } */
   }
 }
 </script>

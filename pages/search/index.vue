@@ -9,7 +9,7 @@
       <ticket-create
         v-model="ticket"
         search
-        @input="searchFiltred()"  
+        @input="search(ticket)"  
       />
     </v-flex>
     <v-flex
@@ -51,34 +51,47 @@ export default {
   },
   computed: mapGetters({
     status: 'status/getStatus',
-    groups: 'group/getGroups'
+    group: 'group/getGroups',
+    category: 'category/getCategories'
   }),
   watch: {
     $route(to, from) {
       this.data = this.$router.currentRoute.query
-      this.search(this.data)
+      this.search(this.convertQueryString(this.data))
     }
   },
-  created() {
+  async mounted() {
+    await this.$axios.get('api/status').then(response => {
+      this.$store.commit('status/setStatus', response.data)
+    })
+    await this.$axios.get('api/category').then(response => {
+      this.$store.commit('category/setCategories', response.data)
+    })
+    await this.$axios.get('api/group').then(response => {
+      this.$store.commit('group/setGroups', response.data)
+    })
+    await this.$axios.get('api/analyst').then(reponse => {
+      this.$store.commit('analyst/setAnalysts', reponse.data)
+    })
     this.data = this.$router.currentRoute.query
-    this.search(this.data)
+    this.search(this.convertQueryString(this.data))
   },
   methods: {
-    clean(obj) {
-      Object.keys(obj).forEach(key => {
-        if (obj[key] === '') {
-          delete obj[key]
-        }
+    convertQueryString(queryString) {
+      const search = {}
+      Object.keys(queryString).forEach(k => {
+        const [field, name] = k.split('.')
+        const value = this[field].filter(f => {
+          return f[name] === Object.values(queryString)[0]
+        })[0]._id
+        search[field] = value
       })
-      return obj
-    },
-    searchFiltred() {
-      this.search(this.ticket)
+      return search
     },
     search(ticket) {
       const newTicket = {}
       Object.keys(ticket).forEach(k => {
-        if (ticket[k].hasOwnProperty('_id')) {
+        if (ticket[k] !== undefined && ticket[k].hasOwnProperty('_id')) {
           newTicket[k] = ticket[k]._id
         } else {
           newTicket[k] = ticket[k]
@@ -89,8 +102,7 @@ export default {
         delete newTicket[f]
       })
       this.$axios.post('api/search', newTicket).then(response => {
-        this.$store.commit('ticket/setTickets', response.data)
-        // this.list = result.data
+        this.$store.commit('ticket/setSearch', response.data)
       })
     }
   }
