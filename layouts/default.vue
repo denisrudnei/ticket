@@ -108,6 +108,7 @@
       :logged="logged"
       :clipped="clipped"
     />
+    <TicketDialog />
     <v-content>
       <v-layout
         row
@@ -156,7 +157,7 @@
             bottom
             right
             fixed
-            direction="left"
+            direction="top"
           >
             <template
               v-slot:activator
@@ -171,14 +172,16 @@
               </v-btn>
             </template>
             <v-btn
+              :title="ticket._id"
               v-for="ticket in ticketsToEdit"
               :key="ticket._id"
               class="primary white--text"
-              @click="setDialog(ticket._id)"
+              fab
+              @click="setDialog(ticket)"
+              v-on="on"
             >
-              {{ ticket._id }}
-              <v-icon right>
-                build
+              <v-icon>
+                search
               </v-icon>
             </v-btn>
           </v-speed-dial>
@@ -197,10 +200,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import Toolbar from '@/components/toolbar'
+import TicketDialog from '@/components/ticket/dialog'
 
 export default {
   components: {
-    Toolbar
+    Toolbar,
+    TicketDialog
   },
   data() {
     return {
@@ -270,8 +275,9 @@ export default {
     fetchUrl(item) {
       this.$router.push('/search/' + item.name)
     },
-    setDialog(id) {
-      this.$store.commit('ticket/setDialog', id)
+    setDialog(ticket) {
+      this.$store.commit('ticket/setActualTicket', ticket)
+      this.$store.commit('ticket/setDialog', ticket._id)
     }
   }
 }

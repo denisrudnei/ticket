@@ -5,6 +5,7 @@ export const state = () => ({
   tickets: [],
   search: [],
   dialog: '',
+  actualTicket: {},
   info: [
     {
       name: 'Status',
@@ -48,6 +49,10 @@ export const getters = {
       }
     })
   },
+
+  getActualTicket(state) {
+    return state.actualTicket
+  },
   getDialog(state) {
     return state.dialog
   },
@@ -57,6 +62,9 @@ export const getters = {
 }
 
 export const mutations = {
+  setActualTicket(state, ticket) {
+    state.actualTicket = ticket
+  },
   insertTicket(state, { ticket }) {
     state.tickets.push(ticket)
   },
