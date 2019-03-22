@@ -153,6 +153,7 @@
           pa-2
         >
           <v-speed-dial
+            v-if="logged"
             v-model="fab"
             bottom
             right
@@ -172,9 +173,9 @@
               </v-btn>
             </template>
             <v-btn
-              :title="ticket._id"
               v-for="ticket in ticketsToEdit"
               :key="ticket._id"
+              :title="ticket._id"
               class="primary white--text"
               fab
               @click="setDialog(ticket)"

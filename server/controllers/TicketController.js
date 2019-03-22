@@ -39,7 +39,9 @@ module.exports = (app, io) => {
 
     Ticket.create(ticket, async (err, result) => {
       if (err) return res.status(500).json(err)
-      const newTicket = await Ticket.findOne({ _id: result._id }).populate(populateArray)
+      const newTicket = await Ticket.findOne({ _id: result._id }).populate(
+        populateArray
+      )
       io.emit('notification', notification)
       io.emit('addTicket', newTicket)
       return res.status(200).json(newTicket)
