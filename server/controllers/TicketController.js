@@ -7,7 +7,14 @@ const Notification = require('../models/Notification')
 module.exports = (app, io) => {
   app.get('/ticket', (req, res) => {
     Ticket.find({})
-      .populate(['openedBy', 'actualUser', 'status', 'group', 'category'])
+      .populate([
+        'openedBy',
+        'actualUser',
+        'status',
+        'group',
+        'category',
+        'logs'
+      ])
       .exec((err, tickets) => {
         if (err || tickets === null) return res.status(500).json(err)
         return res.status(200).json(tickets)
@@ -38,7 +45,7 @@ module.exports = (app, io) => {
 
   app.post('/ticket/transfer/:id', async (req, res) => {
     const ticket = await Ticket.findOne({ _id: req.params.id })
-      .populate(['group', 'status', 'openedBy', 'actualUser', 'category'])
+      .populate(['group', 'status', 'openedBy', 'actualUser', 'category', 'logs'])
       .exec()
 
     const group = await Group.findOne({ _id: req.body._id })
@@ -59,7 +66,7 @@ module.exports = (app, io) => {
 
   app.post('/ticket/updateStatus/:id', async (req, res) => {
     const ticket = await Ticket.findOne({ _id: req.params.id })
-      .populate(['group', 'status', 'openedBy', 'actualUser', 'category'])
+      .populate(['group', 'status', 'openedBy', 'actualUser', 'category', 'logs'])
       .exec()
 
     const status = await Status.findOne({ _id: req.body._id })

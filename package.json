@@ -29,7 +29,7 @@
     "mongoose": "^5.4.17",
     "nuxt": "^2.4.5",
     "socket.io": "^2.2.0",
-    "vuetify": "^1.5.5",
+    "vuetify": "^1.5.7",
     "vuetify-loader": "^1.2.0"
   },
   "devDependencies": {

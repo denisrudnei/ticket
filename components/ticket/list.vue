@@ -37,10 +37,54 @@
                 xs12
                 pa-2
               >
+                <v-dialog
+                  lazy
+                  :value="dialog === item._id"
+                  fullscreen
+                >
+                  <v-card>
+                    <v-card-title>
+                      <v-toolbar
+                        fixed
+                        card
+                        class="primary white--text"
+                      >
+                        <v-toolbar-items>
+                          <v-btn
+                            class="primary white--text"
+                            icon
+                            @click="setDialog('')"
+                          >
+                            <v-icon>
+                              close
+                            </v-icon>
+                          </v-btn>
+                        </v-toolbar-items>
+                      </v-toolbar>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-layout
+                        row
+                        wrap
+                      >
+                        <v-flex
+                          xs12
+                          pa-2
+                        >
+                          <create-ticket
+                            :readonly="true"
+                            :ticket="item"
+                          />
+                        </v-flex>
+                      </v-layout>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
+                <!--:to="`/ticket/${item._id}`"-->
                 <v-btn
-                  :to="`/ticket/${item._id}`"
                   class="primary white--text"
                   block
+                  @click="addTicketsToEdit(item)"
                 >
                   Ver Ticket
                 </v-btn>
@@ -193,8 +237,12 @@
 </template>
 
 <script>
+import CreateTicket from '@/components/ticket/create'
 import { mapGetters } from 'vuex'
 export default {
+  components: {
+    CreateTicket
+  },
   props: {
     search: {
       type: String,
@@ -245,7 +293,8 @@ export default {
   computed: mapGetters({
     status: 'status/getStatus',
     groups: 'group/getGroups',
-    tickets: 'ticket/getSearch'
+    tickets: 'ticket/getSearch',
+    dialog: 'ticket/getDialog'
   }),
   mounted() {
     this.$axios.get('api/group').then(response => {
@@ -280,6 +329,13 @@ export default {
             }
           )
         })
+    },
+    setDialog(id) {
+      this.$store.commit('ticket/setDialog', id)
+    },
+    addTicketsToEdit(ticket) {
+      this.$store.commit('ticket/setDialog', ticket._id)
+      this.$store.commit('ticket/addTicketsToEdit', ticket)
     }
   }
 }

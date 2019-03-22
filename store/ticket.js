@@ -1,10 +1,10 @@
 /* eslint-disable */
 import _ from 'lodash'
-import { satisfies } from 'semver';
 
 export const state = () => ({
   tickets: [],
   search: [],
+  dialog: '',
   info: [
     {
       name: 'Status',
@@ -18,7 +18,8 @@ export const state = () => ({
       name: 'Categoria',
       group: 'category.name'
     }
-  ]
+  ],
+  ticketsToEdit: []
 })
 
 export const getters = {
@@ -46,6 +47,12 @@ export const getters = {
         children: result
       }
     })
+  },
+  getDialog(state) {
+    return state.dialog
+  },
+  getTicketsToEdit(state) {
+    return state.ticketsToEdit
   }
 }
 
@@ -72,8 +79,14 @@ export const mutations = {
       ]
     }
   },
+  setDialog(state, ticketId) {
+    state.dialog = ticketId
+  },
   setSearch(state, tickets) {
     state.search = tickets
+  },
+  addTicketsToEdit(state, ticket) {
+    state.ticketsToEdit.push(ticket)
   }
 }
 

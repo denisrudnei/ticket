@@ -2,7 +2,6 @@
   <v-app>
     <v-navigation-drawer
       v-if="logged"
-      v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
       fixed
@@ -105,62 +104,10 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar
-      :clipped-left="clipped"
-      fixed
-      app
-      class="primary white--text"
-    >
-      <v-btn
-        to="/"
-        icon
-        class="primary white--text"
-      >
-        <v-icon>
-          home
-        </v-icon>
-      </v-btn>
-      <v-spacer />
-      <v-btn
-        v-if="logged"
-        flat
-        icon
-        class="primary white--text"
-        to="/profile"
-      >
-        <v-icon>
-          person
-        </v-icon>
-      </v-btn>
-      <Notification />
-      <v-btn
-        v-if="logged"
-        flat
-        title="Configurações"
-        to="/config"
-        class="white--text"
-      >
-        Configurações
-        <v-icon
-          right
-          class="white--text"
-        >
-          settings_applications
-        </v-icon>
-      </v-btn>
-      <v-btn
-        v-if="logged"
-        to="/auth/logout"
-        title="Fazer logoff"
-        icon
-        flat
-        class="primary white-text"
-      >
-        <v-icon>
-          exit_to_app
-        </v-icon>
-      </v-btn>
-    </v-toolbar>
+    <Toolbar
+      :logged="logged"
+      :clipped="clipped"
+    />
     <v-content>
       <v-layout
         row
@@ -196,9 +143,50 @@
         </template>
       </v-layout>
       <nuxt />
+      <v-layout
+        row
+        wrap
+      >
+        <v-flex
+          xs12
+          pa-2
+        >
+          <v-speed-dial
+            v-model="fab"
+            bottom
+            right
+            fixed
+            direction="left"
+          >
+            <template
+              v-slot:activator
+            >
+              <v-btn
+                v-model="fab"
+                fab
+                class="primary white--text"
+              >
+                <v-icon>apps</v-icon>
+                <v-icon>close</v-icon>
+              </v-btn>
+            </template>
+            <v-btn
+              v-for="ticket in ticketsToEdit"
+              :key="ticket._id"
+              class="primary white--text"
+              @click="setDialog(ticket._id)"
+            >
+              {{ ticket._id }}
+              <v-icon right>
+                build
+              </v-icon>
+            </v-btn>
+          </v-speed-dial>
+        </v-flex>
+      </v-layout>
     </v-content>
     <v-footer
-      :fixed="fixed"
+      fixed
       app
     >
       <span>&copy; 2019</span>
@@ -208,21 +196,19 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Notification from '@/components/notification'
+import Toolbar from '@/components/toolbar'
 
 export default {
   components: {
-    Notification
+    Toolbar
   },
   data() {
     return {
-      clipped: true,
-      drawer: true,
-      fixed: true,
+      fab: true,
       items: [{ icon: 'bookmarks', title: 'Chamados', to: '/' }],
       miniVariant: true,
       right: true,
-      rightDrawer: false
+      clipped: true
     }
   },
   computed: {
@@ -231,7 +217,8 @@ export default {
       logged: 'auth/getLoggedIn',
       user: 'auth/getUser',
       analysts: 'analyst/getAnalysts',
-      tree: 'ticket/getTree'
+      tree: 'ticket/getTree',
+      ticketsToEdit: 'ticket/getTicketsToEdit'
     })
   },
   async created() {
@@ -282,6 +269,9 @@ export default {
   methods: {
     fetchUrl(item) {
       this.$router.push('/search/' + item.name)
+    },
+    setDialog(id) {
+      this.$store.commit('ticket/setDialog', id)
     }
   }
 }
