@@ -4,17 +4,19 @@ const Group = require('../models/Group')
 const Status = require('../models/Status')
 const Notification = require('../models/Notification')
 
+const populateArray = [
+  'openedBy',
+  'actualUser',
+  'status',
+  'group',
+  'category',
+  'logs'
+]
+
 module.exports = (app, io) => {
   app.get('/ticket', (req, res) => {
     Ticket.find({})
-      .populate([
-        'openedBy',
-        'actualUser',
-        'status',
-        'group',
-        'category',
-        'logs'
-      ])
+      .populate(populateArray)
       .exec((err, tickets) => {
         if (err || tickets === null) return res.status(500).json(err)
         return res.status(200).json(tickets)
@@ -35,17 +37,18 @@ module.exports = (app, io) => {
       content: 'Criado novo ticket'
     })
 
-    Ticket.create(ticket, (err, result) => {
+    Ticket.create(ticket, async (err, result) => {
       if (err) return res.status(500).json(err)
+      const newTicket = await Ticket.findOne({ _id: result._id }).populate(populateArray)
       io.emit('notification', notification)
-      io.emit('addTicket', ticket)
-      return res.status(200).json(result)
+      io.emit('addTicket', newTicket)
+      return res.status(200).json(newTicket)
     })
   })
 
   app.post('/ticket/transfer/:id', async (req, res) => {
     const ticket = await Ticket.findOne({ _id: req.params.id })
-      .populate(['group', 'status', 'openedBy', 'actualUser', 'category', 'logs'])
+      .populate(populateArray)
       .exec()
 
     const group = await Group.findOne({ _id: req.body._id })
@@ -66,7 +69,7 @@ module.exports = (app, io) => {
 
   app.post('/ticket/updateStatus/:id', async (req, res) => {
     const ticket = await Ticket.findOne({ _id: req.params.id })
-      .populate(['group', 'status', 'openedBy', 'actualUser', 'category', 'logs'])
+      .populate(populateArray)
       .exec()
 
     const status = await Status.findOne({ _id: req.body._id })
@@ -89,14 +92,7 @@ module.exports = (app, io) => {
     Ticket.findOne({
       _id: req.params.id
     })
-      .populate([
-        'openedBy',
-        'actualUser',
-        'category',
-        'group',
-        'status',
-        'logs'
-      ])
+      .populate(populateArray)
       .exec((err, ticket) => {
         if (err) return res.status(500).json(err)
         return res.status(200).json(ticket)
