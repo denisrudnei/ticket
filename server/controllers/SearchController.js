@@ -3,7 +3,7 @@ const Ticket = require('../models/Ticket')
 module.exports = app => {
   app.post('/search', (req, res) => {
     Ticket.find(req.body)
-      .populate(['group', 'status', 'openedBy', 'actualUser', 'category'])
+      .populate(['group', 'status', 'openedBy', 'actualUser', 'category', 'logs'])
       .exec((err, result) => {
         console.log(req.body)
         console.log(req.params)
