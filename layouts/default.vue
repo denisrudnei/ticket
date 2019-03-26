@@ -119,7 +119,6 @@
         >
           <v-flex
             xs12
-            md3
             pa-2
           >
             <v-btn
@@ -128,12 +127,6 @@
             >
               Criar incidente
             </v-btn>
-          </v-flex>
-          <v-flex
-            xs12
-            md3
-            pa-2
-          >
             <v-btn
               to="/search"
               class="primary"
@@ -179,7 +172,6 @@
               class="primary white--text"
               fab
               @click="setDialog(ticket)"
-              v-on="on"
             >
               <v-icon>
                 search
@@ -214,7 +206,8 @@ export default {
       items: [{ icon: 'bookmarks', title: 'Chamados', to: '/' }],
       miniVariant: true,
       right: true,
-      clipped: true
+      clipped: true,
+      notificationGroups: []
     }
   },
   computed: {
@@ -237,6 +230,11 @@ export default {
         .then(response => {
           this.$store.commit('notification/setNotifications', response.data)
         })
+      await this.$axios
+        .post(`api/analyst/${this.user._id}/groups`)
+        .then(response => {
+          this.notificationGroups = response.data
+        })
     }
     await this.$axios.get('api/ticket').then(response => {
       this.$store.commit('ticket/setTickets', response.data)
@@ -255,9 +253,11 @@ export default {
     await this.$axios.get('api/analyst').then(reponse => {
       this.$store.commit('analyst/setAnalysts', reponse.data)
     })
-    this.$socket.on('notification', notification => {
-      // this.$store.dispatch('ticket/insertTicket', ticket)
-      this.$store.commit('notification/addNotification', notification)
+
+    this.notificationGroups.forEach(group => {
+      this.$socket.on(`notification/${group._id}`, notification => {
+        this.$store.commit('notification/addNotification', notification)
+      })
     })
 
     this.$socket.on('readNotification', notification => {
@@ -270,6 +270,7 @@ export default {
 
     this.$socket.on('addTicket', ticket => {
       this.$store.commit('ticket/insertTicket', ticket)
+      // alert('Ticket adicionado')
     })
   },
   methods: {

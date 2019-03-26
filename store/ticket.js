@@ -65,7 +65,7 @@ export const mutations = {
   setActualTicket(state, ticket) {
     state.actualTicket = ticket
   },
-  insertTicket(state, { ticket }) {
+  insertTicket(state, ticket) {
     state.tickets.push(ticket)
   },
   setTickets(state, tickets) {

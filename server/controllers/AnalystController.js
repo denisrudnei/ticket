@@ -21,6 +21,15 @@ module.exports = app => {
     })
   })
 
+  app.post('/analyst/:id/groups', async (req, res) => {
+    const analyst = await Analyst.findOne({ _id: req.params.id })
+
+    analyst.getGroups((err, result) => {
+      if (err) return res.status(500).json(err)
+      return res.status(200).json(result)
+    })
+  })
+
   app.delete('/analyst/:id', (req, res) => {
     Analyst.findOneAndDelete(
       {

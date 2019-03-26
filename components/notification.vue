@@ -77,7 +77,7 @@
                 {{ notification.content }}
               </v-list-tile-title>
               <v-list-tile-sub-title>
-                {{ new Date(notification.date) | date }}
+                {{ notification.date | date }}
               </v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action>

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const Group = require('./Group')
 
 const AnalystSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -22,6 +23,29 @@ const AnalystSchema = new Schema({
     default: false
   },
   picture: String
+})
+
+AnalystSchema.method('getGroups', function(callback) {
+  Group.find(
+    {
+      analysts: {
+        $in: [this._id]
+      }
+    },
+    (err, result) => {
+      callback(err, result)
+    }
+  )
+})
+
+AnalystSchema.set('toJSON', {
+  getters: true,
+  virtuals: true
+})
+
+AnalystSchema.set('toObject', {
+  getters: true,
+  virtuals: true
 })
 
 module.exports = new mongoose.model('Analyst', AnalystSchema)

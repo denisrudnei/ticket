@@ -3,6 +3,7 @@ const Ticket = require('../models/Ticket')
 const Group = require('../models/Group')
 const Status = require('../models/Status')
 const Notification = require('../models/Notification')
+const { check } = require('express-validator/check')
 
 const populateArray = [
   'openedBy',
@@ -23,30 +24,41 @@ module.exports = (app, io) => {
       })
   })
 
-  app.post('/ticket', async (req, res) => {
-    const ticket = {
-      _id: new mongoose.Types.ObjectId(),
-      ...req.body
+  app.post(
+    '/ticket',
+    [
+      check('openedBy', 'Preencha o analista'),
+      check('actualUser'),
+      check('group'),
+      check('status'),
+      check('resume'),
+      check('content')
+    ],
+    async (req, res) => {
+      const ticket = {
+        _id: new mongoose.Types.ObjectId(),
+        ...req.body
+      }
+
+      const notification = await Notification.create({
+        _id: new mongoose.Types.ObjectId(),
+        name: 'TicketCreate',
+        from: ticket.openedBy._id,
+        to: ticket.group.analysts.map(a => a._id),
+        content: `${ticket.openedBy.name} abriu um novo chamado`
+      })
+
+      Ticket.create(ticket, async (err, result) => {
+        if (err) return res.status(500).json(err)
+        const newTicket = await Ticket.findOne({ _id: result._id }).populate(
+          populateArray
+        )
+        io.emit(`notification/${ticket.group._id}`, notification)
+        io.emit('addTicket', newTicket)
+        return res.status(200).json(newTicket)
+      })
     }
-
-    const notification = await Notification.create({
-      _id: new mongoose.Types.ObjectId(),
-      name: 'TicketCreate',
-      from: ticket.actualUser._id,
-      to: [ticket.actualUser._id],
-      content: 'Criado novo ticket'
-    })
-
-    Ticket.create(ticket, async (err, result) => {
-      if (err) return res.status(500).json(err)
-      const newTicket = await Ticket.findOne({ _id: result._id }).populate(
-        populateArray
-      )
-      io.emit('notification', notification)
-      io.emit('addTicket', newTicket)
-      return res.status(200).json(newTicket)
-    })
-  })
+  )
 
   app.post('/ticket/transfer/:id', async (req, res) => {
     const ticket = await Ticket.findOne({ _id: req.params.id })
@@ -62,9 +74,18 @@ module.exports = (app, io) => {
       group: group
     }
 
+    const notification = await Notification.create({
+      _id: new mongoose.Types.ObjectId(),
+      name: 'TicketTransfer',
+      from: ticket.openedBy._id,
+      to: group.analysts.map(a => a._id),
+      content: `${ticket.openedBy.name} transferiu um chamado para seu grupo`
+    })
+
     ticket.save(err => {
       if (err) return res.status(500).json(err)
       io.emit('updateTicket', newTicket)
+      io.emit(`notification/${group._id}`, notification)
       return res.status(200).json(newTicket)
     })
   })

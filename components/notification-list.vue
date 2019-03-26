@@ -22,6 +22,11 @@
             </v-list-tile-sub-title>
           </v-list-tile-content>
           <v-list-tile-action>
+            <v-switch
+              :value="notification.read"
+              label="Lida?"
+              @change="readNotification(notification)"
+            />
             <v-btn
               icon
               :to="`/notification/${notification._id}`"
@@ -43,7 +48,19 @@ import { mapGetters } from 'vuex'
 export default {
   computed: mapGetters({
     notifications: 'notification/getNotifications'
-  })
+  }),
+  methods: {
+    readNotification(notification) {
+      this.$axios
+        .post(`api/notification/${notification._id}/read`, notification)
+        .then(response => {
+          this.$store.commit('notification/updateNotification', response.data)
+          this.$toast.show('Lida', {
+            duration: 1000
+          })
+        })
+    }
+  }
 }
 </script>
 

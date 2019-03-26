@@ -79,7 +79,7 @@
                         <v-form>
                           <v-select
                             v-model="currentGroup"
-                            :items="groups.map(g => ({ text: g.name, value: g }))"
+                            :items="groups.filter(g => {return g._id !== item.group._id}).map(g => ({ text: g.name, value: g }))"
                             box
                             label="Para qual grupo? "
                           />
@@ -125,7 +125,7 @@
                         <v-form>
                           <v-select
                             v-model="currentStatus"
-                            :items="status.map(s => ({ text: s.name, value: s }))"
+                            :items="status.filter(s => {return s._id !== item.status._id}).map(s => ({ text: s.name, value: s }))"
                             box
                             label="Status"
                           />
@@ -189,7 +189,7 @@
       <td>{{ item.status.name }}</td>
       <td>{{ item.group.name }}</td>
       <td>{{ item.category.fullName }}</td>
-      <td>{{ new Date(item.created) | date }}</td>
+      <td>{{ item.created | date }}</td>
     </template>
   </v-data-table>
 </template>

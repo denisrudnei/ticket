@@ -15,5 +15,5 @@ Vue.use(Vuetify, {
 })
 
 Vue.filter('date', value => {
-  return value.toLocaleString()
+  return new Date(value).toLocaleString()
 })
