@@ -33,7 +33,9 @@ export default {
   methods: {
     save() {
       this.$axios.post('api/group', this.group).then(() => {
-        alert('Criado')
+        this.$toast.show('Grupo criado', {
+          duration: 1000
+        })
       })
     }
   }

@@ -181,6 +181,9 @@
         </v-flex>
       </v-layout>
     </v-content>
+    <Chat
+      v-if="logged"
+    />
     <v-footer
       fixed
       app
@@ -194,11 +197,13 @@
 import { mapGetters } from 'vuex'
 import Toolbar from '@/components/toolbar'
 import TicketDialog from '@/components/ticket/dialog'
+import Chat from '@/components/chat'
 
 export default {
   components: {
     Toolbar,
-    TicketDialog
+    TicketDialog,
+    Chat
   },
   data() {
     return {
@@ -270,7 +275,6 @@ export default {
 
     this.$socket.on('addTicket', ticket => {
       this.$store.commit('ticket/insertTicket', ticket)
-      // alert('Ticket adicionado')
     })
   },
   methods: {

@@ -94,7 +94,10 @@ export const mutations = {
     state.search = tickets
   },
   addTicketsToEdit(state, ticket) {
-    state.ticketsToEdit.push(ticket)
+    state.ticketsToEdit = [
+      ...state.ticketsToEdit.filter(t => { return t._id !== ticket._id }),
+      ticket
+    ]
   }
 }
 
