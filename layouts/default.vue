@@ -92,7 +92,7 @@
           </v-list-tile-content>
           <v-list-tile-action>
             <v-btn
-              :to="`/chat/${analyst.email}`"
+              @click="openChat(analyst)"
               icon
               class="green white--text"
             >
@@ -284,6 +284,11 @@ export default {
     setDialog(ticket) {
       this.$store.commit('ticket/setActualTicket', ticket)
       this.$store.commit('ticket/setDialog', ticket._id)
+    },
+    openChat(analyst) {
+      this.$store.commit('chat/setVisible', true)
+      this.$store.commit('chat/setActive', analyst._id)
+      this.$store.commit('chat/createChat', analyst)
     }
   }
 }

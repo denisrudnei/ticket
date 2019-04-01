@@ -3,7 +3,7 @@ const Ticket = require('../models/Ticket')
 const Group = require('../models/Group')
 const Status = require('../models/Status')
 const Notification = require('../models/Notification')
-const { check } = require('express-validator/check')
+const { body, validationResult } = require('express-validator/check')
 
 const populateArray = [
   'openedBy',
@@ -24,17 +24,21 @@ module.exports = (app, io) => {
       })
   })
 
+
   app.post(
     '/ticket',
     [
-      check('openedBy', 'Preencha o analista'),
-      check('actualUser'),
-      check('group'),
-      check('status'),
-      check('resume'),
-      check('content')
+      body('openedBy', 'Preencha o analista').exists(),
+      body('actualUser', 'Preencha o usuário atual').exists(),
+      body('group', 'Preencha um gropo').exists(),
+      body('status', 'Preencha um status').exists(),
+      body('resume').exists(),
+      body('content').exists()
     ],
     async (req, res) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) return res.status(400).json(errors.mapped())
+      
       const ticket = {
         _id: new mongoose.Types.ObjectId(),
         ...req.body

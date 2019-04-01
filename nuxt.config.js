@@ -50,7 +50,8 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/toast',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    '@nuxtjs/google-analytics'
   ],
   /*
   ** Axios module configuration
@@ -82,6 +83,10 @@ module.exports = {
         client_id: 'hHLA1yh4Ffvj1xyWhZzEzgk5Hz9GNHY2'
       }
     }
+  },
+
+  googleAnalytics: {
+    id: 'UA-38858408-3'
   },
 
   /*

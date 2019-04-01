@@ -26,4 +26,14 @@ module.exports = (app, io) => {
       }
     )
   })
+
+  app.get('/chat/message/:from/:to', (req, res) => {
+    Message.find({
+      from: req.params.from,
+      to: req.params.to
+    }, (err, messages) => {
+      if (err) return res.status(500).json(err)
+      return res.status(200).json(messages)
+    })
+  })
 }
