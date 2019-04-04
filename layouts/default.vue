@@ -16,9 +16,9 @@
               icon
               @click.stop="miniVariant = !miniVariant"
             >
-              <v-icon
-                v-html="miniVariant ? 'chevron_right' : 'chevron_left'"
-              />
+              <v-icon>
+                {{ miniVariant ? 'chevron_right' : 'chevron_left' }}
+              </v-icon>
             </v-btn>
           </v-list-tile-action>
           <v-list-tile-content>
@@ -33,7 +33,9 @@
           exact
         >
           <v-list-tile-action>
-            <v-icon v-html="item.icon" />
+            <v-icon>
+              {{ item.icon }}
+            </v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title v-text="item.title" />
@@ -92,9 +94,9 @@
           </v-list-tile-content>
           <v-list-tile-action>
             <v-btn
-              @click="openChat(analyst)"
               icon
               class="green white--text"
+              @click="openChat(analyst)"
             >
               <v-icon>
                 chat
@@ -208,7 +210,18 @@ export default {
   data() {
     return {
       fab: true,
-      items: [{ icon: 'bookmarks', title: 'Chamados', to: '/' }],
+      items: [
+        {
+          icon: 'bookmarks',
+          title: 'Chamados',
+          to: '/'
+        },
+        {
+          icon: 'show_chart',
+          title: 'Relatórios',
+          to: '/reports'
+        }
+      ],
       miniVariant: true,
       right: true,
       clipped: true,

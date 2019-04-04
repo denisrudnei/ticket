@@ -1,8 +1,8 @@
 <template>
   <v-dialog
+    v-if="chat"
     :value="visible"
     width="90vw"
-    v-if="chat"
   >
     <v-layout
       row
@@ -14,7 +14,7 @@
         class="primary white--text"
       >
         <v-avatar>
-         <img :src="chat.to.picture" />
+          <img :src="chat.to.picture">
         </v-avatar>
         <v-spacer />
         {{ chat.to.name }}
@@ -73,6 +73,12 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  computed: mapGetters({
+    analysts: 'analyst/getAnalysts',
+    messages: 'chat/getMessages',
+    chat: 'chat/getActive',
+    visible: 'chat/getVisible'
+  }),
   async created() {
     await this.$axios.get('api/analyst').then(response => {
       response.data.forEach(a => {
@@ -80,12 +86,6 @@ export default {
       })
     })
   },
-  computed: mapGetters({
-    analysts: 'analyst/getAnalysts',
-    messages: 'chat/getMessages',
-    chat: 'chat/getActive',
-    visible: 'chat/getVisible'
-  }),
   methods: {
     addMessage() {
       this.$store.commit('chat/createChat', 'fulano')

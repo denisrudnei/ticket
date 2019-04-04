@@ -30,7 +30,7 @@ module.exports = (app, io) => {
     [
       body('openedBy', 'Preencha o analista').exists(),
       body('actualUser', 'Preencha o usuário atual').exists(),
-      body('group', 'Preencha um gropo').exists(),
+      body('group', 'Preencha um grupo').exists(),
       body('status', 'Preencha um status').exists(),
       body('resume').exists(),
       body('content').exists()

@@ -33,7 +33,9 @@ export default {
   methods: {
     save() {
       this.$axios.post('api/status', this.status).then(() => {
-        alert('Criado')
+        this.$toast.show('Status criado', {
+          duration: 1000
+        })
       })
     }
   }

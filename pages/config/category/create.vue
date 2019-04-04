@@ -123,6 +123,9 @@ export default {
     save() {
       this.$axios.post('api/category', this.category).then(() => {
         this.loadData()
+        this.$toast.show('Categoria criada', {
+          duration: 1000
+        })
       })
     }
   }

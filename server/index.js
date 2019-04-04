@@ -8,12 +8,17 @@ const mongoose = require('mongoose')
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const session = require('express-session')
+const compression = require('compression')
 
 app.use(
   session({
-    secret: 'ccontrol_secret_key'
+    secret: process.env.SESSION_KEY,
+    resave: false,
+    saveUninitialized: false
   })
 )
+
+app.use(compression())
 
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost/test',
