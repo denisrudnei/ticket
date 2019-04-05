@@ -217,7 +217,7 @@ export default {
           to: '/'
         },
         {
-          icon: 'show_chart',
+          icon: 'insert_chart',
           title: 'Relatórios',
           to: '/reports'
         }

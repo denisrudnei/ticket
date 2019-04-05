@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Group = require('../models/Group')
-const Analyst = require('../models/Analyst')
 
 module.exports = app => {
   app.get('/group', (req, res) => {

@@ -8,9 +8,10 @@
         v-for="chart in charts"
         :key="chart.id"
         xs12
-        md4
+        md6
         pa-2
       >
+        <h5>{{ chart.id }}</h5>
         <apexchart
           width="100%"
           type="bar"

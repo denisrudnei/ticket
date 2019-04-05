@@ -6,7 +6,11 @@
     <v-flex
       xs12
     >
-      <v-tabs>
+      <v-tabs
+        color="primary"
+        dark
+        slider-color="white"
+      >
         <v-tab>Analista</v-tab>
         <v-tab-item>
           <v-tabs>

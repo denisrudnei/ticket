@@ -2,6 +2,7 @@
   <v-menu
     v-if="logged"
     :nudge-width="350"
+    max-width="350"
     max-height="40vh"
     offset-y
     :close-on-content-click="false"
@@ -30,21 +31,14 @@
         </v-badge>
       </v-btn>
     </template>
-    <v-card>
-      <v-btn
-        v-if="notifications.length > 0"
-        block
-        @click="readAllNotifications()"
-      >
-        Marcar todas como lidas
-      </v-btn>
-    </v-card>
     <v-tabs>
       <v-tab
         right
         title="Ticket"
       >
-        <v-icon>
+        <v-icon
+          class="primary--text"
+        >
           work
         </v-icon>
       </v-tab>
@@ -83,6 +77,7 @@
             <v-list-tile-action>
               <v-btn
                 icon
+                class="primary--text"
                 :to="`/notification/${notification._id}`"
               >
                 <v-icon>
@@ -94,10 +89,43 @@
         </v-list>
       </v-tab-item>
       <v-tab>
-        Teste
+        <v-icon
+          class="primary--text"
+        >
+          insert_chart
+        </v-icon>
       </v-tab>
       <v-tab-item />
     </v-tabs>
+    <v-card
+      class="fixed-footer"
+    >
+      <v-btn
+        v-if="notifications.length > 0"
+        flat
+        @click="readAllNotifications()"
+      >
+        Marcar todas como lidas
+        <v-icon
+          right
+          class="primary--text"
+        >
+          details
+        </v-icon>
+      </v-btn>
+      <v-btn
+        flat
+        to="/notification"
+      >
+        Ver todas notificações
+        <v-icon
+          right
+          class="primary--text"
+        >
+          search
+        </v-icon>
+      </v-btn>
+    </v-card>
   </v-menu>
 </template>
 
@@ -120,4 +148,9 @@ export default {
 </script>
 
 <style>
+.fixed-footer {
+  bottom: 0 !important;
+  margin-top: auto !important;
+  position: sticky !important;
+}
 </style>
