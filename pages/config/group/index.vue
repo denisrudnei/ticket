@@ -95,7 +95,7 @@
                     pa-2
                   >
                     <v-autocomplete
-                      v-model="analyst"
+                      v-model="currentAnalyst"
                       :items="analystsToAdd(item).map(a => ({text: a.name, value: a}))"
                       box
                     />
@@ -106,7 +106,7 @@
                   >
                     <v-btn
                       icon
-                      @click="addToGroup(item, analyst)"
+                      @click="addToGroup(item, currentAnalyst)"
                     >
                       <v-icon>
                         send
@@ -129,7 +129,7 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      analyst: {},
+      currentAnalyst: undefined,
       headers: [
         {
           text: 'Nome',
@@ -162,7 +162,7 @@ export default {
   methods: {
     addToGroup(group, analyst) {
       this.$axios
-        .post(`api/group/analyst/${group._id}`, this.analyst)
+        .post(`api/group/analyst/${group._id}`, this.currentAnalyst)
         .then(response => {
           this.updateGroups()
           this.$toast.show('Adicionado', {

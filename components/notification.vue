@@ -140,7 +140,9 @@ export default {
   methods: {
     readAllNotifications() {
       this.notifications.forEach(n => {
-        this.$axios.post(`api/notification/${n._id}/read`)
+        this.$axios.post(`api/notification/${n._id}/read`, {
+          read: true
+        })
       })
     }
   }

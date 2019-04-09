@@ -138,7 +138,7 @@
           >
             <v-autocomplete
               v-model="ticketComputed.openedBy"
-              :rules="[v => !!v || 'Necessário preencher']"
+              :rules="!search ? [v => !!v || 'Necessário preencher'] : undefined"
               :items="analysts.map(v => { return {text: v.name, value: v} })"
               required
               :readonly="readonly || !search"
@@ -153,7 +153,7 @@
           >
             <v-autocomplete
               v-model="ticketComputed.actualUser"
-              :rules="[v => !!v || 'Necessário preencher']"
+              :rules="!search ? [v => !!v || 'Necessário preencher']: undefined"
               :items="analysts.map(v => { return {text: v.name, value: v} })"
               required
               :readonly="readonly"
@@ -169,7 +169,7 @@
             <v-autocomplete
               v-model="ticketComputed.category"
               :items="categories.filter(c => { return c.subs.length === 0 }).map(c => { return { text: c.fullName, value: c } })"
-              :rules="[v => !!v || 'Necessário preencher uma categoria']"
+              :rules="!search ? [v => !!v || 'Necessário preencher uma categoria'] : undefined"
               required
               :readonly="readonly"
               box
@@ -184,7 +184,7 @@
             <v-autocomplete
               v-model="ticketComputed.group"
               :items="groups.map(g => { return { text: g.name, value: g } })"
-              :rules="[v => !!v || 'Necessário preeencher o grupo']"
+              :rules="!search ? [v => !!v || 'Necessário preeencher o grupo'] : undefined"
               required
               :readonly="readonly"
               box
@@ -199,7 +199,7 @@
             <v-autocomplete
               v-model="ticketComputed.status"
               :items="status.map(s => { return { text: s.name, value: s } })"
-              :rules="[v => !!v || 'Necessário preencher status']"
+              :rules="!search ? [v => !!v || 'Necessário preencher status'] : undefined"
               required
               :readonly="readonly"
               box
@@ -290,6 +290,13 @@
               <v-icon right>
                 save
               </v-icon>
+            </v-btn>
+            <v-btn
+              v-if="search"
+              class="primary"
+              @click="clearFields()"
+            >
+              Limpar campos
             </v-btn>
           </v-flex>
           <v-flex
@@ -494,8 +501,12 @@ export default {
           data: fileReader.result
         })
       }
-
       fileReader.readAsDataURL(this.$refs.filePicker.files[0])
+    },
+    clearFields() {
+      Object.keys(this.ticketData).forEach(key => {
+        this.ticketData[key] = undefined
+      })
     }
   }
 }

@@ -42,12 +42,10 @@ export default {
   computed: mapGetters({
     tickets: 'ticket/getTickets'
   }),
-  created() {
-    this.$axios.get('api/ticket').then(response => {
+  async mounted() {
+    await this.$axios.get('api/ticket').then(response => {
       this.$store.commit('ticket/setTickets', response.data)
     })
-  },
-  mounted() {
     this.addChart('status.name', 'Chamados por status')
     this.addChart('category.name', 'Chamados por categoria')
     this.addChart('openedBy.name', 'Chamados abertos por analista')

@@ -12,8 +12,6 @@ module.exports = app => {
         'logs'
       ])
       .exec((err, result) => {
-        console.log(req.body)
-        console.log(req.params)
         if (err) return res.status(500).json(err)
         return res.status(200).json(result)
       })
