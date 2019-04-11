@@ -59,7 +59,6 @@ export default {
   }),
   mounted() {
     this.$socket.on('message', message => {
-      /* eslint-disable-next-line */
       this.$store.commit('message/addMessage', message)
     })
   },

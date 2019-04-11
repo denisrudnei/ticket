@@ -1,4 +1,3 @@
-/* eslint-disable */
 import _ from 'lodash'
 
 export const state = () => ({
@@ -78,7 +77,10 @@ export const mutations = {
       }),
       ticket
     ]
-    if (state.search.filter(s => { return s._id === ticket._id }).length > 0) {
+    const tickets = state.search.filter(s => {
+      return s._id === ticket._id
+    })
+    if (tickets.length > 0) {
       state.search = [
         ...state.search.filter(s => {
           return s._id !== ticket._id
@@ -95,7 +97,9 @@ export const mutations = {
   },
   addTicketsToEdit(state, ticket) {
     state.ticketsToEdit = [
-      ...state.ticketsToEdit.filter(t => { return t._id !== ticket._id }),
+      ...state.ticketsToEdit.filter(t => {
+        return t._id !== ticket._id
+      }),
       ticket
     ]
   }
