@@ -37,7 +37,7 @@
               />
               <audio
                 v-if="item.type.includes('audio')"
-                :src="item.data"
+                :src="item.data || `/api/ticket/${item.name}/file`"
                 controls
               />
             </td>
