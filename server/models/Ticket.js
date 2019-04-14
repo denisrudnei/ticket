@@ -39,8 +39,7 @@ const TicketSchema = new mongoose.Schema({
   },
   files: [
     {
-      type: Schema.Types.ObjectId,
-      ref: 'File'
+      type: Object
     }
   ],
   logs: [

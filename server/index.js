@@ -2,19 +2,30 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
+const server = require('http').createServer(app)
 const apiRouter = express.Router()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const session = require('express-session')
 const compression = require('compression')
+const fileUploader = require('express-fileupload')
 
 app.use(
   session({
     secret: process.env.SESSION_KEY,
     resave: false,
     saveUninitialized: false
+  })
+)
+
+app.use(bodyParser.json())
+
+app.use(
+  fileUploader({
+    limits: {
+      fileSize: 10 * 1024 * 1024
+    }
   })
 )
 
@@ -45,8 +56,6 @@ async function start() {
   } else {
     await nuxt.ready()
   }
-
-  app.use(bodyParser.json())
 
   require('./controllers/AuthController')(apiRouter)
   require('./controllers/TicketController')(apiRouter, io)

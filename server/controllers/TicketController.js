@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
+const { body, validationResult } = require('express-validator/check')
+const S3 = require('../../plugins/S3')
 const Ticket = require('../models/Ticket')
 const Group = require('../models/Group')
 const Status = require('../models/Status')
 const Notification = require('../models/Notification')
-const { body, validationResult } = require('express-validator/check')
 
 const populateArray = [
   'openedBy',
@@ -24,7 +25,6 @@ module.exports = (app, io) => {
       })
   })
 
-
   app.post(
     '/ticket',
     [
@@ -38,7 +38,7 @@ module.exports = (app, io) => {
     async (req, res) => {
       const errors = validationResult(req)
       if (!errors.isEmpty()) return res.status(400).json(errors.mapped())
-      
+
       const ticket = {
         _id: new mongoose.Types.ObjectId(),
         ...req.body
@@ -135,5 +135,64 @@ module.exports = (app, io) => {
       ticket.save()
       res.sendStatus(200)
     })
+  })
+
+  app.get('/ticket/:id/file', (req, res) => {
+    S3.getObject(
+      {
+        Bucket: process.env.BUCKET,
+        Key: req.params.id
+      },
+      (err, file) => {
+        if (err) return res.status(500).json(err)
+        return res.end(file.Body)
+      }
+    )
+  })
+
+  app.delete('/ticket/:ticket/:file/file', async (req, res) => {
+    const ticket = await Ticket.findOne({
+      _id: req.params.ticket
+    })
+    S3.deleteObject(
+      {
+        Bucket: process.env.BUCKET,
+        Key: req.params.file
+      },
+      err => {
+        if (err) return res.status(500).json(err)
+        ticket.files = ticket.files.filter(f => {
+          return f.name !== req.params.file
+        })
+        ticket.save()
+        return res.sendStatus(200)
+      }
+    )
+  })
+
+  app.post('/ticket/:id/file', async (req, res) => {
+    const files = Object.values(req.files)
+    const ticket = await Ticket.findOne({
+      _id: req.params.id
+    })
+    files.forEach(async (f, index) => {
+      await S3.createBucket(async () => {
+        const name = `${req.params.id} - ${f.name} - ${index}`
+        const params = {
+          Bucket: process.env.BUCKET,
+          Key: name,
+          Body: f.data
+        }
+        await S3.upload(params, (err, data) => {
+          if (err) return res.status(400).json(err)
+          ticket.files.push({
+            name: name,
+            type: f.mimetype
+          })
+          ticket.save()
+        })
+      })
+    })
+    return res.status(200).json(ticket.files)
   })
 }

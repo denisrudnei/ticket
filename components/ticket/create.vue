@@ -8,7 +8,8 @@
         v-if="readonly"
         offset-y
         :close-on-content-click="false"
-        :nudge-width="350"
+        :nudge-width="500"
+        max-height="45vw"
       >
         <template
           v-slot:activator="{ on }"
@@ -52,34 +53,9 @@
                 </v-icon>
               </v-tab>
               <v-tab-item>
-                <input ref="filePicker" type="file" @change="selectFile()">
-                <v-layout
-                  row
-                  wrap
-                >
-                  <v-flex
-                    v-for="file in files"
-                    :key="file.name"
-                    xs12
-                    md6
-                    pa-3
-                  >
-                    <v-img :src="file.data" />
-                  </v-flex>
-                  <v-flex
-                    xs12
-                    pa-2
-                  >
-                    <v-btn
-                      icon
-                      class="primary white-text"
-                    >
-                      <v-icon>
-                        send
-                      </v-icon>
-                    </v-btn>
-                  </v-flex>
-                </v-layout>
+                <file-include
+                  :ticket-data="ticketData"
+                />
               </v-tab-item>
               <v-tab>
                 Transferir
@@ -374,15 +350,9 @@
                 </v-icon>
               </v-tab>
               <v-tab-item>
-                <v-btn>
-                  Incluir arquivo
-                  <v-icon>
-                    attach_file
-                  </v-icon>
-                </v-btn>
-                <v-list>
-                  <v-list-tile />
-                </v-list>
+                <file-include
+                  :ticket-data="ticketData"
+                />
               </v-tab-item>
             </v-tabs>
           </v-flex>
@@ -395,9 +365,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import moment from 'moment'
+import FileInclude from '@/components/files/include'
 // import { format } from 'date-fns/format'
 
 export default {
+  components: {
+    FileInclude
+  },
   filters: {
     date(value) {
       const newDate = new Date(value)
@@ -417,7 +391,6 @@ export default {
   data() {
     return {
       menuDateCreated: false,
-      files: [],
       headers: [
         {
           text: 'Usuário',
@@ -492,16 +465,6 @@ export default {
       } else {
         this.$emit('input', this.ticketComputed)
       }
-    },
-    selectFile() {
-      const vue = this
-      const fileReader = new FileReader()
-      fileReader.onloadend = function() {
-        vue.files.push({
-          data: fileReader.result
-        })
-      }
-      fileReader.readAsDataURL(this.$refs.filePicker.files[0])
     },
     clearFields() {
       Object.keys(this.ticketData).forEach(key => {

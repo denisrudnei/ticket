@@ -1,50 +1,43 @@
 <template>
-  <v-dialog
+  <div
     v-if="chat"
-    :value="visible"
-    width="90vw"
+    class="fixed"
   >
-    <v-layout
-      row
-      wrap
-      class="fixed"
-      justify-end
+    <v-flex
+      xs12
+      class="white"
     >
-      <v-toolbar
-        class="primary white--text"
-      >
-        <v-avatar>
-          <img :src="chat.to.picture">
-        </v-avatar>
-        <v-spacer />
-        {{ chat.to.name }}
-        <v-toolbar-items>
-          <v-btn
-            icon
-            class="white--text"
-            @click="hide()"
-          >
-            <v-icon>
-              close
-            </v-icon>
-          </v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
-      <v-flex
-        xs12
-        pa-2
-        class="white"
-      >
-        <v-timeline>
+      <v-card>
+        <v-toolbar
+          class="primary white--text"
+        >
+          <v-avatar>
+            <img :src="chat.to.picture">
+          </v-avatar>
+          <v-spacer />
+          {{ chat.to.name }}
+          <v-toolbar-items>
+            <v-btn
+              icon
+              class="white--text"
+              @click="hide()"
+            >
+              <v-icon>
+                close
+              </v-icon>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-timeline
+          class="expand"
+        >
           <v-timeline-item
             v-for="message in messages"
             :key="message._id"
             hide-dot
           >
             <v-card>
-              <v-card-title
-                class="primary white--text"
-              >
+              <v-card-title>
                 {{ message.name }}
                 <v-spacer />
                 <v-avatar>
@@ -59,14 +52,18 @@
             </v-card>
           </v-timeline-item>
         </v-timeline>
-        <v-textarea
-          box
-          label="Envie um texto"
-          @keydown.enter="addMessage()"
-        />
-      </v-flex>
-    </v-layout>
-  </v-dialog>
+      </v-card>
+    </v-flex>
+    <v-card
+      class="bottom" 
+    >
+      <v-text-field
+        box
+        label="Envie um texto"
+        @keydown.enter="addMessage()"
+      />
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -96,3 +93,28 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.fixed {
+  z-index: 9999;
+  position: fixed;
+  display: flex;
+  right: 0.8vw;
+  bottom: 0;
+  height: 65vh;
+  width: 33vw;
+  background: white;
+}
+
+.expand {
+  flex: 1;
+  flex-direction: column;
+}
+
+.bottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-sizing: content-box;
+}
+</style>

@@ -22,19 +22,32 @@
             </v-list-tile-sub-title>
           </v-list-tile-content>
           <v-list-tile-action>
-            <v-switch
-              :value="notification.read"
-              label="Lida?"
-              @change="readNotification(notification)"
-            />
-            <v-btn
-              icon
-              :to="`/notification/${notification._id}`"
+            <v-layout
+              row
+              wrap
             >
-              <v-icon>
-                info
-              </v-icon>
-            </v-btn>
+              <v-flex
+                pa-1
+              >
+                <v-btn
+                  icon
+                  :to="`/notification/${notification._id}`"
+                >
+                  <v-icon>
+                    info
+                  </v-icon>
+                </v-btn>
+              </v-flex>
+              <v-flex
+                pa-1
+              >
+                <v-switch
+                  :input-value="notification.read"
+                  label="Lida?"
+                  @change="readNotification(notification)"
+                />
+              </v-flex>
+            </v-layout>
           </v-list-tile-action>
         </v-list-tile>
       </v-list>
@@ -52,7 +65,10 @@ export default {
   methods: {
     readNotification(notification) {
       this.$axios
-        .post(`api/notification/${notification._id}/read`, notification)
+        .post(`api/notification/${notification._id}/read`, {
+          ...notification,
+          read: !notification.read
+        })
         .then(response => {
           this.$store.commit('notification/updateNotification', response.data)
           this.$toast.show('Lida', {

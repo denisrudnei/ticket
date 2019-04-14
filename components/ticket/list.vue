@@ -250,17 +250,38 @@ export default {
     tickets: 'ticket/getSearch',
     dialog: 'ticket/getDialog'
   }),
-  mounted() {
-    this.$axios.get('api/group').then(response => {
+  watch: {
+    dialog: function(value) {
+      const query =
+        value === ''
+          ? undefined
+          : {
+              ticket: value
+            }
+      this.$router.push({
+        query: query
+      })
+    }
+  },
+  async mounted() {
+    await this.$axios.get('api/group').then(response => {
       this.$store.commit('group/setGroups', response.data)
     })
-    this.$axios.get('api/status').then(response => {
+    await this.$axios.get('api/status').then(response => {
       this.$store.commit('status/setStatus', response.data)
     })
-    this.$axios.get('api/ticket').then(response => {
+    await this.$axios.get('api/ticket').then(response => {
       this.$store.commit('ticket/setTickets', response.data)
       this.$store.commit('ticket/setSearch', response.data)
     })
+    const query = this.$router.currentRoute.query
+    if (query.ticket !== undefined) {
+      this.addTicketsToEdit(
+        this.tickets.find(t => {
+          return t._id === query.ticket
+        })
+      )
+    }
   },
   methods: {
     modifyStatus(ticket) {
