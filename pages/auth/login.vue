@@ -67,7 +67,7 @@ export default {
         )
     },
     login() {
-      this.$auth.login('auth0')
+      this.$auth.loginWith('auth0')
     }
   }
 }
