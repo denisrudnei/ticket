@@ -115,7 +115,7 @@
             <v-autocomplete
               v-model="ticketComputed.openedBy"
               :rules="!search ? [v => !!v || 'Necessário preencher'] : undefined"
-              :items="analysts.map(v => { return {text: v.name, value: v} })"
+              :items="analysts.map(a => { return {text: a.name, value: a} })"
               required
               :readonly="readonly || !search"
               box
@@ -130,7 +130,7 @@
             <v-autocomplete
               v-model="ticketComputed.actualUser"
               :rules="!search ? [v => !!v || 'Necessário preencher']: undefined"
-              :items="analysts.map(v => { return {text: v.name, value: v} })"
+              :items="analysts.map(u => { return {text: u.name, value: u} })"
               required
               :readonly="readonly"
               box

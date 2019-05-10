@@ -5,14 +5,16 @@ module.exports = app => {
   app.post('/auth/login', (req, res) => {
     Analyst.findOne({
       email: req.body.email
-    }).exec((err, user) => {
-      if (err || user === null) return res.sendStatus(400)
-      user.verifyPassword(req.body.password, (err, result) => {
-        if (err || !result) return res.sendStatus(400)
-        req.session.authUser = user
-        return res.json(user)
-      })
     })
+      .select('+password')
+      .exec((err, user) => {
+        if (err || user === null) return res.sendStatus(400)
+        user.verifyPassword(req.body.password, (err, result) => {
+          if (err || !result) return res.sendStatus(400)
+          req.session.authUser = user
+          return res.json(user)
+        })
+      })
   })
 
   app.post('/auth/user', (req, res) => {

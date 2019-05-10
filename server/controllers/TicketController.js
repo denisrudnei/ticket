@@ -7,12 +7,34 @@ const Status = require('../models/Status')
 const Notification = require('../models/Notification')
 
 const populateArray = [
-  'openedBy',
-  'actualUser',
+  {
+    path: 'openedBy',
+    select: {
+      name: 1,
+      picture: 1,
+      email: 1
+    }
+  },
+  {
+    path: 'actualUser',
+    select: {
+      name: 1,
+      picture: 1,
+      email: 1
+    }
+  },
+  {
+    path: 'logs',
+    select: {
+      date: 1,
+      oldStatus: 1,
+      group: 1,
+      user: 1
+    }
+  },
   'status',
   'group',
-  'category',
-  'logs'
+  'category'
 ]
 
 module.exports = (app, io) => {

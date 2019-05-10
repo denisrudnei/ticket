@@ -18,6 +18,11 @@
         >
           Notificações
         </v-tab>
+        <v-tab
+          to="/profile/password"
+        >
+          Senha
+        </v-tab>
       </v-tabs>
       <nuxt-child />
     </v-flex>

@@ -14,7 +14,8 @@ const AnalystSchema = new Schema({
     required: [true, 'Necessário preencher um nome']
   },
   password: {
-    type: String
+    type: String,
+    select: false
   },
   description: {
     type: String
