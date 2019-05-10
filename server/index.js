@@ -10,6 +10,7 @@ const io = require('socket.io')(server)
 const session = require('express-session')
 const compression = require('compression')
 const fileUploader = require('express-fileupload')
+const acl = require('express-acl')
 
 app.use(
   session({
@@ -18,6 +19,11 @@ app.use(
     saveUninitialized: false
   })
 )
+
+acl.config({
+  filename: 'nacl.json',
+  defaultRole: 'user'
+})
 
 app.use(bodyParser.json())
 
@@ -67,6 +73,8 @@ async function start() {
   require('./controllers/NotificationController')(apiRouter, io)
   require('./controllers/ChatController')(apiRouter, io)
   app.use('/api', apiRouter)
+
+  apiRouter.use(acl.authorize)
 
   // Give nuxt middleware to express
   app.use(nuxt.render)

@@ -10,5 +10,6 @@ export const getters = {
 export const mutations = {
   setUserId(state, id) {
     state.user._id = id
-  }
+  },
+  SET(state, value) {}
 }

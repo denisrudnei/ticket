@@ -15,6 +15,7 @@
 
 <script>
 import ListTicket from '@/components/ticket/list'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -25,13 +26,14 @@ export default {
       tickets: []
     }
   },
+  computed: mapGetters({
+    user: 'auth/getUser',
+    logged: 'auth/getLoggedIn'
+  }),
   watch: {
     $route(to, from) {
       this.getTicket()
     }
-  },
-  created() {
-    this.getTicket()
   },
   methods: {
     getTicket() {

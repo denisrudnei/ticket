@@ -27,7 +27,9 @@
         person
       </v-icon>
     </v-btn>
-    <Notification />
+    <Notification
+      v-if="logged"
+    />
     <v-btn
       v-if="logged"
       flat

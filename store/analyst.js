@@ -4,7 +4,7 @@ export const state = () => ({
 })
 
 export const getters = {
-  getAnalysts(state) {
+  getAnalysts: state => {
     return state.analysts
   }
 }
@@ -13,7 +13,7 @@ export const mutations = {
   insert(state, analyst) {
     state.analysts.push(analyst)
   },
-  setAnalysts(state, analysts) {
+  setAnalysts: (state, analysts) => {
     state.analysts = analysts
   }
 }

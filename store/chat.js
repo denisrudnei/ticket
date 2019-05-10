@@ -9,13 +9,9 @@ export const getters = {
     return state.chats
   },
   getMessages(state) {
-    /* const index = state.chats.findIndex(c => {
-      return c.id === state.active
-    })
-
-    if (index === -1) return */
-
-    return state.chats[state.active].messages
+    return state.chats[state.active] === undefined
+      ? []
+      : state.chats[state.active].messages
   },
   getActive(state) {
     return state.chats[state.active]
@@ -64,14 +60,16 @@ export const actions = {
     let messages = []
 
     const current = this.getters['auth/getUser']
-    await this.$axios
-      .get(`/chat/message/${current._id}/${analyst._id}`)
-      .then(response => {
-        messages = response.data
+    if (current !== undefined && current._id !== undefined) {
+      await this.$axios
+        .get(`/chat/message/${current._id}/${analyst._id}`)
+        .then(response => {
+          messages = response.data
+        })
+      commit('createChat', {
+        analyst: analyst,
+        messages: messages
       })
-    commit('createChat', {
-      analyst: analyst,
-      messages: messages
-    })
+    }
   }
 }

@@ -75,6 +75,11 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  data() {
+    return {
+      text: ''
+    }
+  },
   computed: mapGetters({
     user: 'auth/getUser',
     analysts: 'analyst/getAnalysts',
@@ -83,11 +88,6 @@ export default {
     chats: 'chat/getChats',
     visible: 'chat/getVisible'
   }),
-  data() {
-    return {
-      text: ''
-    }
-  },
   mounted() {
     this.$socket.on('message', value => {
       this.$store.commit('chat/receiveMessage', value)

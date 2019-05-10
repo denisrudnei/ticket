@@ -72,39 +72,9 @@
         </template>
       </v-treeview>
       <v-spacer />
-      <v-list
-        two-line
-      >
-        <v-list-tile
-          v-for="analyst in analysts"
-          :key="analyst._id"
-        >
-          <v-list-tile-avatar>
-            <v-img
-              :src="analyst.picture"
-            />
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              {{ analyst.name }}
-            </v-list-tile-title>
-            <v-list-tile-sub-title>
-              {{ analyst.email }}
-            </v-list-tile-sub-title>
-          </v-list-tile-content>
-          <v-list-tile-action>
-            <v-btn
-              icon
-              class="green white--text"
-              @click="openChat(analyst)"
-            >
-              <v-icon>
-                chat
-              </v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-      </v-list>
+      <analyst-list
+        v-if="logged"
+      />
     </v-navigation-drawer>
     <Toolbar
       :logged="logged"
@@ -199,12 +169,14 @@
 import { mapGetters } from 'vuex'
 import Toolbar from '@/components/toolbar'
 import TicketDialog from '@/components/ticket/dialog'
+import AnalystList from '@/components/analyst-list'
 import Chat from '@/components/chat'
 
 export default {
   components: {
     Toolbar,
     TicketDialog,
+    AnalystList,
     Chat
   },
   data() {
@@ -224,8 +196,7 @@ export default {
       ],
       miniVariant: true,
       right: true,
-      clipped: true,
-      notificationGroups: []
+      clipped: true
     }
   },
   computed: {
@@ -233,50 +204,16 @@ export default {
       tickets: 'ticket/getTickets',
       logged: 'auth/getLoggedIn',
       user: 'auth/getUser',
-      analysts: 'analyst/getAnalysts',
       tree: 'ticket/getTree',
-      ticketsToEdit: 'ticket/getTicketsToEdit'
-    })
-  },
-  async created() {
-    if (this.user !== undefined) {
-      await this.$axios.post('/auth/mergeUser', this.user).then(response => {
-        this.$store.commit('auth/setUserId', response.data._id)
-      })
-      await this.$axios
-        .post(`/notification/${this.user._id}`)
-        .then(response => {
-          this.$store.commit('notification/setNotifications', response.data)
-        })
-      await this.$axios
-        .post(`/analyst/${this.user._id}/groups`)
-        .then(response => {
-          this.notificationGroups = response.data
-        })
-    }
-    await this.$axios.get('/ticket').then(response => {
-      this.$store.commit('ticket/setTickets', response.data)
+      ticketsToEdit: 'ticket/getTicketsToEdit',
+      notificationGroups: 'getNotificationGroups'
     })
   },
   async mounted() {
-    await this.$axios.get('/status').then(response => {
-      this.$store.commit('status/setStatus', response.data)
-    })
-    await this.$axios.get('/category').then(response => {
-      this.$store.commit('category/setCategories', response.data)
-    })
-    await this.$axios.get('/group').then(response => {
-      this.$store.commit('group/setGroups', response.data)
-    })
-    await this.$axios.get('/analyst').then(reponse => {
-      this.$store.commit('analyst/setAnalysts', reponse.data)
-    })
-
-    this.notificationGroups.forEach(group => {
-      this.$socket.on(`notification/${group._id}`, notification => {
-        this.$store.commit('notification/addNotification', notification)
-      })
-    })
+    if (this.logged) {
+      await this.$store.dispatch('downloadInfo')
+      this.$axios.post('/auth/mergeUser', this.user)
+    }
 
     this.$socket.on('readNotification', notification => {
       this.$store.commit('notification/updateNotification', notification)
@@ -289,6 +226,12 @@ export default {
     this.$socket.on('addTicket', ticket => {
       this.$store.commit('ticket/insertTicket', ticket)
     })
+
+    this.notificationGroups.forEach(group => {
+      this.$socket.on(`notification/${group._id}`, notification => {
+        this.$store.commit('notification/addNotification', notification)
+      })
+    })
   },
   methods: {
     fetchUrl(item) {
@@ -297,11 +240,6 @@ export default {
     setDialog(ticket) {
       this.$store.commit('ticket/setActualTicket', ticket)
       this.$store.commit('ticket/setDialog', ticket._id)
-    },
-    openChat(analyst) {
-      this.$store.commit('chat/setVisible', true)
-      this.$store.commit('chat/setActive', analyst._id)
-      this.$store.dispatch('chat/getMessages', analyst)
     }
   }
 }
