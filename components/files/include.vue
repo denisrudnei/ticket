@@ -31,10 +31,32 @@
             v-slot:items="{ item }"
           >
             <td>
-              <v-img
+              <v-menu
                 v-if="item.type.includes('image')"
-                :src="item.data || `/api/ticket/${item.name}/file`"
-              />
+                :close-on-content-click="true"
+                :open-on-hover="true"
+                :nudge-width="350"
+                offset-x
+              >
+                <template
+                  v-slot:activator="{ on }"
+                >
+                  <v-img
+                    :src="item.data || `/api/ticket/${item.name}/file`"
+                    v-on="on"
+                  />
+                </template>
+                <v-card>
+                  <nuxt-link
+                    target="_blank"
+                    :to="`/api/ticket/${item.name}/file`"
+                  >
+                    <v-img
+                      :src="item.data || `/api/ticket/${item.name}/file`"
+                    />
+                  </nuxt-link>
+                </v-card>
+              </v-menu>
               <audio
                 v-if="item.type.includes('audio')"
                 :src="item.data || `/api/ticket/${item.name}/file`"
@@ -219,7 +241,7 @@ export default {
       }
 
       this.$axios
-        .post(`api/ticket/${this.ticketData._id}/file`, formData, {
+        .post(`/ticket/${this.ticketData._id}/file`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -233,7 +255,7 @@ export default {
     },
     removeFileInServer(file) {
       this.$axios
-        .delete(`api/ticket/${this.ticketData._id}/${file.name}/file`)
+        .delete(`/ticket/${this.ticketData._id}/${file.name}/file`)
         .then(() => {
           const files = this.ticketData.files.filter(f => {
             return f.name !== file.name

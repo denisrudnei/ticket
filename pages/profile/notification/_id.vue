@@ -38,7 +38,7 @@ export default {
   },
   async mounted() {
     const id = this.$router.currentRoute.params.id
-    await this.$axios.get(`api/notification/${id}`).then(response => {
+    await this.$axios.get(`/notification/${id}`).then(response => {
       this.notification = response.data
     })
   },
@@ -46,7 +46,7 @@ export default {
     read() {
       const id = this.notification._id
       this.$axios
-        .post(`api/notification/${id}/read`, this.notification)
+        .post(`/notification/${id}/read`, this.notification)
         .then(response => {
           this.$store.commit('notification/updateNotification', response.data)
         })

@@ -78,7 +78,7 @@
               <v-btn
                 icon
                 class="primary--text"
-                :to="`/notification/${notification._id}`"
+                :to="`/profile/notification/${notification._id}`"
               >
                 <v-icon>
                   info
@@ -115,7 +115,7 @@
       </v-btn>
       <v-btn
         flat
-        to="/notification"
+        to="/profile/notification"
       >
         Ver todas notificações
         <v-icon
@@ -140,7 +140,7 @@ export default {
   methods: {
     readAllNotifications() {
       this.notifications.forEach(n => {
-        this.$axios.post(`api/notification/${n._id}/read`, {
+        this.$axios.post(`/notification/${n._id}/read`, {
           read: true
         })
       })

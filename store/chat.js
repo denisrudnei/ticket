@@ -1,23 +1,24 @@
 export const state = () => ({
-  chats: [],
+  chats: {},
   active: '',
   visible: false
 })
 
 export const getters = {
+  getChats(state) {
+    return state.chats
+  },
   getMessages(state) {
-    const index = state.chats.findIndex(c => {
+    /* const index = state.chats.findIndex(c => {
       return c.id === state.active
     })
 
-    if (index === -1) return []
+    if (index === -1) return */
 
-    return state.chats[index].messages
+    return state.chats[state.active].messages
   },
   getActive(state) {
-    return state.chats.find(c => {
-      return c.id === state.active
-    })
+    return state.chats[state.active]
   },
   getVisible(state) {
     return state.visible
@@ -25,40 +26,52 @@ export const getters = {
 }
 
 export const mutations = {
-  createChat(state, analyst) {
-    state.chats = [
-      ...state.chats.filter(c => {
-        return c.id !== analyst._id
-      }),
-      {
-        id: analyst._id,
-        to: analyst,
-        messages: []
-      }
-    ]
-  },
   deleteChat(state, id) {
-    state.chats = [
-      ...state.chats.filter(c => {
-        return c.id !== id
-      })
-    ]
+    delete state.chats[id]
   },
   updateChat(state, chat) {
-    state.chats = [
-      ...state.chats.filter(c => {
-        return c.id !== chat.id
-      }),
-      chat
-    ]
+    state.chats[chat.chatId] = chat
   },
-  addMessage(state, message) {
+  createChat(state, info) {
+    state.chats[info.analyst._id] = {
+      id: info.analyst._id,
+      to: info.analyst,
+      messages: info.messages
+    }
+  },
+  receiveMessage: function(state, message) {
     state.chats[message.chatId].messages.push(message)
+  },
+  send: function(state, message) {
+    this.$axios.post('/chat/message', message)
   },
   setVisible(state, visible) {
     state.visible = visible
+    if (!visible) state.active = ''
   },
   setActive(state, id) {
     state.active = id
+  }
+}
+
+export const actions = {
+  addMessage: ({ commit }, message) => {
+    commit('receiveMessage', message)
+    commit('send', message)
+  },
+  getMessages: async function({ commit }, analyst) {
+    if (!analyst) return
+    let messages = []
+
+    const current = this.getters['auth/getUser']
+    await this.$axios
+      .get(`/chat/message/${current._id}/${analyst._id}`)
+      .then(response => {
+        messages = response.data
+      })
+    commit('createChat', {
+      analyst: analyst,
+      messages: messages
+    })
   }
 }

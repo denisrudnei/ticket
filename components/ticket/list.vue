@@ -264,13 +264,13 @@ export default {
     }
   },
   async mounted() {
-    await this.$axios.get('api/group').then(response => {
+    await this.$axios.get('/group').then(response => {
       this.$store.commit('group/setGroups', response.data)
     })
-    await this.$axios.get('api/status').then(response => {
+    await this.$axios.get('/status').then(response => {
       this.$store.commit('status/setStatus', response.data)
     })
-    await this.$axios.get('api/ticket').then(response => {
+    await this.$axios.get('/ticket').then(response => {
       this.$store.commit('ticket/setTickets', response.data)
       this.$store.commit('ticket/setSearch', response.data)
     })
@@ -286,7 +286,7 @@ export default {
   methods: {
     modifyStatus(ticket) {
       this.$axios
-        .post(`api/ticket/updateStatus/${ticket._id}`, this.currentStatus)
+        .post(`/ticket/updateStatus/${ticket._id}`, this.currentStatus)
         .then(() => {
           this.$toast.show('Status alterado', {
             duration: 5000
@@ -295,7 +295,7 @@ export default {
     },
     transferToGroup(ticket) {
       this.$axios
-        .post(`api/ticket/transfer/${ticket._id}`, this.currentGroup)
+        .post(`/ticket/transfer/${ticket._id}`, this.currentGroup)
         .then(() => {
           this.$toast.show(
             `Movido com sucesso ao grupo ${this.currentGroup.name}`,

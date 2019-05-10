@@ -25,7 +25,10 @@
           solo
           label="Grupo"
         />
-        <v-btn @click="save">
+        <v-btn
+          class="primary white--text"
+          @click="save"  
+        >
           Criar
         </v-btn>
       </v-form>
@@ -46,13 +49,13 @@ export default {
     }
   },
   created() {
-    this.$axios.get('api/group').then(result => {
+    this.$axios.get('/group').then(result => {
       this.groups = result.data
     })
   },
   methods: {
     save() {
-      this.$axios.post('api/analyst', this.analyst).then(() => {
+      this.$axios.post('/analyst', this.analyst).then(() => {
         this.$toast.show('Criado novo analista', {
           duration: 1000
         })

@@ -45,7 +45,7 @@ export default {
     }
   },
   created() {
-    this.$axios.get('api/category').then(response => {
+    this.$axios.get('/category').then(response => {
       this.items = response.data
     })
   }

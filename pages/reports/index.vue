@@ -233,7 +233,7 @@ export default {
     }
   },
   async mounted() {
-    await this.$axios.get('api/ticket').then(response => {
+    await this.$axios.get('/ticket').then(response => {
       this.$store.commit('ticket/setTickets', response.data)
     })
     this.charts = JSON.parse(localStorage.getItem('charts')) || []

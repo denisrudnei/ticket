@@ -61,16 +61,16 @@ export default {
     }
   },
   async mounted() {
-    await this.$axios.get('api/status').then(response => {
+    await this.$axios.get('/status').then(response => {
       this.$store.commit('status/setStatus', response.data)
     })
-    await this.$axios.get('api/category').then(response => {
+    await this.$axios.get('/category').then(response => {
       this.$store.commit('category/setCategories', response.data)
     })
-    await this.$axios.get('api/group').then(response => {
+    await this.$axios.get('/group').then(response => {
       this.$store.commit('group/setGroups', response.data)
     })
-    await this.$axios.get('api/analyst').then(reponse => {
+    await this.$axios.get('/analyst').then(reponse => {
       this.$store.commit('analyst/setAnalysts', reponse.data)
     })
     this.data = this.$router.currentRoute.query
@@ -101,7 +101,7 @@ export default {
       fieldsToExclude.forEach(f => {
         delete newTicket[f]
       })
-      this.$axios.post('api/search', newTicket).then(response => {
+      this.$axios.post('/search', newTicket).then(response => {
         this.$store.commit('ticket/setSearch', response.data)
       })
     }

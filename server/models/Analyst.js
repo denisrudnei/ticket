@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const Schema = mongoose.Schema
 const Group = require('./Group')
 
@@ -25,7 +26,7 @@ const AnalystSchema = new Schema({
   picture: String
 })
 
-AnalystSchema.method('getGroups', function(callback) {
+AnalystSchema.methods.getGroups = function(callback) {
   Group.find(
     {
       analysts: {
@@ -36,7 +37,25 @@ AnalystSchema.method('getGroups', function(callback) {
       callback(err, result)
     }
   )
+}
+
+AnalystSchema.pre('save', function(next) {
+  const user = this
+  if (!user.isModified('password')) return next()
+  const salt = bcrypt.genSaltSync(12)
+  bcrypt.hash(user.password, salt, function(err, hash) {
+    if (err) return next(err)
+    user.password = hash
+    next()
+  })
 })
+
+AnalystSchema.methods.verifyPassword = function(password, next) {
+  bcrypt.compare(password, this.password, (err, result) => {
+    if (err) return next(err)
+    return next(null, result)
+  })
+}
 
 AnalystSchema.set('toJSON', {
   getters: true,

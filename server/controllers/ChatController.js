@@ -21,22 +21,34 @@ module.exports = (app, io) => {
           from: from,
           content: req.body.content
         }
-        io.emit('message', messageToSend)
+        io.emit('message', req.body)
         return res.status(200).json(messageToSend)
       }
     )
   })
 
   app.get('/chat/message/:from/:to', (req, res) => {
-    Message.find(
-      {
-        from: req.params.from,
-        to: req.params.to
-      },
-      (err, messages) => {
+    Message.find({
+      from: req.params.from,
+      to: req.params.to
+    })
+      .populate([
+        {
+          path: 'to',
+          select: {
+            password: 0
+          }
+        },
+        {
+          path: 'from',
+          select: {
+            password: 0
+          }
+        }
+      ])
+      .exec((err, messages) => {
         if (err) return res.status(500).json(err)
         return res.status(200).json(messages)
-      }
-    )
+      })
   })
 }

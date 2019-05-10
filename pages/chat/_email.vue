@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     add() {
-      this.$axios.post('api/chat/message', {
+      this.$axios.post('/chat/message', {
         to: this.current,
         from: this.current,
         content: this.content

@@ -29,7 +29,7 @@ export default {
     }
   },
   created() {
-    this.$axios.get('api/category').then(response => {
+    this.$axios.get('/category').then(response => {
       this.items = response.data.filter(c => {
         return c.father === undefined
       })
@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     getSub(item) {
-      this.$axios.get(`api/category/${item._id}/subs`).then(response => {
+      this.$axios.get(`/category/${item._id}/subs`).then(response => {
         item.subs = response.data.subs
       })
     }

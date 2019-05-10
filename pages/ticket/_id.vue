@@ -61,26 +61,26 @@ export default {
     save() {
       const id = this.$router.currentRoute.params.id
       if (this.$refs.form.validate()) {
-        this.$axios.put(`api/ticket/${id}`, this.ticket).then(() => {
+        this.$axios.put(`/ticket/${id}`, this.ticket).then(() => {
           this.update()
         })
       }
     },
     update() {
       const id = this.$router.currentRoute.params.id
-      this.$axios.get(`api/ticket/${id}`).then(result => {
+      this.$axios.get(`/ticket/${id}`).then(result => {
         this.ticket = result.data
       })
-      this.$axios.get('api/analyst').then(result => {
+      this.$axios.get('/analyst').then(result => {
         this.analysts = result.data
       })
-      this.$axios.get('api/group').then(result => {
+      this.$axios.get('/group').then(result => {
         this.groups = result.data
       })
-      this.$axios.get('api/status').then(result => {
+      this.$axios.get('/status').then(result => {
         this.status = result.data
       })
-      this.$axios.get('api/category').then(result => {
+      this.$axios.get('/category').then(result => {
         this.categories = result.data
       })
     }

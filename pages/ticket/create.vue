@@ -20,7 +20,7 @@ export default {
   methods: {
     create() {
       this.$axios
-        .post('api/ticket', this.ticket)
+        .post('/ticket', this.ticket)
         .then(() => {
           this.$router.push('/')
         })

@@ -34,20 +34,24 @@
           <v-timeline-item
             v-for="message in messages"
             :key="message._id"
-            hide-dot
+            :left="user._id === message.from"
           >
+            <template
+              v-slot:icon
+            >
+              <v-avatar>
+                <img :src="message.picture" alt="">
+              </v-avatar>
+            </template>
             <v-card>
               <v-card-title>
                 {{ message.name }}
                 <v-spacer />
-                <v-avatar>
-                  <img :src="message.picture" alt="">
-                </v-avatar>
               </v-card-title>
               <v-card-text>
-                teste
+                {{ message.content }}
                 <hr>
-                <sub>{{ new Date() | date }}</sub>
+                <sub>{{ message.date | date }}</sub>
               </v-card-text>
             </v-card>
           </v-timeline-item>
@@ -58,6 +62,7 @@
       class="bottom" 
     >
       <v-text-field
+        v-model="text"
         box
         label="Envie um texto"
         @keydown.enter="addMessage()"
@@ -71,21 +76,42 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: mapGetters({
+    user: 'auth/getUser',
     analysts: 'analyst/getAnalysts',
     messages: 'chat/getMessages',
     chat: 'chat/getActive',
+    chats: 'chat/getChats',
     visible: 'chat/getVisible'
   }),
+  data() {
+    return {
+      text: ''
+    }
+  },
+  mounted() {
+    this.$socket.on('message', value => {
+      this.$store.commit('chat/receiveMessage', value)
+    })
+  },
   async created() {
-    await this.$axios.get('api/analyst').then(response => {
+    await this.$axios.get('/analyst').then(response => {
       response.data.forEach(a => {
-        this.$store.commit('chat/createChat', a)
+        this.$store.dispatch('chat/getMessages', a)
       })
     })
   },
   methods: {
     addMessage() {
-      this.$store.commit('chat/createChat', 'fulano')
+      this.$store.dispatch('chat/addMessage', {
+        chatId: this.chat.id,
+        content: this.text,
+        date: new Date(),
+        name: this.user.name,
+        picture: this.user.picture,
+        to: this.chat.to,
+        from: this.user
+      })
+      this.text = ''
     },
     hide() {
       this.$store.commit('chat/setVisible', false)
@@ -109,6 +135,8 @@ export default {
 .expand {
   flex: 1;
   flex-direction: column;
+  overflow-y: scroll !important;
+  max-height: 50vh;
 }
 
 .bottom {

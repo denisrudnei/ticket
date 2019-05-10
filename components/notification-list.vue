@@ -31,7 +31,7 @@
               >
                 <v-btn
                   icon
-                  :to="`/notification/${notification._id}`"
+                  :to="`/profile/notification/${notification._id}`"
                 >
                   <v-icon>
                     info
@@ -65,7 +65,7 @@ export default {
   methods: {
     readNotification(notification) {
       this.$axios
-        .post(`api/notification/${notification._id}/read`, {
+        .post(`/notification/${notification._id}/read`, {
           ...notification,
           read: !notification.read
         })

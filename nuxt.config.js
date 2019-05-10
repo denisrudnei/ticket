@@ -59,7 +59,8 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    proxy: 'true'
+    proxy: true,
+    prefix: '/api'
   },
 
   router: {
@@ -78,7 +79,24 @@ module.exports = {
       home: '/'
     },
     strategies: {
-      local: false,
+      local: {
+        endpoints: {
+          login: {
+            url: 'auth/login',
+            method: 'post',
+            propertyName: 'user'
+          },
+          user: {
+            url: 'auth/user',
+            method: 'post',
+            propertyName: 'user'
+          },
+          logout: {
+            url: 'auth/logout',
+            method: 'post'
+          }
+        }
+      },
       auth0: {
         domain: 'bm-dns.auth0.com',
         client_id: 'hHLA1yh4Ffvj1xyWhZzEzgk5Hz9GNHY2'

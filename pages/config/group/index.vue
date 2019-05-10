@@ -151,18 +151,18 @@ export default {
     analysts: 'analyst/getAnalysts'
   }),
   async mounted() {
-    await this.$axios.get('api/group').then(response => {
+    await this.$axios.get('/group').then(response => {
       this.$store.commit('group/setGroups', response.data)
     })
 
-    await this.$axios.get('api/analyst').then(response => {
+    await this.$axios.get('/analyst').then(response => {
       this.$store.commit('analyst/setAnalysts', response.data)
     })
   },
   methods: {
     addToGroup(group, analyst) {
       this.$axios
-        .post(`api/group/analyst/${group._id}`, this.currentAnalyst)
+        .post(`/group/analyst/${group._id}`, this.currentAnalyst)
         .then(response => {
           this.updateGroups()
           this.$toast.show('Adicionado', {
@@ -172,7 +172,7 @@ export default {
     },
     removeFromGroup(group, analyst) {
       this.$axios
-        .delete(`api/group/analyst/${group._id}/${analyst._id}`)
+        .delete(`/group/analyst/${group._id}/${analyst._id}`)
         .then(response => {
           this.updateGroups()
           this.$toast.show('Removido do grupo', {
@@ -181,7 +181,7 @@ export default {
         })
     },
     updateGroups() {
-      this.$axios.get('api/group').then(response => {
+      this.$axios.get('/group').then(response => {
         this.$store.commit('group/setGroups', response.data)
       })
     },

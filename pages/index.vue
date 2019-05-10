@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     getTicket() {
-      this.$axios.get('api/ticket').then(result => {
+      this.$axios.get('/ticket').then(result => {
         this.tickets = result.data
       })
     }

@@ -13,7 +13,10 @@
           placeholder="Nome"
           solo
         />
-        <v-btn @click="save()">
+        <v-btn
+          class="primary white--text"
+          @click="save()"  
+        >
           Salvar
         </v-btn>
       </v-form>
@@ -32,7 +35,7 @@ export default {
   },
   methods: {
     save() {
-      this.$axios.post('api/status', this.status).then(() => {
+      this.$axios.post('/status', this.status).then(() => {
         this.$toast.show('Status criado', {
           duration: 1000
         })

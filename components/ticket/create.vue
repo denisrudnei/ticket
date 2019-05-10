@@ -192,13 +192,14 @@
             >
               <v-flex
                 xs6
+                pa-2
               >
                 <h3 v-if="!search">
                   Criado em: {{ ticketComputed.created | date }}
                 </h3>
                 <v-menu
                   v-if="search"
-                  v-model="menuDateCreated"
+                  v-model="menuDateInitial"
                   full-width
                   max-width="290"
                 >
@@ -206,7 +207,7 @@
                     v-slot:activator="{ on }"
                   >
                     <v-text-field
-                      :value="momentValue()"
+                      :value="initial | date"
                       box
                       label="Data em que foi aberto"
                       readonly
@@ -214,16 +215,38 @@
                     />
                   </template>
                   <v-date-picker
-                    v-model="created"
+                    v-model="initial"
                   />
                 </v-menu>
               </v-flex>
               <v-flex
                 xs6
+                pa-2
               >
                 <h3 v-if="!search">
                   Última modificação: {{ ticketComputed.modified | date }}
                 </h3>
+                <v-menu
+                  v-if="search"
+                  v-model="menuDateFinal"
+                  full-width
+                  max-width="290"
+                >
+                  <template
+                    v-slot:activator="{ on }"
+                  >
+                    <v-text-field
+                      :value="final | date"
+                      box
+                      label="Data limite"
+                      readonly
+                      v-on="on"
+                    />
+                  </template>
+                  <v-date-picker
+                    v-model="final"
+                  />
+                </v-menu>
               </v-flex>
             </v-layout>
           </v-flex>
@@ -366,7 +389,6 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import FileInclude from '@/components/files/include'
-// import { format } from 'date-fns/format'
 
 export default {
   components: {
@@ -375,7 +397,7 @@ export default {
   filters: {
     date(value) {
       const newDate = new Date(value)
-      return newDate.toLocaleString()
+      return newDate.toLocaleDateString()
     }
   },
   props: {
@@ -390,7 +412,8 @@ export default {
   },
   data() {
     return {
-      menuDateCreated: false,
+      menuDateInitial: false,
+      menuDateFinal: false,
       headers: [
         {
           text: 'Usuário',
@@ -413,7 +436,8 @@ export default {
       groups: [],
       status: [],
       categories: [],
-      created: new Date().toISOString().substr(0, 10),
+      initial: new Date().toISOString().substr(0, 10),
+      final: new Date().toISOString().substr(0, 10),
       ticketData: {
         resume: '',
         content: '',
@@ -434,16 +458,16 @@ export default {
     }
   },
   async created() {
-    await this.$axios.get('api/analyst').then(result => {
+    await this.$axios.get('/analyst').then(result => {
       this.analysts = result.data
     })
-    this.$axios.get('api/group').then(result => {
+    this.$axios.get('/group').then(result => {
       this.groups = result.data
     })
-    this.$axios.get('api/status').then(result => {
+    this.$axios.get('status').then(result => {
       this.status = result.data
     })
-    this.$axios.get('api/category').then(result => {
+    this.$axios.get('/category').then(result => {
       this.categories = result.data
     })
     if (!this.search && !this.readonly) {

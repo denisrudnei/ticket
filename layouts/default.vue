@@ -240,35 +240,35 @@ export default {
   },
   async created() {
     if (this.user !== undefined) {
-      await this.$axios.post('api/auth/mergeUser', this.user).then(response => {
+      await this.$axios.post('/auth/mergeUser', this.user).then(response => {
         this.$store.commit('auth/setUserId', response.data._id)
       })
       await this.$axios
-        .post(`api/notification/${this.user._id}`)
+        .post(`/notification/${this.user._id}`)
         .then(response => {
           this.$store.commit('notification/setNotifications', response.data)
         })
       await this.$axios
-        .post(`api/analyst/${this.user._id}/groups`)
+        .post(`/analyst/${this.user._id}/groups`)
         .then(response => {
           this.notificationGroups = response.data
         })
     }
-    await this.$axios.get('api/ticket').then(response => {
+    await this.$axios.get('/ticket').then(response => {
       this.$store.commit('ticket/setTickets', response.data)
     })
   },
   async mounted() {
-    await this.$axios.get('api/status').then(response => {
+    await this.$axios.get('/status').then(response => {
       this.$store.commit('status/setStatus', response.data)
     })
-    await this.$axios.get('api/category').then(response => {
+    await this.$axios.get('/category').then(response => {
       this.$store.commit('category/setCategories', response.data)
     })
-    await this.$axios.get('api/group').then(response => {
+    await this.$axios.get('/group').then(response => {
       this.$store.commit('group/setGroups', response.data)
     })
-    await this.$axios.get('api/analyst').then(reponse => {
+    await this.$axios.get('/analyst').then(reponse => {
       this.$store.commit('analyst/setAnalysts', reponse.data)
     })
 
@@ -301,7 +301,7 @@ export default {
     openChat(analyst) {
       this.$store.commit('chat/setVisible', true)
       this.$store.commit('chat/setActive', analyst._id)
-      this.$store.commit('chat/createChat', analyst)
+      this.$store.dispatch('chat/getMessages', analyst)
     }
   }
 }

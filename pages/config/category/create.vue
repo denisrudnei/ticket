@@ -23,6 +23,7 @@
           xs12
         >
           <v-btn
+            class="primary white--text"
             @click="addField()"
           >
             Acicionar campo
@@ -76,7 +77,10 @@
           </v-layout>
         </v-flex>
 
-        <v-btn @click="save()">
+        <v-btn
+          class="primary white--text"
+          @click="save()"
+        >
           Salvar
         </v-btn>
       </v-form>
@@ -106,7 +110,7 @@ export default {
   },
   methods: {
     loadData() {
-      this.$axios.get('api/category').then(response => {
+      this.$axios.get('/category').then(response => {
         this.categories = response.data
       })
     },
@@ -121,7 +125,7 @@ export default {
       })
     },
     save() {
-      this.$axios.post('api/category', this.category).then(() => {
+      this.$axios.post('/category', this.category).then(() => {
         this.loadData()
         this.$toast.show('Categoria criada', {
           duration: 1000
