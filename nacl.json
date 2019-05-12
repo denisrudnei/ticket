@@ -13,7 +13,7 @@
     "group": "user",
     "permissions": [
       {
-        "resource": "users/",
+        "resource": "*",
         "methods": "*",
         "action": "allow"
       }
@@ -23,7 +23,7 @@
     "group": "guest",
     "permissions": [
       {
-        "resource": "auth/*",
+        "resource": "/api/auth/*",
         "methods": ["POST"],
         "action": "allow"
       }

@@ -68,4 +68,15 @@ module.exports = app => {
       }
     )
   })
+
+  app.post('/auth/password/reset', (req, res) => {
+    Analyst.findOne({
+      _id: req.session.authUser._id
+    }).exec((err, user) => {
+      if (err) return res.status(500).json(err)
+      user.password = req.body.newPassword
+      user.save()
+      return res.sendStatus(201)
+    })
+  })
 }

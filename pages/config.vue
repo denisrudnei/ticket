@@ -23,6 +23,9 @@
         <v-tab to="/config/status">
           Status
         </v-tab>
+        <v-tab to="/config/permissions">
+          Permissões
+        </v-tab>
       </v-tabs>
       <nuxt-child />
     </v-flex>

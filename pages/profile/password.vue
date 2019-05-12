@@ -8,7 +8,7 @@
       pa-2
     >
       <v-text-field
-        v-model="oldPassword"
+        v-model="user.oldPassword"
         placeholder="Senha atual"
         type="password"
         box
@@ -19,7 +19,7 @@
       pa-2
     >
       <v-text-field
-        v-model="newPassword"
+        v-model="user.newPassword"
         placeholder="Nova senha"
         type="password"
         box
@@ -30,7 +30,7 @@
       pa-2
     >
       <v-text-field
-        v-model="confirmPassword"
+        v-model="user.confirmPassword"
         placeholder="Repita a nova senha"
         type="password"
         box
@@ -54,14 +54,16 @@
 export default {
   data() {
     return {
-      oldPassword: '',
-      newPassword: '',
-      confirmPassword: ''
+      user: {
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      }
     }
   },
   methods: {
     resetPassword() {
-      this.$axios.post('/auth/reset').then(
+      this.$axios.post('/auth/password/reset', this.user).then(
         () => {
           this.$toast.show('Resetado', {
             duration: 1000,

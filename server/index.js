@@ -22,8 +22,10 @@ app.use(
 
 acl.config({
   filename: 'nacl.json',
-  defaultRole: 'user'
+  roleSearchPath: 'session.authUser.role'
 })
+
+apiRouter.use(acl.authorize)
 
 app.use(bodyParser.json())
 
@@ -44,6 +46,7 @@ mongoose.connect(
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
+const CheckACL = require('./models/CheckACL')
 config.dev = !(process.env.NODE_ENV === 'production')
 
 async function start() {
@@ -63,9 +66,14 @@ async function start() {
     await nuxt.ready()
   }
 
+  CheckACL.checkDb(err => {
+    if (err) consola.error(err)
+  })
+
   require('./controllers/AuthController')(apiRouter)
   require('./controllers/TicketController')(apiRouter, io)
   require('./controllers/AnalystController')(apiRouter)
+  require('./controllers/RoleController')(apiRouter)
   require('./controllers/CategoryController')(apiRouter)
   require('./controllers/GroupController')(apiRouter)
   require('./controllers/StatusController')(apiRouter)
@@ -73,8 +81,6 @@ async function start() {
   require('./controllers/NotificationController')(apiRouter, io)
   require('./controllers/ChatController')(apiRouter, io)
   app.use('/api', apiRouter)
-
-  apiRouter.use(acl.authorize)
 
   // Give nuxt middleware to express
   app.use(nuxt.render)

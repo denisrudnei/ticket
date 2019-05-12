@@ -13,6 +13,12 @@ const AnalystSchema = new Schema({
     type: String,
     required: [true, 'Necessário preencher um nome']
   },
+  role: {
+    type: String,
+    default: 'user',
+    enum: ['guest', 'user', 'admin'],
+    required: [true, 'O nível de acesso deve ser definido']
+  },
   password: {
     type: String,
     select: false
