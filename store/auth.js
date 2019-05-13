@@ -11,5 +11,8 @@ export const mutations = {
   setUserId(state, id) {
     state.user._id = id
   },
+  mergeUser(state, user) {
+    state.user = user
+  },
   SET(state, value) {}
 }

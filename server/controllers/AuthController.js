@@ -57,12 +57,14 @@ module.exports = app => {
             },
             (err, newAnalyst) => {
               if (err) return res.status(500).json(err)
+              req.session.authUser = newAnalyst
               return res.status(200).json(newAnalyst)
             }
           )
         } else {
           analyst.picture = req.body.picture
           analyst.save()
+          req.session.authUser = analyst
           return res.status(200).json(analyst)
         }
       }

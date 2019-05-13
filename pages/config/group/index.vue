@@ -162,7 +162,7 @@ export default {
   methods: {
     addToGroup(group, analyst) {
       this.$axios
-        .post(`/group/analyst/${group._id}`, this.currentAnalyst)
+        .post(`/config/group/analyst/${group._id}`, this.currentAnalyst)
         .then(response => {
           this.updateGroups()
           this.$toast.show('Adicionado', {
@@ -172,7 +172,7 @@ export default {
     },
     removeFromGroup(group, analyst) {
       this.$axios
-        .delete(`/group/analyst/${group._id}/${analyst._id}`)
+        .delete(`/config/group/analyst/${group._id}/${analyst._id}`)
         .then(response => {
           this.updateGroups()
           this.$toast.show('Removido do grupo', {

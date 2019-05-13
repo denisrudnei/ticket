@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     save() {
-      this.$axios.post('/group', this.group).then(() => {
+      this.$axios.post('/config/group', this.group).then(() => {
         this.$toast.show('Grupo criado', {
           duration: 1000
         })

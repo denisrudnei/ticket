@@ -41,9 +41,6 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  computed: mapGetters({
-    roles: 'role/getRoles'
-  }),
   data() {
     return {
       headers: [
@@ -62,6 +59,9 @@ export default {
       ]
     }
   },
+  computed: mapGetters({
+    roles: 'role/getRoles'
+  }),
   mounted() {
     this.$store.dispatch('role/downloadRoles')
   }

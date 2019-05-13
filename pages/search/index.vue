@@ -52,7 +52,8 @@ export default {
   computed: mapGetters({
     status: 'status/getStatus',
     group: 'group/getGroups',
-    category: 'category/getCategories'
+    category: 'category/getCategories',
+    openedBy: 'analyst/getAnalysts'
   }),
   watch: {
     $route(to, from) {

@@ -9,7 +9,7 @@ module.exports = app => {
     })
   })
 
-  app.post('/group', (req, res) => {
+  app.post('/config/group', (req, res) => {
     const group = {
       _id: new mongoose.Types.ObjectId(),
       ...req.body
@@ -21,7 +21,7 @@ module.exports = app => {
     })
   })
 
-  app.post('/group/analyst/:groupId', (req, res) => {
+  app.post('/config/group/analyst/:groupId', (req, res) => {
     Group.updateOne(
       { _id: req.params.groupId },
       {
@@ -36,7 +36,7 @@ module.exports = app => {
     )
   })
 
-  app.delete('/group/analyst/:groupId/:analystId', (req, res) => {
+  app.delete('/config/group/analyst/:groupId/:analystId', (req, res) => {
     Group.updateOne(
       { _id: req.params.groupId },
       {

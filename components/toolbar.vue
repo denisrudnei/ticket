@@ -31,7 +31,7 @@
       v-if="logged"
     />
     <v-btn
-      v-if="logged"
+      v-if="logged && user.role === 'admin'"
       flat
       title="Configurações"
       to="/config"
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Notification from '@/components/notification'
 
 export default {
@@ -80,7 +81,10 @@ export default {
       type: Boolean,
       default: true
     }
-  }
+  },
+  computed: mapGetters({
+    user: 'auth/getUser'
+  })
 }
 </script>
 

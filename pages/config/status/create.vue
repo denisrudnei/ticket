@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     save() {
-      this.$axios.post('/status', this.status).then(() => {
+      this.$axios.post('/config/status', this.status).then(() => {
         this.$toast.show('Status criado', {
           duration: 1000
         })

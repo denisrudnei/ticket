@@ -9,7 +9,7 @@ module.exports = app => {
     })
   })
 
-  app.post('/status', (req, res) => {
+  app.post('/config/status', (req, res) => {
     const status = {
       _id: new mongoose.Types.ObjectId(),
       ...req.body

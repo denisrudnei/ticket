@@ -13,7 +13,7 @@ module.exports = app => {
       })
   })
 
-  app.post('/analyst', (req, res) => {
+  app.post('/config/analyst', (req, res) => {
     const analyst = {
       _id: new mongoose.Types.ObjectId(),
       ...req.body

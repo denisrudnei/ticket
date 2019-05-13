@@ -125,7 +125,7 @@ export default {
       })
     },
     save() {
-      this.$axios.post('/category', this.category).then(() => {
+      this.$axios.post('/config/category', this.category).then(() => {
         this.loadData()
         this.$toast.show('Categoria criada', {
           duration: 1000

@@ -13,9 +13,59 @@
     "group": "user",
     "permissions": [
       {
-        "resource": "*",
+        "resource": "/api/auth/*",
         "methods": "*",
         "action": "allow"
+      },
+      {
+        "resource": "/api/analyst/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/chat/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/notification/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/role/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/group/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/search/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/ticket/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/status/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/category/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/config/*",
+        "methods": "*",
+        "action": "deny"
       }
     ]
   },

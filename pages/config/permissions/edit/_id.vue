@@ -8,10 +8,10 @@
       pa-2
     >
       <v-text-field
+        v-model="role.name"
         label="Nome [não pode ser alterado]"
         box
         placeholder="Nome"
-        v-model="role.name"
         readonly
       />
     </v-flex>
@@ -20,10 +20,10 @@
       pa-2
     >
       <v-text-field
+        v-model="role.description"
         label="Descrição"
         box
         placeholder="Descrição"
-        v-model="role.description"
       />
     </v-flex>
     <v-flex
@@ -48,14 +48,14 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  computed: mapGetters({
-    roles: 'role/getRoles'
-  }),
   data() {
     return {
       role: null
     }
   },
+  computed: mapGetters({
+    roles: 'role/getRoles'
+  }),
   created() {
     const id = this.$router.currentRoute.params.id
     this.$store.dispatch('role/downloadRoles')
@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     save() {
-      this.$axios.put(`/role/${this.role._id}`, this.role).then(() => {
+      this.$axios.put(`/config/role/${this.role._id}`, this.role).then(() => {
         this.$toast.show('Role ataualizada com sucesso', {
           duration: 1000,
           icon: 'verified_user'

@@ -9,6 +9,7 @@
     >
       <v-data-table
         :items="analysts"
+        :headers="headers"
       >
         <template
           slot="items"
@@ -22,12 +23,21 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      analysts: []
+      headers: [
+        {
+          text: 'Nome',
+          value: 'name'
+        }
+      ]
     }
   },
+  computed: mapGetters({
+    analysts: 'analyst/getAnalysts'
+  }),
   created() {}
 }
 </script>

@@ -35,6 +35,11 @@ export default {
       this.getTicket()
     }
   },
+  mounted() {
+    this.$axios.post('/auth/mergeUser', this.$auth.user).then(response => {
+      this.$store.commit('auth/mergeUser', response.data)
+    })
+  },
   methods: {
     getTicket() {
       this.$axios.get('/ticket').then(result => {

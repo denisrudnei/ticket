@@ -25,7 +25,7 @@ module.exports = app => {
     })
   })
 
-  app.post('/category', async (req, res) => {
+  app.post('/config/category', async (req, res) => {
     const category = {
       _id: new mongoose.Types.ObjectId(),
       name: req.body.name

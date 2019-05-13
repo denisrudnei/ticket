@@ -13,7 +13,7 @@ module.exports = app => {
     })
   })
 
-  app.put('/role/:id', (req, res) => {
+  app.put('/config/role/:id', (req, res) => {
     Role.updateOne(
       {
         _id: req.params.id
@@ -29,7 +29,7 @@ module.exports = app => {
     })
   })
 
-  app.post('/role/:id', (req, res) => {
+  app.post('/config/role/:id', (req, res) => {
     Analyst.updateOne(
       {
         _id: req.params.id

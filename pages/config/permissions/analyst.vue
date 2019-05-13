@@ -8,7 +8,7 @@
       pa-2
     >
       <v-data-table
-        :items="analysts"
+        :items="analysts.filter(a => { return a._id !== user._id })"
         :headers="headers"
       >
         <template
@@ -44,8 +44,8 @@
                     pa-2
                   >
                     <v-select
-                      box
                       v-model="selected"
+                      box
                       :items="roles.map(r => { return { text: r.name, value: r }})"
                     />
                   </v-flex>
@@ -54,9 +54,9 @@
                     pa-2
                   >
                     <v-btn
-                      @click="updateRole(data.item._id)"
                       class="primary white--text"
                       icon
+                      @click="updateRole(data.item._id)"
                     >
                       <v-icon>
                         save
@@ -76,13 +76,6 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  computed: mapGetters({
-    analysts: 'analyst/getAnalysts',
-    roles: 'role/getRoles'
-  }),
-  mounted() {
-    this.$store.dispatch('role/downloadRoles')
-  },
   data() {
     return {
       selected: '',
@@ -102,9 +95,17 @@ export default {
       ]
     }
   },
+  computed: mapGetters({
+    analysts: 'analyst/getAnalysts',
+    roles: 'role/getRoles',
+    user: 'auth/getUser'
+  }),
+  mounted() {
+    this.$store.dispatch('role/downloadRoles')
+  },
   methods: {
     updateRole(analystId) {
-      this.$axios.post(`/role/${analystId}`, this.selected).then(() => {
+      this.$axios.post(`/config/role/${analystId}`, this.selected).then(() => {
         this.$toast.show('Alterado', {
           duration: 1000,
           icon: 'verified_user'

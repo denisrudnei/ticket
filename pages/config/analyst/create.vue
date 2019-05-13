@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     save() {
-      this.$axios.post('/analyst', this.analyst).then(() => {
+      this.$axios.post('/config/analyst', this.analyst).then(() => {
         this.$toast.show('Criado novo analista', {
           duration: 1000
         })
