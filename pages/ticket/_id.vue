@@ -1,12 +1,15 @@
 <template>
-  <v-layout>
+  <v-layout
+    row
+    wrap
+  >
     <v-flex
       xs12
       pa-2
     >
       <ticket-create
         :ticket="ticket"
-        :readonly="true"
+        :readonly="false"
       />
     </v-flex>
   </v-layout>
@@ -60,11 +63,9 @@ export default {
   methods: {
     save() {
       const id = this.$router.currentRoute.params.id
-      if (this.$refs.form.validate()) {
-        this.$axios.put(`/ticket/${id}`, this.ticket).then(() => {
-          this.update()
-        })
-      }
+      this.$axios.put(`/ticket/${id}`, this.ticket).then(() => {
+        this.update()
+      })
     },
     update() {
       const id = this.$router.currentRoute.params.id

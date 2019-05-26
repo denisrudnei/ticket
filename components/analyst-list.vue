@@ -14,9 +14,24 @@
           <v-list-tile-avatar
             v-on="on"
           >
-            <v-img
-              :src="analyst.picture"
-            />
+            <v-badge
+              overlap
+            >
+              <template
+                v-slot:badge
+              >
+                <v-icon
+                  :class="`${getStatus()} white--text`"
+                >
+                  chat
+                </v-icon>
+              </template>
+              <v-avatar>
+                <v-img
+                  :src="analyst.picture"
+                />
+              </v-avatar>
+            </v-badge>
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>
@@ -97,6 +112,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapGetters } from 'vuex'
 export default {
   computed: mapGetters({
@@ -112,6 +128,11 @@ export default {
       this.$store.commit('chat/setVisible', true)
       this.$store.commit('chat/setActive', analyst._id)
       this.$store.dispatch('chat/getMessages', analyst)
+    },
+    getStatus() {
+      // TODO
+      const colors = ['red', 'green', 'yellow']
+      return Object.values(_.shuffle(colors))[0]
     },
     viewRecents(name) {
       this.$router.push({

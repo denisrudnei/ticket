@@ -34,8 +34,10 @@
             pa-2
           >
             <create-ticket
+              v-model="ticket"
               :readonly="true"
               :ticket="actualTicket"
+              @input="update()"
             />
           </v-flex>
         </v-layout>
@@ -52,6 +54,11 @@ export default {
   components: {
     CreateTicket
   },
+  data() {
+    return {
+      ticket: {}
+    }
+  },
   computed: mapGetters({
     dialog: 'ticket/getDialog',
     actualTicket: 'ticket/getActualTicket'
@@ -59,6 +66,16 @@ export default {
   methods: {
     setDialog(id) {
       this.$store.commit('ticket/setDialog', id)
+    },
+    update() {
+      this.$axios
+        .put(`/ticket/${this.actualTicket._id}`, this.ticket)
+        .then(() => {
+          this.$toast.show('Atualizado', {
+            duration: 1000,
+            icon: 'done'
+          })
+        })
     },
     setActualTicket(ticket) {
       this.$store.commit('ticket/setActualTicket', ticket)

@@ -12,12 +12,14 @@
           v-model="user.email"
           placeholder="Login"
           solo
+          @keypress.enter="localLogin()"
         />
         <v-text-field
           v-model="user.password"
           placeholder="Senha"
           type="password"
           solo
+          @keypress.enter="localLogin()"
         />
         <v-btn
           large
@@ -37,6 +39,13 @@
           @click="login()"
         >
           Login externo
+        </v-btn>
+        <v-btn
+          large
+          class="primary white--text"
+          to="/auth/register"
+        >
+          Registrar
         </v-btn>
       </v-form>
     </v-flex>

@@ -209,10 +209,25 @@ export default {
       notificationGroups: 'getNotificationGroups'
     })
   },
+  updated() {
+    if (this.logged) {
+      setTimeout(() => {
+        this.$vuetify.theme.primary =
+          this.user.color || this.$vuetify.theme.primary
+      }, 0)
+    }
+  },
   async mounted() {
     if (this.logged) {
       await this.$store.dispatch('downloadInfo')
       this.$axios.post('/auth/mergeUser', this.user)
+      this.$socket.on(`message/${this.user._id}`, message => {
+        this.$toast.show('Mensagem recebida', {
+          duration: 1000
+        })
+        this.$store.commit('chat/setActive', message.chatId)
+        // this.$store.dispatch('chat/addMessage', message)
+      })
     }
 
     this.$socket.on('readNotification', notification => {

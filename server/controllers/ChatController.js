@@ -5,13 +5,14 @@ const Analyst = require('../models/Analyst')
 module.exports = (app, io) => {
   app.post('/chat/message', async (req, res) => {
     const to = await Analyst.findOne({ _id: req.body.to._id })
-    const from = await Analyst.findOne({ _id: req.body.from._id })
+    const from = await Analyst.findOne({ _id: req.session.authUser._id })
 
     Message.create(
       {
         _id: new mongoose.Types.ObjectId(),
         to: to._id,
         from: from._id,
+        data: new Date(),
         content: req.body.content
       },
       err => {
@@ -21,16 +22,24 @@ module.exports = (app, io) => {
           from: from,
           content: req.body.content
         }
-        io.emit('message', req.body)
+        io.emit(`message/${req.body.to._id}`, req.body)
         return res.status(200).json(messageToSend)
       }
     )
   })
 
-  app.get('/chat/message/:from/:to', (req, res) => {
+  app.get('/chat/message/:user', (req, res) => {
     Message.find({
-      from: req.params.from,
-      to: req.params.to
+      $or: [
+        {
+          from: req.session.authUser._id,
+          to: req.params.user
+        },
+        {
+          from: req.params.user,
+          to: req.session.authUser._id
+        }
+      ]
     })
       .populate([
         {

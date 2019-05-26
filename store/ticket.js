@@ -48,7 +48,6 @@ export const getters = {
       }
     })
   },
-
   getActualTicket(state) {
     return state.actualTicket
   },
@@ -62,7 +61,9 @@ export const getters = {
 
 export const mutations = {
   setActualTicket(state, ticket) {
-    state.actualTicket = ticket
+    state.actualTicket = state.tickets.find(t => {
+      return t._id === ticket._id
+    })
   },
   insertTicket(state, ticket) {
     state.tickets.push(ticket)
@@ -71,6 +72,11 @@ export const mutations = {
     state.tickets = tickets
   },
   updateTicket(state, ticket) {
+    if (state.actualTicket.hasOwnProperty('_id')) {
+      if (state.actualTicket._id === ticket._id) {
+        state.actualTicket = ticket
+      }
+    }
     state.tickets = [
       ...state.tickets.filter(t => {
         return t._id !== ticket._id

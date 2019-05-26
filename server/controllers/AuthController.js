@@ -37,10 +37,18 @@ module.exports = app => {
         message: 'Usuário já existe'
       })
     }
-    Analyst.create(req.body, err => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(201)
-    })
+    Analyst.create(
+      {
+        _id: new mongoose.Types.ObjectId(),
+        email: req.body.email,
+        name: req.body.name,
+        password: req.body.password
+      },
+      err => {
+        if (err) return res.status(500).json(err)
+        return res.sendStatus(201)
+      }
+    )
   })
 
   app.post('/auth/mergeUser', (req, res) => {
@@ -74,11 +82,20 @@ module.exports = app => {
   app.post('/auth/password/reset', (req, res) => {
     Analyst.findOne({
       _id: req.session.authUser._id
-    }).exec((err, user) => {
-      if (err) return res.status(500).json(err)
-      user.password = req.body.newPassword
-      user.save()
-      return res.sendStatus(201)
     })
+      .select('+password')
+      .exec((err, user) => {
+        if (err) return res.status(500).json(err)
+        user.verifyPassword(req.body.oldPassword, (err, result) => {
+          if (err || !result) {
+            return res.status(400).json({
+              message: 'Senha antiga errada'
+            })
+          }
+          user.password = req.body.newPassword
+          user.save()
+          return res.sendStatus(202)
+        })
+      })
   })
 }

@@ -27,6 +27,16 @@ const TicketSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     required: [true, 'Deve ter um status']
   },
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment'
+    }
+  ],
+  affectedUser: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   actualUser: {
     type: Schema.Types.ObjectId,
     ref: 'Analyst',
@@ -50,11 +60,11 @@ const TicketSchema = new mongoose.Schema({
   ],
   created: {
     type: Date,
-    default: new Date()
+    default: Date.now
   },
   modified: {
     type: Date,
-    default: new Date()
+    default: Date.now
   }
 })
 

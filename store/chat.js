@@ -61,11 +61,9 @@ export const actions = {
 
     const current = this.getters['auth/getUser']
     if (current !== undefined && current._id !== undefined) {
-      await this.$axios
-        .get(`/chat/message/${current._id}/${analyst._id}`)
-        .then(response => {
-          messages = response.data
-        })
+      await this.$axios.get(`/chat/message/${analyst._id}`).then(response => {
+        messages = response.data
+      })
       commit('createChat', {
         analyst: analyst,
         messages: messages

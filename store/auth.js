@@ -14,5 +14,11 @@ export const mutations = {
   mergeUser(state, user) {
     state.user = user
   },
+  updateName(state, name) {
+    state.user.name = name
+  },
+  setColor(state, color) {
+    state.user.color = color
+  },
   SET(state, value) {}
 }

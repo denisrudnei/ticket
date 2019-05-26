@@ -27,8 +27,7 @@ export default {
     }
   },
   computed: mapGetters({
-    user: 'auth/getUser',
-    logged: 'auth/getLoggedIn'
+    user: 'auth/getUser'
   }),
   watch: {
     $route(to, from) {

@@ -92,7 +92,7 @@
         <v-icon
           class="primary--text"
         >
-          insert_chart
+          group
         </v-icon>
       </v-tab>
       <v-tab-item />

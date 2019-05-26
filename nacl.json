@@ -18,6 +18,16 @@
         "action": "allow"
       },
       {
+        "resource": "/api/profile/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/address/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
         "resource": "/api/analyst/*",
         "methods": "*",
         "action": "allow"

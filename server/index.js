@@ -71,6 +71,8 @@ async function start() {
   })
 
   require('./controllers/AuthController')(apiRouter)
+  require('./controllers/AddressController')(apiRouter)
+  require('./controllers/ProfileController')(apiRouter)
   require('./controllers/TicketController')(apiRouter, io)
   require('./controllers/AnalystController')(apiRouter)
   require('./controllers/RoleController')(apiRouter)

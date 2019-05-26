@@ -14,6 +14,11 @@
           Perfil
         </v-tab>
         <v-tab
+          to="/profile/address"
+        >
+          Endereço
+        </v-tab>
+        <v-tab
           to="/profile/notification"
         >
           Notificações

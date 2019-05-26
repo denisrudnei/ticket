@@ -5,7 +5,7 @@
       pa-2
     >
       <v-menu
-        v-if="readonly"
+        v-if="readOnlyData"
         offset-y
         :close-on-content-click="false"
         :nudge-width="500"
@@ -34,12 +34,14 @@
               </v-tab>
               <v-tab-item>
                 <v-textarea
+                  v-model="comment"
                   box
                   label="Comentário"
                 />
                 <v-btn
                   icon
                   class="primary white--text"
+                  @click="addComment()"
                 >
                   <v-icon>
                     send
@@ -117,7 +119,7 @@
               :rules="!search ? [v => !!v || 'Necessário preencher'] : undefined"
               :items="analysts.map(a => { return {text: a.name, value: a} })"
               required
-              :readonly="readonly || !search"
+              :readonly="readOnlyData || !search"
               box
               label="Relatado por:"
             />
@@ -132,7 +134,7 @@
               :rules="!search ? [v => !!v || 'Necessário preencher']: undefined"
               :items="analysts.map(u => { return {text: u.name, value: u} })"
               required
-              :readonly="readonly"
+              :readonly="readOnlyData"
               box
               label="Analista"
             />
@@ -147,7 +149,7 @@
               :items="categories.filter(c => { return c.subs.length === 0 }).map(c => { return { text: c.fullName, value: c } })"
               :rules="!search ? [v => !!v || 'Necessário preencher uma categoria'] : undefined"
               required
-              :readonly="readonly"
+              :readonly="readOnlyData"
               box
               label="Categoria"
             />
@@ -162,7 +164,7 @@
               :items="groups.map(g => { return { text: g.name, value: g } })"
               :rules="!search ? [v => !!v || 'Necessário preeencher o grupo'] : undefined"
               required
-              :readonly="readonly"
+              :readonly="readOnlyData"
               box
               label="Grupo"
             />
@@ -177,7 +179,7 @@
               :items="status.map(s => { return { text: s.name, value: s } })"
               :rules="!search ? [v => !!v || 'Necessário preencher status'] : undefined"
               required
-              :readonly="readonly"
+              :readonly="readOnlyData"
               box
               label="Status"
             />
@@ -202,6 +204,7 @@
                   v-model="menuDateInitial"
                   full-width
                   max-width="290"
+                  :close-on-content-click="false"
                 >
                   <template
                     v-slot:activator="{ on }"
@@ -231,6 +234,7 @@
                   v-model="menuDateFinal"
                   full-width
                   max-width="290"
+                  :close-on-content-click="false"
                 >
                   <template
                     v-slot:activator="{ on }"
@@ -259,7 +263,7 @@
               v-model="ticketComputed.resume"
               :rules="[v => !!v || 'Necessário preencher o resumo']"
               required
-              :readonly="readonly"
+              :readonly="readOnlyData"
               box
               label="Resumo"
             />
@@ -273,7 +277,7 @@
               v-model="ticketComputed.content"
               :rules="[v => !!v || 'Necessário preeencher o corpo deo chamado']"
               required
-              :readonly="readonly"
+              :readonly="readOnlyData"
               box
               label="Conteúdo"
             />
@@ -282,6 +286,7 @@
             xs12
           >
             <v-btn
+              v-if="!readOnlyData"
               class="primary"
               @click="save()"
             >
@@ -296,6 +301,13 @@
               @click="clearFields()"
             >
               Limpar campos
+            </v-btn>
+            <v-btn
+              v-if="readOnlyData"
+              class="primary white--text"
+              @click="edit()"
+            >
+              Editar
             </v-btn>
           </v-flex>
           <v-flex
@@ -312,59 +324,7 @@
                 </v-icon>
               </v-tab>
               <v-tab-item>
-                <v-layout
-                  row
-                  wrap
-                >
-                  <v-flex
-                    xs12
-                    pa-2
-                  >
-                    <v-timeline
-                      align-top
-                    >
-                      <v-timeline-item
-                        v-for="(log, index) in ticketComputed.logs"
-                        :key="index"
-                        :left="index%2===0"
-                        :right="index%2!==0"
-                        small
-                      >
-                        <template
-                          v-slot:opposite
-                        >
-                          <span>{{ log.oldStatus.name }}</span>
-                        </template>
-                        <v-card>
-                          <v-card-title
-                            class="headline"
-                          >
-                            {{ log.group.name }}
-                          </v-card-title>
-                          <v-card-text>
-                            {{ log.oldStatus.name }}
-                            <hr>
-                            Atualizado por: {{ log.user.name }} em {{ log.date | date }}
-                          </v-card-text>
-                        </v-card>
-                      </v-timeline-item>
-                    </v-timeline>
-                  </v-flex>
-                </v-layout>
-                <v-data-table
-                  :items="ticketComputed.logs"
-                  :headers="headers"
-                >
-                  <template
-                    slot="items"
-                    slot-scope="data"
-                  >
-                    <td>{{ data.item.user.name }}</td>
-                    <td>{{ data.item.date | date }}</td>
-                    <td>{{ data.item.oldStatus.name }}</td>
-                    <td>{{ data.item.group.name }}</td>
-                  </template>
-                </v-data-table>
+                <Logs />
               </v-tab-item>
               <v-tab>
                 Arquivos
@@ -373,9 +333,16 @@
                 </v-icon>
               </v-tab>
               <v-tab-item>
-                <file-include
-                  :ticket-data="ticketData"
-                />
+                <file-include />
+              </v-tab-item>
+              <v-tab>
+                Comentários
+                <v-icon>
+                  comment
+                </v-icon>
+              </v-tab>
+              <v-tab-item>
+                <Comments />
               </v-tab-item>
             </v-tabs>
           </v-flex>
@@ -389,10 +356,14 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import FileInclude from '@/components/files/include'
+import Logs from '@/components/ticket/logs'
+import Comments from '@/components/ticket/comments'
 
 export default {
   components: {
-    FileInclude
+    FileInclude,
+    Logs,
+    Comments
   },
   filters: {
     date(value) {
@@ -402,7 +373,10 @@ export default {
   },
   props: {
     search: Boolean,
-    readonly: Boolean,
+    readonly: {
+      type: Boolean,
+      default: false
+    },
     ticket: {
       type: Object,
       default: () => {
@@ -414,30 +388,14 @@ export default {
     return {
       menuDateInitial: false,
       menuDateFinal: false,
-      headers: [
-        {
-          text: 'Usuário',
-          value: 'user'
-        },
-        {
-          text: 'Data',
-          value: 'date'
-        },
-        {
-          text: 'Status',
-          value: 'status.name'
-        },
-        {
-          text: 'Grupo',
-          value: 'group.name'
-        }
-      ],
+      readOnlyData: false,
       analysts: [],
       groups: [],
       status: [],
       categories: [],
       initial: new Date().toISOString().substr(0, 10),
       final: new Date().toISOString().substr(0, 10),
+      comment: '',
       ticketData: {
         resume: '',
         content: '',
@@ -458,6 +416,7 @@ export default {
     }
   },
   async created() {
+    this.readOnlyData = this.readonly
     await this.$axios.get('/analyst').then(result => {
       this.analysts = result.data
     })
@@ -483,12 +442,25 @@ export default {
         ? moment(this.ticketComputed.created).format('dddd, MMMM Do YYYY')
         : ''
     },
+    addComment() {
+      this.$axios
+        .post(`/ticket/comment/${this.ticketComputed._id}`, {
+          content: this.comment
+        })
+        .then(() => {
+          this.comment = ''
+        })
+    },
     save() {
       if (!this.search && this.$refs.form.validate()) {
         this.$emit('input', this.ticketComputed)
+        this.readOnlyData = true
       } else {
         this.$emit('input', this.ticketComputed)
       }
+    },
+    edit() {
+      this.readOnlyData = false
     },
     clearFields() {
       Object.keys(this.ticketData).forEach(key => {

@@ -4,6 +4,11 @@
     wrap
   >
     <template
+      v-if="error.statusCode === 500"
+    >
+      {{ error.message }}
+    </template>
+    <template
       v-if="error.statusCode === 403"
     >
       Acesso negado ao recurso {{ error.path }}

@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
-const { body, validationResult } = require('express-validator/check')
+const { body, param, validationResult } = require('express-validator/check')
 const S3 = require('../../plugins/S3')
 const Ticket = require('../models/Ticket')
 const Group = require('../models/Group')
 const Status = require('../models/Status')
 const Notification = require('../models/Notification')
+const Comment = require('../models/Comment')
 
 const populateArray = [
   {
@@ -29,6 +30,14 @@ const populateArray = [
       date: 1,
       oldStatus: 1,
       group: 1,
+      user: 1
+    }
+  },
+  {
+    path: 'comments',
+    select: {
+      date: 1,
+      content: 1,
       user: 1
     }
   },
@@ -137,6 +146,42 @@ module.exports = (app, io) => {
     })
   })
 
+  app.post(
+    '/ticket/comment/:id',
+    [
+      body('content', 'Preencha o comentário').exists(),
+      param('id', 'Precisa de um id').exists()
+    ],
+    (req, res) => {
+      const errors = validationResult(req)
+      if (!errors.isEmpty()) return res.status(400).json(errors.mapped())
+
+      Ticket.findOne({
+        _id: req.params.id
+      })
+        .populate(populateArray)
+        .exec(async (err, ticket) => {
+          if (err) return res.status(500).json(err)
+          if (!ticket) return res.sendStatus(404)
+
+          const comment = await Comment.create({
+            _id: new mongoose.Types.ObjectId(),
+            user: req.session.authUser._id,
+            content: req.body.content
+          })
+          ticket.comments.push(comment)
+          ticket.save(async err => {
+            if (err) return res.status(500).json(err)
+            const newTicket = await Ticket.findOne({
+              _id: req.params.id
+            }).populate(populateArray)
+            io.emit('updateTicket', newTicket)
+            return res.sendStatus(202)
+          })
+        })
+    }
+  )
+
   app.get('/ticket/:id', (req, res) => {
     Ticket.findOne({
       _id: req.params.id
@@ -149,13 +194,24 @@ module.exports = (app, io) => {
   })
 
   app.put('/ticket/:id', (req, res) => {
-    Ticket.findOne({
-      _id: req.params.id
-    }).exec((err, ticket) => {
+    Ticket.updateOne(
+      {
+        _id: req.params.id
+      },
+      {
+        $set: {
+          status: req.body.status._id,
+          group: req.body.group._id,
+          resume: req.body.resume,
+          content: req.body.content,
+          category: req.body.category._id,
+          actualUser: req.body.actualUser._id
+        }
+      }
+    ).exec(err => {
       if (err) return res.status(500).json(err)
-      Object.assign(ticket, req.body)
-      ticket.save()
-      res.sendStatus(200)
+      io.emit('updateTicket', req.body)
+      res.sendStatus(202)
     })
   })
 

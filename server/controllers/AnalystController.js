@@ -34,6 +34,23 @@ module.exports = app => {
     })
   })
 
+  app.put('/analyst', (req, res) => {
+    Analyst.updateOne(
+      {
+        _id: req.session.authUser._id
+      },
+      {
+        $set: {
+          name: req.body.name,
+          color: req.body.color
+        }
+      }
+    ).exec(err => {
+      if (err) return res.status(500).json(err)
+      return res.sendStatus(201)
+    })
+  })
+
   app.delete('/analyst/:id', (req, res) => {
     Analyst.findOneAndDelete(
       {

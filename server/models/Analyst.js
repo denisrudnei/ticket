@@ -19,9 +19,17 @@ const AnalystSchema = new Schema({
     enum: ['guest', 'user', 'admin'],
     required: [true, 'O nível de acesso deve ser definido']
   },
+  color: {
+    type: String,
+    default: ''
+  },
   password: {
     type: String,
     select: false
+  },
+  address: {
+    type: Schema.Types.ObjectId,
+    ref: 'Address'
   },
   description: {
     type: String

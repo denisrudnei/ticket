@@ -119,16 +119,6 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  props: {
-    ticketData: {
-      type: Object,
-      default: () => {
-        return {
-          files: []
-        }
-      }
-    }
-  },
   data() {
     return {
       fileHeaders: [
@@ -158,7 +148,8 @@ export default {
   computed: mapGetters({
     files: 'file/getFiles',
     filePreview: 'file/getFilePreview',
-    dialog: 'ticket/getDialog'
+    dialog: 'ticket/getDialog',
+    ticket: 'ticket/getActualTicket'
   }),
   watch: {
     dialog: function(value) {
@@ -170,10 +161,10 @@ export default {
   },
   methods: {
     updateFiles() {
-      if (this.ticketData.files === undefined) return
+      if (this.ticket.files === undefined) return
       this.$store.commit(
         'file/setFilePreview',
-        this.ticketData.files.map(f => {
+        this.ticket.files.map(f => {
           return {
             ...f,
             old: true
@@ -241,7 +232,7 @@ export default {
       }
 
       this.$axios
-        .post(`/ticket/${this.ticketData._id}/file`, formData, {
+        .post(`/ticket/${this.ticket._id}/file`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -255,9 +246,9 @@ export default {
     },
     removeFileInServer(file) {
       this.$axios
-        .delete(`/ticket/${this.ticketData._id}/${file.name}/file`)
+        .delete(`/ticket/${this.ticket._id}/${file.name}/file`)
         .then(() => {
-          const files = this.ticketData.files.filter(f => {
+          const files = this.ticket.files.filter(f => {
             return f.name !== file.name
           })
           this.$store.commit('file/setFiles', files)
