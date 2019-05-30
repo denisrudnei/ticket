@@ -309,6 +309,13 @@
             >
               Editar
             </v-btn>
+            <v-btn
+              v-if="editing"
+              class="primary white--text"
+              @click="cancelEdit()"
+            >
+              Cancelar edição
+            </v-btn>
           </v-flex>
           <v-flex
             v-show="!search"
@@ -386,6 +393,7 @@ export default {
   },
   data() {
     return {
+      editing: false,
       menuDateInitial: false,
       menuDateFinal: false,
       readOnlyData: false,
@@ -461,6 +469,11 @@ export default {
     },
     edit() {
       this.readOnlyData = false
+      this.editing = true
+    },
+    cancelEdit() {
+      this.editing = false
+      this.readOnlyData = true
     },
     clearFields() {
       Object.keys(this.ticketData).forEach(key => {
