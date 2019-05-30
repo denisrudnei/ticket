@@ -463,6 +463,7 @@ export default {
       if (!this.search && this.$refs.form.validate()) {
         this.$emit('input', this.ticketComputed)
         this.readOnlyData = true
+        this.editing = false
       } else {
         this.$emit('input', this.ticketComputed)
       }
