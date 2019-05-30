@@ -475,6 +475,9 @@ export default {
     cancelEdit() {
       this.editing = false
       this.readOnlyData = true
+      this.$axios.get(`/ticket/${this.ticketData._id}`).then(response => {
+        this.ticketData = response.data
+      })
     },
     clearFields() {
       Object.keys(this.ticketData).forEach(key => {
