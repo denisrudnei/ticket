@@ -439,7 +439,7 @@ export default {
     })
     if (!this.search && !this.readonly) {
       const openedBy = this.analysts.filter(a => {
-        return a.email === this.user.email
+        return a._id === this.user._id
       })[0]
       this.ticketComputed.openedBy = openedBy
     }
