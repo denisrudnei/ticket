@@ -21,6 +21,12 @@
           label="Email"
           readonly
         />
+        <v-text-field
+          :value="user.contactEmail"
+          box
+          label="Endereço de email para contato"
+          @change="updateEmail"
+        />
       </v-flex>
       <v-flex
         xs12
@@ -72,16 +78,43 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <color-chooser
-      v-model="primary"
-      @input="updatePrimary()"
-    >
-      Cor primária
-    </color-chooser>
-    <v-switch
-      color="primary"
-      label="Receber notificações via email?"
-    />
+    <v-layout row wrap>
+      <v-flex xs12 pa-2>
+        <color-chooser
+          v-model="primary"
+          @input="updatePrimary()"
+        >
+          Cor primária
+        </color-chooser>
+        <v-btn class="primary white--text" @click="openImageSelection()">
+          <v-icon
+            left
+          >
+            image
+          </v-icon>
+          Selecionar imagem do perfil
+        </v-btn>
+        <v-btn
+          class="primary white--text"
+          @click="removeImage()"
+        >
+          <v-icon
+            left
+          >
+            delete
+          </v-icon>
+          Remover imagem
+        </v-btn>
+        <input ref="profileImage" type="file" style="display: none" accept="image/*" @change="updateImage()">
+      </v-flex>
+      <v-flex xs12 pa-2>
+        <v-switch :input-value="user.mergePictureWithExternalAccount" label="Atualizar imagem com conta externa automaticamente" @change="updatePictureMerge" />
+        <v-switch
+          color="primary"
+          label="Receber notificações via email?"
+        />
+      </v-flex>
+    </v-layout>
     <v-btn
       flat
       class="primary white--text"
@@ -116,11 +149,15 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateName: 'auth/updateName'
+      updateName: 'auth/updateName',
+      updateEmail: 'auth/updateEmail'
     }),
     updatePrimary() {
       this.$vuetify.theme.primary = this.primary
       this.$store.commit('auth/setColor', this.primary)
+    },
+    updatePictureMerge(value) {
+      this.$store.commit('auth/updatemergePictureWithExternalAccount', value)
     },
     save() {
       this.$axios.put('/analyst', this.user).then(() => {
@@ -129,6 +166,44 @@ export default {
           icon: 'update'
         })
       })
+    },
+    openImageSelection() {
+      this.$refs.profileImage.click()
+    },
+    removeImage() {
+      this.$axios.delete('/analyst/image').then(
+        () => {
+          this.$store.commit('auth/removeImage')
+          this.$toast.show('Imagem removida com sucesso', {
+            duration: 5000,
+            icon: 'done'
+          })
+        },
+        () => {
+          this.$toast.error('Falha ao realizar a remoção da imagem de perfil')
+        }
+      )
+    },
+    updateImage() {
+      if (!this.$refs.profileImage.files[0]) return
+      const fileReader = new FileReader()
+      fileReader.addEventListener('loadend', () => {
+        this.$store.commit('auth/updateImage', fileReader.result)
+      })
+      fileReader.readAsDataURL(this.$refs.profileImage.files[0])
+      const formData = new FormData()
+      formData.append('image', this.$refs.profileImage.files[0])
+      this.$axios.put('/analyst/image', formData).then(
+        () => {
+          this.$toast.show('Imagem enviada ao servidor', {
+            duration: 5000,
+            icon: 'done'
+          })
+        },
+        () => {
+          this.$toast.error('Falha ao upar imagem no servidor')
+        }
+      )
     }
   }
 }

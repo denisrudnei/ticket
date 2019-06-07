@@ -17,8 +17,20 @@ export const mutations = {
   updateName(state, name) {
     state.user.name = name
   },
+  updateEmail(state, contactEmail) {
+    state.user.contactEmail = contactEmail
+  },
+  updatemergePictureWithExternalAccount(state, merge) {
+    state.user.mergePictureWithExternalAccount = merge
+  },
   setColor(state, color) {
     state.user.color = color
+  },
+  updateImage(state, url) {
+    state.user.picture = url
+  },
+  removeImage(state) {
+    state.user.picture = '/user.svg'
   },
   SET(state, value) {}
 }

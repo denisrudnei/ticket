@@ -59,10 +59,21 @@
       pa-2
     >
       <gmap-autocomplete />
+      <v-btn
+        icon
+        class="primary white--text"
+        @click="addMarker"
+      >
+        <v-icon>
+          add
+        </v-icon>
+      </v-btn>
       <gmap-map
+        ref="gmap"
         :center="center"
         :zoom="12"
         style="width:100%;  height: 400px;"
+        @center_changed="updateCenter"
       >
         <gmap-marker
           v-for="(m, index) in markers"
@@ -129,6 +140,22 @@ export default {
     })
   },
   methods: {
+    setPlace(place) {
+      this.currentPlace = place
+    },
+    addMarker() {
+      if (this.currentPlace) {
+        const marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        }
+        this.markers.push({ position: marker })
+        this.places.push(this.currentPlace)
+        this.center = marker
+        this.currentPlace = null
+      }
+    },
+    updateCenter(center) {},
     save() {
       this.$axios.post('/address', this.address).then(
         () => {

@@ -11,6 +11,11 @@ export const getters = {
     return state.notifications.filter(n => {
       return n.read === false
     })
+  },
+  getRead(state) {
+    return state.notifications.filter(n => {
+      return n.read
+    })
   }
 }
 

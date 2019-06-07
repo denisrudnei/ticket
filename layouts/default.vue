@@ -182,6 +182,7 @@ export default {
   data() {
     return {
       fab: true,
+      notificationGroups: [],
       items: [
         {
           icon: 'bookmarks',
@@ -205,8 +206,13 @@ export default {
       logged: 'auth/getLoggedIn',
       user: 'auth/getUser',
       tree: 'ticket/getTree',
-      ticketsToEdit: 'ticket/getTicketsToEdit',
-      notificationGroups: 'getNotificationGroups'
+      groups: 'group/getGroups',
+      ticketsToEdit: 'ticket/getTicketsToEdit'
+    })
+  },
+  fetch({ $axios, store }) {
+    $axios.get('/group').then(response => {
+      store.commit('group/setGroups', response.data)
     })
   },
   updated() {
@@ -229,6 +235,10 @@ export default {
         // this.$store.dispatch('chat/addMessage', message)
       })
     }
+
+    this.notificationGroups = this.groups.filter(g => {
+      return g.analysts.map(a => a._id).includes(this.user._id)
+    })
 
     this.$socket.on('readNotification', notification => {
       this.$store.commit('notification/updateNotification', notification)

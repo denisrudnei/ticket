@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Analyst = require('../models/Analyst')
+const S3 = require('../../plugins/S3')
 
 module.exports = app => {
   app.get('/analyst', (req, res) => {
@@ -42,13 +43,68 @@ module.exports = app => {
       {
         $set: {
           name: req.body.name,
-          color: req.body.color
+          contactEmail: req.body.contactEmail,
+          color: req.body.color,
+          mergePictureWithExternalAccount:
+            req.body.mergePictureWithExternalAccount
         }
       }
     ).exec(err => {
       if (err) return res.status(500).json(err)
-      return res.sendStatus(201)
+      return res.sendStatus(202)
     })
+  })
+
+  app.put('/analyst/image', (req, res) => {
+    S3.createBucket(async () => {
+      const file = req.files.image
+      const name = req.session.authUser._id
+      const params = {
+        Bucket: process.env.BUCKET,
+        Key: name,
+        Body: file.data
+      }
+      await S3.upload(params, (err, data) => {
+        if (err) return res.status(500).json(err)
+        Analyst.findOneAndUpdate(
+          {
+            _id: req.session.authUser._id
+          },
+          {
+            $set: {
+              picture: data.Location
+            }
+          }
+        ).exec(err => {
+          if (err) return res.status(500).json(err)
+          return res.sendStatus(202)
+        })
+      })
+    })
+  })
+
+  app.delete('/analyst/image', (req, res) => {
+    S3.deleteObject(
+      {
+        Bucket: process.env.BUCKET,
+        Key: req.session.authUser._id
+      },
+      () => {
+        Analyst.findOneAndUpdate(
+          {
+            _id: req.session.authUser._id
+          },
+          {
+            $set: {
+              picture: '/user.svg'
+            }
+          }
+        ).exec(err => {
+          if (err) return res.status(500).json(err)
+          return res.sendStatus(202)
+        })
+      }
+    )
   })
 
   app.delete('/analyst/:id', (req, res) => {

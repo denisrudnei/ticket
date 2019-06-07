@@ -115,7 +115,7 @@
       </v-btn>
       <v-btn
         flat
-        to="/profile/notification"
+        to="/profile/notification/all"
       >
         Ver todas notificações
         <v-icon
@@ -140,11 +140,9 @@ export default {
   }),
   async mounted() {
     if (this.user !== undefined && this.user._id !== undefined) {
-      await this.$axios
-        .post(`/notification/${this.user._id}`)
-        .then(response => {
-          this.$store.commit('notification/setNotifications', response.data)
-        })
+      await this.$axios.post('/notification/').then(response => {
+        this.$store.commit('notification/setNotifications', response.data)
+      })
       await this.$axios
         .post(`/analyst/${this.user._id}/groups`)
         .then(response => {

@@ -6,7 +6,7 @@ module.exports = app => {
     Analyst.findOne({
       email: req.body.email
     })
-      .select('+password')
+      .select('+password +email')
       .exec((err, user) => {
         if (err || user === null) return res.sendStatus(400)
         user.verifyPassword(req.body.password, (err, result) => {
@@ -52,11 +52,11 @@ module.exports = app => {
   })
 
   app.post('/auth/mergeUser', (req, res) => {
-    Analyst.findOne(
-      {
-        email: req.body.email
-      },
-      async (err, analyst) => {
+    Analyst.findOne({
+      email: req.body.email
+    })
+      .select('+email')
+      .exec(async (err, analyst) => {
         if (err || analyst === null) {
           await Analyst.create(
             {
@@ -70,13 +70,14 @@ module.exports = app => {
             }
           )
         } else {
-          analyst.picture = req.body.picture
-          analyst.save()
+          if (analyst.mergePictureWithExternalAccount) {
+            analyst.picture = req.body.picture
+            analyst.save()
+          }
           req.session.authUser = analyst
           return res.status(200).json(analyst)
         }
-      }
-    )
+      })
   })
 
   app.post('/auth/password/reset', (req, res) => {
@@ -92,9 +93,19 @@ module.exports = app => {
               message: 'Senha antiga errada'
             })
           }
-          user.password = req.body.newPassword
-          user.save()
-          return res.sendStatus(202)
+          Analyst.updateOne(
+            {
+              _id: req.session.authUser._id
+            },
+            {
+              $set: {
+                password: req.body.newPassword
+              }
+            }
+          ).exec(err => {
+            if (err) return res.status(500).json(err)
+            return res.sendStatus(202)
+          })
         })
       })
   })

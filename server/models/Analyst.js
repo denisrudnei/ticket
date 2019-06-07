@@ -7,7 +7,13 @@ const AnalystSchema = new Schema({
   _id: Schema.Types.ObjectId,
   email: {
     type: String,
+    select: false,
     required: [true, 'Necessário preencher o email']
+  },
+  contactEmail: {
+    type: String,
+    required: false,
+    default: ''
   },
   name: {
     type: String,
@@ -38,7 +44,11 @@ const AnalystSchema = new Schema({
     type: Boolean,
     default: false
   },
-  picture: String
+  picture: String,
+  mergePictureWithExternalAccount: {
+    type: Boolean,
+    default: false
+  }
 })
 
 AnalystSchema.methods.getGroups = function(callback) {

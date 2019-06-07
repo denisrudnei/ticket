@@ -19,7 +19,7 @@
           Endereço
         </v-tab>
         <v-tab
-          to="/profile/notification"
+          to="/profile/notification/all"
         >
           Notificações
         </v-tab>
@@ -44,7 +44,7 @@ export default {
     user: 'auth/getUser'
   }),
   async created() {
-    await this.$axios.post(`/notification/${this.user._id}`).then(response => {
+    await this.$axios.post(`/notification/`).then(response => {
       this.$store.commit('notification/setNotifications', response.data)
     })
     await this.$axios

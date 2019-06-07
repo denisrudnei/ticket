@@ -1,19 +1,12 @@
 export const state = () => ({
   message: '',
-  show: false,
-  notificationGroups: []
+  show: false
 })
 
 export const mutations = {
   showMessage(state, message) {
     state.message = message
     state.show = true
-  }
-}
-
-export const getters = {
-  getNotificationGroups: state => {
-    return state.notificationGroups
   }
 }
 

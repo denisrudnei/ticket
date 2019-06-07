@@ -56,12 +56,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
-  computed: mapGetters({
-    notifications: 'notification/getNotifications'
-  }),
+  props: {
+    notifications: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    }
+  },
   methods: {
     readNotification(notification) {
       this.$axios

@@ -11,11 +11,15 @@
       class="primary white--text"
       @click="selectColor()"
     >
+      <v-icon
+        left
+      >
+        color_lens
+      </v-icon>
       <slot />
     </v-btn>
   </div>
 </template>
-
 <script>
 export default {
   data() {
@@ -34,5 +38,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+div {
+  display: inline-block !important;
+}
 </style>

@@ -12,10 +12,10 @@ module.exports = (app, io) => {
       })
   })
 
-  app.post('/notification/:userId', (req, res) => {
+  app.post('/notification/', (req, res) => {
     Notification.find({
       to: {
-        $in: [req.params.userId]
+        $in: [req.session.authUser._id]
       }
     })
       .populate(fields)
