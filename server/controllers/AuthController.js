@@ -6,7 +6,7 @@ module.exports = app => {
     Analyst.findOne({
       email: req.body.email
     })
-      .select('+password +email')
+      .select('+password +email +role')
       .exec((err, user) => {
         if (err || user === null) return res.sendStatus(400)
         user.verifyPassword(req.body.password, (err, result) => {
@@ -55,7 +55,7 @@ module.exports = app => {
     Analyst.findOne({
       email: req.body.email
     })
-      .select('+email')
+      .select('+email +mergePictureWithExternalAccount +role +color')
       .exec(async (err, analyst) => {
         if (err || analyst === null) {
           await Analyst.create(

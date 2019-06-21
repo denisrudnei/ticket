@@ -3,9 +3,6 @@
     row
     wrap
   >
-    <!-- <pre>
-      {{ items }}
-    </pre> -->
     <v-treeview
       :items="items"
       :load-children="getSub"

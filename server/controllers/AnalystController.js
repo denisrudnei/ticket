@@ -4,9 +4,20 @@ const S3 = require('../../plugins/S3')
 
 module.exports = app => {
   app.get('/analyst', (req, res) => {
+    Analyst.find({}).exec((err, analysts) => {
+      if (err || analysts === null) return res.status(500).json(err)
+      return res.status(200).json(analysts)
+    })
+  })
+
+  app.get('/config/analyst', (req, res) => {
     Analyst.find({})
       .select({
-        password: 0
+        active: 1,
+        emailVisible: 1,
+        mergePictureWithExternalAccount: 1,
+        role: 1,
+        color: 1
       })
       .exec((err, analysts) => {
         if (err || analysts === null) return res.status(500).json(err)

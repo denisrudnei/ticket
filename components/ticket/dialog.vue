@@ -64,8 +64,8 @@ export default {
     actualTicket: 'ticket/getActualTicket'
   }),
   methods: {
-    setDialog(id) {
-      this.$store.commit('ticket/setDialog', id)
+    setDialog() {
+      this.$store.commit('ticket/setDialog', '')
     },
     update() {
       this.$axios
@@ -76,9 +76,6 @@ export default {
             icon: 'done'
           })
         })
-    },
-    setActualTicket(ticket) {
-      this.$store.commit('ticket/setActualTicket', ticket)
     }
   }
 }

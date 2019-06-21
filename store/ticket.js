@@ -1,24 +1,9 @@
-import _ from 'lodash'
-
 export const state = () => ({
   tickets: [],
   search: [],
   dialog: '',
+  tree: [],
   actualTicket: {},
-  info: [
-    {
-      name: 'Status',
-      group: 'status.name'
-    },
-    {
-      name: 'Grupo',
-      group: 'group.name'
-    },
-    {
-      name: 'Categoria',
-      group: 'category.name'
-    }
-  ],
   ticketsToEdit: []
 })
 
@@ -30,23 +15,7 @@ export const getters = {
     return state.search
   },
   getTree(state) {
-    return state.info.map(leaf => {
-      const base = _(state.tickets)
-        .groupBy(leaf.group)
-        .value()
-
-      const result = Object.keys(base).map(k => ({
-        id: `(${base[k].length}) ${k}`,
-        name: `(${base[k].length}) ${k}`,
-        url: `/search?${leaf.group}=${k}`,
-        children: []
-      }))
-      return {
-        id: leaf.group,
-        name: leaf.name,
-        children: result
-      }
-    })
+    return state.tree
   },
   getActualTicket(state) {
     return state.actualTicket
@@ -61,9 +30,7 @@ export const getters = {
 
 export const mutations = {
   setActualTicket(state, ticket) {
-    state.actualTicket = state.tickets.find(t => {
-      return t._id === ticket._id
-    })
+    state.actualTicket = ticket
   },
   insertTicket(state, ticket) {
     state.tickets.push(ticket)
@@ -95,6 +62,9 @@ export const mutations = {
       ]
     }
   },
+  setTree(state, tree) {
+    state.tree = tree
+  },
   setDialog(state, ticketId) {
     state.dialog = ticketId
   },
@@ -114,5 +84,15 @@ export const mutations = {
 export const actions = {
   insertTicket({ commit }, ticket) {
     commit('insertTicket', ticket)
+  },
+  findTicket: async function({ commit }, id) {
+    await this.$axios.get(`/ticket/${id}`).then(response => {
+      commit('setActualTicket', response.data)
+    })
+  },
+  updateTree: async function({ commit }) {
+    await this.$axios.get('/info/path').then(response => {
+      commit('setTree', response.data)
+    })
   }
 }

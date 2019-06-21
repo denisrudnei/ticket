@@ -96,7 +96,7 @@
                   title="Chamados abertos"
                   icon
                   class="white primary--text"
-                  @click="viewRecents(analyst.name)"
+                  @click="viewRecents(analyst._id)"
                 >
                   <v-icon>
                     work
@@ -134,11 +134,11 @@ export default {
       const colors = ['red', 'green', 'yellow']
       return Object.values(_.shuffle(colors))[0]
     },
-    viewRecents(name) {
+    viewRecents(id) {
       this.$router.push({
         path: 'search',
         query: {
-          'openedBy.name': name
+          openedBy: id
         }
       })
     }

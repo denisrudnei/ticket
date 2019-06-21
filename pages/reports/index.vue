@@ -233,8 +233,9 @@ export default {
     }
   },
   async mounted() {
+    // TODO
     await this.$axios.get('/ticket').then(response => {
-      this.$store.commit('ticket/setTickets', response.data)
+      this.$store.commit('ticket/setTickets', response.data.docs)
     })
     this.charts = JSON.parse(localStorage.getItem('charts')) || []
   },

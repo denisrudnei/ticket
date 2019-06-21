@@ -7,7 +7,7 @@
       xs12
     >
       <list-ticket
-        :tickets="tickets"
+        url="/ticket/"
       />
     </v-flex>
   </v-layout>
@@ -16,7 +16,6 @@
 <script>
 import ListTicket from '@/components/ticket/list'
 import { mapGetters } from 'vuex'
-
 export default {
   components: {
     ListTicket
@@ -29,22 +28,11 @@ export default {
   computed: mapGetters({
     user: 'auth/getUser'
   }),
-  watch: {
-    $route(to, from) {
-      this.getTicket()
-    }
-  },
+
   mounted() {
     this.$axios.post('/auth/mergeUser', this.$auth.user).then(response => {
       this.$store.commit('auth/mergeUser', response.data)
     })
-  },
-  methods: {
-    getTicket() {
-      this.$axios.get('/ticket').then(result => {
-        this.tickets = result.data
-      })
-    }
   }
 }
 </script>

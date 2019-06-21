@@ -16,7 +16,7 @@
       xs12
     >
       <ticket-list
-        :tickets="list"
+        :url="'/search/'"
       />
     </v-flex>
   </v-layout>
@@ -26,7 +26,6 @@
 import TicketCreate from '@/components/ticket/create'
 import TicketList from '@/components/ticket/list'
 import { mapGetters } from 'vuex'
-
 export default {
   components: {
     TicketCreate,
@@ -58,7 +57,6 @@ export default {
   watch: {
     $route(to, from) {
       this.data = this.$router.currentRoute.query
-      this.search(this.convertQueryString(this.data))
     }
   },
   async mounted() {
@@ -75,20 +73,8 @@ export default {
       this.$store.commit('analyst/setAnalysts', reponse.data)
     })
     this.data = this.$router.currentRoute.query
-    this.search(this.convertQueryString(this.data))
   },
   methods: {
-    convertQueryString(queryString) {
-      const search = {}
-      Object.keys(queryString).forEach(k => {
-        const [field, name] = k.split('.')
-        const value = this[field].filter(f => {
-          return f[name] === Object.values(queryString)[0]
-        })[0]._id
-        search[field] = value
-      })
-      return search
-    },
     search(ticket) {
       const newTicket = {}
       Object.keys(ticket).forEach(k => {
@@ -102,8 +88,8 @@ export default {
       fieldsToExclude.forEach(f => {
         delete newTicket[f]
       })
-      this.$axios.post('/search', newTicket).then(response => {
-        this.$store.commit('ticket/setSearch', response.data)
+      this.$router.push({
+        query: newTicket
       })
     }
   }

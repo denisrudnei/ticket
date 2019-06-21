@@ -1,9 +1,11 @@
 <template>
   <v-data-table
     :items="tickets"
-    :search="search"
     :headers="headers"
     must-sort
+    :loading="loading"
+    :rows-per-page-items="rowsPerPageItems"
+    :total-items="pagination.totalItems"
     :pagination.sync="pagination"
   >
     <template
@@ -196,8 +198,15 @@
 
 <script>
 import { mapGetters } from 'vuex'
+
+const querystring = require('querystring')
+
 export default {
   props: {
+    url: {
+      type: String,
+      default: '/ticket/'
+    },
     search: {
       type: String,
       default: ''
@@ -205,13 +214,18 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      currentGroup: {},
+      currentStatus: {},
+      tickets: [],
       pagination: {
         sortBy: 'created',
         descending: true,
-        rowsPerPage: -1
+        totalItems: 0,
+        page: 1,
+        rowsPerPage: 5
       },
-      currentGroup: {},
-      currentStatus: {},
+      rowsPerPageItems: [5, 10, 15, 25, 50],
       headers: [
         {
           text: 'Ações',
@@ -247,43 +261,71 @@ export default {
   computed: mapGetters({
     status: 'status/getStatus',
     groups: 'group/getGroups',
-    tickets: 'ticket/getSearch',
-    dialog: 'ticket/getDialog'
+    dialog: 'ticket/getDialog',
+    actualTicket: 'ticket/getActualTicket'
   }),
   watch: {
     dialog: function(value) {
-      const query =
-        value === ''
-          ? undefined
-          : {
-              ticket: value
-            }
+      const query = Object.assign({}, this.$route.query, {
+        ticket: value || this.$route.query.ticket || null
+      })
+
       this.$router.push({
         query: query
       })
+    },
+    $route: async function(newValue) {
+      await this.update()
+    },
+    pagination: {
+      deep: true,
+      handler: function(newValue, old) {
+        if (
+          old.page === newValue.page &&
+          old.rowsPerPage === newValue.rowsPerPage
+        )
+          return
+        this.loading = 'primary'
+        this.$router.push({
+          query: Object.assign({}, this.$route.query, {
+            page: newValue.page,
+            limit: newValue.rowsPerPage
+          })
+        })
+      }
     }
   },
-  async mounted() {
+  async created() {
     await this.$axios.get('/group').then(response => {
       this.$store.commit('group/setGroups', response.data)
     })
     await this.$axios.get('/status').then(response => {
       this.$store.commit('status/setStatus', response.data)
     })
-    await this.$axios.get('/ticket').then(response => {
-      this.$store.commit('ticket/setTickets', response.data)
-      this.$store.commit('ticket/setSearch', response.data)
-    })
-    const query = this.$router.currentRoute.query
+    const query = this.$route.query
     if (query.ticket !== undefined) {
-      this.addTicketsToEdit(
-        this.tickets.find(t => {
-          return t._id === query.ticket
-        })
-      )
+      await this.$store.dispatch('ticket/findTicket', query.ticket)
+
+      await this.addTicketsToEdit(this.actualTicket)
     }
+    await this.update()
   },
   methods: {
+    async update() {
+      const query = this.$router.currentRoute.query
+      await this.$axios
+        .get(`${this.url}?${querystring.encode(query)}`)
+        .then(response => {
+          const { docs, total, limit, page } = response.data
+          this.$store.commit('ticket/setTickets', docs)
+          this.$store.commit('ticket/setSearch', docs)
+          this.tickets = docs
+          this.pagination.totalItems = parseInt(total)
+          this.pagination.page = parseInt(page)
+          this.pagination.rowsPerPage = parseInt(limit)
+          this.loading = false
+        })
+    },
     modifyStatus(ticket) {
       this.$axios
         .post(`/ticket/updateStatus/${ticket._id}`, this.currentStatus)
@@ -305,13 +347,14 @@ export default {
           )
         })
     },
-    setDialog(id) {
-      this.$store.commit('ticket/setDialog', id)
+    async setDialog(id) {
+      await this.$store.dispatch('ticket/findTicket', id)
+      await this.$store.commit('ticket/setDialog', id)
     },
-    addTicketsToEdit(ticket) {
-      this.$store.commit('ticket/setActualTicket', ticket)
-      this.$store.commit('ticket/setDialog', ticket._id)
-      this.$store.commit('ticket/addTicketsToEdit', ticket)
+    async addTicketsToEdit(ticket) {
+      await this.$store.commit('ticket/setActualTicket', ticket)
+      await this.$store.commit('ticket/setDialog', ticket._id)
+      await this.$store.commit('ticket/addTicketsToEdit', ticket)
     }
   }
 }

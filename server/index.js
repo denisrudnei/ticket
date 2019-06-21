@@ -72,7 +72,7 @@ async function start() {
 
   require('./controllers/AuthController')(apiRouter)
   require('./controllers/AddressController')(apiRouter)
-  require('./controllers/ProfileController')(apiRouter)
+  require('./controllers/ProfileController')(apiRouter, io)
   require('./controllers/TicketController')(apiRouter, io)
   require('./controllers/AnalystController')(apiRouter)
   require('./controllers/RoleController')(apiRouter)
@@ -88,7 +88,6 @@ async function start() {
   app.use(nuxt.render)
 
   // Listen the server
-  // app.listen(port, host)
   server.listen(port, host)
   consola.ready({
     message: `Server listening on http://${host}:${port}`,

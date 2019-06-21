@@ -13,6 +13,9 @@
         >
           Perfil
         </v-tab>
+        <v-tab to="/profile/path/view">
+          Listagem em árvore
+        </v-tab>
         <v-tab
           to="/profile/address"
         >

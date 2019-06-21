@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const mongoosePaginate = require('mongoose-paginate')
 const Log = require('./Log')
 
 const TicketSchema = new mongoose.Schema({
@@ -35,7 +36,7 @@ const TicketSchema = new mongoose.Schema({
   ],
   affectedUser: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'Analyst'
   },
   actualUser: {
     type: Schema.Types.ObjectId,
@@ -69,7 +70,7 @@ const TicketSchema = new mongoose.Schema({
 })
 
 TicketSchema.pre('find', function() {
-  this.populate(['status', 'group', 'openedBy', 'actualUser'])
+  this.populate(['status', 'group', 'openedBy', 'actualUser', 'category'])
 })
 
 async function createLog(ticket) {
@@ -95,5 +96,7 @@ TicketSchema.pre('findOneAndUpdate', async function(next) {
   await createLog(ticket)
   next()
 })
+
+TicketSchema.plugin(mongoosePaginate)
 
 module.exports = mongoose.model('Ticket', TicketSchema)

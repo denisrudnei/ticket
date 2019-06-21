@@ -9,20 +9,10 @@ const Comment = require('../models/Comment')
 
 const populateArray = [
   {
-    path: 'openedBy',
-    select: {
-      name: 1,
-      picture: 1,
-      email: 1
-    }
+    path: 'openedBy'
   },
   {
-    path: 'actualUser',
-    select: {
-      name: 1,
-      picture: 1,
-      email: 1
-    }
+    path: 'actualUser'
   },
   {
     path: 'logs',
@@ -48,12 +38,18 @@ const populateArray = [
 
 module.exports = (app, io) => {
   app.get('/ticket', (req, res) => {
-    Ticket.find({})
-      .populate(populateArray)
-      .exec((err, tickets) => {
-        if (err || tickets === null) return res.status(500).json(err)
-        return res.status(200).json(tickets)
-      })
+    Ticket.paginate(
+      {},
+      {
+        page: parseInt(req.query.page) || 1,
+        limit: parseInt(req.query.limit) || 5,
+        populate: 'logs comments'
+      },
+      (err, result) => {
+        if (err) return res.status(500).json(err)
+        return res.status(200).json(result)
+      }
+    )
   })
 
   app.post(

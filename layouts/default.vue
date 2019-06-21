@@ -43,34 +43,7 @@
         </v-list-tile>
       </v-list>
       <v-spacer />
-      <v-treeview
-        v-if="tickets.length > 0"
-        v-show="!miniVariant"
-        :items="tree"
-        open-on-click
-        activatable
-      >
-        <template
-          v-slot:prepend="{ item }"
-        >
-          <v-icon
-            v-if="item.children.length === 0"
-          >
-            layers
-          </v-icon>
-        </template>
-        <template
-          v-slot:label="{ item }"
-        >
-          <span v-if="item.children.length > 0">{{ item.name }}</span>
-          <nuxt-link
-            v-if="item.children.length === 0"
-            :to="item.url"
-          >
-            {{ item.name }}
-          </nuxt-link>
-        </template>
-      </v-treeview>
+      <ticket-tree v-show="!miniVariant" />
       <v-spacer />
       <analyst-list
         v-if="logged"
@@ -171,13 +144,15 @@ import Toolbar from '@/components/toolbar'
 import TicketDialog from '@/components/ticket/dialog'
 import AnalystList from '@/components/analyst-list'
 import Chat from '@/components/chat'
+import TicketTree from '@/components/ticket/tree'
 
 export default {
   components: {
     Toolbar,
     TicketDialog,
     AnalystList,
-    Chat
+    Chat,
+    TicketTree
   },
   data() {
     return {
@@ -200,19 +175,16 @@ export default {
       clipped: true
     }
   },
-  computed: {
-    ...mapGetters({
-      tickets: 'ticket/getTickets',
-      logged: 'auth/getLoggedIn',
-      user: 'auth/getUser',
-      tree: 'ticket/getTree',
-      groups: 'group/getGroups',
-      ticketsToEdit: 'ticket/getTicketsToEdit'
-    })
-  },
-  fetch({ $axios, store }) {
-    $axios.get('/group').then(response => {
-      store.commit('group/setGroups', response.data)
+  computed: mapGetters({
+    tickets: 'ticket/getTickets',
+    logged: 'auth/getLoggedIn',
+    user: 'auth/getUser',
+    groups: 'group/getGroups',
+    ticketsToEdit: 'ticket/getTicketsToEdit'
+  }),
+  created() {
+    this.$axios.get('/group').then(response => {
+      this.$store.commit('group/setGroups', response.data)
     })
   },
   updated() {
@@ -245,11 +217,19 @@ export default {
     })
 
     this.$socket.on('updateTicket', ticket => {
+      // TODO
+      this.$store.dispatch('ticket/updateTree')
       this.$store.commit('ticket/updateTicket', ticket)
     })
 
     this.$socket.on('addTicket', ticket => {
+      // TODO
+      this.$store.dispatch('ticket/updateTree')
       this.$store.commit('ticket/insertTicket', ticket)
+    })
+
+    this.$socket.on('paths/updatePath', paths => {
+      this.$store.dispatch('ticket/updateTree')
     })
 
     this.notificationGroups.forEach(group => {

@@ -1,6 +1,5 @@
 export const state = () => ({
-  analysts: [],
-  current: null
+  analysts: []
 })
 
 export const getters = {

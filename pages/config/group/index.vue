@@ -20,6 +20,7 @@
               :close-on-content-click="false"
               :close-on-click="true"
               :nudge-width="250"
+              max-height="40vh"
             >
               <template
                 v-slot:activator="{ on }"

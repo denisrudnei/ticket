@@ -1,52 +1,60 @@
-const _ = require('lodash')
-const Ticket = require('../models/Ticket')
-const Analyst = require('../models/Analyst')
+const PathService = require('../services/PathService')
 
-module.exports = app => {
+module.exports = (app, io) => {
   app.get('/profile', (req, res) => {
-    const id = req.session.authUser._id
-    const result = {}
-    Ticket.find({})
-      .populate(['category', 'status', 'openedBy'])
-      .exec((err, tickets) => {
+    const userId = req.session.authUser._id
+    PathService.getProfileInfo(userId, (_, result) => {
+      return res.status(200).json(result)
+    })
+  })
+
+  app.get('/info/path/refs', (_, res) => {
+    PathService.getRefs((_, result) => {
+      return res.status(200).json(result)
+    })
+  })
+
+  app.post('/info/path', (req, res) => {
+    const path = {
+      name: req.body.name,
+      path: req.body.path,
+      group: req.body.group
+    }
+    const userId = req.session.authUser._id
+    PathService.create(
+      {
+        path,
+        userId
+      },
+      err => {
         if (err) return res.status(500).json(err)
-        result.opened = tickets.filter(t => {
-          return t.openedBy._id.toString() === id
-        }).length
-        result.total = tickets.length
-        result.categories = _(tickets)
-          .groupBy('category')
-          .map(v => ({
-            name: v[0].category.fullName,
-            total: v.length
-          }))
-        result.status = _(tickets)
-          .groupBy('status')
-          .map(v => ({
-            name: v[0].status.name,
-            total: v.length
-          }))
-        result.inName = _(tickets)
-          .groupBy('actualUser')
-          .map(v => ({
-            id: v[0].actualUser._id,
-            total: v.length
-          }))
-          .find(v => {
-            return v.id === id
-          })
-        return res.status(200).json(result)
-      })
+        io.emit('paths/updatePath')
+        return res.sendStatus(201)
+      }
+    )
+  })
+
+  app.get('/info/path', (req, res) => {
+    const userId = req.session.authUser._id
+    PathService.getPaths(userId, (err, result) => {
+      if (err) return res.status(500).json(err)
+      return res.status(200).json(result)
+    })
   })
 
   app.get('/profile/address', (req, res) => {
-    Analyst.findOne({
-      _id: req.session.authUser._id
+    const userId = req.session.authUser._id
+    PathService.getAddress(userId, (err, result) => {
+      if (err) return res.status(500).json(err)
+      return res.status(200).json(result)
     })
-      .populate('address')
-      .exec((err, analyst) => {
-        if (err) return res.status(500).json(err)
-        return res.status(200).json(analyst.address)
-      })
+  })
+
+  app.delete('/info/path/:id', (req, res) => {
+    PathService.remove(req.params.id, err => {
+      if (err) return res.status(500).json(err)
+      io.emit('paths/updatePath')
+      return res.sendStatus(202)
+    })
   })
 }

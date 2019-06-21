@@ -73,6 +73,11 @@
         "action": "allow"
       },
       {
+        "resource": "/api/info/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
         "resource": "/api/config/*",
         "methods": "*",
         "action": "deny"

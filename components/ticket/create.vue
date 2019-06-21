@@ -423,9 +423,9 @@ export default {
       return Object.assign(this.ticketData, this.ticket)
     }
   },
-  async created() {
+  created() {
     this.readOnlyData = this.readonly
-    await this.$axios.get('/analyst').then(result => {
+    this.$axios.get('/analyst').then(result => {
       this.analysts = result.data
     })
     this.$axios.get('/group').then(result => {
@@ -482,6 +482,7 @@ export default {
     clearFields() {
       Object.keys(this.ticketData).forEach(key => {
         this.ticketData[key] = undefined
+        delete this.ticketData[key]
       })
     }
   }

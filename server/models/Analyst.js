@@ -23,11 +23,13 @@ const AnalystSchema = new Schema({
     type: String,
     default: 'user',
     enum: ['guest', 'user', 'admin'],
-    required: [true, 'O nível de acesso deve ser definido']
+    required: [true, 'O nível de acesso deve ser definido'],
+    select: false
   },
   color: {
     type: String,
-    default: ''
+    default: '',
+    select: false
   },
   password: {
     type: String,
@@ -42,13 +44,21 @@ const AnalystSchema = new Schema({
   },
   active: {
     type: Boolean,
-    default: false
+    default: false,
+    select: false
   },
   picture: String,
   mergePictureWithExternalAccount: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+    select: false
+  },
+  paths: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Path'
+    }
+  ]
 })
 
 AnalystSchema.methods.getGroups = function(callback) {
