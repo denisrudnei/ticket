@@ -22,7 +22,7 @@
     "@nuxtjs/toast": "^3.0.2",
     "apexcharts": "^3.6.5",
     "aws-sdk": "^2.437.0",
-    "bcrypt": "^3.0.4",
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "compression": "^1.7.4",
     "cross-env": "^5.2.0",
