@@ -18,6 +18,7 @@ beforeAll(done => {
 })
 
 afterAll(done => {
-  mongoose.disconnect()
-  done()
+  mongoose.disconnect(() => {
+    done()
+  })
 })
