@@ -1,132 +1,71 @@
-const mongoose = require('mongoose')
-const Analyst = require('../models/Analyst')
-const S3 = require('../../plugins/S3')
+const AnalystService = require('../services/AnalystService')
 
 module.exports = app => {
   app.get('/analyst', (req, res) => {
-    Analyst.find({}).exec((err, analysts) => {
+    AnalystService.getAnalysts((err, analysts) => {
       if (err || analysts === null) return res.status(500).json(err)
       return res.status(200).json(analysts)
     })
   })
 
-  app.get('/config/analyst', (req, res) => {
-    Analyst.find({})
-      .select({
-        active: 1,
-        emailVisible: 1,
-        mergePictureWithExternalAccount: 1,
-        role: 1,
-        color: 1
-      })
-      .exec((err, analysts) => {
-        if (err || analysts === null) return res.status(500).json(err)
-        return res.status(200).json(analysts)
-      })
-  })
-
-  app.post('/config/analyst', (req, res) => {
-    const analyst = {
-      _id: new mongoose.Types.ObjectId(),
-      ...req.body
-    }
-
-    Analyst.create(analyst, (err, result) => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(200)
+  app.get('/config/analyst', (_, res) => {
+    AnalystService.getConfigAnalysts((err, analysts) => {
+      if (err || analysts === null) return res.status(500).json(err)
+      return res.status(200).json(analysts)
     })
   })
 
-  app.post('/analyst/:id/groups', async (req, res) => {
-    const analyst = await Analyst.findOne({ _id: req.params.id })
-
-    analyst.getGroups((err, result) => {
+  app.post('/config/analyst', (req, res) => {
+    AnalystService.create(req.body, (err, _) => {
       if (err) return res.status(500).json(err)
-      return res.status(200).json(result)
+      return res.sendStatus(201)
+    })
+  })
+
+  app.post('/analyst/:id/groups', (req, res) => {
+    const userId = req.params.id
+    AnalystService.getGroups(userId, (err, groups) => {
+      if (err) return res.status(500).json(err)
+      return res.status(200).json(groups)
     })
   })
 
   app.put('/analyst', (req, res) => {
-    Analyst.updateOne(
-      {
-        _id: req.session.authUser._id
-      },
-      {
-        $set: {
-          name: req.body.name,
-          contactEmail: req.body.contactEmail,
-          color: req.body.color,
-          mergePictureWithExternalAccount:
-            req.body.mergePictureWithExternalAccount
-        }
-      }
-    ).exec(err => {
+    const userId = req.session.authUser._id
+    const analyst = {
+      name: req.body.name,
+      contactEmail: req.body.contactEmail,
+      color: req.body.color,
+      mergePictureWithExternalAccount: req.body.mergePictureWithExternalAccount
+    }
+    AnalystService.updateAnalyst(userId, analyst, (err, _) => {
       if (err) return res.status(500).json(err)
       return res.sendStatus(202)
     })
   })
 
   app.put('/analyst/image', (req, res) => {
-    S3.createBucket(async () => {
-      const file = req.files.image
-      const name = req.session.authUser._id
-      const params = {
-        Bucket: process.env.BUCKET,
-        Key: name,
-        Body: file.data
-      }
-      await S3.upload(params, (err, data) => {
-        if (err) return res.status(500).json(err)
-        Analyst.findOneAndUpdate(
-          {
-            _id: req.session.authUser._id
-          },
-          {
-            $set: {
-              picture: data.Location
-            }
-          }
-        ).exec(err => {
-          if (err) return res.status(500).json(err)
-          return res.sendStatus(202)
-        })
-      })
+    const userId = req.session.authUser._id
+    const file = req.files.image
+    AnalystService.updateImage(userId, file, (err, _) => {
+      if (err) return res.status(500).json(err)
+      return res.sendStatus(202)
     })
   })
 
   app.delete('/analyst/image', (req, res) => {
-    S3.deleteObject(
-      {
-        Bucket: process.env.BUCKET,
-        Key: req.session.authUser._id
-      },
-      () => {
-        Analyst.findOneAndUpdate(
-          {
-            _id: req.session.authUser._id
-          },
-          {
-            $set: {
-              picture: '/user.svg'
-            }
-          }
-        ).exec(err => {
-          if (err) return res.status(500).json(err)
-          return res.sendStatus(202)
-        })
-      }
-    )
+    const userId = req.session.authUser._id
+    AnalystService.removeImage(userId, (err, _) => {
+      if (err) return res.status(500).json(err)
+      return res.sendStatus(202)
+    })
   })
 
   app.delete('/analyst/:id', (req, res) => {
-    Analyst.findOneAndDelete(
-      {
-        _id: req.params.id
-      },
-      (err, result) => {
-        if (err) return res.status(500).json(err)
-        return res.sendStatus(200)
-      }
-    )
+    const userId = req.params.id
+    AnalystService.remove(userId, (err, _) => {
+      if (err) return res.status(500).json(err)
+      return res.sendStatus(200)
+    })
   })
 }

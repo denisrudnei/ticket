@@ -21,17 +21,11 @@ module.exports = (app, io) => {
       group: req.body.group
     }
     const userId = req.session.authUser._id
-    PathService.create(
-      {
-        path,
-        userId
-      },
-      err => {
-        if (err) return res.status(500).json(err)
-        io.emit('paths/updatePath')
-        return res.sendStatus(201)
-      }
-    )
+    PathService.create(path, userId, err => {
+      if (err) return res.status(500).json(err)
+      io.emit('paths/updatePath')
+      return res.sendStatus(201)
+    })
   })
 
   app.get('/info/path', (req, res) => {

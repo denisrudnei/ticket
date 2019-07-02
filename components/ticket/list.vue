@@ -217,7 +217,7 @@ export default {
       loading: false,
       currentGroup: {},
       currentStatus: {},
-      tickets: [],
+      // tickets: [],
       pagination: {
         sortBy: 'created',
         descending: true,
@@ -233,7 +233,7 @@ export default {
         },
         {
           text: 'Usuário atual',
-          value: 'actualUser.name'
+          value: 'actualUser'
         },
         {
           text: 'Resumo',
@@ -241,15 +241,15 @@ export default {
         },
         {
           text: 'Status',
-          value: 'status.name'
+          value: 'status'
         },
         {
           text: 'Grupo',
-          value: 'group.name'
+          value: 'group'
         },
         {
           text: 'Categoria',
-          value: 'category.fullName'
+          value: 'category'
         },
         {
           text: 'Data de criação',
@@ -259,6 +259,7 @@ export default {
     }
   },
   computed: mapGetters({
+    tickets: 'ticket/getTickets',
     status: 'status/getStatus',
     groups: 'group/getGroups',
     dialog: 'ticket/getDialog',
@@ -282,14 +283,18 @@ export default {
       handler: function(newValue, old) {
         if (
           old.page === newValue.page &&
-          old.rowsPerPage === newValue.rowsPerPage
+          old.rowsPerPage === newValue.rowsPerPage &&
+          old.sortBy === newValue.sortBy &&
+          old.descending === newValue.descending
         )
           return
         this.loading = 'primary'
         this.$router.push({
           query: Object.assign({}, this.$route.query, {
             page: newValue.page,
-            limit: newValue.rowsPerPage
+            limit: newValue.rowsPerPage,
+            sortBy: newValue.sortBy,
+            descending: newValue.descending ? -1 : 1
           })
         })
       }
@@ -319,7 +324,8 @@ export default {
           const { docs, total, limit, page } = response.data
           this.$store.commit('ticket/setTickets', docs)
           this.$store.commit('ticket/setSearch', docs)
-          this.tickets = docs
+          // this.tickets = docs
+          this.$store.commit('ticket/setTickets', docs)
           this.pagination.totalItems = parseInt(total)
           this.pagination.page = parseInt(page)
           this.pagination.rowsPerPage = parseInt(limit)

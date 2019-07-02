@@ -4,7 +4,8 @@
     wrap
   >
     <v-flex
-      xs8
+      xs12
+      md8
       pa-2
     >
       <v-layout
@@ -12,7 +13,8 @@
         wrap
       >
         <v-flex
-          xs4
+          xs12
+          md4
           pa-2
         >
           <v-text-field
@@ -23,7 +25,8 @@
           />
         </v-flex>
         <v-flex
-          xs4
+          md4
+          xs12
           pa-2
         >
           <v-autocomplete
@@ -33,7 +36,8 @@
           />
         </v-flex>
         <v-flex
-          xs4
+          md4
+          xs12
           pa-2
         >
           <v-autocomplete
@@ -55,7 +59,8 @@
       </v-layout>
     </v-flex>
     <v-flex
-      xs4
+      md4
+      xs12
       pa-2
     >
       <gmap-autocomplete />

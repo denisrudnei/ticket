@@ -5,7 +5,7 @@ const Analyst = require('../models/Analyst')
 const Ticket = require('../models/Ticket')
 
 const PathService = {
-  create({ path, userId }, callback) {
+  create(path, userId, callback) {
     Path.create(
       {
         _id: new mongoose.Types.ObjectId(),
@@ -22,9 +22,8 @@ const PathService = {
               paths: path
             }
           }
-        ).exec(err => {
-          if (err) return callback(err, null)
-          return callback(null, null)
+        ).exec((err, result) => {
+          return callback(err, result)
         })
       }
     )
@@ -35,7 +34,7 @@ const PathService = {
     Ticket.find({})
       .populate(['category', 'status', 'openedBy'])
       .exec((err, tickets) => {
-        if (err) return err
+        if (err) return callback(err, null)
         result.opened = tickets.filter(t => {
           return t.openedBy._id.toString() === userId
         }).length
@@ -61,7 +60,7 @@ const PathService = {
           .find(v => {
             return v.id === userId
           })
-        return callback(null, result)
+        return callback(err, result)
       })
   },
 
@@ -97,6 +96,7 @@ const PathService = {
     Analyst.findOne({
       _id: userId
     })
+      .select('+paths')
       .populate('paths')
       .exec(async (err, user) => {
         if (err) return callback(err, null)
@@ -136,8 +136,7 @@ const PathService = {
     Path.deleteOne({
       _id: id
     }).exec(err => {
-      if (err) return callback(err, null)
-      return callback(null, null)
+      return callback(err, null)
     })
   }
 }

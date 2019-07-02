@@ -56,7 +56,8 @@ const AnalystSchema = new Schema({
   paths: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Path'
+      ref: 'Path',
+      select: false
     }
   ]
 })
@@ -88,6 +89,12 @@ AnalystSchema.pre('save', function(next) {
 AnalystSchema.methods.verifyPassword = function(password, next) {
   bcrypt.compare(password, this.password, (err, result) => {
     if (err) return next(err)
+    if (!result)
+      return next(
+        new Error({
+          message: 'Password incorrect'
+        })
+      )
     return next(null, result)
   })
 }
@@ -102,4 +109,4 @@ AnalystSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = new mongoose.model('Analyst', AnalystSchema)
+module.exports = mongoose.model('Analyst', AnalystSchema)

@@ -1,49 +1,31 @@
-const mongoose = require('mongoose')
-const Category = require('../models/Category')
+const CategoryService = require('../services/CategoryService')
 
 module.exports = app => {
-  app.get('/category', (req, res) => {
-    Category.find({})
-      .populate(['father', 'subs'])
-      .exec((err, categories) => {
-        if (err || categories === null) return res.status(500).json(err)
-        return res.status(200).json(categories)
-      })
+  app.get('/category', (_, res) => {
+    CategoryService.getCategories((err, result) => {
+      if (err || result === null) return res.status(500).json(err)
+      return res.status(200).json(result)
+    })
   })
 
   app.get('/category/:name', (req, res) => {
-    Category.findOne({ name: req.params.name }, (err, result) => {
+    CategoryService.getOne(req.params.name, (err, result) => {
       if (err) return res.status(500).json(err)
       return res.status(200).json(result)
     })
   })
 
   app.get('/category/:id/subs', (req, res) => {
-    Category.findOne({ _id: req.params.id }).exec((err, result) => {
+    CategoryService.getSubsForCategory(req.params.id, (err, result) => {
       if (err) return res.status(500).json(err)
       return res.status(200).json(result)
     })
   })
 
-  app.post('/config/category', async (req, res) => {
-    const category = {
-      _id: new mongoose.Types.ObjectId(),
-      name: req.body.name
-    }
-
-    const father = await Category.findOne({ _id: req.body.father._id }).exec()
-
-    if (father) {
-      category.father = father._id
-    }
-
-    Category.create(category, (err, category) => {
-      if (err || category === null) return res.status(500).json(err)
-      if (father !== null) {
-        father.subs.push(category)
-        father.save()
-      }
-      return res.sendStatus(200)
+  app.post('/config/category', (req, res) => {
+    CategoryService.create(req.body.name, req.body.father, (err, result) => {
+      if (err) return res.status(500).json(err)
+      return res.status(201).json(result)
     })
   })
 }

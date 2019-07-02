@@ -1,6 +1,6 @@
 {
   "env": {
-    "test": {
+    "development": {
       "presets": [
         [
           "@babel/preset-env",
