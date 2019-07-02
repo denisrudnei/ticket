@@ -42,7 +42,7 @@ const models = [
 const seed = {
   execute: callback => {
     seeder.connect(
-      'mongodb://127.0.0.1/testing',
+      process.env.MONGODB_TESTING_URI || 'mongodb://127.0.0.1/testing',
       function(err) {
         if (err) throw err
         seeder.loadModels(models)

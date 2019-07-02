@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const seed = require('./seed')
 
 mongoose.connect(
-  'mongodb://127.0.0.1/testing',
+  process.env.MONGODB_TESTING_URI || 'mongodb://127.0.0.1/testing',
   {
     useNewUrlParser: true
   },
