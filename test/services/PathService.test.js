@@ -20,10 +20,11 @@ test('Create new path', async done => {
   })
 })
 
-test('Get all refs', () => {
+test('Get all refs', done => {
   PathService.getRefs((err, result) => {
     expect(err).toBeNull()
     expect(result).toBeTruthy()
+    done()
   })
 })
 
@@ -36,9 +37,10 @@ test('Get profile information', async done => {
   })
 })
 
-test('Get paths', async () => {
+test('Get paths', async done => {
   const userId = await getUserId()
   PathService.getPaths(userId, (_, result) => {
     expect(result).toBeTruthy()
+    done()
   })
 })
