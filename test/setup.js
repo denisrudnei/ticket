@@ -17,8 +17,6 @@ beforeAll(done => {
   })
 })
 
-afterAll(done => {
-  mongoose.disconnect(() => {
-    done()
-  })
+afterAll(async () => {
+  await mongoose.disconnect()
 })
