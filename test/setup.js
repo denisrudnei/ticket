@@ -19,4 +19,5 @@ beforeAll(done => {
 
 afterAll(async () => {
   await mongoose.disconnect()
+  await seed.disconnect()
 })

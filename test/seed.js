@@ -54,9 +54,7 @@ const seed = {
       }
     )
   },
-  finish() {
-    seeder.disconnect()
-  }
+  disconnect: seeder.disconnect
 }
 
 module.exports = seed
