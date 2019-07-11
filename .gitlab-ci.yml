@@ -14,8 +14,4 @@ test:
   script:
     - npm install
     - npm run test
-  
-coverage:
-  script:
-    - npm install
     - npm run coverage
