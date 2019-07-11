@@ -32,11 +32,11 @@ const data = [
 
 const models = [
   './server/models/Analyst.js',
-  './server/models/Group.js',
-  './server/models/Status.js',
-  './server/models/Category.js',
+  './server/models/ticket/Group.js',
+  './server/models/ticket/Status.js',
+  './server/models/ticket/Category.js',
   './server/models/Path.js',
-  './server/models/Ticket.js'
+  './server/models/ticket/Ticket.js'
 ]
 
 const seed = {

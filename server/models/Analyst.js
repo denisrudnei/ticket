@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const Schema = mongoose.Schema
-const Group = require('./Group')
+const Group = require('./ticket/Group')
 
 const AnalystSchema = new Schema({
   _id: Schema.Types.ObjectId,

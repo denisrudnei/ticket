@@ -1,8 +1,8 @@
+const expect = require('expect')
 const AnalystService = require('../../server/services/AnalystService')
 const AnalystSeed = require('../seeds/AnalystSeed')
 const analyst = AnalystSeed.seed(1)[0]
-
-test('Get analysts', done => {
+it('Get analysts', function(done) {
   AnalystService.getAnalysts((err, result) => {
     expect(err).toBeNull()
     expect(result).toBeTruthy()
@@ -10,7 +10,7 @@ test('Get analysts', done => {
   })
 })
 
-test('Create new analyst', done => {
+it('Create new analyst', done => {
   AnalystService.create(analyst, (err, result) => {
     expect(err).toBeNull()
     expect(result).toBeTruthy()
@@ -18,7 +18,7 @@ test('Create new analyst', done => {
   })
 })
 
-test('Get analyst in admin view', done => {
+it('Get analyst in admin view', done => {
   AnalystService.getConfigAnalysts((err, result) => {
     expect(err).toBeNull()
     expect(result).toBeTruthy()

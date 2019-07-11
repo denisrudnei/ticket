@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Status = require('../models/Status')
+const Status = require('../../models/ticket/Status')
 
 module.exports = app => {
   app.get('/status', (req, res) => {

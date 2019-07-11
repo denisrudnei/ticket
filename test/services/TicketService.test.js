@@ -1,6 +1,7 @@
-const TicketService = require('../../server/services/TicketService')
+const expect = require('expect')
+const TicketService = require('../../server/services/ticket/TicketService')
 
-test('Get All tickets', done => {
+it('Get All tickets', done => {
   const sort = {
     category: -1
   }

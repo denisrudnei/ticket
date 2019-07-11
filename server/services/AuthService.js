@@ -9,6 +9,8 @@ const AuthService = {
       .select('+password +email +role')
       .exec((err, user) => {
         if (err) return callback(err, null)
+        if (user === null)
+          return callback(new Error('Username or password incorrect'), null)
         user.verifyPassword(password, err => {
           return callback(err, user)
         })

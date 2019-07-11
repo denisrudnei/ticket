@@ -1,5 +1,5 @@
 const { body, param, validationResult } = require('express-validator/check')
-const TicketService = require('../services/TicketService')
+const TicketService = require('../../services/ticket/TicketService')
 
 module.exports = (app, io) => {
   app.get('/ticket', (req, res) => {

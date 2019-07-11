@@ -1,4 +1,4 @@
-const CategoryService = require('../services/CategoryService')
+const CategoryService = require('../../services/ticket/CategoryService')
 
 module.exports = app => {
   app.get('/category', (_, res) => {

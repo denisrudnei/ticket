@@ -78,6 +78,12 @@
             >
               Pesquisar
             </v-btn>
+            <v-btn
+              class="primary white--text"
+              to="/knowledge"
+            >
+              Base de conhecimento
+            </v-btn>
           </v-flex>
         </template>
       </v-layout>

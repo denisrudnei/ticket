@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Category = require('../models/Category')
+const Category = require('../../models/ticket/Category')
 
 const CategoryService = {
   async create({ name, father = {} }, callback) {

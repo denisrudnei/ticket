@@ -2,7 +2,7 @@ const _ = require('lodash')
 const mongoose = require('mongoose')
 const Path = require('../models/Path')
 const Analyst = require('../models/Analyst')
-const Ticket = require('../models/Ticket')
+const Ticket = require('../models/ticket/Ticket')
 
 const PathService = {
   create(path, userId, callback) {
@@ -76,13 +76,16 @@ const PathService = {
   },
 
   getRefs(callback) {
+    // FIXME
     const paths = Object.values(Ticket.schema.paths)
     const pathsWithObjects = paths.filter(v => {
       return v.options.ref !== undefined
     })
     const pathsWithRefs = pathsWithObjects.map(v => ({
-      path: v.path,
-      options: Object.keys(require(`../models/${v.options.ref}`).schema.paths)
+      path: v.path
+      /* options: Object.keys(
+        require(`../models/ticket/${v.options.ref}`).schema.paths
+      ) */
     }))
     return callback(null, pathsWithRefs)
   },

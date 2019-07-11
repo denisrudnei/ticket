@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
-const Ticket = require('../models/Ticket')
-const Comment = require('../models/Comment')
-const Group = require('../models/Group')
-const Notification = require('../models/Notification')
-const Status = require('../models/Status')
-const S3 = require('../../plugins/S3')
+const Ticket = require('../../models/ticket/Ticket')
+const Comment = require('../../models/ticket/Comment')
+const Group = require('../../models/ticket/Group')
+const Notification = require('../../models/Notification')
+const Status = require('../../models/ticket/Status')
+const S3 = require('../../../plugins/S3')
 
 const populateArray = [
   {
