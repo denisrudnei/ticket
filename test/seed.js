@@ -7,28 +7,30 @@ const StatusSeed = require('./seeds/StatusSeed')
 
 seeder.setLogOutput(false)
 
-const data = [
-  {
-    model: 'Analyst',
-    documents: AnalystSeed.seed(5)
-  },
-  {
-    model: 'Category',
-    documents: CategorySeed.seed(5)
-  },
-  {
-    model: 'Status',
-    documents: StatusSeed.seed(5)
-  },
-  {
-    model: 'Group',
-    documents: GroupSeed.seed(5)
-  },
-  {
-    model: 'Ticket',
-    documents: TicketSeed.seed(5)
-  }
-]
+const data = async function() {
+  return [
+    {
+      model: 'Analyst',
+      documents: AnalystSeed.seed(1)
+    },
+    {
+      model: 'Category',
+      documents: CategorySeed.seed(5)
+    },
+    {
+      model: 'Status',
+      documents: StatusSeed.seed(5)
+    },
+    {
+      model: 'Group',
+      documents: GroupSeed.seed(5)
+    },
+    {
+      model: 'Ticket',
+      documents: await TicketSeed.seed(5)
+    }
+  ]
+}
 
 const models = [
   './server/models/Analyst.js',
@@ -40,13 +42,14 @@ const models = [
 ]
 
 const seed = {
-  execute: callback => {
-    seeder.connect(
+  execute: async callback => {
+    await seeder.connect(
       process.env.MONGODB_TESTING_URI || 'mongodb://127.0.0.1/testing',
-      function(err) {
+      async function(err) {
         if (err) throw err
         seeder.loadModels(models)
-        seeder.clearModels(data.map(m => m.model), function() {
+        const d = await data()
+        seeder.clearModels(d.map(m => m.model), function() {
           seeder.populateModels(data, function() {
             callback()
           })

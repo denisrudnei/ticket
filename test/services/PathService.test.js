@@ -5,7 +5,7 @@ describe('PathaSerivce', function() {
   this.timeout(0)
 
   it('Create new path', done => {
-    getUserId(userId => {
+    getUserId((_, userId) => {
       const path = {
         path: 'group',
         group: 'name',
@@ -28,7 +28,7 @@ describe('PathaSerivce', function() {
   })
 
   it('Get profile information', done => {
-    getUserId(userId => {
+    getUserId((_, userId) => {
       PathService.getProfileInfo(userId, (err, result) => {
         expect(err).toBeNull()
         expect(result).toBeTruthy()
@@ -38,12 +38,11 @@ describe('PathaSerivce', function() {
   })
 
   it('Get paths', done => {
-    getUserId(userId => {
-      /* PathService.getPaths(userId, (_, result) => {
+    getUserId((_, userId) => {
+      PathService.getPaths(userId, (_, result) => {
         expect(result).toBeTruthy()
         done()
-      }) */
-      done()
+      })
     })
   })
 })
