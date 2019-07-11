@@ -57,7 +57,7 @@ module.exports = app => {
 
   app.delete('/knowledge/:id', (req, res) => {
     const knowledgeId = req.params.id
-    KnowledgeService.delete(knowledgeId, (err, _) => {
+    KnowledgeService.remove(knowledgeId, (err, _) => {
       if (err) return res.status(500).json(err)
       return res.sendStatus(201)
     })

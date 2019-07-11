@@ -83,7 +83,7 @@ const KnowledgeService = {
       }
     )
   },
-  delete(id, callback) {
+  remove(id, callback) {
     // TODO
   }
 }
