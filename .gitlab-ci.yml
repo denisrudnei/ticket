@@ -17,4 +17,5 @@ test:
   
 coverage:
   script:
+    - npm install
     - npm run coverage
