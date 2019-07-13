@@ -17,10 +17,10 @@
     </v-flex>
     <v-flex xs12 md6 pa-2>
       <v-select
-        v-model="knowledge.knowledgeCategory"
+        v-model="knowledge.group"
         box
-        :items="knowledgeCategory.map(v => ({text: v.name, value: v}))"
-        placeholder="Categoria de conhecimento"
+        :items="group.map(v => ({text: v.name, value: v}))"
+        placeholder="Grupo responsável"
       />
     </v-flex>
     <v-flex xs12 pa-2>
@@ -35,6 +35,7 @@
         Incluir arquivo
       </v-btn>
       <v-btn
+        :disabled="disabled"
         class="primary white--text"
         @click="save()"
       >
@@ -52,17 +53,26 @@ export default {
       knowledge: {
         name: '',
         preview: '',
-        category: '',
-        knowledgeCategory: ''
+        group: '',
+        category: ''
       }
     }
   },
+  computed: {
+    disabled() {
+      return (
+        this.knowledge.preview === '' ||
+        this.knowledge.category === '' ||
+        this.knowledge.group === ''
+      )
+    }
+  },
   asyncData: async ({ $axios }) => {
-    const knowledgeCategory = await $axios.get('/knowledge/category')
     const category = await $axios.get('/category/')
+    const group = await $axios.get('/group/')
     return {
-      knowledgeCategory: knowledgeCategory.data,
-      category: category.data
+      category: category.data,
+      group: group.data
     }
   },
   methods: {

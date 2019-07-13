@@ -8,9 +8,6 @@
         <v-tab to="/config/knowledge/">
           Listar documentos
         </v-tab>
-        <v-tab to="/config/knowledge/category">
-          Categorias da base
-        </v-tab>
       </v-tabs>
       <nuxt-child />
     </v-flex>

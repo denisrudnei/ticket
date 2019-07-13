@@ -4,6 +4,14 @@
       <v-data-table :items="items" :headers="headers">
         <template v-slot:items="{item}">
           <td>{{ item.name }}</td>
+          <td>
+            <v-btn class="primary white--text" icon :to="`/config/knowledge/edit/${item._id}`">
+              <v-icon>edit</v-icon>
+            </v-btn>
+            <v-btn class="primary white--text" icon>
+              <v-icon>delete</v-icon>
+            </v-btn>
+          </td>
         </template>
       </v-data-table>
     </v-flex>
@@ -18,12 +26,16 @@ export default {
         {
           text: 'Nome',
           value: 'name'
+        },
+        {
+          text: 'Ações',
+          value: 'actions'
         }
       ]
     }
   },
   asyncData({ $axios }) {
-    return $axios.get('/knowledge/').then(response => {
+    return $axios.get('/knowledge/all').then(response => {
       return {
         items: response.data
       }

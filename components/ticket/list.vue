@@ -217,7 +217,6 @@ export default {
       loading: false,
       currentGroup: {},
       currentStatus: {},
-      // tickets: [],
       pagination: {
         sortBy: 'created',
         descending: true,
@@ -324,7 +323,6 @@ export default {
           const { docs, total, limit, page } = response.data
           this.$store.commit('ticket/setTickets', docs)
           this.$store.commit('ticket/setSearch', docs)
-          // this.tickets = docs
           this.$store.commit('ticket/setTickets', docs)
           this.pagination.totalItems = parseInt(total)
           this.pagination.page = parseInt(page)

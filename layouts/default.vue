@@ -189,9 +189,11 @@ export default {
     ticketsToEdit: 'ticket/getTicketsToEdit'
   }),
   created() {
-    this.$axios.get('/group').then(response => {
-      this.$store.commit('group/setGroups', response.data)
-    })
+    if (this.logged) {
+      this.$axios.get('/group').then(response => {
+        this.$store.commit('group/setGroups', response.data)
+      })
+    }
   },
   updated() {
     if (this.logged) {

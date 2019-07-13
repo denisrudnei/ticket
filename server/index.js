@@ -83,7 +83,6 @@ async function start() {
   require('./controllers/NotificationController')(apiRouter, io)
   require('./controllers/ChatController')(apiRouter, io)
   require('./controllers/knowledge/KnowledgeController')(apiRouter)
-  require('./controllers/knowledge/KnowledgeCategoryController')(apiRouter)
   require('./controllers/knowledge/KnowledgeStatusController')(apiRouter)
   app.use('/api', apiRouter)
 

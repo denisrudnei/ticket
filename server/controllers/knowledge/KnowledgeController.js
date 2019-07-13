@@ -8,6 +8,13 @@ module.exports = app => {
     })
   })
 
+  app.get('/knowledge/all', (req, res) => {
+    KnowledgeService.getAll((err, result) => {
+      if (err) return res.status(500).json(err)
+      return res.status(200).json(result)
+    })
+  })
+
   app.get('/knowledge/view/:id', (req, res) => {
     const id = req.params.id
     KnowledgeService.getOne(id, (err, knowledge) => {
@@ -24,21 +31,16 @@ module.exports = app => {
     })
   })
 
-  app.get('/knowledge/bycategory/:categoryName', (req, res) => {
-    const categoryName = req.params.categoryName
-    KnowledgeService.getByKnowledgeCategory(categoryName, (err, result) => {
+  app.get('/knowledge/group/:groupName', (req, res) => {
+    const groupName = req.params.groupName
+    KnowledgeService.getByKnowledgeGroup(groupName, (err, result) => {
       if (err) return res.status(500).json(err)
       return res.status(200).json(result)
     })
   })
 
   app.post('/knowledge/', (req, res) => {
-    const knowledge = {
-      name: req.body.name,
-      preview: req.body.preview,
-      knowledgeCategory: req.body.knowledgeCategory,
-      category: req.body.catgory
-    }
+    const knowledge = req.body
 
     KnowledgeService.create(knowledge, (err, result) => {
       if (err) return res.status(500).json(err)

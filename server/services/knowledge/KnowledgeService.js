@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Knowledge = require('../../models/knowledge/Knowledge')
-const knowledgeCategory = require('../../models/knowledge/KnowledgeCategory')
+const Group = require('../../models/ticket/Group')
 const S3 = require('../../../plugins/S3')
 const KnowledgeService = {
   getAll(callback) {
@@ -17,33 +17,31 @@ const KnowledgeService = {
   },
   getUncategorized(callback) {
     Knowledge.find({
-      category: null
+      group: null
     }).exec((err, result) => {
       return callback(err, result)
     })
   },
-  getByKnowledgeCategory(categoryName, callback) {
-    knowledgeCategory
-      .findOne({
-        name: categoryName
+  getByKnowledgeGroup(groupName, callback) {
+    Group.findOne({
+      name: groupName
+    }).exec((err, result) => {
+      if (err) return callback(err, null)
+      Knowledge.find({
+        group: result._id
+      }).exec((err, result) => {
+        return callback(err, result)
       })
-      .exec((err, result) => {
-        if (err) return callback(err, null)
-        Knowledge.find({
-          knowledgeCategory: result._id
-        }).exec((err, result) => {
-          return callback(err, result)
-        })
-      })
+    })
   },
   create(knowledge, callback) {
-    const { name, category, preview, knowledgeCategory } = knowledge
+    const { name, group, preview, category } = knowledge
     Knowledge.create(
       {
         _id: new mongoose.Types.ObjectId(),
         name: name,
+        group: group,
         category: category,
-        knowledgeCategory: knowledgeCategory,
         preview: preview
       },
       (err, knowledge) => {
@@ -84,7 +82,21 @@ const KnowledgeService = {
     )
   },
   remove(id, callback) {
-    // TODO
+    Knowledge.deleteOne({
+      _id: id
+    }).exec(err => {
+      if (err) return callback(err, null)
+      S3.deleteObject(
+        {
+          Bucket: process.env.BUCKET,
+          Key: id
+        },
+        (err, obj) => {
+          if (err) return callback(err, null)
+          return callback(err, obj)
+        }
+      )
+    })
   }
 }
 

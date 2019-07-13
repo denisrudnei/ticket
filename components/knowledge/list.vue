@@ -40,14 +40,18 @@ export default {
   watch: {
     $route(newValue) {
       this.$axios
-        .get(`/knowledge/bycategory/${newValue.params.id}`)
+        .get(`/knowledge/group/${newValue.params.id}`)
         .then(response => {
           this.items = response.data
         })
     }
   },
   created() {
-    this.$axios.get('/knowledge').then(response => {
+    const url =
+      this.$route.params.id !== undefined
+        ? `/knowledge/group/${this.$route.params.id}`
+        : '/knowledge'
+    this.$axios.get(url).then(response => {
       this.items = response.data
     })
   }

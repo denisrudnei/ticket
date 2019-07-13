@@ -12,11 +12,17 @@ const KnowledgeSchema = new Schema({
   },
   category: {
     type: Schema.Types.ObjectId,
-    ref: 'Category'
+    ref: 'Category',
+    required: [true, 'Necessário haver uma categoria relacionada']
   },
-  knowledgeCategory: {
+  group: {
     type: Schema.Types.ObjectId,
-    ref: 'KnowledgeCategory'
+    ref: 'Group',
+    required: [true, 'Necessário haver um grupo relacionado']
+  },
+  status: {
+    type: Schema.Types.ObjectId,
+    ref: 'KnowledgeStatus'
   },
   preview: {
     type: String
@@ -24,6 +30,14 @@ const KnowledgeSchema = new Schema({
   url: {
     type: String
   }
+})
+
+KnowledgeSchema.pre('find', function() {
+  this.populate(['category', 'group', 'status'])
+})
+
+KnowledgeSchema.pre('findOne', function() {
+  this.populate(['category', 'group', 'status'])
 })
 
 module.exports = new mongoose.model('Knowledge', KnowledgeSchema)
