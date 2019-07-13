@@ -61,7 +61,7 @@ module.exports = app => {
     const knowledgeId = req.params.id
     KnowledgeService.remove(knowledgeId, (err, _) => {
       if (err) return res.status(500).json(err)
-      return res.sendStatus(201)
+      return res.sendStatus(202)
     })
   })
 }
