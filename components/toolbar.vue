@@ -17,7 +17,6 @@
     </v-btn>
     <v-spacer />
     <v-btn
-      v-if="logged"
       flat
       icon
       class="primary white--text"
@@ -27,6 +26,41 @@
         person
       </v-icon>
     </v-btn>
+      
+    <v-menu
+      v-if="logged"
+      offset-y
+      offset-x
+      :nudge-width="350"
+      :close-on-content-click="false"
+      max-height="40vh"
+    >
+      <template v-slot:activator="{on}">
+        <v-btn class="primary white--text" icon v-on="on">
+          <v-icon>
+            chat
+          </v-icon>
+        </v-btn>
+      </template>
+      <v-tabs>
+        <v-tab>
+          Usuários
+        </v-tab>
+        <v-tab-item>
+          <analyst-list
+            v-if="logged"
+          />
+        </v-tab-item>
+        <v-tab>
+          Status
+        </v-tab>
+        <v-tab-item>
+          <v-card>
+            <status />
+          </v-card>
+        </v-tab-item>
+      </v-tabs>
+    </v-menu>
     <Notification
       v-if="logged"
     />
@@ -63,10 +97,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import Notification from '@/components/notification'
+import AnalystList from '@/components/chat/analyst-list'
+import Status from '@/components/chat/status'
 
 export default {
   components: {
-    Notification
+    Notification,
+    AnalystList,
+    Status
   },
   props: {
     app: {

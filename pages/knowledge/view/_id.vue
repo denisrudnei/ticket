@@ -1,7 +1,6 @@
 <template>
   <v-dialog
     :value="dialog"
-    width="90vw"
     scrollable
   >
     <v-card>
@@ -51,6 +50,7 @@
             <v-layout row wrap>
               <v-flex xs12 pa-2>
                 <ticket-list
+                  v-if="showModal"
                   :url="`/search/`"
                 />
               </v-flex>

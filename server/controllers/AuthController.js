@@ -2,11 +2,14 @@ const AuthService = require('../services/AuthService')
 
 module.exports = app => {
   app.post('/auth/login', (req, res) => {
-    AuthService.login(req.body.email, req.body.password, (err, result) => {
-      if (err || !result) return res.sendStatus(400)
-      req.session.authUser = result
-      return res.json(result)
-    })
+    AuthService.login(req.body.email, req.body.password)
+      .then(result => {
+        req.session.authUser = result
+        return res.json(result)
+      })
+      .catch(() => {
+        return res.sendStatus(400)
+      })
   })
 
   app.post('/auth/user', (req, res) => {
@@ -21,18 +24,24 @@ module.exports = app => {
   })
 
   app.post('/auth/register', async (req, res) => {
-    await AuthService.register(req.body.email, req.body.password, err => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(201)
-    })
+    await AuthService.register(req.body.email, req.body.password)
+      .then(() => {
+        return res.sendStatus(201)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.post('/auth/mergeUser', (req, res) => {
-    AuthService.mergeUser(req.body.email, req.body, (err, result) => {
-      if (err) return res.status(500).json(err)
-      req.session.authUser = result
-      return res.status(200).json(result)
-    })
+    AuthService.mergeUser(req.body.email, req.body)
+      .then(result => {
+        req.session.authUser = result
+        return res.status(200).json(result)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.post('/auth/password/reset', (req, res) => {
@@ -40,14 +49,15 @@ module.exports = app => {
     AuthService.resetPassword(
       userId,
       req.body.oldPassword,
-      req.body.newPassword,
-      (err, _) => {
-        if (err)
-          return res.status(400).json({
-            message: 'Senha antiga errada'
-          })
-        return res.sendStatus(201)
-      }
+      req.body.newPassword
     )
+      .then(() => {
+        return res.sendStatus(201)
+      })
+      .catch(e => {
+        return res.status(400).json({
+          message: 'Senha antiga errada'
+        })
+      })
   })
 }

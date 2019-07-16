@@ -1,55 +1,47 @@
 const expect = require('expect')
 const PathService = require('../../server/services/PathService')
 const Analyst = require('../../server/models/Analyst')
-describe('PathaSerivce', function() {
+describe('PathService', function() {
   this.timeout(0)
 
-  it('Create new path', done => {
-    getUserId((_, userId) => {
-      const path = {
-        path: 'group',
-        group: 'name',
-        name: 'Por grupo'
-      }
-      PathService.create(path, userId, (err, paths) => {
-        expect(err).toBeNull()
-        expect(paths).toBeTruthy()
-        done()
-      })
+  it('Create new path', async () => {
+    const userId = await getUserId()
+    const path = {
+      path: 'group',
+      group: 'name',
+      name: 'Por grupo'
+    }
+    PathService.create(path, userId).then(paths => {
+      expect(paths).toBeTruthy()
     })
   })
 
-  it('Get all refs', done => {
-    PathService.getRefs((err, result) => {
-      expect(err).toBeNull()
+  it('Get all refs', () => {
+    PathService.getRefs().then(result => {
       expect(result).toBeTruthy()
-      done()
     })
   })
 
-  it('Get profile information', done => {
-    getUserId((_, userId) => {
-      PathService.getProfileInfo(userId, (err, result) => {
-        expect(err).toBeNull()
-        expect(result).toBeTruthy()
-        done()
-      })
+  it('Get profile information', async () => {
+    const userId = await getUserId()
+
+    PathService.getProfileInfo(userId).then(result => {
+      expect(result).toBeTruthy()
     })
   })
 
-  it('Get paths', done => {
-    getUserId((_, userId) => {
-      PathService.getPaths(userId, (_, result) => {
-        expect(result).toBeTruthy()
-        done()
-      })
+  it('Get paths', async () => {
+    const userId = await getUserId()
+    PathService.getPaths(userId).then(result => {
+      expect(result).toBeTruthy()
     })
   })
 })
 
-function getUserId(callback) {
-  Analyst.find().exec((err, result) => {
-    if (err) return callback(err, null)
-    return callback(err, result[0]._id)
+function getUserId() {
+  return new Promise(async (resolve, reject) => {
+    const result = await Analyst.findOne({}).exec()
+    if (result === null) return reject(new Error('User not found'))
+    return resolve(result._id)
   })
 }

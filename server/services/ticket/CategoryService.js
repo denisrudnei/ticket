@@ -2,42 +2,55 @@ const mongoose = require('mongoose')
 const Category = require('../../models/ticket/Category')
 
 const CategoryService = {
-  async create({ name, father = {} }, callback) {
-    const category = {
-      _id: new mongoose.Types.ObjectId(),
-      name: name
-    }
-
-    const fatherFromDB = await Category.findOne({ _id: father._id }).exec()
-
-    if (fatherFromDB) {
-      category.father = father._id
-    }
-
-    Category.create(category, (err, category) => {
-      if (err) return callback(err, null)
-      if (fatherFromDB !== null) {
-        fatherFromDB.subs.push(category)
-        fatherFromDB.save()
+  create(name, father) {
+    return new Promise(async (resolve, reject) => {
+      const category = {
+        _id: new mongoose.Types.ObjectId(),
+        name: name
       }
-      return callback(err, category)
-    })
-  },
-  getCategories(callback) {
-    Category.find({})
-      .populate(['father', 'subs'])
-      .exec((err, categories) => {
-        return callback(err, categories)
+      let fatherFromDB = null
+
+      if (father) {
+        fatherFromDB = await Category.findOne({ _id: father._id }).exec()
+      }
+      if (fatherFromDB) {
+        category.father = father._id
+      }
+
+      Category.create(category, (err, category) => {
+        if (err) reject(err)
+        if (fatherFromDB !== null) {
+          fatherFromDB.subs.push(category)
+          fatherFromDB.save()
+        }
+        resolve(category)
       })
-  },
-  getOne(name, callback) {
-    Category.findOne({ name: name }, (err, result) => {
-      return callback(err, result)
     })
   },
-  getSubsForCategory(id, callback) {
-    Category.findOne({ _id: id }).exec((err, result) => {
-      return callback(err, result.subs)
+  getCategories() {
+    return new Promise((resolve, reject) => {
+      Category.find({})
+        .populate(['father', 'subs'])
+        .exec((err, categories) => {
+          if (err) return reject(err)
+          return resolve(categories)
+        })
+    })
+  },
+  getOne(name) {
+    return new Promise((resolve, reject) => {
+      Category.findOne({ name: name }, (err, result) => {
+        if (err) return reject(err)
+        return resolve(result)
+      })
+    })
+  },
+  getSubsForCategory(id) {
+    return new Promise((resolve, reject) => {
+      Category.findOne({ _id: id }).exec((err, result) => {
+        if (err) return reject(err)
+        return resolve(result.subs)
+      })
     })
   }
 }

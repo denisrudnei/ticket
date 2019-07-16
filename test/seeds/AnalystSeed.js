@@ -9,7 +9,7 @@ const seed = number => {
     role: 'user',
     color: '#fff',
     password: faker.internet.password(),
-    adress: null,
+    address: null,
     active: true,
     email: faker.internet.email()
   })

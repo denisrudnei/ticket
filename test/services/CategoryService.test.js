@@ -1,18 +1,26 @@
 const expect = require('expect')
 const CategoryService = require('../../server/services/ticket/CategoryService')
 
-it('Get Categories', done => {
-  CategoryService.getCategories((err, result) => {
-    expect(err).toBeNull()
-    expect(result).toBeTruthy()
-    done()
-  })
-})
+describe('CategoryService', function() {
+  this.timeout(0)
 
-it('Crete a new category', done => {
-  CategoryService.create('Teste', (err, result) => {
-    expect(err).toBeNull()
-    expect(result).toBeTruthy()
-    done()
+  it('Get Categories', () => {
+    CategoryService.getCategories()
+      .then(result => {
+        expect(result).toBeTruthy()
+      })
+      .catch(e => {
+        expect(e).toBeNull()
+      })
+  })
+
+  it('Crete a new category', () => {
+    CategoryService.create('Teste', null)
+      .then(result => {
+        expect(result).toBeTruthy()
+      })
+      .catch(e => {
+        expect(e).toBeTruthy()
+      })
   })
 })

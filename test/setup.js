@@ -1,23 +1,10 @@
-const mongoose = require('mongoose')
 const seed = require('./seed')
 
-before(function(done) {
+before(async function() {
   this.timeout(0)
-
-  mongoose.connect(
-    process.env.MONGODB_TESTING_URI || 'mongodb://127.0.0.1/testing',
-    {
-      useNewUrlParser: true
-    },
-    function(err) {
-      if (err) throw err
-      seed.execute(() => done())
-    }
-  )
+  await seed.execute()
 })
 
-after(function(done) {
-  mongoose.disconnect(() => {
-    done()
-  })
+after(function() {
+  seed.disconnect()
 })

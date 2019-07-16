@@ -1,33 +1,31 @@
 <template>
-  <div
+  <v-dialog
     v-if="chat"
-    class="fixed"
+    v-model="chat"
+    scrollable
   >
-    <v-flex
-      xs12
-      class="white"
-    >
-      <v-card>
-        <v-toolbar
-          class="primary white--text"
-        >
-          <v-avatar>
-            <img :src="chat.to.picture">
-          </v-avatar>
-          <v-spacer />
-          {{ chat.to.name }}
-          <v-toolbar-items>
-            <v-btn
-              icon
-              class="white--text"
-              @click="hide()"
-            >
-              <v-icon>
-                close
-              </v-icon>
-            </v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
+    <v-card>
+      <v-toolbar
+        class="primary white--text"
+      >
+        <v-avatar>
+          <img :src="chat.to.picture">
+        </v-avatar>
+        <v-spacer />
+        {{ chat.to.name }}
+        <v-toolbar-items>
+          <v-btn
+            icon
+            class="white--text"
+            @click="hide()"
+          >
+            <v-icon>
+              close
+            </v-icon>
+          </v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
+      <v-card-text>
         <v-timeline
           class="expand"
         >
@@ -56,19 +54,17 @@
             </v-card>
           </v-timeline-item>
         </v-timeline>
-      </v-card>
-    </v-flex>
-    <v-card
-      class="bottom" 
-    >
-      <v-text-field
-        v-model="text"
-        box
-        label="Envie um texto"
-        @keydown.enter="addMessage()"
-      />
+      </v-card-text>
+      <v-card-actions>
+        <v-text-field
+          v-model="text"
+          box
+          label="Envie um texto"
+          @keydown.enter="addMessage()"
+        />
+      </v-card-actions>
     </v-card>
-  </div>
+  </v-dialog>
 </template>
 
 <script>
@@ -121,7 +117,7 @@ export default {
 </script>
 
 <style scoped>
-.fixed {
+/* .fixed {
   z-index: 9999;
   position: fixed;
   display: flex;
@@ -144,5 +140,5 @@ export default {
   bottom: 0;
   width: 100%;
   box-sizing: content-box;
-}
+}*/
 </style>

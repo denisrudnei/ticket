@@ -21,6 +21,11 @@
                 close
               </v-icon>
             </v-btn>
+            <v-btn class="primary white--text" icon @click="done(dialog)">
+              <v-icon>
+                done
+              </v-icon>
+            </v-btn>
           </v-toolbar-items>
         </v-toolbar>
       </v-card-title>
@@ -66,6 +71,10 @@ export default {
   methods: {
     setDialog() {
       this.$store.commit('ticket/setDialog', '')
+    },
+    done(id) {
+      this.$store.commit('ticket/removeFromEdit', id)
+      this.setDialog()
     },
     update() {
       this.$axios

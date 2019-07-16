@@ -61,6 +61,7 @@ export default {
   computed: {
     disabled() {
       return (
+        this.knowledge.name === '' ||
         this.knowledge.preview === '' ||
         this.knowledge.category === '' ||
         this.knowledge.group === ''

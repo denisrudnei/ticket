@@ -2,32 +2,44 @@ const AnalystService = require('../services/AnalystService')
 
 module.exports = app => {
   app.get('/analyst', (req, res) => {
-    AnalystService.getAnalysts((err, analysts) => {
-      if (err || analysts === null) return res.status(500).json(err)
-      return res.status(200).json(analysts)
-    })
+    AnalystService.getAnalysts()
+      .then(analysts => {
+        return res.status(200).json(analysts)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.get('/config/analyst', (_, res) => {
-    AnalystService.getConfigAnalysts((err, analysts) => {
-      if (err || analysts === null) return res.status(500).json(err)
-      return res.status(200).json(analysts)
-    })
+    AnalystService.getConfigAnalysts()
+      .the(analysts => {
+        return res.status(200).json(analysts)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.post('/config/analyst', (req, res) => {
-    AnalystService.create(req.body, (err, _) => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(201)
-    })
+    AnalystService.create(req.body)
+      .thene(() => {
+        return res.sendStatus(201)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.post('/analyst/:id/groups', (req, res) => {
     const userId = req.params.id
-    AnalystService.getGroups(userId, (err, groups) => {
-      if (err) return res.status(500).json(err)
-      return res.status(200).json(groups)
-    })
+    AnalystService.getGroups(userId)
+      .then(groups => {
+        return res.status(200).json(groups)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.put('/analyst', (req, res) => {
@@ -38,34 +50,46 @@ module.exports = app => {
       color: req.body.color,
       mergePictureWithExternalAccount: req.body.mergePictureWithExternalAccount
     }
-    AnalystService.updateAnalyst(userId, analyst, (err, _) => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(202)
-    })
+    AnalystService.updateAnalyst(userId, analyst)
+      .then(() => {
+        return res.sendStatus(202)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.put('/analyst/image', (req, res) => {
     const userId = req.session.authUser._id
     const file = req.files.image
-    AnalystService.updateImage(userId, file, (err, _) => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(202)
-    })
+    AnalystService.updateImage(userId, file)
+      .then(() => {
+        return res.sendStatus(202)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.delete('/analyst/image', (req, res) => {
     const userId = req.session.authUser._id
-    AnalystService.removeImage(userId, (err, _) => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(202)
-    })
+    AnalystService.removeImage(userId)
+      .then(() => {
+        return res.sendStatus(202)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.delete('/analyst/:id', (req, res) => {
     const userId = req.params.id
-    AnalystService.remove(userId, (err, _) => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(200)
-    })
+    AnalystService.remove(userId)
+      .then(() => {
+        return res.sendStatus(200)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 }

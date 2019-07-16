@@ -31,24 +31,38 @@ const category = async function() {
   return result
 }
 
-const seed = async _ => {
-  const categoryResult = await category()
-  const analystResult = await analyst()
-  const groupResult = await group()
-  const statusResult = await status()
-
-  return [
-    {
-      _id: new mongoose.Types.ObjectId(),
-      resume: faker.lorem.paragraph(),
-      content: faker.lorem.paragraph(),
-      category: categoryResult._id,
-      actualUser: analystResult._id,
-      openedBy: analystResult._id,
-      group: groupResult._id,
-      status: statusResult._id
+const seed = () => {
+  return new Promise(async (resolve, reject) => {
+    await mongoose.connect(
+      process.env.MONGODB_TESTING_URI || 'mongodb://127.0.0.1/testing',
+      {
+        useNewUrlParser: true
+      }
+    )
+    if (mongoose.connection.readyState !== 1) {
+      reject(new Error('Disconnected'))
     }
-  ]
+    await Ticket.deleteMany({})
+
+    const analystResult = await analyst()
+    const categoryResult = await category()
+    const groupResult = await group()
+    const statusResult = await status()
+    const ticketsToSave = [
+      {
+        _id: new mongoose.Types.ObjectId(),
+        resume: faker.lorem.paragraph(),
+        content: faker.lorem.paragraph(),
+        category: categoryResult._id,
+        actualUser: analystResult._id,
+        openedBy: analystResult._id,
+        group: groupResult._id,
+        status: statusResult._id
+      }
+    ]
+    const saved = await Ticket.create(ticketsToSave)
+    return resolve(saved)
+  })
 }
 
 module.exports = { seed }

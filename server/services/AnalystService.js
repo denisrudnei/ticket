@@ -3,125 +3,149 @@ const Analyst = require('../../server/models/Analyst')
 const S3 = require('../../plugins/S3')
 
 const AnalystService = {
-  create(analyst, callback) {
-    Analyst.create(
-      {
-        _id: new mongoose.Types.ObjectId(),
-        ...analyst
-      },
-      (err, analyst) => {
-        callback(err, analyst)
-      }
-    )
-  },
-
-  getAnalysts(callback) {
-    Analyst.find({}).exec((err, analysts) => {
-      return callback(err, analysts)
+  create(analyst) {
+    return new Promise((resolve, reject) => {
+      Analyst.create(
+        {
+          _id: new mongoose.Types.ObjectId(),
+          ...analyst
+        },
+        (err, analyst) => {
+          if (err) return reject(err)
+          return resolve(analyst)
+        }
+      )
     })
   },
 
-  getConfigAnalysts(callback) {
-    Analyst.find({})
-      .select({
-        active: 1,
-        emailVisible: 1,
-        mergePictureWithExternalAccount: 1,
-        role: 1,
-        color: 1
-      })
-      .exec((err, analysts) => {
-        return callback(err, analysts)
-      })
-  },
-
-  updateAnalyst(userId, analyst, callback) {
-    Analyst.updateOne(
-      {
-        _id: userId
-      },
-      {
-        $set: analyst
-      }
-    ).exec(err => {
-      return callback(err, {
-        message: 'success'
+  getAnalysts() {
+    return new Promise((resolve, reject) => {
+      Analyst.find({}).exec((err, analysts) => {
+        if (err) return reject(err)
+        return resolve(analysts)
       })
     })
   },
 
-  updateImage(userId, file, callback) {
-    S3.createBucket(async () => {
-      const name = userId
-      const params = {
-        Bucket: process.env.BUCKET,
-        Key: name,
-        Body: file.data
-      }
-      await S3.upload(params, (err, data) => {
-        if (err) return callback(err, null)
-        Analyst.findOneAndUpdate(
-          {
-            _id: userId
-          },
-          {
-            $set: {
-              picture: data.Location
-            }
-          }
-        ).exec(err => {
-          return callback(err, {
-            message: 'success'
-          })
+  getConfigAnalysts() {
+    return new Promise((resolve, reject) => {
+      Analyst.find({})
+        .select({
+          active: 1,
+          emailVisible: 1,
+          mergePictureWithExternalAccount: 1,
+          role: 1,
+          color: 1
         })
-      })
-    })
-  },
-
-  async getGroups(userId, callback) {
-    const analyst = await Analyst.findOne({ _id: userId })
-
-    analyst.getGroups((err, result) => {
-      callback(err, result)
-    })
-  },
-
-  removeImage(userId, callback) {
-    S3.deleteObject(
-      {
-        Bucket: process.env.BUCKET,
-        Key: userId
-      },
-      () => {
-        Analyst.findOneAndUpdate(
-          {
-            _id: userId
-          },
-          {
-            $set: {
-              picture: '/user.svg'
-            }
-          }
-        ).exec(err => {
-          return callback(err, {
-            message: 'success'
-          })
+        .exec((err, analysts) => {
+          if (err) reject(err)
+          return resolve(analysts)
         })
-      }
-    )
+    })
   },
 
-  remove(userId, callback) {
-    Analyst.findOneAndDelete(
-      {
-        _id: userId
-      },
-      (err, _) => {
-        return callback(err, {
+  updateAnalyst(userId, analyst) {
+    return new Promise((resolve, reject) => [
+      Analyst.updateOne(
+        {
+          _id: userId
+        },
+        {
+          $set: analyst
+        }
+      ).exec(err => {
+        if (err) return reject(err)
+        return resolve({
           message: 'success'
         })
-      }
-    )
+      })
+    ])
+  },
+
+  updateImage(userId, file) {
+    return new Promise((resolve, reject) => {
+      S3.createBucket(async () => {
+        const name = userId
+        const params = {
+          Bucket: process.env.BUCKET,
+          Key: name,
+          Body: file.data
+        }
+        await S3.upload(params, (err, data) => {
+          if (err) return resolve(null)
+          Analyst.findOneAndUpdate(
+            {
+              _id: userId
+            },
+            {
+              $set: {
+                picture: data.Location
+              }
+            }
+          ).exec(err => {
+            if (err) return reject(err)
+            return resolve({
+              message: 'success'
+            })
+          })
+        })
+      })
+    })
+  },
+
+  getGroups(userId) {
+    return new Promise(async (resolve, reject) => {
+      const analyst = await Analyst.findOne({ _id: userId })
+
+      analyst.getGroups((err, result) => {
+        if (err) return reject(err)
+        return resolve(result)
+      })
+    })
+  },
+
+  removeImage(userId) {
+    return new Promise((resolve, reject) => {
+      S3.deleteObject(
+        {
+          Bucket: process.env.BUCKET,
+          Key: userId
+        },
+        () => {
+          Analyst.findOneAndUpdate(
+            {
+              _id: userId
+            },
+            {
+              $set: {
+                picture: '/user.svg'
+              }
+            }
+          ).exec(err => {
+            if (err) return reject(err)
+            return resolve({
+              message: 'success'
+            })
+          })
+        }
+      )
+    })
+  },
+
+  remove(userId) {
+    return new Promise((resolve, reject) => {
+      Analyst.findOneAndDelete(
+        {
+          _id: userId
+        },
+        (err, _) => {
+          if (err) reject(err)
+          return resolve({
+            message: 'success'
+          })
+        }
+      )
+    })
   }
 }
 

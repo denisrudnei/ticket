@@ -2,20 +2,26 @@ const mongoose = require('mongoose')
 const KnowledgeStatus = require('../../models/knowledge/KnowledgeStatus')
 
 const KnowledgeStatusService = {
-  create(status, callback) {
-    KnowledgeStatus.create(
-      {
-        _id: new mongoose.Types.ObjectId(),
-        ...status
-      },
-      (err, result) => {
-        return callback(err, result)
-      }
-    )
+  create(status) {
+    return new Promise((resolve, reject) => {
+      KnowledgeStatus.create(
+        {
+          _id: new mongoose.Types.ObjectId(),
+          ...status
+        },
+        (err, result) => {
+          if (err) return reject(err)
+          return resolve(result)
+        }
+      )
+    })
   },
-  getAll(callback) {
-    KnowledgeStatus.find({}, (err, result) => {
-      return callback(err, result)
+  getAll() {
+    return new Promise((resolve, reject) => {
+      KnowledgeStatus.find({}, (err, result) => {
+        if (err) return reject(err)
+        return resolve(result)
+      })
     })
   }
 }

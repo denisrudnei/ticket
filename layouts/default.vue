@@ -44,10 +44,6 @@
       </v-list>
       <v-spacer />
       <ticket-tree v-show="!miniVariant" />
-      <v-spacer />
-      <analyst-list
-        v-if="logged"
-      />
     </v-navigation-drawer>
     <Toolbar
       :logged="logged"
@@ -148,15 +144,13 @@
 import { mapGetters } from 'vuex'
 import Toolbar from '@/components/toolbar'
 import TicketDialog from '@/components/ticket/dialog'
-import AnalystList from '@/components/analyst-list'
-import Chat from '@/components/chat'
+import Chat from '@/components/chat/chat'
 import TicketTree from '@/components/ticket/tree'
 
 export default {
   components: {
     Toolbar,
     TicketDialog,
-    AnalystList,
     Chat,
     TicketTree
   },
