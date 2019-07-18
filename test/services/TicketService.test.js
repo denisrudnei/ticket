@@ -9,3 +9,13 @@ it('Get All tickets', () => {
     expect(result).toBeTruthy()
   })
 })
+
+it('Get one tickt by id', () => {
+  TicketService.getOne('')
+    .then(ticket => {
+      expect(ticket).toBeTruthy()
+    })
+    .catch(e => {
+      throw e
+    })
+})

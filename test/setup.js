@@ -5,6 +5,6 @@ before(async function() {
   await seed.execute()
 })
 
-after(function() {
-  seed.disconnect()
+after(async function() {
+  await seed.disconnect()
 })

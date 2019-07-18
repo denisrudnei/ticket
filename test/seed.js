@@ -1,5 +1,4 @@
 const path = require('path')
-const _ = require('lodash')
 const mongoose = require('mongoose')
 const AnalystSeed = require('./seeds/AnalystSeed')
 const CategorySeed = require('./seeds/CategorySeed')
@@ -86,7 +85,9 @@ const seed = {
       resolve()
     })
   },
-  disconnect: mongoose.disconnect
+  disconnect: async () => {
+    await mongoose.disconnect
+  }
 }
 
 module.exports = seed

@@ -24,7 +24,12 @@ module.exports = app => {
   })
 
   app.post('/auth/register', async (req, res) => {
-    await AuthService.register(req.body.email, req.body.password)
+    const user = {
+      name: req.body.name,
+      email: req.body.email,
+      passowrd: req.body.password
+    }
+    await AuthService.register(user)
       .then(() => {
         return res.sendStatus(201)
       })
