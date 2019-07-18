@@ -2,9 +2,9 @@
   <v-layout row wrap>
     <v-flex px-2>
       <v-card>
-        <v-card-content>
+        <v-card-text>
           <v-select v-model="actualStatus" :items="status" box label="Status onlie" @change="changeStatus()" />
-        </v-card-content>
+        </v-card-text>
       </v-card>
     </v-flex>
   </v-layout>

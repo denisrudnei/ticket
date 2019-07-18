@@ -427,6 +427,12 @@ export default {
     this.readOnlyData = this.readonly
     this.$axios.get('/analyst').then(result => {
       this.analysts = result.data
+      if (!this.search && !this.readonly) {
+        const openedBy = this.analysts.filter(a => {
+          return a._id === this.user._id
+        })[0]
+        this.ticketComputed.openedBy = openedBy
+      }
     })
     this.$axios.get('/group').then(result => {
       this.groups = result.data
@@ -437,12 +443,6 @@ export default {
     this.$axios.get('/category').then(result => {
       this.categories = result.data
     })
-    if (!this.search && !this.readonly) {
-      const openedBy = this.analysts.filter(a => {
-        return a._id === this.user._id
-      })[0]
-      this.ticketComputed.openedBy = openedBy
-    }
   },
   methods: {
     momentValue() {
