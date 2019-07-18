@@ -31,13 +31,13 @@ module.exports = (app, io) => {
       body('resume').exists(),
       body('content').exists()
     ],
-    async (req, res) => {
+    (req, res) => {
       const errors = validationResult(req)
       if (!errors.isEmpty()) return res.status(400).json(errors.mapped())
 
-      await TicketService.create(req.body)
+      TicketService.create(req.body)
         .then(result => {
-          io.emit(`notification/${req.ticket.group._id}`, result.notification)
+          io.emit(`notification/${req.body.group._id}`, result.notification)
           io.emit('addTicket', result.newTicket)
           return res.status(200).json(result.newTicket)
         })

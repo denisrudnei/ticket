@@ -104,12 +104,12 @@ const TicketService = {
       })
 
       Ticket.create(ticket, async (err, result) => {
-        if (err) return resolve(result)
-        const newTicket = await Ticket.findOne({ _id: result._id }).populate(
-          populateArray
-        )
-        return resolve(result, {
-          result: newTicket,
+        if (err) return reject(err)
+        const newTicket = await Ticket.findOne({ _id: result._id })
+          .populate(populateArray)
+          .exec()
+        return resolve({
+          newTicket: newTicket,
           notification: notification
         })
       })

@@ -1,4 +1,5 @@
 const expect = require('expect')
+const mongoose = require('mongoose')
 const TicketService = require('../../server/services/ticket/TicketService')
 
 it('Get All tickets', () => {
@@ -11,6 +12,7 @@ it('Get All tickets', () => {
 })
 
 it('Get one tickt by id', () => {
+  // TODO
   TicketService.getOne('')
     .then(ticket => {
       expect(ticket).toBeTruthy()
