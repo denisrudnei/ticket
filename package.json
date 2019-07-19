@@ -28,7 +28,6 @@
     "compression": "^1.7.4",
     "cross-env": "^5.2.0",
     "date-fns": "^1.30.1",
-    "expect": "^24.8.0",
     "express": "^4.16.4",
     "express-acl": "^2.0.5",
     "express-fileupload": "^1.1.4",

@@ -1,23 +1,24 @@
-const expect = require('expect')
-const mongoose = require('mongoose')
+const faker = require('faker')
+const Ticket = require('../../server/models/ticket/Ticket')
 const TicketService = require('../../server/services/ticket/TicketService')
 
-it('Get All tickets', () => {
-  const sort = {
-    category: -1
-  }
-  TicketService.getTickets(sort, 1, 10).then(result => {
-    expect(result).toBeTruthy()
+describe('Ticket', function() {
+  this.timeout(0)
+  it('Get All tickets', async () => {
+    const sort = {
+      category: -1
+    }
+    await TicketService.getTickets(sort, 1, 10)
   })
-})
 
-it('Get one tickt by id', () => {
-  // TODO
-  TicketService.getOne('')
-    .then(ticket => {
-      expect(ticket).toBeTruthy()
-    })
-    .catch(e => {
-      throw e
-    })
+  it('Get one tickt by id', async () => {
+    const ticket = await Ticket.findOne().exec()
+    await TicketService.getOne(ticket._id)
+  })
+
+  it('Edit one ticket', async () => {
+    const ticket = await Ticket.findOne().exec()
+    ticket.content = faker.lorem.paragraphs()
+    return TicketService.updateOne(ticket._id, ticket)
+  })
 })

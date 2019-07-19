@@ -23,7 +23,7 @@ const AuthService = {
     return new Promise(async (resolve, reject) => {
       const userFromDB = await Analyst.findOne({
         email: user.email
-      })
+      }).exec()
 
       if (userFromDB) {
         return reject(
@@ -32,7 +32,6 @@ const AuthService = {
           })
         )
       }
-
       Analyst.create(
         {
           _id: new mongoose.Types.ObjectId(),

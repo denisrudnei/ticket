@@ -3,7 +3,7 @@
     <v-flex px-2>
       <v-card>
         <v-card-text>
-          <v-select v-model="actualStatus" :items="status" box label="Status onlie" @change="changeStatus()" />
+          <v-select v-model="actualStatus" :items="status" box label="Status online" @change="changeStatus()" />
         </v-card-text>
       </v-card>
     </v-flex>

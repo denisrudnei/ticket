@@ -23,13 +23,13 @@ module.exports = app => {
     res.sendStatus(200)
   })
 
-  app.post('/auth/register', async (req, res) => {
+  app.post('/auth/register', (req, res) => {
     const user = {
       name: req.body.name,
       email: req.body.email,
       passowrd: req.body.password
     }
-    await AuthService.register(user)
+    AuthService.register(user)
       .then(() => {
         return res.sendStatus(201)
       })

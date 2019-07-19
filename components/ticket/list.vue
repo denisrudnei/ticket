@@ -162,6 +162,7 @@
           >
             <v-btn
               class="primary white--text"
+              block
               flat
               v-on="on"
             >

@@ -1,4 +1,3 @@
-const expect = require('expect')
 const PathService = require('../../server/services/PathService')
 const Analyst = require('../../server/models/Analyst')
 describe('PathService', function() {
@@ -11,30 +10,33 @@ describe('PathService', function() {
       group: 'name',
       name: 'Por grupo'
     }
-    PathService.create(path, userId).then(paths => {
-      expect(paths).toBeTruthy()
-    })
+    await PathService.create(path, userId)
   })
 
-  it('Get all refs', () => {
-    PathService.getRefs().then(result => {
-      expect(result).toBeTruthy()
-    })
+  it('Get all refs', async () => {
+    await PathService.getRefs()
   })
 
   it('Get profile information', async () => {
     const userId = await getUserId()
 
-    PathService.getProfileInfo(userId).then(result => {
-      expect(result).toBeTruthy()
-    })
+    await PathService.getProfileInfo(userId)
   })
 
   it('Get paths', async () => {
     const userId = await getUserId()
-    PathService.getPaths(userId).then(result => {
-      expect(result).toBeTruthy()
-    })
+    return PathService.getPaths(userId)
+  })
+
+  it('Delete path', async () => {
+    const user = await Analyst.findOne({}).exec()
+    const path = user.paths[0]
+    await PathService.remove(path)
+  })
+
+  it('Get address', async () => {
+    const userId = await getUserId()
+    await PathService.getAddress(userId)
   })
 })
 

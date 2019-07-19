@@ -31,7 +31,8 @@ const models = [
   './server/models/ticket/Status.js',
   './server/models/ticket/Category.js',
   './server/models/Path.js',
-  './server/models/ticket/Ticket.js'
+  './server/models/ticket/Ticket.js',
+  './server/models/Address.js'
 ]
 
 const seed = {
