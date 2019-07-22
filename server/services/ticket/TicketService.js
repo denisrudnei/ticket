@@ -82,9 +82,14 @@ const TicketService = {
             actualUser: ticketBody.actualUser._id
           }
         }
-      ).exec(err => {
+      ).exec(async err => {
         if (err) return reject(err)
-        return resolve(ticketBody)
+        const result = await Ticket.findOne({
+          _id: ticketId
+        })
+          .populate(populateArray)
+          .exec()
+        return resolve(result)
       })
     })
   },
