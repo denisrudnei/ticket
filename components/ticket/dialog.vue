@@ -76,9 +76,26 @@ export default {
       this.$store.commit('ticket/removeFromEdit', id)
       this.setDialog()
     },
+    transformPupolatedToIds(ticket) {
+      const result = {}
+      const dontReplace = ['comments', 'logs', 'created', 'modified']
+      for (const field in ticket) {
+        if (dontReplace.includes(field)) continue
+
+        if (ticket[field].hasOwnProperty('_id')) {
+          result[field] = ticket[field]._id
+        } else {
+          result[field] = ticket[field]
+        }
+      }
+      return result
+    },
     update() {
       this.$axios
-        .put(`/ticket/${this.actualTicket._id}`, this.ticket)
+        .put(
+          `/ticket/${this.actualTicket._id}`,
+          this.transformPupolatedToIds(this.ticket)
+        )
         .then(() => {
           this.$toast.show('Atualizado', {
             duration: 1000,
