@@ -83,7 +83,9 @@ export default {
         if (dontReplace.includes(field)) continue
 
         if (ticket[field].hasOwnProperty('_id')) {
-          result[field] = ticket[field]._id
+          result[field] = {
+            _id: ticket[field]._id
+          }
         } else {
           result[field] = ticket[field]
         }
