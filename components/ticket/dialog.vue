@@ -76,7 +76,7 @@ export default {
       this.$store.commit('ticket/removeFromEdit', id)
       this.setDialog()
     },
-    transformPupolatedToIds(ticket) {
+    transformPopulatedToIds(ticket) {
       const result = {}
       const dontReplace = ['comments', 'logs', 'created', 'modified']
       for (const field in ticket) {
@@ -94,7 +94,7 @@ export default {
       this.$axios
         .put(
           `/ticket/${this.actualTicket._id}`,
-          this.transformPupolatedToIds(this.ticket)
+          this.transformPopulatedToIds(this.ticket)
         )
         .then(() => {
           this.$toast.show('Atualizado', {
