@@ -96,10 +96,16 @@ export default {
     }
   },
   computed: mapGetters({
-    analysts: 'analyst/getAnalysts',
     roles: 'role/getRoles',
     user: 'auth/getUser'
   }),
+  asyncData({ $axios }) {
+    return $axios.get('/config/analyst').then(response => {
+      return {
+        analysts: response.data
+      }
+    })
+  },
   mounted() {
     this.$store.dispatch('role/downloadRoles')
   },

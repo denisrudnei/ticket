@@ -13,7 +13,7 @@ module.exports = app => {
 
   app.get('/config/analyst', (_, res) => {
     AnalystService.getConfigAnalysts()
-      .the(analysts => {
+      .then(analysts => {
         return res.status(200).json(analysts)
       })
       .catch(e => {
@@ -23,7 +23,7 @@ module.exports = app => {
 
   app.post('/config/analyst', (req, res) => {
     AnalystService.create(req.body)
-      .thene(() => {
+      .then(() => {
         return res.sendStatus(201)
       })
       .catch(e => {

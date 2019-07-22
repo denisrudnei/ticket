@@ -35,7 +35,8 @@ const AnalystService = {
           emailVisible: 1,
           mergePictureWithExternalAccount: 1,
           role: 1,
-          color: 1
+          color: 1,
+          name: 1
         })
         .exec((err, analysts) => {
           if (err) reject(err)
