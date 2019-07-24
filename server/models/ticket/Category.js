@@ -37,7 +37,7 @@ CategorySchema.virtual('fullName').get(function() {
 })
 
 CategorySchema.pre('find', function(next) {
-  this.populate('father')
+  this.populate('father fields')
   next()
 })
 

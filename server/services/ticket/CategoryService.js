@@ -1,29 +1,43 @@
 const mongoose = require('mongoose')
 const Category = require('../../models/ticket/Category')
+const Field = require('../../models/ticket/Field')
 
 const CategoryService = {
-  create(name, father) {
+  create(category) {
     return new Promise(async (resolve, reject) => {
-      const category = {
+      const newCategory = {
         _id: new mongoose.Types.ObjectId(),
-        name: name
+        name: category.name,
+        father: category.father,
+        fields: category.fields || []
       }
       let fatherFromDB = null
 
-      if (father) {
-        fatherFromDB = await Category.findOne({ _id: father._id }).exec()
-      }
-      if (fatherFromDB) {
-        category.father = father._id
+      if (newCategory.father) {
+        fatherFromDB = await Category.findOne({
+          _id: newCategory.father._id
+        }).exec()
       }
 
-      Category.create(category, (err, category) => {
+      if (fatherFromDB) {
+        category.father = newCategory.father._id
+      }
+
+      for (let i = 0; i < newCategory.fields.length; i++) {
+        newCategory.fields[i] = {
+          _id: new mongoose.Types.ObjectId(),
+          ...newCategory.fields[i]
+        }
+        newCategory.fields[i] = await Field.create(newCategory.fields[i])
+      }
+
+      Category.create(newCategory, (err, categorySaved) => {
         if (err) reject(err)
         if (fatherFromDB !== null) {
-          fatherFromDB.subs.push(category)
+          fatherFromDB.subs.push(categorySaved)
           fatherFromDB.save()
         }
-        resolve(category)
+        resolve(categorySaved)
       })
     })
   },

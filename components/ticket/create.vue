@@ -325,6 +325,13 @@
               icons-and-text
             >
               <v-tab>
+                Campos
+                <v-icon>build</v-icon>
+              </v-tab>
+              <v-tab-item>
+                <Fields />
+              </v-tab-item>
+              <v-tab>
                 Logs
                 <v-icon>
                   history
@@ -362,12 +369,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import moment from 'moment'
+import Fields from '@/components/ticket/fields'
 import FileInclude from '@/components/files/include'
 import Logs from '@/components/ticket/logs'
 import Comments from '@/components/ticket/comments'
 
 export default {
   components: {
+    Fields,
     FileInclude,
     Logs,
     Comments

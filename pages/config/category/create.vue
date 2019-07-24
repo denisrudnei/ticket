@@ -43,7 +43,7 @@
               pa-2
             >
               <v-text-field
-                v-model="field.name"
+                v-model="field.text"
                 placeholder="Nome do campo"
                 box
               />
@@ -95,7 +95,7 @@ export default {
       categories: [],
       category: {
         name: '',
-        father: {},
+        father: null,
         fields: []
       }
     }
@@ -116,11 +116,11 @@ export default {
     },
     addField() {
       this.category.fields.push({
-        name: '',
+        text: '',
         required: false,
         limits: {
           min: 0,
-          max: Number.MAX_SAFE_INTEGER
+          max: 50
         }
       })
     },

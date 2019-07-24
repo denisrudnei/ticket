@@ -15,7 +15,7 @@
           slot-scope="data"
         >
           <td>{{ data.item.fullName }}</td>
-          <td>{{ data.item.father !== undefined ? data.item.father.fullName : 'orfão' }}</td>
+          <td>{{ (data.item.father !== undefined && data.item.father !== null) ? data.item.father.fullName : 'orfão' }}</td>
           <td>{{ data.item.subs !== undefined ? data.item.subs.length : 0 }}</td>
         </template>
       </v-data-table>

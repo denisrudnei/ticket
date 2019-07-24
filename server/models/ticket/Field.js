@@ -14,8 +14,12 @@ const fieldSchema = new Schema({
     type: Object,
     default: {
       min: Number.MIN_SAFE_INTEGER,
-      max: Number.MAX_SAFE_INTEGER
+      max: 50
     }
+  },
+  value: {
+    type: String,
+    default: ''
   }
 })
 

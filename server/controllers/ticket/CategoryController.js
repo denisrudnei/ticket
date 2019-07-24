@@ -32,7 +32,12 @@ module.exports = app => {
   })
 
   app.post('/config/category', (req, res) => {
-    CategoryService.create(req.body.name, req.body.father)
+    const category = {
+      name: req.body.name,
+      father: req.body.father,
+      fields: req.body.fields
+    }
+    CategoryService.create(category)
       .then(result => {
         return res.status(201).json(result)
       })
