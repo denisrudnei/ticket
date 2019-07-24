@@ -1,4 +1,5 @@
 const AnalystService = require('../../server/services/AnalystService')
+const Analyst = require('../../server/models/Analyst')
 const AnalystSeed = require('../seeds/AnalystSeed')
 const analyst = AnalystSeed.seed(1)[0]
 
@@ -18,5 +19,32 @@ describe('Analyst', function() {
 
   it('Remove user image', async () => {
     await AnalystService.removeImage(analyst._id)
+  })
+
+  it('Update one analyst', async () => {
+    const a = await Analyst.findOne().exec()
+    a.name = 'test'
+    AnalystService.updateAnalyst(a._id, a)
+  })
+
+  it('Get analyst groups', async () => {
+    await AnalystService.getGroups(analyst._id)
+  })
+
+  it('Update analyst image', async () => {
+    const file = {
+      name: 'test.txt',
+      lastModifiedDate: Date.now(),
+      data: ''
+    }
+    await AnalystService.updateImage(analyst._id.toString(), file)
+  })
+
+  it('Remove analyst image', async () => {
+    await AnalystService.removeImage(analyst._id.toString())
+  })
+
+  it('Remove analyst', async () => {
+    await AnalystService.remove(analyst._id)
   })
 })

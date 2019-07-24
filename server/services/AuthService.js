@@ -54,9 +54,9 @@ const AuthService = {
         email: email
       })
         .select('+email +mergePictureWithExternalAccount +role +color')
-        .exec(async (err, analyst) => {
+        .exec((err, analyst) => {
           if (err || analyst === null) {
-            await Analyst.create(
+            Analyst.create(
               {
                 _id: new mongoose.Types.ObjectId(),
                 ...userBody

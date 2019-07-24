@@ -41,6 +41,6 @@ describe('Ticket', function() {
     const analyst = await Analyst.findOne().exec()
     const ticket = await Ticket.findOne().exec()
     const content = faker.lorem.paragraphs()
-    TicketService.commentOnTicket(ticket._id, analyst._id, content)
+    await TicketService.commentOnTicket(ticket._id, analyst._id, content)
   })
 })

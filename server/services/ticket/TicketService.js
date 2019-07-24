@@ -182,7 +182,7 @@ const TicketService = {
       })
         .populate(populateArray)
         .exec(async (err, ticket) => {
-          if (err) return resolve(ticket)
+          if (err) return reject(ticket)
 
           const comment = await Comment.create({
             _id: new mongoose.Types.ObjectId(),

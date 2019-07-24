@@ -73,7 +73,7 @@ const AnalystService = {
           Body: file.data
         }
         await S3.upload(params, (err, data) => {
-          if (err) return resolve(null)
+          if (err) return reject(err)
           Analyst.findOneAndUpdate(
             {
               _id: userId
