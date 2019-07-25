@@ -100,19 +100,20 @@ const TicketService = {
         ...ticketBody
       }
 
-      const notification = await Notification.create({
-        _id: new mongoose.Types.ObjectId(),
-        name: 'TicketCreate',
-        from: ticket.openedBy._id,
-        to: ticket.group.analysts.map(a => a._id),
-        content: `${ticket.openedBy.name} abriu um novo chamado`
-      })
-
       Ticket.create(ticket, async (err, result) => {
         if (err) return reject(err)
         const newTicket = await Ticket.findOne({ _id: result._id })
           .populate(populateArray)
           .exec()
+
+        const notification = await Notification.create({
+          _id: new mongoose.Types.ObjectId(),
+          name: 'TicketCreate',
+          from: newTicket.openedBy._id,
+          to: newTicket.group.analysts.map(a => a._id),
+          content: `${newTicket.openedBy.name} abriu um novo chamado`
+        })
+
         return resolve({
           newTicket: newTicket,
           notification: notification
@@ -210,25 +211,24 @@ const TicketService = {
     return new Promise(async (resolve, reject) => {
       const ticket = await Ticket.findOne({
         _id: ticketId
-      })
-      files.forEach(async (f, index) => {
-        await S3.createBucket(async () => {
-          const name = `${ticketId} - ${f.name} - ${index}`
-          const params = {
-            Bucket: process.env.BUCKET,
-            Key: name,
-            Body: f.data
-          }
-          await S3.upload(params, (err, _) => {
-            if (err) return reject(err)
-            ticket.files.push({
-              name: name,
-              type: f.mimetype
-            })
-            ticket.save()
-          })
+      }).exec()
+      for (let i = 0; i < files.length; i++) {
+        const f = files[i]
+
+        const name = `${ticketId} - ${f.name} - ${i}`
+        const params = {
+          Bucket: process.env.BUCKET,
+          Key: name,
+          Body: f.data
+        }
+        await S3.upload(params).promise()
+
+        ticket.files.push({
+          name: name,
+          type: f.mimetype
         })
-      })
+        await ticket.save()
+      }
       return resolve(ticket.files)
     })
   },
