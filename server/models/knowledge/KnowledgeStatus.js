@@ -11,4 +11,4 @@ const KnowledgeStatusSchema = new Schema({
   }
 })
 
-module.exports = new mongoose.model('KnowledgeStatus', KnowledgeStatusSchema)
+module.exports = mongoose.model('KnowledgeStatus', KnowledgeStatusSchema)

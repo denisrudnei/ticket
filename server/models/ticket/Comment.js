@@ -31,4 +31,4 @@ CommentSchema.set('toJSON', {
   virtuals: true
 })
 
-module.exports = new mongoose.model('Comment', CommentSchema)
+module.exports = mongoose.model('Comment', CommentSchema)

@@ -39,7 +39,7 @@ export const mutations = {
     state.tickets = tickets
   },
   updateTicket(state, ticket) {
-    if (state.actualTicket.hasOwnProperty('_id')) {
+    if (Object.prototype.hasOwnProperty.call(state.actualTicket, '_id')) {
       if (state.actualTicket._id === ticket._id) {
         state.actualTicket = ticket
       }

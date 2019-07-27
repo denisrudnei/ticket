@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import ListTicket from '@/components/ticket/list'
 import { mapGetters } from 'vuex'
+import ListTicket from '@/components/ticket/list'
 export default {
   components: {
     ListTicket

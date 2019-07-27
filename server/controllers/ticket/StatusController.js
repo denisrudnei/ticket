@@ -1,23 +1,23 @@
-const mongoose = require('mongoose')
-const Status = require('../../models/ticket/Status')
+const StatusService = require('../../services/ticket/StatusService')
 
 module.exports = app => {
   app.get('/status', (req, res) => {
-    Status.find({}, (err, status) => {
-      if (err) return res.status(500).json(err)
-      return res.status(200).json(status)
-    })
+    StatusService.getStatus()
+      .then(status => {
+        return res.status(200).json(status)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.post('/config/status', (req, res) => {
-    const status = {
-      _id: new mongoose.Types.ObjectId(),
-      ...req.body
-    }
-
-    Status.create(status, err => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(200)
-    })
+    StatusService.create(req.body)
+      .then(() => {
+        return res.sendStatus(200)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 }

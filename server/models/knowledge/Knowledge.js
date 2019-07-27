@@ -40,4 +40,4 @@ KnowledgeSchema.pre('findOne', function() {
   this.populate(['category', 'group', 'status'])
 })
 
-module.exports = new mongoose.model('Knowledge', KnowledgeSchema)
+module.exports = mongoose.model('Knowledge', KnowledgeSchema)

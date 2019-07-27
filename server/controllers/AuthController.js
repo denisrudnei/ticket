@@ -27,7 +27,7 @@ module.exports = app => {
     const user = {
       name: req.body.name,
       email: req.body.email,
-      passowrd: req.body.password
+      password: req.body.password
     }
     AuthService.register(user)
       .then(() => {

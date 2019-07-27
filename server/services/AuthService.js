@@ -20,32 +20,36 @@ const AuthService = {
     })
   },
   register(user) {
-    return new Promise(async (resolve, reject) => {
-      const userFromDB = await Analyst.findOne({
+    return new Promise((resolve, reject) => {
+      Analyst.findOne({
         email: user.email
-      }).exec()
-
-      if (userFromDB) {
-        return reject(
-          new Error({
-            message: 'Usuário já existe'
-          })
-        )
-      }
-      Analyst.create(
-        {
-          _id: new mongoose.Types.ObjectId(),
-          email: user.email,
-          name: user.name,
-          password: user.password
-        },
-        err => {
-          if (err) return reject(err)
-          return resolve({
-            message: 'success'
-          })
-        }
-      )
+      })
+        .exec()
+        .then(userFromDB => {
+          if (userFromDB) {
+            return reject(
+              new Error({
+                message: 'Usuário já existe'
+              })
+            )
+          }
+        })
+        .then(() => {
+          Analyst.create(
+            {
+              _id: new mongoose.Types.ObjectId(),
+              email: user.email,
+              name: user.name,
+              password: user.password
+            },
+            err => {
+              if (err) return reject(err)
+              return resolve({
+                message: 'success'
+              })
+            }
+          )
+        })
     })
   },
   mergeUser(email, userBody) {

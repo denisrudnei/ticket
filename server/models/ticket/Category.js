@@ -51,4 +51,4 @@ CategorySchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = new mongoose.model('Category', CategorySchema)
+module.exports = mongoose.model('Category', CategorySchema)

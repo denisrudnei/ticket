@@ -94,7 +94,7 @@ const TicketService = {
     })
   },
   create(ticketBody) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const ticket = {
         _id: new mongoose.Types.ObjectId(),
         ...ticketBody
@@ -122,26 +122,27 @@ const TicketService = {
     })
   },
   changeStatus(ticketId, statusId) {
-    return new Promise(async (resolve, reject) => {
-      const ticket = await Ticket.findOne({ _id: ticketId })
+    return new Promise((resolve, reject) => {
+      Ticket.findOne({ _id: ticketId })
         .populate(populateArray)
         .exec()
+        .then(async ticket => {
+          const status = await Status.findOne({
+            _id: statusId
+          })
 
-      const status = await Status.findOne({
-        _id: statusId
-      })
+          ticket.status = status._id
 
-      ticket.status = status._id
+          const newTicket = {
+            ...ticket._doc,
+            status: status
+          }
 
-      const newTicket = {
-        ...ticket._doc,
-        status: status
-      }
-
-      ticket.save(err => {
-        if (err) return reject(err)
-        return resolve(newTicket)
-      })
+          ticket.save(err => {
+            if (err) return reject(err)
+            return resolve(newTicket)
+          })
+        })
     })
   },
   transferToGroup(ticketId, groupId) {

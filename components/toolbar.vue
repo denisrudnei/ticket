@@ -17,6 +17,7 @@
     </v-btn>
     <v-spacer />
     <v-btn
+      v-if="logged"
       flat
       icon
       class="primary white--text"

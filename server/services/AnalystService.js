@@ -74,7 +74,7 @@ const AnalystService = {
         }
         await S3.upload(params, (err, data) => {
           if (err) return reject(err)
-          Analyst.findOneAndUpdate(
+          Analyst.updateOne(
             {
               _id: userId
             },
@@ -95,12 +95,12 @@ const AnalystService = {
   },
 
   getGroups(userId) {
-    return new Promise(async (resolve, reject) => {
-      const analyst = await Analyst.findOne({ _id: userId })
-
-      analyst.getGroups((err, result) => {
-        if (err) return reject(err)
-        return resolve(result)
+    return new Promise((resolve, reject) => {
+      Analyst.findOne({ _id: userId }).then(analyst => {
+        analyst.getGroups((err, result) => {
+          if (err) return reject(err)
+          return resolve(result)
+        })
       })
     })
   },
@@ -113,7 +113,7 @@ const AnalystService = {
           Key: userId
         },
         () => {
-          Analyst.findOneAndUpdate(
+          Analyst.updateOne(
             {
               _id: userId
             },

@@ -126,8 +126,8 @@
 </template>
 
 <script>
-import ColorChooser from '@/components/colors/chooser'
 import { mapGetters, mapMutations } from 'vuex'
+import ColorChooser from '@/components/colors/chooser'
 export default {
   components: {
     ColorChooser

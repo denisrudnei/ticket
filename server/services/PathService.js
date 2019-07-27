@@ -3,7 +3,6 @@ const mongoose = require('mongoose')
 const Path = require('../models/Path')
 const Analyst = require('../models/Analyst')
 const Ticket = require('../models/ticket/Ticket')
-
 const PathService = {
   create(path, userId) {
     return new Promise((resolve, reject) => {
@@ -95,6 +94,7 @@ const PathService = {
           require(`../models/ticket/${v.options.ref}`).schema.paths
         ) */
       }))
+
       return resolve(pathsWithRefs)
     })
   },

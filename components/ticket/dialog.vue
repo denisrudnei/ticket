@@ -81,8 +81,7 @@ export default {
       const dontReplace = ['comments', 'logs', 'created', 'modified']
       for (const field in ticket) {
         if (dontReplace.includes(field)) continue
-
-        if (ticket[field].hasOwnProperty('_id')) {
+        if (Object.prototype.hasOwnProperty.call(ticket[field], '_id')) {
           result[field] = {
             _id: ticket[field]._id
           }

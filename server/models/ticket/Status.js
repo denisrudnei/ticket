@@ -4,8 +4,9 @@ const Schema = mongoose.Schema
 const StatusSchema = new Schema({
   _id: Schema.Types.ObjectId,
   name: {
-    type: String
+    type: String,
+    required: [true, 'Necessário identificar o status']
   }
 })
 
-module.exports = new mongoose.model('Status', StatusSchema)
+module.exports = mongoose.model('Status', StatusSchema)

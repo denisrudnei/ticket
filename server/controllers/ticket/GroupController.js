@@ -1,55 +1,43 @@
-const mongoose = require('mongoose')
-const Group = require('../../models/ticket/Group')
+const GroupService = require('../../services/ticket/GroupService')
 
 module.exports = app => {
   app.get('/group', (req, res) => {
-    Group.find({}, (err, groups) => {
-      if (err || groups === null) return res.status(500).json(err)
-      return res.status(200).json(groups)
-    })
+    GroupService.getAll()
+      .then(groups => {
+        return res.status(200).json(groups)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.post('/config/group', (req, res) => {
-    const group = {
-      _id: new mongoose.Types.ObjectId(),
-      ...req.body
-    }
-
-    Group.create(group, err => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(200)
-    })
+    GroupService.create(req.body)
+      .then(() => {
+        res.sendStatus(201)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.post('/config/group/analyst/:groupId', (req, res) => {
-    Group.updateOne(
-      { _id: req.params.groupId },
-      {
-        $addToSet: {
-          analysts: [req.body._id]
-        }
-      },
-      err => {
-        if (err) return res.status(500).json(err)
-        return res.sendStatus(200)
-      }
-    )
+    GroupService.insertAnalyst(req.params.groupId, req.body._id)
+      .then(() => {
+        return res.sendStatus(201)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.delete('/config/group/analyst/:groupId/:analystId', (req, res) => {
-    Group.updateOne(
-      { _id: req.params.groupId },
-      {
-        $pull: {
-          analysts: {
-            $in: [req.params.analystId]
-          }
-        }
-      },
-      err => {
-        if (err) return res.status(500).json(err)
-        return res.sendStatus(200)
-      }
-    )
+    GroupService.removeAnalyst(req.params.groupId, req.params.analystId)
+      .then(() => {
+        return res.sendStatus(201)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 }

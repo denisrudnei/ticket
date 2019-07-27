@@ -18,4 +18,4 @@ GroupSchema.pre('find', function() {
   this.populate(['analysts'])
 })
 
-module.exports = new mongoose.model('Group', GroupSchema)
+module.exports = mongoose.model('Group', GroupSchema)

@@ -31,6 +31,10 @@ export const mutations = {
   },
   removeImage(state) {
     state.user.picture = '/user.svg'
-  },
-  SET(state, value) {}
+  }
+}
+
+export default {
+  getters,
+  mutations
 }

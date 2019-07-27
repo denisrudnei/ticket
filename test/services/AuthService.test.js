@@ -16,6 +16,15 @@ describe('Auth', function() {
     await AuthService.register(newUser)
   })
 
+  it('Register a existing user', async () => {
+    const newUser = {
+      name: 'teste',
+      email: email,
+      password: password
+    }
+    await AuthService.register(newUser).catch(() => {})
+  })
+
   it('Login', async () => {
     await AuthService.login(email, password)
   })
@@ -66,5 +75,19 @@ describe('Auth', function() {
       .select('+email')
       .exec()
     await AuthService.resetPassword(user._id, password, 'newPassword')
+  })
+
+  it('Reset password with incorrect password', async () => {
+    const user = await Analyst.findOne({
+      email: email
+    })
+      .select('+email')
+      .exec()
+
+    await AuthService.resetPassword(
+      user._id,
+      'incorrect password',
+      'newPassword'
+    ).catch(() => {})
   })
 })

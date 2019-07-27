@@ -68,15 +68,14 @@ export default {
         .loginWith('local', {
           data: this.user
         })
-        .then(
-          () => {},
-          () => {
-            this.$toast.error('Falha ao logar')
-          }
-        )
+        .catch(() => {
+          this.$toast.error('Falha ao logar')
+        })
     },
     login() {
-      this.$auth.loginWith('auth0')
+      this.$auth.loginWith('auth0').catch(e => {
+        this.$toast.error('Falha ao logar')
+      })
     }
   }
 }

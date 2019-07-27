@@ -1,47 +1,33 @@
-const Role = require('../models/Role')
-const CheckACL = require('../models/CheckACL')
-const Analyst = require('../models/Analyst')
+const RoleService = require('../services/RoleService')
 
 module.exports = app => {
   app.get('/role', (req, res) => {
-    CheckACL.checkDb(err => {
-      if (err) return res.status(500).json(err)
-    })
-    Role.find({}).exec((err, roles) => {
-      if (err) return res.status(500).json(err)
-      return res.status(200).json(roles)
-    })
+    RoleService.getRoles()
+      .then(roles => {
+        return res.status(200).json(roles)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.put('/config/role/:id', (req, res) => {
-    Role.updateOne(
-      {
-        _id: req.params.id
-      },
-      {
-        $set: {
-          description: req.body.description
-        }
-      }
-    ).exec(err => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(201)
-    })
+    RoleService.updateRole(req.params.id, req.body)
+      .then(() => {
+        return res.sendStatus(201)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 
   app.post('/config/role/:id', (req, res) => {
-    Analyst.updateOne(
-      {
-        _id: req.params.id
-      },
-      {
-        $set: {
-          role: req.body.name
-        }
-      }
-    ).exec(err => {
-      if (err) return res.status(500).json(err)
-      return res.sendStatus(201)
-    })
+    RoleService.setAnalystRole(req.params.id, req.body.name)
+      .then(() => {
+        return res.sendStatus(201)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
   })
 }

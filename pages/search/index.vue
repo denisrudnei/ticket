@@ -23,9 +23,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import TicketCreate from '@/components/ticket/create'
 import TicketList from '@/components/ticket/list'
-import { mapGetters } from 'vuex'
 export default {
   components: {
     TicketCreate,
@@ -78,7 +78,10 @@ export default {
     search(ticket) {
       const newTicket = {}
       Object.keys(ticket).forEach(k => {
-        if (ticket[k] !== undefined && ticket[k].hasOwnProperty('_id')) {
+        if (
+          ticket[k] !== undefined &&
+          Object.prototype.hasOwnProperty.call(ticket[k], '_id')
+        ) {
           newTicket[k] = ticket[k]._id
         } else {
           newTicket[k] = ticket[k]

@@ -182,13 +182,6 @@ export default {
     groups: 'group/getGroups',
     ticketsToEdit: 'ticket/getTicketsToEdit'
   }),
-  created() {
-    if (this.logged) {
-      this.$axios.get('/group').then(response => {
-        this.$store.commit('group/setGroups', response.data)
-      })
-    }
-  },
   updated() {
     if (this.logged) {
       setTimeout(() => {
@@ -197,23 +190,7 @@ export default {
       }, 0)
     }
   },
-  async mounted() {
-    if (this.logged) {
-      await this.$store.dispatch('downloadInfo')
-      this.$axios.post('/auth/mergeUser', this.user)
-      this.$socket.on(`message/${this.user._id}`, message => {
-        this.$toast.show('Mensagem recebida', {
-          duration: 1000
-        })
-        this.$store.commit('chat/setActive', message.chatId)
-        // this.$store.dispatch('chat/addMessage', message)
-      })
-    }
-
-    this.notificationGroups = this.groups.filter(g => {
-      return g.analysts.map(a => a._id).includes(this.user._id)
-    })
-
+  mounted() {
     this.$socket.on('readNotification', notification => {
       this.$store.commit('notification/updateNotification', notification)
     })
@@ -238,6 +215,29 @@ export default {
       this.$socket.on(`notification/${group._id}`, notification => {
         this.$store.commit('notification/addNotification', notification)
       })
+    })
+  },
+  created() {
+    if (this.logged) {
+      this.$axios.post('/auth/mergeUser', this.user).then(() => {
+        this.$store.dispatch('downloadInfo')
+        this.$axios.get('/group').then(response => {
+          this.$store.commit('group/setGroups', response.data)
+        })
+        if (process.client) {
+          this.$socket.on(`message/${this.user._id}`, message => {
+            this.$toast.show('Mensagem recebida', {
+              duration: 1000
+            })
+            this.$store.commit('chat/setActive', message.chatId)
+            // this.$store.dispatch('chat/addMessage', message)
+          })
+        }
+      })
+    }
+
+    this.notificationGroups = this.groups.filter(g => {
+      return g.analysts.map(a => a._id).includes(this.user._id)
     })
   },
   methods: {

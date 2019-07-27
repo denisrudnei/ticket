@@ -82,15 +82,16 @@ export default {
     messages: 'chat/getMessages',
     chat: 'chat/getActive',
     chats: 'chat/getChats',
-    visible: 'chat/getVisible'
+    visible: 'chat/getVisible',
+    logged: 'auth/getLogged'
   }),
   mounted() {
     this.$socket.on('message', value => {
       this.$store.commit('chat/receiveMessage', value)
     })
   },
-  async created() {
-    await this.$axios.get('/analyst').then(response => {
+  created() {
+    this.$axios.get('/analyst').then(response => {
       response.data.forEach(a => {
         this.$store.dispatch('chat/getMessages', a)
       })
@@ -116,29 +117,5 @@ export default {
 }
 </script>
 
-<style scoped>
-/* .fixed {
-  z-index: 9999;
-  position: fixed;
-  display: flex;
-  right: 0.8vw;
-  bottom: 0;
-  height: 65vh;
-  width: 33vw;
-  background: white;
-}
-
-.expand {
-  flex: 1;
-  flex-direction: column;
-  overflow-y: scroll !important;
-  max-height: 50vh;
-}
-
-.bottom {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  box-sizing: content-box;
-}*/
+<style>
 </style>

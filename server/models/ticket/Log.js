@@ -29,4 +29,4 @@ LogSchema.pre('find', function() {
   this.populate(['user', 'group', 'oldStatus', 'newStatus'])
 })
 
-module.exports = new mongoose.model('Log', LogSchema)
+module.exports = mongoose.model('Log', LogSchema)
