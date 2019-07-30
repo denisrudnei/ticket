@@ -66,6 +66,18 @@ module.exports = app => {
       })
   })
 
+  app.put('/knowledge/:id', (req, res) => {
+    const knowledge = req.body
+
+    KnowledgeService.updateKnowledge(req.params.id, knowledge)
+      .then(result => {
+        return res.status(201).json(result)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  })
+
   app.post('/knowledge/:id/file', (req, res) => {
     const file = req.files.file
     const id = req.params.id

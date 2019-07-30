@@ -41,7 +41,8 @@ module.exports = {
     { src: '@/plugins/vuetify' },
     { src: '@/plugins/socketIo', ssr: false },
     { src: '@/plugins/apex-charts', ssr: false },
-    { src: '@/plugins/google-maps', ssr: false }
+    { src: '@/plugins/google-maps', ssr: false },
+    { src: '@/plugins/CKEditor', ssr: false }
   ],
 
   /*

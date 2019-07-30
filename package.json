@@ -16,6 +16,10 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^12.3.1",
+    "@ckeditor/ckeditor5-vue": "^1.0.0-beta.2",
+    "@models/index": "file:server/models",
+    "@models/ticket": "file:server/models/ticket",
     "@nuxtjs/auth": "^4.8.1",
     "@nuxtjs/axios": "^5.5.4",
     "@nuxtjs/google-analytics": "^2.2.0",
@@ -34,6 +38,8 @@
     "express-session": "^1.16.2",
     "express-validator": "^5.3.1",
     "faker": "^4.1.0",
+    "html2canvas": "^1.0.0-rc.3",
+    "jspdf": "^1.5.3",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "mongoose": "^5.6.7",

@@ -82,19 +82,18 @@ const PathService = {
   },
 
   getRefs() {
-    // FIXME
     return new Promise((resolve, reject) => {
       const paths = Object.values(Ticket.schema.paths)
       const pathsWithObjects = paths.filter(v => {
         return v.options.ref !== undefined
       })
-      const pathsWithRefs = pathsWithObjects.map(v => ({
-        path: v.path
-        /* options: Object.keys(
-          require(`../models/ticket/${v.options.ref}`).schema.paths
-        ) */
+      const onlyWithObjectId = pathsWithObjects.filter(o => {
+        return o.instance === 'ObjectID'
+      })
+      const pathsWithRefs = onlyWithObjectId.map(v => ({
+        path: v.path,
+        options: getOptions(v.options.ref)
       }))
-
       return resolve(pathsWithRefs)
     })
   },
@@ -155,6 +154,44 @@ const PathService = {
         return resolve()
       })
     })
+  }
+}
+
+function getOptions(ref) {
+  const model = require(getModule(ref))
+  return Object.keys(model.schema.paths).filter(r => {
+    return filterSelected(model.schema.paths, r)
+  })
+}
+
+function hasInstanceField(object) {
+  return Object.prototype.hasOwnProperty.call(object, 'instance')
+}
+
+function instanceIsString(object) {
+  return object.instance === 'String'
+}
+
+function isSelected(object) {
+  if (Object.prototype.hasOwnProperty.call(object.options, 'select')) {
+    return object.options.select
+  }
+  return true
+}
+
+function filterSelected(paths, ref) {
+  return (
+    hasInstanceField(paths[ref]) &&
+    instanceIsString(paths[ref]) &&
+    isSelected(paths[ref])
+  )
+}
+
+function getModule(ref) {
+  try {
+    return require.resolve(`@models/ticket/${ref}`)
+  } catch {
+    return require.resolve(`@models/index/${ref}`)
   }
 }
 

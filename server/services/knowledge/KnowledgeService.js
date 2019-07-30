@@ -64,6 +64,26 @@ const KnowledgeService = {
       )
     })
   },
+  updateKnowledge(knowledgeId, knowledge) {
+    return new Promise((resolve, reject) => {
+      Knowledge.updateOne(
+        {
+          _id: knowledgeId
+        },
+        {
+          $set: {
+            name: knowledge.name,
+            category: knowledge.category,
+            grou: knowledge.group,
+            preview: knowledge.preview
+          }
+        }
+      ).exec((err, result) => {
+        if (err) return reject(err)
+        return resolve(result)
+      })
+    })
+  },
   addFile(id, file) {
     return new Promise((resolve, reject) => {
       Knowledge.findOne({

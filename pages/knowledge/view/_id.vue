@@ -57,11 +57,13 @@
             </v-layout>
           </v-dialog>
           <v-flex xs12 pa-4>
-            <span>{{ knowledge.preview }}</span>
+            <div ref="preview" v-html="knowledge.preview" />
           </v-flex>
           <v-flex xs12 pa-3>
             <hr>
-            <a target="_blank" class="v-btn primary white--text" :href="`/api/knowledge/${knowledge._id}/file`">Baixar it</a>
+            <v-btn class=" primary white--text" @click="download()">
+              Baixar it
+            </v-btn>
           </v-flex>
         </v-layout>
       </v-card-text>
@@ -70,6 +72,7 @@
 </template>
 
 <script>
+import JsPDF from 'jspdf'
 import TicketList from '@/components/ticket/list'
 export default {
   components: {
@@ -97,6 +100,13 @@ export default {
         }
       })
     },
+    download() {
+      const pdf = new JsPDF()
+      pdf.fromHTML(this.$refs.preview, 10, 10, {
+        width: '190'
+      })
+      pdf.save(`${this.knowledge.name}.pdf`)
+    },
     openGroupModal(value) {
       this.showModal = true
       this.$router.push({
@@ -114,4 +124,37 @@ export default {
 </script>
 
 <style>
+blockquote {
+  font-size: 1.4em;
+  font-family: Open Sans;
+  font-style: italic;
+  color: #555555;
+  padding: 1.2em 30px 1.2em 75px;
+  border-left: 0.5px solid #78c0a8;
+  line-height: 1.6;
+  position: relative;
+  background: #ededed;
+}
+
+blockquote::before {
+  font-family: Arial;
+  content: '\201C';
+  color: #78c0a8;
+  font-size: 4em;
+  position: absolute;
+  left: 10px;
+  top: -10px;
+}
+
+blockquote::after {
+  content: '';
+}
+
+blockquote span {
+  display: block;
+  color: #333333;
+  font-style: normal;
+  font-weight: bold;
+  margin-top: 1em;
+}
 </style>
