@@ -29,6 +29,7 @@ export default {
             duration: 5000,
             icon: 'done'
           })
+          this.$router.push('/config/knowledge/list')
         })
     }
   }

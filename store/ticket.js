@@ -3,6 +3,7 @@ export const state = () => ({
   search: [],
   dialog: '',
   tree: [],
+  modalList: false,
   actualTicket: {},
   ticketsToEdit: []
 })
@@ -25,6 +26,9 @@ export const getters = {
   },
   getTicketsToEdit(state) {
     return state.ticketsToEdit
+  },
+  getModalList(state) {
+    return state.modalList
   }
 }
 
@@ -83,6 +87,9 @@ export const mutations = {
       }),
       ticket
     ]
+  },
+  setModalList(state, modalList) {
+    state.modalList = modalList
   }
 }
 

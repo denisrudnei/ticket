@@ -1,19 +1,16 @@
 <template>
   <v-layout row wrap>
-    <v-navigation-drawer>
-      <v-list>
-        <v-list-tile v-for="group in groups" :key="group._id" router :to="`/knowledge/group/${group.name}`">
-          <v-list-tile-content>
-            <v-list-tile-title>
-              {{ group.name }}
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-flex>
-      <nuxt-child />
+    <v-flex xs12>
+      <v-tabs color="primary white--text" dark>
+        <v-tab to="/knowledge/">
+          Não categorizado
+        </v-tab>
+        <v-tab v-for="group in groups" :key="group._id" :to="`/knowledge/group/${group.name}`">
+          {{ group.name }}
+        </v-tab>
+      </v-tabs>
     </v-flex>
+    <nuxt-child />
   </v-layout>
 </template>
 

@@ -35,10 +35,10 @@ export const mutations = {
       messages: info.messages
     }
   },
-  receiveMessage: function(state, message) {
+  receiveMessage(state, message) {
     state.chats[message.chatId].messages.push(message)
   },
-  send: function(state, message) {
+  send(state, message) {
     this.$axios.post('/chat/message', message)
   },
   setVisible(state, visible) {

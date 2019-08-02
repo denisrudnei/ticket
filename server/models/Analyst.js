@@ -10,6 +10,14 @@ const AnalystSchema = new Schema({
     select: false,
     required: [true, 'Necessário preencher o email']
   },
+  status: {
+    type: String,
+    enum: ['online', 'offline', 'away', 'busy']
+  },
+  lastTimeActive: {
+    type: Date,
+    default: Date.now
+  },
   contactEmail: {
     type: String,
     required: false,

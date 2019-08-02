@@ -14,5 +14,19 @@ export const mutations = {
   },
   setAnalysts: (state, analysts) => {
     state.analysts = analysts
+  },
+  updateStatus(state, info) {
+    const analyst = state.analysts.find(a => {
+      return a._id === info.id
+    })
+    if (analyst) {
+      analyst.status = info.status
+      state.analysts = [
+        analyst,
+        ...state.analysts.filter(a => {
+          return a._id !== info.id
+        })
+      ]
+    }
   }
 }

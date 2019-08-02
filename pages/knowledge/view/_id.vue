@@ -25,12 +25,13 @@
           </v-flex>
           <v-flex xs6 pa-2>
             <v-text-field
-              v-model="knowledge.category.name"
+              v-model="knowledge.category.fullName"
               label="Categoria"
               box
               readonly
               append-icon="search"
-              @click="openCategoryModal(knowledge.category._id)"
+              :value-comparator="compare"
+              @click:append="openModal('category', knowledge.category._id)"
             />
           </v-flex>
           <v-flex xs6 pa-2>
@@ -40,7 +41,8 @@
               box
               readonly
               append-icon="search"
-              @click="openGroupModal(knowledge.group._id)"
+              :value-comparator="compare"
+              @click:append="openModal('group', knowledge.group._id)"
             />
           </v-flex>
           <v-dialog
@@ -92,11 +94,14 @@ export default {
     })
   },
   methods: {
-    openCategoryModal(value) {
+    compare(obj1, obj2) {
+      return obj1._id === obj2._id
+    },
+    openModal(field, value) {
       this.showModal = true
       this.$router.push({
         query: {
-          category: value
+          [field]: value
         }
       })
     },
@@ -106,14 +111,6 @@ export default {
         width: '190'
       })
       pdf.save(`${this.knowledge.name}.pdf`)
-    },
-    openGroupModal(value) {
-      this.showModal = true
-      this.$router.push({
-        query: {
-          group: value
-        }
-      })
     },
     close() {
       this.dialog = false

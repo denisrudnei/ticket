@@ -39,11 +39,13 @@ export default {
   },
   watch: {
     $route(newValue) {
-      this.$axios
-        .get(`/knowledge/group/${newValue.params.id}`)
-        .then(response => {
-          this.items = response.data
-        })
+      if (newValue.params.id) {
+        this.$axios
+          .get(`/knowledge/group/${newValue.params.id}`)
+          .then(response => {
+            this.items = response.data
+          })
+      }
     }
   },
   created() {

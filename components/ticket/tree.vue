@@ -2,6 +2,7 @@
   <v-treeview
     :items="tree"
     open-on-click
+    item-key="_id"
     activatable
   >
     <template

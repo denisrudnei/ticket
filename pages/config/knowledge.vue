@@ -5,7 +5,7 @@
         <v-tab to="/config/knowledge/create">
           Criar documento
         </v-tab>
-        <v-tab to="/config/knowledge/">
+        <v-tab to="/config/knowledge/list">
           Listar documentos
         </v-tab>
       </v-tabs>

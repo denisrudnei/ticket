@@ -23,7 +23,7 @@
         <v-tab to="/config/status">
           Status
         </v-tab>
-        <v-tab to="/config/knowledge">
+        <v-tab to="/config/knowledge/list">
           Base de conhecimento
         </v-tab>
         <v-tab to="/config/permissions">

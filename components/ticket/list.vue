@@ -301,10 +301,10 @@ export default {
     }
   },
   async created() {
-    await this.$axios.get('/group').then(response => {
+    this.$axios.get('/group').then(response => {
       this.$store.commit('group/setGroups', response.data)
     })
-    await this.$axios.get('/status').then(response => {
+    this.$axios.get('/status').then(response => {
       this.$store.commit('status/setStatus', response.data)
     })
     const query = this.$route.query
@@ -316,9 +316,9 @@ export default {
     await this.update()
   },
   methods: {
-    async update() {
+    update() {
       const query = this.$router.currentRoute.query
-      await this.$axios
+      this.$axios
         .get(`${this.url}?${querystring.encode(query)}`)
         .then(response => {
           const { docs, total, limit, page } = response.data

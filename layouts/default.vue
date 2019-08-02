@@ -224,15 +224,6 @@ export default {
         this.$axios.get('/group').then(response => {
           this.$store.commit('group/setGroups', response.data)
         })
-        if (process.client) {
-          this.$socket.on(`message/${this.user._id}`, message => {
-            this.$toast.show('Mensagem recebida', {
-              duration: 1000
-            })
-            this.$store.commit('chat/setActive', message.chatId)
-            // this.$store.dispatch('chat/addMessage', message)
-          })
-        }
       })
     }
 

@@ -11,6 +11,7 @@
       <v-select
         v-model="knowledge.category"
         box
+        :value-comparator="compare"
         placeholder="Categoria do problema"
         :items="category.map(v => ({text: v.fullName, value: v}))"
       />
@@ -19,6 +20,7 @@
       <v-select
         v-model="knowledge.group"
         box
+        :value-comparator="compare"
         :items="group.map(v => ({text: v.name, value: v}))"
         placeholder="Grupo responsável"
       />
@@ -42,7 +44,9 @@
 </template>
 
 <script>
+import compareObjectsWithId from '@/mixins/compareObjectsWithId'
 export default {
+  mixins: [compareObjectsWithId],
   props: {
     value: {
       type: Object,

@@ -121,7 +121,10 @@
               required
               :readonly="readOnlyData || !search"
               box
+              :value-comparator="compare"
               label="Relatado por:"
+              append-icon="search"
+              @click:append="show('openedBy', ticketComputed.openedBy)"
             />
           </v-flex>
           <v-flex
@@ -137,6 +140,9 @@
               :readonly="readOnlyData"
               box
               label="Analista"
+              :value-comparator="compare"
+              append-icon="search"
+              @click:append="show('actuaUser', ticketComputed.actualUser)"
             />
           </v-flex>
           <v-flex
@@ -151,7 +157,10 @@
               required
               :readonly="readOnlyData"
               box
+              :value-comparator="compare"
               label="Categoria"
+              append-icon="search"
+              @click:append="show('category', ticketComputed.category)"
             />
           </v-flex>
           <v-flex
@@ -166,7 +175,10 @@
               required
               :readonly="readOnlyData"
               box
+              :value-comparator="compare"
               label="Grupo"
+              append-icon="search"
+              @click:append="show('group', ticketComputed.group)"
             />
           </v-flex>
           <v-flex
@@ -181,7 +193,10 @@
               required
               :readonly="readOnlyData"
               box
+              :value-comparator="compare"
               label="Status"
+              append-icon="search"
+              @click:append="show('status', ticketComputed.status)"
             />
           </v-flex>
           <v-flex
@@ -363,6 +378,7 @@
         </v-layout>
       </v-form>
     </v-flex>
+    <ticket-modal />
   </v-layout>
 </template>
 
@@ -373,13 +389,16 @@ import Fields from '@/components/ticket/fields'
 import FileInclude from '@/components/files/include'
 import Logs from '@/components/ticket/logs'
 import Comments from '@/components/ticket/comments'
+import compareObjectsWithId from '@/mixins/compareObjectsWithId'
+import TicketModal from '@/components/ticket/ticket-modal'
 
 export default {
   components: {
     Fields,
     FileInclude,
     Logs,
-    Comments
+    Comments,
+    TicketModal
   },
   filters: {
     date(value) {
@@ -387,6 +406,7 @@ export default {
       return newDate.toLocaleDateString()
     }
   },
+  mixins: [compareObjectsWithId],
   props: {
     search: Boolean,
     readonly: {
@@ -459,6 +479,17 @@ export default {
         ? moment(this.ticketComputed.created).format('dddd, MMMM Do YYYY')
         : ''
     },
+    show(property, value) {
+      if (value === null || value === undefined) return
+      if (Object.prototype.hasOwnProperty.call(value, '_id')) {
+        this.$store.commit('ticket/setModalList', true)
+        this.$router.push({
+          query: {
+            [property]: value._id
+          }
+        })
+      }
+    },
     addComment() {
       this.$axios
         .post(`/ticket/comment/${this.ticketComputed._id}`, {
@@ -487,6 +518,9 @@ export default {
       this.$axios.get(`/ticket/${this.ticketData._id}`).then(response => {
         this.ticketData = response.data
       })
+    },
+    checkFields() {
+      alert('trigger check')
     },
     clearFields() {
       Object.keys(this.ticketData).forEach(key => {

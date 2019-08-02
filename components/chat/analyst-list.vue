@@ -12,6 +12,7 @@
       >
         <v-list-tile>
           <v-list-tile-avatar
+           
             v-on="on"
           >
             <v-badge
@@ -21,7 +22,7 @@
                 v-slot:badge
               >
                 <v-icon
-                  :class="`${getStatus()} white--text`"
+                  :class="`${getStatus(analyst.status)} white--text`"
                 >
                   chat
                 </v-icon>
@@ -44,7 +45,7 @@
           <v-list-tile-action>
             <v-btn
               icon
-              class="green white--text"
+              :class="`${getStatus(analyst.status)} white--text`"
               @click="openChat(analyst)"
             >
               <v-icon>
@@ -86,7 +87,7 @@
                 xs12
                 pa-2
               >
-                Ultima vez ativo {{ new Date().toLocaleString() }}
+                Ultima vez ativo {{ analyst.lastTimeActive }}
               </v-flex>
               <v-flex
                 xs-12
@@ -108,19 +109,45 @@
         </v-layout>
       </v-card>
     </v-menu>
+    <v-dialog
+      v-model="showModal"
+      scrollable
+    >
+      <v-layout row wrap>
+        <v-flex xs12 pa-2>
+          <ticket-list
+            v-if="showModal"
+            :url="`/search/`"
+          />
+        </v-flex>
+      </v-layout>
+    </v-dialog>
   </v-list>
 </template>
 
 <script>
-import _ from 'lodash'
 import { mapGetters } from 'vuex'
+import TicketList from '@/components/ticket/list'
 export default {
+  components: {
+    TicketList
+  },
+  data() {
+    return {
+      showModal: false
+    }
+  },
   computed: mapGetters({
     analysts: 'analyst/getAnalysts'
   }),
-  async created() {
-    await this.$axios.get('/analyst').then(reponse => {
+  created() {
+    this.$axios.get('/analyst').then(reponse => {
       this.$store.commit('analyst/setAnalysts', reponse.data)
+    })
+  },
+  mounted() {
+    this.$socket.on('chat/status/update', newInfo => {
+      this.$store.commit('analyst/updateStatus', newInfo)
     })
   },
   methods: {
@@ -129,14 +156,34 @@ export default {
       this.$store.commit('chat/setActive', analyst._id)
       this.$store.dispatch('chat/getMessages', analyst)
     },
-    getStatus() {
-      // TODO
-      const colors = ['red', 'green', 'yellow']
-      return Object.values(_.shuffle(colors))[0]
+    getStatus(status) {
+      const colors = [
+        {
+          status: 'offline',
+          color: 'black'
+        },
+        {
+          status: 'busy',
+          color: 'red'
+        },
+        {
+          status: 'away',
+          color: 'yellow'
+        },
+        {
+          status: 'online',
+          color: 'green'
+        }
+      ]
+      const result = colors.find(s => {
+        return s.status === status
+      })
+      if (result) return result.color
+      return 'black'
     },
     viewRecents(id) {
+      this.showModal = true
       this.$router.push({
-        path: 'search',
         query: {
           openedBy: id
         }
