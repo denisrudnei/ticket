@@ -1,7 +1,10 @@
 export const state = () => ({
   tickets: [],
+  modalTickets: [],
   search: [],
   dialog: '',
+  query: {},
+  modalQuery: {},
   tree: [],
   modalList: false,
   actualTicket: {},
@@ -11,6 +14,15 @@ export const state = () => ({
 export const getters = {
   getTickets(state) {
     return state.tickets
+  },
+  getModalTickets(state) {
+    return state.modalTickets
+  },
+  getQuery(state) {
+    return state.query
+  },
+  getModalQuery(state) {
+    return state.modalQuery
   },
   getSearch(state) {
     return state.search
@@ -41,6 +53,18 @@ export const mutations = {
   },
   setTickets(state, tickets) {
     state.tickets = tickets
+  },
+  setModalTickets(state, tickets) {
+    state.modalTickets = tickets
+  },
+  setQuery: function(state, query) {
+    state.query = query
+    this.$router.push({
+      query: query
+    })
+  },
+  setModalQuery(state, modalQuery) {
+    state.modalQuery = modalQuery
   },
   updateTicket(state, ticket) {
     if (Object.prototype.hasOwnProperty.call(state.actualTicket, '_id')) {

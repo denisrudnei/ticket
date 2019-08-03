@@ -131,23 +131,21 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
 export default {
   computed: mapGetters({
     notifications: 'notification/getUnread',
     logged: 'auth/getLoggedIn',
-    user: 'auth/getUser'
+    user: 'auth/getUser',
+    groups: 'group/getGroups'
   }),
-  async mounted() {
+  mounted() {
     if (this.user !== undefined && this.user._id !== undefined) {
-      await this.$axios.post('/notification/').then(response => {
+      this.$axios.post('/notification/').then(response => {
         this.$store.commit('notification/setNotifications', response.data)
       })
-      await this.$axios
-        .post(`/analyst/${this.user._id}/groups`)
-        .then(response => {
-          this.notificationGroups = response.data
-        })
+      this.$axios.post(`/analyst/${this.user._id}/groups`).then(response => {
+        this.notificationGroups = response.data
+      })
     }
   },
   methods: {

@@ -208,6 +208,10 @@ export default {
       type: String,
       default: '/ticket/'
     },
+    modal: {
+      type: Boolean,
+      default: false
+    },
     search: {
       type: String,
       default: ''
@@ -258,24 +262,48 @@ export default {
       ]
     }
   },
-  computed: mapGetters({
-    tickets: 'ticket/getTickets',
-    status: 'status/getStatus',
-    groups: 'group/getGroups',
-    dialog: 'ticket/getDialog',
-    actualTicket: 'ticket/getActualTicket'
-  }),
+  computed: {
+    query: {
+      get() {
+        if (this.modal) return this.$store.getters['ticket/getModalQuery']
+        return this.$store.getters['ticket/getQuery']
+      },
+      set(value) {
+        this.$store.commit('ticket/setQuery', value)
+      }
+    },
+    tickets: {
+      get() {
+        if (this.modal) return this.$store.getters['ticket/getModalTickets']
+
+        if (this.url === '/search/')
+          return this.$store.getters['ticket/getSearch']
+        return this.$store.getters['ticket/getTickets']
+      },
+      set(value) {
+        this.$store.commit('ticket/setTickets', value)
+      }
+    },
+    ...mapGetters({
+      status: 'status/getStatus',
+      groups: 'group/getGroups',
+      dialog: 'ticket/getDialog',
+      actualTicket: 'ticket/getActualTicket'
+    })
+  },
   watch: {
     dialog: function(value) {
-      const query = Object.assign({}, this.$route.query, {
-        ticket: value || this.$route.query.ticket || null
+      if (this.modal) return
+      const query = Object.assign({}, this.query, {
+        ticket: value || this.query.ticket || null
       })
-
       this.$router.push({
         query: query
       })
+      this.$store.commit('ticket/setQuery', query)
     },
     $route: async function(newValue) {
+      this.$store.commit('ticket/setQuery', newValue.query)
       await this.update()
     },
     pagination: {
@@ -289,14 +317,15 @@ export default {
         )
           return
         this.loading = 'primary'
-        this.$router.push({
-          query: Object.assign({}, this.$route.query, {
-            page: newValue.page,
-            limit: newValue.rowsPerPage,
-            sortBy: newValue.sortBy,
-            descending: newValue.descending ? -1 : 1
-          })
+
+        const query = Object.assign({}, this.query, {
+          page: newValue.page,
+          limit: newValue.rowsPerPage,
+          sortBy: newValue.sortBy,
+          descending: newValue.descending ? -1 : 1
         })
+
+        this.setQuery(query)
       }
     }
   },
@@ -308,7 +337,7 @@ export default {
       this.$store.commit('status/setStatus', response.data)
     })
     const query = this.$route.query
-    if (query.ticket !== undefined) {
+    if (query.ticket !== undefined && query.ticket !== null) {
       await this.$store.dispatch('ticket/findTicket', query.ticket)
 
       await this.addTicketsToEdit(this.actualTicket)
@@ -316,20 +345,32 @@ export default {
     await this.update()
   },
   methods: {
-    update() {
-      const query = this.$router.currentRoute.query
-      this.$axios
+    async update() {
+      const query = this.query
+      await this.$axios
         .get(`${this.url}?${querystring.encode(query)}`)
         .then(response => {
           const { docs, total, limit, page } = response.data
-          this.$store.commit('ticket/setTickets', docs)
-          this.$store.commit('ticket/setSearch', docs)
-          this.$store.commit('ticket/setTickets', docs)
+          if (this.modal) {
+            this.$store.commit('ticket/setModalTickets', docs)
+          } else {
+            this.$store.commit('ticket/setTickets', docs)
+            this.$store.commit('ticket/setSearch', docs)
+            this.$store.commit('ticket/setTickets', docs)
+          }
           this.pagination.totalItems = parseInt(total)
           this.pagination.page = parseInt(page)
           this.pagination.rowsPerPage = parseInt(limit)
           this.loading = false
         })
+    },
+    setQuery(query) {
+      if (this.modal) {
+        this.$store.commit('ticket/setModalQuery', query)
+      } else {
+        this.$store.commit('ticket/setQuery', query)
+      }
+      this.update()
     },
     modifyStatus(ticket) {
       this.$axios

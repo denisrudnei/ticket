@@ -1,15 +1,12 @@
 const ChatService = require('../services/ChatService')
 
 module.exports = (app, io) => {
-  io.on(`updateLastActive`, info => {
-    console.log(info)
-  })
   app.post('/chat/message', (req, res) => {
     const toId = req.body.to._id
     const fromId = req.session.authUser._id
     const content = req.body.content
     ChatService.create(fromId, toId, content)
-      .then(messageToSend => { 
+      .then(messageToSend => {
         io.emit(`message/${req.body.to._id}`, req.body)
         return res.status(200).json(messageToSend)
       })

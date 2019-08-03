@@ -142,7 +142,7 @@
               label="Analista"
               :value-comparator="compare"
               append-icon="search"
-              @click:append="show('actuaUser', ticketComputed.actualUser)"
+              @click:append="show('actualUser', ticketComputed.actualUser)"
             />
           </v-flex>
           <v-flex
@@ -482,12 +482,10 @@ export default {
     show(property, value) {
       if (value === null || value === undefined) return
       if (Object.prototype.hasOwnProperty.call(value, '_id')) {
-        this.$store.commit('ticket/setModalList', true)
-        this.$router.push({
-          query: {
-            [property]: value._id
-          }
+        this.$store.commit('ticket/setModalQuery', {
+          [property]: value._id
         })
+        this.$store.commit('ticket/setModalList', true)
       }
     },
     addComment() {

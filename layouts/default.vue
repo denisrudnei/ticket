@@ -157,7 +157,6 @@ export default {
   data() {
     return {
       fab: true,
-      notificationGroups: [],
       items: [
         {
           icon: 'bookmarks',
@@ -190,7 +189,11 @@ export default {
       }, 0)
     }
   },
-  mounted() {
+  async mounted() {
+    await this.$axios.post('/auth/mergeUser', this.user)
+    this.$store.dispatch('downloadInfo')
+    const response = await this.$axios.get('/group')
+    this.$store.commit('group/setGroups', response.data)
     this.$socket.on('readNotification', notification => {
       this.$store.commit('notification/updateNotification', notification)
     })
@@ -211,25 +214,15 @@ export default {
       this.$store.dispatch('ticket/updateTree')
     })
 
-    this.notificationGroups.forEach(group => {
-      this.$socket.on(`notification/${group._id}`, notification => {
-        this.$store.commit('notification/addNotification', notification)
+    this.groups
+      .filter(g => {
+        return g.analysts.map(a => a._id).includes(this.user._id)
       })
-    })
-  },
-  created() {
-    if (this.logged) {
-      this.$axios.post('/auth/mergeUser', this.user).then(() => {
-        this.$store.dispatch('downloadInfo')
-        this.$axios.get('/group').then(response => {
-          this.$store.commit('group/setGroups', response.data)
+      .forEach(group => {
+        this.$socket.on(`notification/${group._id}`, notification => {
+          this.$store.commit('notification/addNotification', notification)
         })
       })
-    }
-
-    this.notificationGroups = this.groups.filter(g => {
-      return g.analysts.map(a => a._id).includes(this.user._id)
-    })
   },
   methods: {
     fetchUrl(item) {
