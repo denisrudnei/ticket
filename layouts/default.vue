@@ -181,23 +181,15 @@ export default {
     groups: 'group/getGroups',
     ticketsToEdit: 'ticket/getTicketsToEdit'
   }),
-  updated() {
+  async created() {
     if (this.logged) {
-      setTimeout(() => {
-        this.$vuetify.theme.primary =
-          this.user.color || this.$vuetify.theme.primary
-      }, 0)
+      const response = await this.$axios.get('/group')
+      this.$store.commit('group/setGroups', response.data)
+      this.$vuetify.theme.primary =
+        this.user.color || this.$vuetify.theme.primary
     }
   },
-  async mounted() {
-    await this.$axios.post('/auth/mergeUser', this.user)
-    this.$store.dispatch('downloadInfo')
-    const response = await this.$axios.get('/group')
-    this.$store.commit('group/setGroups', response.data)
-    this.$socket.on('readNotification', notification => {
-      this.$store.commit('notification/updateNotification', notification)
-    })
-
+  mounted() {
     this.$socket.on('updateTicket', ticket => {
       // TODO
       this.$store.dispatch('ticket/updateTree')
@@ -213,16 +205,6 @@ export default {
     this.$socket.on('paths/updatePath', paths => {
       this.$store.dispatch('ticket/updateTree')
     })
-
-    this.groups
-      .filter(g => {
-        return g.analysts.map(a => a._id).includes(this.user._id)
-      })
-      .forEach(group => {
-        this.$socket.on(`notification/${group._id}`, notification => {
-          this.$store.commit('notification/addNotification', notification)
-        })
-      })
   },
   methods: {
     fetchUrl(item) {

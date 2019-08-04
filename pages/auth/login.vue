@@ -68,6 +68,42 @@ export default {
         .loginWith('local', {
           data: this.user
         })
+        .then(async () => {
+          const loggedUser = await this.$axios.post('/auth/user')
+          this.$axios
+            .post('/auth/mergeUser', loggedUser.data.user)
+            .then(response => {
+              const user = response.data
+              this.$vuetify.theme.primary =
+                user.color || this.$vuetify.theme.primary
+              this.$axios
+                .post(`/analyst/${user._id}/groups`)
+                .then(responseGroups => {
+                  responseGroups.data
+                    .filter(g => {
+                      return g.analysts.map(a => a._id).includes(this.user._id)
+                    })
+                    .forEach(group => {
+                      this.$socket.on(
+                        `notification/${group._id}`,
+                        notification => {
+                          this.$store.commit(
+                            'notification/addNotification',
+                            notification
+                          )
+                        }
+                      )
+                    })
+
+                  this.$socket.on('readNotification', notification => {
+                    this.$store.commit(
+                      'notification/updateNotification',
+                      notification
+                    )
+                  })
+                })
+            })
+        })
         .catch(() => {
           this.$toast.error('Falha ao logar')
         })

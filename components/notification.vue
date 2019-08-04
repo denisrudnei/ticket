@@ -143,9 +143,6 @@ export default {
       this.$axios.post('/notification/').then(response => {
         this.$store.commit('notification/setNotifications', response.data)
       })
-      this.$axios.post(`/analyst/${this.user._id}/groups`).then(response => {
-        this.notificationGroups = response.data
-      })
     }
   },
   methods: {
