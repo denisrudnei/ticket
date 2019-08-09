@@ -61,6 +61,19 @@ const AnalystSchema = new Schema({
     default: false,
     select: false
   },
+  sounds: {
+    type: Object,
+    default: {
+      chat: {
+        volume: 0,
+        muted: true
+      },
+      notification: {
+        volume: 0,
+        muted: false
+      }
+    }
+  },
   paths: [
     {
       type: Schema.Types.ObjectId,

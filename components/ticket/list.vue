@@ -15,6 +15,7 @@
         <v-btn
           class="primary white--text"
           icon
+          title="Ver chamado"
           @click="addTicketsToEdit(item)"
         >
           <v-icon>
@@ -30,6 +31,7 @@
             v-slot:activator="{ on }"
           >
             <v-btn
+              title="Ações"
               class="primary white--text"
               icon
               v-on="on"

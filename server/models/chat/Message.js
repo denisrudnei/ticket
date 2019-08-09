@@ -15,9 +15,13 @@ const MessageSchema = new Schema({
     type: String,
     default: ''
   },
+  read: {
+    type: Boolean,
+    default: false
+  },
   date: {
     type: Date,
-    default: new Date()
+    default: Date.now
   }
 })
 

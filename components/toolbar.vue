@@ -32,9 +32,10 @@
       v-if="logged"
       offset-y
       offset-x
-      :nudge-width="350"
+      :nudge-width="250"
+      max-width="35vw"
       :close-on-content-click="false"
-      max-height="40vh"
+      max-height="65vh"
     >
       <template v-slot:activator="{on}">
         <v-btn class="primary white--text" icon v-on="on">
@@ -43,7 +44,7 @@
           </v-icon>
         </v-btn>
       </template>
-      <v-tabs>
+      <v-tabs class="primary white--text">
         <v-tab>
           Usuários
         </v-tab>

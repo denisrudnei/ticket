@@ -67,18 +67,27 @@
               class="primary"
             >
               Criar incidente
+              <v-icon right>
+                offline_bolt
+              </v-icon>
             </v-btn>
             <v-btn
               to="/search"
               class="primary"
             >
               Pesquisar
+              <v-icon right>
+                search
+              </v-icon>
             </v-btn>
             <v-btn
               class="primary white--text"
               to="/knowledge"
             >
               Base de conhecimento
+              <v-icon right>
+                folder
+              </v-icon>
             </v-btn>
           </v-flex>
         </template>
@@ -93,7 +102,7 @@
           pa-2
         >
           <v-speed-dial
-            v-if="logged"
+            v-if="logged && ticketsToEdit.length > 0"
             v-model="fab"
             bottom
             right
@@ -142,6 +151,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import afterLogin from '@/mixins/afterLogin'
 import Toolbar from '@/components/toolbar'
 import TicketDialog from '@/components/ticket/dialog'
 import Chat from '@/components/chat/chat'
@@ -154,6 +164,7 @@ export default {
     Chat,
     TicketTree
   },
+  mixins: [afterLogin],
   data() {
     return {
       fab: true,
@@ -185,8 +196,7 @@ export default {
     if (this.logged) {
       const response = await this.$axios.get('/group')
       this.$store.commit('group/setGroups', response.data)
-      this.$vuetify.theme.primary =
-        this.user.color || this.$vuetify.theme.primary
+      this.processInfo()
     }
   },
   mounted() {

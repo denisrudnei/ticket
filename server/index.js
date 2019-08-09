@@ -89,6 +89,11 @@ async function start() {
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
+  app.use((err, req, res, next) => {
+    consola.error(err)
+    res.status(500).json(err.message)
+  })
+
   // Listen the server
   server.listen(port, host)
   consola.ready({

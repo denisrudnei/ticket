@@ -1,0 +1,121 @@
+<template>
+  <v-layout row wrap>
+    <v-flex xs12 md6 pa-2>
+      <v-subheader>
+        Som de notificação do chat
+      </v-subheader>
+      <v-slider
+        v-model="sound.chat.volume"
+        thumb-label
+        min="0"
+        max="100"
+        :step="1"
+        append-icon="volume_up"
+        prepend-icon="volume_down"
+      />
+      <v-flex xs12 pa-2>
+        <v-checkbox v-model="sound.chat.muted" label="Mutar" />
+        <v-btn class="primary white--text" @click="playChat()">
+          Testar
+          <v-icon>
+            play_arrow
+          </v-icon>
+        </v-btn>
+      </v-flex>
+    </v-flex>
+    
+    <v-flex xs12 md6 pa-2>
+      <v-subheader>
+        Som de notificação geral
+      </v-subheader>
+      <v-slider
+        v-model="sound.notification.volume"
+        thumb-label
+        min="0"
+        max="100"
+        :step="1"
+        append-icon="volume_up"
+        prepend-icon="volume_down"
+      />
+      <v-flex xs12 pa-2>
+        <v-checkbox v-model="sound.notification.muted" label="Mutar" />
+        <v-btn class="primary white--text" @click="playNotification()">
+          Testar
+          <v-icon>
+            play_arrow
+          </v-icon>
+        </v-btn>
+      </v-flex>
+    </v-flex>
+    <v-flex xs12 pa-2>
+      <v-btn class="primary" @click="save()">
+        Salvar
+        <v-icon right>
+          save
+        </v-icon>
+      </v-btn>
+    </v-flex>
+  </v-layout>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      audioChat: { volume: 0 },
+      audioNotification: { volume: 0 },
+      sound: {
+        chat: {
+          muted: true,
+          volume: 0
+        },
+        notitifcation: {
+          muted: false,
+          volume: 0
+        }
+      }
+    }
+  },
+
+  watch: {
+    'sound.chat.volume': function(value) {
+      this.audioChat.volume = value / 100
+      this.$store.commit('sound/setChatVolume', value / 100)
+    },
+    'sound.notification.volume': function(value) {
+      this.audioNotification.volume = value / 100
+      this.$store.commit('sound/setNotificationVolume', value / 100)
+    }
+  },
+  asyncData({ $axios }) {
+    return $axios.post('/auth/user').then(response => {
+      return {
+        sound: response.data.user.sounds
+      }
+    })
+  },
+  mounted() {
+    this.audioChat = new Audio('/sounds/open-ended.ogg')
+    this.audioNotification = new Audio('/sounds/open-ended.ogg')
+  },
+  methods: {
+    playChat() {
+      this.audioChat.play()
+    },
+    playNotification() {
+      this.audioNotification.play()
+    },
+    save() {
+      this.$axios.put('/analyst/sound', this.sound).then(() => {
+        this.$toast.show('Atualizado', {
+          duration: 1000,
+          icon: 'done'
+        })
+      })
+    }
+  }
+}
+</script>
+
+<style>
+</style>

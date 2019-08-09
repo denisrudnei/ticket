@@ -27,11 +27,7 @@ const AuthService = {
         .exec()
         .then(userFromDB => {
           if (userFromDB) {
-            return reject(
-              new Error({
-                message: 'Usuário já existe'
-              })
-            )
+            return reject(new Error('Usuário já existe'))
           }
         })
         .then(() => {

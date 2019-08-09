@@ -42,6 +42,25 @@ module.exports = app => {
       })
   })
 
+  app.put('/analyst/sound/', (req, res, next) => {
+    const userId = req.session.authUser._id
+    const soundConfig = {
+      chat: {
+        muted: req.body.chat.muted,
+        volume: req.body.chat.volume
+      },
+      notification: {
+        muted: req.body.notification.muted,
+        volume: req.body.notification.volume
+      }
+    }
+    AnalystService.setSoundConfig(userId, soundConfig)
+      .then(() => {
+        res.sendStatus(201)
+      })
+      .catch(next)
+  })
+
   app.put('/analyst', (req, res) => {
     const userId = req.session.authUser._id
     const analyst = {

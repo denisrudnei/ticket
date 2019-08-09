@@ -28,23 +28,22 @@
       <v-card-text>
         <v-timeline
           class="expand"
+          dense
         >
           <v-timeline-item
             v-for="message in messages"
             :key="message._id"
-            :left="user._id === message.from"
           >
             <template
               v-slot:icon
             >
               <v-avatar>
-                <img :src="message.picture" alt="">
+                <img :src="message.from.picture" alt="">
               </v-avatar>
             </template>
             <v-card>
-              <v-card-title>
+              <v-card-title class="headline">
                 {{ message.name }}
-                <v-spacer />
               </v-card-title>
               <v-card-text>
                 {{ message.content }}
@@ -69,7 +68,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
 export default {
   data() {
     return {
@@ -94,7 +92,6 @@ export default {
         duration: 1000
       })
 
-      this.$store.commit('chat/setActive', message.chatId)
       this.$store.commit('chat/receiveMessage', message)
     })
   },

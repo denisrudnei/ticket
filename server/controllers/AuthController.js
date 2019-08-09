@@ -23,7 +23,7 @@ module.exports = app => {
     res.sendStatus(200)
   })
 
-  app.post('/auth/register', (req, res) => {
+  app.post('/auth/register', (req, res, next) => {
     const user = {
       name: req.body.name,
       email: req.body.email,
@@ -33,19 +33,17 @@ module.exports = app => {
       .then(() => {
         return res.sendStatus(201)
       })
-      .catch(e => {
-        return res.status(500).json(e)
-      })
+      .catch(next)
   })
 
-  app.post('/auth/mergeUser', (req, res) => {
+  app.post('/auth/mergeUser', (req, res, next) => {
     AuthService.mergeUser(req.body.email, req.body)
       .then(result => {
         req.session.authUser = result
         return res.status(200).json(result)
       })
       .catch(e => {
-        return res.status(500).json(e)
+        next(e)
       })
   })
 

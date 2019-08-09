@@ -93,6 +93,27 @@ const AnalystService = {
       })
     })
   },
+  setSoundConfig(analystId, config) {
+    return Analyst.updateOne(
+      {
+        _id: analystId
+      },
+      {
+        $set: {
+          sounds: {
+            chat: {
+              muted: config.chat.muted,
+              volume: config.chat.volume
+            },
+            notification: {
+              muted: config.notification.muted,
+              volume: config.notification.volume
+            }
+          }
+        }
+      }
+    )
+  },
 
   getGroups(userId) {
     return new Promise((resolve, reject) => {

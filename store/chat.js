@@ -1,7 +1,8 @@
 export const state = () => ({
   chats: {},
   active: '',
-  visible: false
+  visible: false,
+  messages: []
 })
 
 export const getters = {
@@ -9,9 +10,7 @@ export const getters = {
     return state.chats
   },
   getMessages(state) {
-    return state.chats[state.active] === undefined
-      ? []
-      : state.chats[state.active].messages
+    return state.messages
   },
   getActive(state) {
     return state.chats[state.active]
@@ -36,7 +35,7 @@ export const mutations = {
     }
   },
   receiveMessage(state, message) {
-    state.chats[message.chatId].messages.push(message)
+    state.messages.push(message)
   },
   send(state, message) {
     this.$axios.post('/chat/message', message)
@@ -45,8 +44,9 @@ export const mutations = {
     state.visible = visible
     if (!visible) state.active = ''
   },
-  setActive(state, id) {
+  setActive: function(state, id) {
     state.active = id
+    state.messages = state.chats[id].messages
   }
 }
 

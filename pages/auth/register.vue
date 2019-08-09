@@ -44,10 +44,25 @@
         </v-alert>
         <v-btn
           large
+          :block="onMobile"
           class="primary white--text"
           @click="register()"
         >
           Registrar
+          <v-icon right>
+            save
+          </v-icon>
+        </v-btn>
+        <v-btn
+          large
+          :block="onMobile"
+          class="primary white--text"
+          to="/auth/login"
+        >
+          Logar
+          <v-icon right>
+            person
+          </v-icon>
         </v-btn>
       </v-form>
     </v-flex>
@@ -67,6 +82,11 @@ export default {
       }
     }
   },
+  computed: {
+    onMobile() {
+      return this.$vuetify.breakpoint.xsOnly
+    }
+  },
   methods: {
     register() {
       this.$axios.post('/auth/register', this.user).then(
@@ -82,12 +102,10 @@ export default {
           if (error.response.data.errors) {
             this.errors = error.response.data.errors
           } else {
-            this.$toast.error(
-              `Falha ao realizar registro: ${error.response.data.message}`,
-              {
-                icon: 'error'
-              }
-            )
+            this.$toast.error('Falha ao realizar registro', {
+              icon: 'error',
+              duration: 1000
+            })
           }
         }
       )

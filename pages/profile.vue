@@ -4,31 +4,52 @@
     wrap
   >
     <v-flex
+    
       xs12
-      pa-2
+      pa-1
     >
-      <v-tabs>
+      <v-tabs color="primary" class="white--text" dark show-arrows>
         <v-tab
           to="/profile"
         >
+          <v-icon left>
+            person
+          </v-icon>
           Perfil
         </v-tab>
+        <v-tab to="/profile/sound">
+          <v-icon left>
+            volume_up
+          </v-icon>Configuração de áudio
+        </v-tab>
         <v-tab to="/profile/path/view">
+          <v-icon left>
+            subdirectory_arrow_right
+          </v-icon>
           Listagem em árvore
         </v-tab>
         <v-tab
           to="/profile/address"
         >
+          <v-icon left>
+            streetview
+          </v-icon>
           Endereço
         </v-tab>
         <v-tab
           to="/profile/notification/all"
         >
+          <v-icon left>
+            notification_important
+          </v-icon>
           Notificações
         </v-tab>
         <v-tab
           to="/profile/password"
         >
+          <v-icon left>
+            lock
+          </v-icon>
           Senha
         </v-tab>
       </v-tabs>

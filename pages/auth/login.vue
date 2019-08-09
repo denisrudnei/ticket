@@ -5,6 +5,7 @@
   >
     <v-flex
       xs12
+      md8
       pa-5
     >
       <v-form>
@@ -21,45 +22,63 @@
           solo
           @keypress.enter="localLogin()"
         />
-        <v-btn
-          large
-          class="primary white--text"
-          @click="localLogin()"
-        >
-          Logar
-          <v-icon
-            right
-          >
-            person
-          </v-icon>
-        </v-btn>
-        <v-btn
-          large
-          class="primary white--text"
-          @click="login()"
-        >
-          Login externo
-        </v-btn>
-        <v-btn
-          large
-          class="primary white--text"
-          to="/auth/register"
-        >
-          Registrar
-        </v-btn>
       </v-form>
+    </v-flex>
+    <v-flex xs12 md4 pa-5>
+      <v-btn
+        large
+        block
+        class="primary white--text"
+        @click="localLogin()"
+      >
+        Logar
+        <v-icon
+          right
+        >
+          person
+        </v-icon>
+      </v-btn>
+      <v-btn
+        large
+        block
+        class="primary white--text"
+        @click="login()"
+      >
+        Login externo
+        <v-icon right>
+          import_export
+        </v-icon>
+      </v-btn>
+      <v-btn
+        large
+        block
+        class="primary white--text"
+        to="/auth/register"
+      >
+        Registrar
+        <v-icon right>
+          create
+        </v-icon>
+      </v-btn>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
+import afterLogin from '@/mixins/afterLogin'
 export default {
+  mixins: [afterLogin],
   data() {
     return {
       user: {
         email: '',
         password: ''
       }
+    }
+  },
+  computed: {
+    onMobile() {
+      return this.$vuetify.breakpoint.xsOnly
     }
   },
   methods: {
@@ -69,48 +88,22 @@ export default {
           data: this.user
         })
         .then(async () => {
-          const loggedUser = await this.$axios.post('/auth/user')
-          this.$axios
-            .post('/auth/mergeUser', loggedUser.data.user)
-            .then(response => {
-              const user = response.data
-              this.$vuetify.theme.primary =
-                user.color || this.$vuetify.theme.primary
-              this.$axios
-                .post(`/analyst/${user._id}/groups`)
-                .then(responseGroups => {
-                  responseGroups.data
-                    .filter(g => {
-                      return g.analysts.map(a => a._id).includes(this.user._id)
-                    })
-                    .forEach(group => {
-                      this.$socket.on(
-                        `notification/${group._id}`,
-                        notification => {
-                          this.$store.commit(
-                            'notification/addNotification',
-                            notification
-                          )
-                        }
-                      )
-                    })
-
-                  this.$socket.on('readNotification', notification => {
-                    this.$store.commit(
-                      'notification/updateNotification',
-                      notification
-                    )
-                  })
-                })
-            })
+          await this.processInfo()
+          this.$router.push('/')
         })
         .catch(() => {
-          this.$toast.error('Falha ao logar')
+          this.$toast.error('Falha ao logar', {
+            duration: 1000,
+            icon: 'error'
+          })
         })
     },
     login() {
       this.$auth.loginWith('auth0').catch(e => {
-        this.$toast.error('Falha ao logar')
+        this.$toast.error('Falha ao logar', {
+          duration: 1000,
+          icon: 'error'
+        })
       })
     }
   }

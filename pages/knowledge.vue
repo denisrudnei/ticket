@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap>
     <v-flex xs12>
-      <v-tabs color="primary white--text" dark>
+      <v-tabs color="primary white--text" dark show-arrows>
         <v-tab to="/knowledge/">
           Não categorizado
         </v-tab>

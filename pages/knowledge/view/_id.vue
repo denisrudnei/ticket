@@ -54,6 +54,7 @@
                 <ticket-list
                   v-if="showModal"
                   :url="`/search/`"
+                  :modal="true"
                 />
               </v-flex>
             </v-layout>
@@ -61,14 +62,13 @@
           <v-flex xs12 pa-4>
             <div ref="preview" v-html="knowledge.preview" />
           </v-flex>
-          <v-flex xs12 pa-3>
-            <hr>
-            <v-btn class=" primary white--text" @click="download()">
-              Baixar it
-            </v-btn>
-          </v-flex>
         </v-layout>
       </v-card-text>
+      <v-card-actions>
+        <v-btn class="primary white--text" @click="download()">
+          Baixar it
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
