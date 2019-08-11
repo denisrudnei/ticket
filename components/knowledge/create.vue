@@ -26,7 +26,7 @@
       />
     </v-flex>
     <v-flex xs12 pa-2>
-      <ckeditor v-model="knowledge.preview" :editor="editor" />
+      <ckeditor v-model="knowledge.preview" :editor="editor" @ready="configureEditor" />
       <input ref="file" type="file" style="display: none">
       <v-btn class="primary white--text" @click="addFile()">
         <v-icon>attach_file</v-icon>
@@ -44,7 +44,9 @@
 </template>
 
 <script>
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import compareObjectsWithId from '@/mixins/compareObjectsWithId'
+import ImageUploadAdapter from '@/plugins/image-upload-adapter'
 export default {
   mixins: [compareObjectsWithId],
   props: {
@@ -60,7 +62,7 @@ export default {
   },
   data() {
     return {
-      editor: null,
+      editor: ClassicEditor,
       items: [],
       category: [],
       group: [],
@@ -86,7 +88,6 @@ export default {
     }
   },
   async created() {
-    this.editor = require('@ckeditor/ckeditor5-build-classic')
     const category = await this.$axios.get('/category/')
     const group = await this.$axios.get('/group/')
 
@@ -99,6 +100,11 @@ export default {
     },
     addFile() {
       this.$refs.file.click()
+    },
+    configureEditor(editor) {
+      editor.plugins.get('FileRepository').createUploadAdapter = loader => {
+        return new ImageUploadAdapter(loader, this.$axios)
+      }
     }
   }
 }

@@ -160,6 +160,7 @@
               :value-comparator="compare"
               label="Categoria"
               append-icon="search"
+              @change="checkFields"
               @click:append="show('category', ticketComputed.category)"
             />
           </v-flex>
@@ -344,7 +345,7 @@
                 <v-icon>build</v-icon>
               </v-tab>
               <v-tab-item>
-                <Fields />
+                <Fields :edit="!readOnlyData" />
               </v-tab-item>
               <v-tab>
                 Logs
@@ -384,7 +385,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import moment from 'moment'
 import Fields from '@/components/ticket/fields'
 import FileInclude from '@/components/files/include'
 import Logs from '@/components/ticket/logs'
@@ -474,11 +474,6 @@ export default {
     })
   },
   methods: {
-    momentValue() {
-      return this.ticketComputed.created
-        ? moment(this.ticketComputed.created).format('dddd, MMMM Do YYYY')
-        : ''
-    },
     show(property, value) {
       if (value === null || value === undefined) return
       if (Object.prototype.hasOwnProperty.call(value, '_id')) {
@@ -515,10 +510,12 @@ export default {
       this.readOnlyData = true
       this.$axios.get(`/ticket/${this.ticketData._id}`).then(response => {
         this.ticketData = response.data
+        this.$store.commit('ticket/setActualTicket', this.ticketData)
       })
     },
     checkFields() {
-      alert('trigger check')
+      this.ticket.fields = this.ticketComputed.category.fields
+      this.$store.commit('ticket/setActualTicket', this.ticketData)
     },
     clearFields() {
       Object.keys(this.ticketData).forEach(key => {

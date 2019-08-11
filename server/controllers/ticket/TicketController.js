@@ -1,4 +1,4 @@
-const { body, param, validationResult } = require('express-validator/check')
+const { body, param, validationResult } = require('express-validator')
 const TicketService = require('../../services/ticket/TicketService')
 
 module.exports = (app, io) => {

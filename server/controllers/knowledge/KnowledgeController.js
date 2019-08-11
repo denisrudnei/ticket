@@ -43,6 +43,17 @@ module.exports = app => {
       })
   })
 
+  app.get('/knowledge/:id/files', (req, res) => {
+    const id = req.params.id
+    KnowledgeService.getAllFiles(id)
+      .then(file => {
+        return res.end(file)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  })
+
   app.get('/knowledge/group/:groupName', (req, res) => {
     const groupName = req.params.groupName
     KnowledgeService.getByKnowledgeGroup(groupName)
@@ -72,6 +83,17 @@ module.exports = app => {
     KnowledgeService.updateKnowledge(req.params.id, knowledge)
       .then(result => {
         return res.status(201).json(result)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  })
+
+  app.post('/knowledge/tempFile', (req, res) => {
+    const file = req.files.file
+    KnowledgeService.addTempFile(file)
+      .then(data => {
+        return res.status(201).json(data)
       })
       .catch(e => {
         return res.status(500).json(e)

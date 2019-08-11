@@ -40,6 +40,19 @@ describe('Analyst', function() {
     await AnalystService.updateImage(analyst._id.toString(), file)
   })
 
+  it('Update sound config', async () => {
+    await AnalystService.setSoundConfig(analyst, {
+      chat: {
+        muted: false,
+        volume: 50
+      },
+      notification: {
+        muted: true,
+        volume: 15
+      }
+    })
+  })
+
   it('Remove analyst image', async () => {
     await AnalystService.removeImage(analyst._id.toString())
   })

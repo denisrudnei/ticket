@@ -27,9 +27,12 @@ const KnowledgeSchema = new Schema({
   preview: {
     type: String
   },
-  url: {
-    type: String
-  }
+  files: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Knowledgefile'
+    }
+  ]
 })
 
 KnowledgeSchema.pre('find', function() {

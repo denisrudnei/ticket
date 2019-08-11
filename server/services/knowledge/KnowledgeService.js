@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Knowledge = require('../../models/knowledge/Knowledge')
+const KnowledgeFile = require('../../models/knowledge/KnowledgeFile')
 const Group = require('../../models/ticket/Group')
 const S3 = require('../../../plugins/S3')
 const KnowledgeService = {
@@ -74,7 +75,7 @@ const KnowledgeService = {
           $set: {
             name: knowledge.name,
             category: knowledge.category,
-            grou: knowledge.group,
+            group: knowledge.group,
             preview: knowledge.preview
           }
         }
@@ -84,25 +85,69 @@ const KnowledgeService = {
       })
     })
   },
-  addFile(id, file) {
+  addFile(knowledgeId, file) {
     return new Promise((resolve, reject) => {
       Knowledge.findOne({
-        _id: id
+        _id: knowledgeId
       }).exec((err, knowledge) => {
         if (err) return reject(err)
-        S3.createBucket(() => {
-          const params = {
-            Bucket: process.env.BUCKET,
-            Key: id,
-            Body: file.data
+        KnowledgeFile.create(
+          {
+            name: file.name
+          },
+          (err, knowledgeFile) => {
+            if (err) reject(err)
+            S3.createBucket(() => {
+              const params = {
+                Bucket: process.env.BUCKET,
+                Key: knowledgeFile._id.toString(),
+                Body: file.data
+              }
+              S3.upload(params, (err, data) => {
+                if (err) return reject(err)
+                knowledgeFile.url = data.Location
+                knowledge.files.push(knowledgeFile)
+                knowledge.save()
+                return resolve(data)
+              })
+            })
           }
-          S3.upload(params, (err, data) => {
-            if (err) return reject(err)
-            knowledge.url = data.Location
-            knowledge.save()
-            return resolve(data)
+        )
+      })
+    })
+  },
+  addTempFile(file) {
+    return new Promise((resolve, reject) => {
+      KnowledgeFile.create(
+        {
+          name: file.name
+        },
+        (err, knowledgeFile) => {
+          if (err) return reject(err)
+          S3.createBucket(() => {
+            const params = {
+              Bucket: process.env.BUCKET,
+              Key: knowledgeFile._id.toString(),
+              Body: file.data
+            }
+            S3.upload(params, (err, data) => {
+              if (err) return reject(err)
+              knowledgeFile.url = data.Location
+              knowledgeFile.save()
+              return resolve(data.Location)
+            })
           })
-        })
+        }
+      )
+    })
+  },
+  getAllFiles(knowledgeId) {
+    return new Promise((resolve, reject) => {
+      Knowledge.findOne({
+        _id: knowledgeId
+      }).exec((err, knowledge) => {
+        if (err) return reject(err)
+        resolve(knowledge.files)
       })
     })
   },
@@ -111,7 +156,7 @@ const KnowledgeService = {
       S3.getObject(
         {
           Bucket: process.env.BUCKET,
-          Key: id
+          Key: id.toString()
         },
         (err, file) => {
           if (err) return reject(err)
@@ -129,7 +174,7 @@ const KnowledgeService = {
         S3.deleteObject(
           {
             Bucket: process.env.BUCKET,
-            Key: id
+            Key: id.toString()
           },
           (err, obj) => {
             if (err) return reject(err)

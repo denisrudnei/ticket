@@ -193,15 +193,15 @@
       <td>{{ item.resume }}</td>
       <td>{{ item.status.name }}</td>
       <td>{{ item.group.name }}</td>
-      <td>{{ item.category.fullName }}</td>
+      <td> {{ item.category.fullName }}</td>
       <td>{{ item.created | date }}</td>
     </template>
+    <ticket-modal />
   </v-data-table>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-
 const querystring = require('querystring')
 
 export default {

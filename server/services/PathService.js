@@ -151,7 +151,19 @@ const PathService = {
         _id: id
       }).exec(err => {
         if (err) return reject(err)
-        return resolve()
+        Analyst.updateMany(
+          {},
+          {
+            $pull: {
+              paths: {
+                $in: [id]
+              }
+            }
+          }
+        ).exec(err => {
+          if (err) return reject(err)
+          resolve()
+        })
       })
     })
   }

@@ -2,6 +2,7 @@
   <v-dialog
     :value="dialog"
     scrollable
+    persistent
   >
     <v-card>
       <v-toolbar class="primary white--text">
@@ -64,6 +65,7 @@
           </v-flex>
         </v-layout>
       </v-card-text>
+      <v-divider />
       <v-card-actions>
         <v-btn class="primary white--text" @click="download()">
           Baixar it
@@ -121,37 +123,7 @@ export default {
 </script>
 
 <style>
-blockquote {
-  font-size: 1.4em;
-  font-family: Open Sans;
-  font-style: italic;
-  color: #555555;
-  padding: 1.2em 30px 1.2em 75px;
-  border-left: 0.5px solid #78c0a8;
-  line-height: 1.6;
-  position: relative;
-  background: #ededed;
-}
-
-blockquote::before {
-  font-family: Arial;
-  content: '\201C';
-  color: #78c0a8;
-  font-size: 4em;
-  position: absolute;
-  left: 10px;
-  top: -10px;
-}
-
-blockquote::after {
-  content: '';
-}
-
-blockquote span {
-  display: block;
-  color: #333333;
-  font-style: normal;
-  font-weight: bold;
-  margin-top: 1em;
+img {
+  max-width: 100%;
 }
 </style>
