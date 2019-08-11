@@ -55,7 +55,10 @@ const AnalystSchema = new Schema({
     default: false,
     select: false
   },
-  picture: String,
+  picture: {
+    type: String,
+    default: '/user.svg'
+  },
   mergePictureWithExternalAccount: {
     type: Boolean,
     default: false,
