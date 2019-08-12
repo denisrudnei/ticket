@@ -1,12 +1,12 @@
 const { models, model, Schema } = require('mongoose')
 const MessageSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
+  _id: Schema.Types.ObjectId,
   to: {
-    type: mongoose.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Analyst'
   },
   from: {
-    type: mongoose.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Analyst'
   },
   content: {
