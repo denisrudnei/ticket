@@ -92,18 +92,10 @@ const AuthService = {
                 })
               )
             }
-            Analyst.updateOne(
-              {
-                _id: userId
-              },
-              {
-                $set: {
-                  password: newPassword
-                }
-              }
-            ).exec((err, result) => {
+            user.password = newPassword
+            user.save(err => {
               if (err) reject(err)
-              return resolve(result)
+              return resolve()
             })
           })
         })
