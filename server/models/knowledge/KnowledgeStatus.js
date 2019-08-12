@@ -1,8 +1,7 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const { models, model, Schema } = require('mongoose')
 
 const KnowledgeStatusSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
+  _id: Schema.Types.ObjectId,
   name: {
     type: String
   },
@@ -11,4 +10,5 @@ const KnowledgeStatusSchema = new Schema({
   }
 })
 
-module.exports = mongoose.model('KnowledgeStatus', KnowledgeStatusSchema)
+module.exports =
+  models.KnowledgeStatus || model('KnowledgeStatus', KnowledgeStatusSchema)

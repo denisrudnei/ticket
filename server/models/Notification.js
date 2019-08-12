@@ -1,8 +1,7 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const { models, model, Schema } = require('mongoose')
 
 const NotificationSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
+  _id: Schema.Types.ObjectId,
   from: {
     type: Schema.Types.ObjectId,
     ref: 'Analyst'
@@ -30,4 +29,5 @@ NotificationSchema.pre('find', function() {
   this.populate(['to', 'from'])
 })
 
-module.exports = new mongoose.model('Notification', NotificationSchema)
+module.exports =
+  models.Notification || model('Notification', NotificationSchema)

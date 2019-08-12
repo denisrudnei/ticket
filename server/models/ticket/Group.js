@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const { models, model, Schema } = require('mongoose')
 
 const GroupSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -18,4 +17,4 @@ GroupSchema.pre('find', function() {
   this.populate(['analysts'])
 })
 
-module.exports = mongoose.model('Group', GroupSchema)
+module.exports = models.Group || model('Group', GroupSchema)

@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const { models, model, Schema } = require('mongoose')
 
 const PathSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -31,4 +30,4 @@ PathSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = mongoose.model('Path', PathSchema)
+module.exports = models.Path || model('Path', PathSchema)

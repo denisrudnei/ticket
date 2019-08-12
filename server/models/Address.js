@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const { models, model, Schema } = require('mongoose')
 
 const AddressSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -17,4 +16,4 @@ const AddressSchema = new Schema({
   }
 })
 
-module.exports = new mongoose.model('Address', AddressSchema)
+module.exports = models.Address || model('Address', AddressSchema)

@@ -1,6 +1,4 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-
+const { models, model, Schema } = require('mongoose')
 const LogSchema = new Schema({
   _id: Schema.Types.ObjectId,
   user: {
@@ -29,4 +27,4 @@ LogSchema.pre('find', function() {
   this.populate(['user', 'group', 'oldStatus', 'newStatus'])
 })
 
-module.exports = mongoose.model('Log', LogSchema)
+module.exports = models.Log || model('Log', LogSchema)

@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const { models, model, Schema } = require('mongoose')
 
 const StatusSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -9,4 +8,4 @@ const StatusSchema = new Schema({
   }
 })
 
-module.exports = mongoose.model('Status', StatusSchema)
+module.exports = models.Status || model('Status', StatusSchema)

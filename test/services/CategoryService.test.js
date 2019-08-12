@@ -25,6 +25,11 @@ describe('CategoryService', function() {
     await CategoryService.create(category)
   })
 
+  it('Show full name', async () => {
+    const category = await Category.findOne()
+    console.log(category.fullName)
+  })
+
   it('Create a new category with fields', async () => {
     const field1 = {
       text: 'text of field',

@@ -1,6 +1,5 @@
-const mongoose = require('mongoose')
+const { models, model, Schema } = require('mongoose')
 const bcrypt = require('bcrypt')
-const Schema = mongoose.Schema
 const Group = require('./ticket/Group')
 
 const AnalystSchema = new Schema({
@@ -133,4 +132,4 @@ AnalystSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = mongoose.model('Analyst', AnalystSchema)
+module.exports = models.Analyst || model('Analyst', AnalystSchema)

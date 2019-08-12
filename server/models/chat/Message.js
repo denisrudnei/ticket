@@ -1,6 +1,4 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-
+const { models, model, Schema } = require('mongoose')
 const MessageSchema = new Schema({
   _id: mongoose.Types.ObjectId,
   to: {
@@ -25,4 +23,4 @@ const MessageSchema = new Schema({
   }
 })
 
-module.exports = mongoose.model('Message', MessageSchema)
+module.exports = models.Message || model('Message', MessageSchema)

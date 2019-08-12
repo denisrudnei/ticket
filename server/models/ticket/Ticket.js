@@ -1,9 +1,8 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const { models, model, Schema, Types } = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate')
 const Log = require('./Log')
 
-const TicketSchema = new mongoose.Schema({
+const TicketSchema = new Schema({
   _id: Schema.Types.ObjectId,
   category: {
     ref: 'Category',
@@ -75,7 +74,7 @@ TicketSchema.pre('find', function() {
 
 async function createLog(ticket) {
   const log = await Log.create({
-    _id: new mongoose.Types.ObjectId(),
+    _id: new Types.ObjectId(),
     oldStatus: ticket.status,
     date: new Date(),
     user: ticket.actualUser,
@@ -99,4 +98,4 @@ TicketSchema.pre('findOneAndUpdate', async function(next) {
 
 TicketSchema.plugin(mongoosePaginate)
 
-module.exports = mongoose.model('Ticket', TicketSchema)
+module.exports = models.Ticket || model('Ticket', TicketSchema)

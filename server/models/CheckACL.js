@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const { Schema } = require('mongoose')
 const AclRules = require('../../nacl.json')
 const Role = require('./Role')
 
@@ -11,7 +11,7 @@ const CheckACL = {
         if (err) return next(err)
         if (result === null) {
           Role.create({
-            _id: new mongoose.Types.ObjectId(),
+            _id: new Schema.Types.ObjectId(),
             name: rule.group,
             description:
               'Gerado automaticamente com base nas regras do servidor'

@@ -1,8 +1,6 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-
+const { models, model, Schema } = require('mongoose')
 const KnowledgeSchema = new Schema({
-  _id: mongoose.Types.ObjectId,
+  _id: Schema.Types.ObjectId,
   name: {
     type: String
   },
@@ -43,4 +41,4 @@ KnowledgeSchema.pre('findOne', function() {
   this.populate(['category', 'group', 'status'])
 })
 
-module.exports = mongoose.model('Knowledge', KnowledgeSchema)
+module.exports = models.Knowledge || model('Knowledge', KnowledgeSchema)

@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, models } = require('mongoose')
 
 const KnowledgeFileSchema = new Schema({
   name: {
@@ -10,4 +10,5 @@ const KnowledgeFileSchema = new Schema({
   }
 })
 
-module.exports = model('KnowledgeFile', KnowledgeFileSchema)
+module.exports =
+  models.KnowledgeFile || model('KnowledgeFile', KnowledgeFileSchema)
