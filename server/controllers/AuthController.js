@@ -47,6 +47,17 @@ module.exports = app => {
       })
   })
 
+  app.post('/auth/redefine', (req, res) => {
+    const user = req.body
+    AuthService.generateEmailToReset(user.email, req)
+      .then(() => {
+        return res.sendStatus(200)
+      })
+      .catch(err => {
+        return res.status(500).json(err)
+      })
+  })
+
   app.post('/auth/password/reset', (req, res) => {
     const userId = req.session.authUser._id
     AuthService.resetPassword(

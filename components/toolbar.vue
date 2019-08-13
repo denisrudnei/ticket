@@ -83,11 +83,11 @@
     </v-btn>
     <v-btn
       v-if="logged"
-      to="/auth/logout"
       title="Fazer logoff"
       icon
       flat
       class="primary white-text"
+      @click="logout()"
     >
       <v-icon>
         exit_to_app
@@ -124,7 +124,12 @@ export default {
   },
   computed: mapGetters({
     user: 'auth/getUser'
-  })
+  }),
+  methods: {
+    logout() {
+      this.$store.commit('logout/setLogout', true)
+    }
+  }
 }
 </script>
 

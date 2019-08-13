@@ -140,6 +140,7 @@
     <Chat
       v-if="logged"
     />
+    <Logout />
     <v-footer
       fixed
       app
@@ -156,13 +157,14 @@ import Toolbar from '@/components/toolbar'
 import TicketDialog from '@/components/ticket/dialog'
 import Chat from '@/components/chat/chat'
 import TicketTree from '@/components/ticket/tree'
-
+import Logout from '@/components/logout'
 export default {
   components: {
     Toolbar,
     TicketDialog,
     Chat,
-    TicketTree
+    TicketTree,
+    Logout
   },
   mixins: [afterLogin],
   data() {

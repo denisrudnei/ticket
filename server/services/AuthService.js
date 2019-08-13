@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 const Analyst = require('../models/Analyst')
+const MailService = require('./MailService')
 
 const AuthService = {
   login(email, password) {
@@ -74,6 +76,48 @@ const AuthService = {
             return resolve(analyst)
           }
         })
+    })
+  },
+  generateEmailToReset(email, req) {
+    return new Promise((resolve, reject) => {
+      Analyst.findOne({
+        email: email
+      })
+        .select('+email')
+        .exec((err, analyst) => {
+          if (err) reject(err)
+          const token = jwt.sign(
+            {
+              _id: analyst,
+              email: analyst.email
+            },
+            process.env.JWT_TOKEN
+          )
+          MailService.sendConfirmationEmail(
+            {
+              name: analyst.name,
+              email: analyst.email
+            },
+            req,
+            token
+          )
+          resolve(token)
+        })
+    })
+  },
+  resetPasswordWithToken(token, newPassword) {
+    return new Promise((resolve, reject) => {
+      const info = jwt.verify(token, process.env.JWT_TOKEN)
+      Analyst.findOne({
+        _id: info._id
+      }).exec((err, analyst) => {
+        if (err) reject(err)
+        analyst.newPassword = newPassword
+        analyst.save(err => {
+          if (err) reject(err)
+          resolve()
+        })
+      })
     })
   },
   resetPassword(userId, oldPassword, newPassword) {

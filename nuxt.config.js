@@ -75,7 +75,7 @@ module.exports = {
 
   auth: {
     redirect: {
-      login: '/auth/login',
+      login: '/auth/',
       logout: '/auth/logout',
       callback: '/auth/callback',
       home: '/'

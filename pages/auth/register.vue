@@ -1,72 +1,51 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-5
+  <v-form>
+    <v-text-field
+      v-model="user.email"
+      solo
+      label="Email"
+    />
+    <v-alert
+      v-if="errors.email"
+      v-model="errors.email"
     >
-      <v-form>
-        <v-text-field
-          v-model="user.email"
-          box
-          label="Email"
-        />
-        <v-alert
-          v-if="errors.email"
-          v-model="errors.email"
-        >
-          {{ errors.email.message }}
-        </v-alert>
-        <v-text-field
-          v-model="user.name"
-          box
-          label="Nome de exibição"
-        />
-        <v-alert
-          v-if="errors.name"
-          v-model="errors.name"
-        >
-          {{ errors.name.message }}
-        </v-alert>
-        <v-text-field
-          v-model="user.password"
-          box
-          label="Senha"
-          type="password"
-        />
-        <v-alert
-          v-if="errors.password"
-          v-model="errors.password"
-        >
-          {{ errors.password.message }}
-        </v-alert>
-        <v-btn
-          large
-          :block="onMobile"
-          class="primary white--text"
-          @click="register()"
-        >
-          Registrar
-          <v-icon right>
-            save
-          </v-icon>
-        </v-btn>
-        <v-btn
-          large
-          :block="onMobile"
-          class="primary white--text"
-          to="/auth/login"
-        >
-          Logar
-          <v-icon right>
-            person
-          </v-icon>
-        </v-btn>
-      </v-form>
-    </v-flex>
-  </v-layout>
+      {{ errors.email.message }}
+    </v-alert>
+    <v-text-field
+      v-model="user.name"
+      solo
+      label="Nome de exibição"
+    />
+    <v-alert
+      v-if="errors.name"
+      v-model="errors.name"
+    >
+      {{ errors.name.message }}
+    </v-alert>
+    <v-text-field
+      v-model="user.password"
+      solo
+      label="Senha"
+      type="password"
+    />
+    <v-alert
+      v-if="errors.password"
+      v-model="errors.password"
+    >
+      {{ errors.password.message }}
+    </v-alert>
+    <v-btn
+      large
+      :block="onMobile"
+      class="primary white--text"
+      @click="register()"
+    >
+      Registrar
+      <v-icon right>
+        save
+      </v-icon>
+    </v-btn>
+  </v-form>
 </template>
 
 <script>
