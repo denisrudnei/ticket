@@ -35,7 +35,7 @@ const MailService = {
             name: user.name,
             url: `${req.protocol}://${
               req.hostname
-            }/auth/redefinePassword/${token}`
+            }/auth/redefine-password/${token}`
           },
           message: {
             to: user.email,

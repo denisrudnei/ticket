@@ -85,10 +85,16 @@ const AuthService = {
       })
         .select('+email')
         .exec((err, analyst) => {
-          if (err) reject(err)
+          if (err) return reject(err)
+          if (analyst === null)
+            return reject(
+              new Error({
+                message: 'Not found'
+              })
+            )
           const token = jwt.sign(
             {
-              _id: analyst,
+              _id: analyst._id,
               email: analyst.email
             },
             process.env.JWT_TOKEN
@@ -112,7 +118,7 @@ const AuthService = {
         _id: info._id
       }).exec((err, analyst) => {
         if (err) reject(err)
-        analyst.newPassword = newPassword
+        analyst.password = newPassword
         analyst.save(err => {
           if (err) reject(err)
           resolve()

@@ -1,15 +1,13 @@
 <template>
-  <v-layout>
-    <v-flex xs12 pa-2>
-      <v-text-field v-model="user.email" solo placeholder="Seu email cadastrado" />
-      <v-btn class="primary white--text" @click="reset()">
-        Enviar email para reset de senha
-        <v-icon right>
-          mail
-        </v-icon>
-      </v-btn>
-    </v-flex>
-  </v-layout>
+  <v-form>
+    <v-text-field v-model="user.email" type="email" solo placeholder="Seu email cadastrado" />
+    <v-btn class="primary white--text" @click="reset()">
+      Enviar email para reset de senha
+      <v-icon right>
+        mail
+      </v-icon>
+    </v-btn>
+  </v-form>
 </template>
 
 <script>
@@ -18,17 +16,25 @@ export default {
   data() {
     return {
       user: {
-        eamil: ''
+        email: ''
       }
     }
   },
   methods: {
     reset() {
-      this.$axios.post('/auth/redefine', this.user).then(() => {
-        this.$toast.show('Solicitado reset, verifique sua caixa de e-mail', {
-          duration: 10000,
-          icon: 'done'
+      this.$axios
+        .post('/auth/redefine', this.user)
+        .then(() => {
+          this.showMessage()
         })
+        .catch(() => {
+          this.showMessage()
+        })
+    },
+    showMessage() {
+      this.$toast.show('Solicitado reset, verifique sua caixa de e-mail', {
+        duration: 10000,
+        icon: 'done'
       })
     }
   }

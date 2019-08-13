@@ -58,6 +58,18 @@ module.exports = app => {
       })
   })
 
+  app.post('/auth/redefine-password/:token', (req, res) => {
+    const user = req.body
+    const token = req.params.token
+    AuthService.resetPasswordWithToken(token, user.password)
+      .then(() => {
+        return res.sendStatus(200)
+      })
+      .catch(err => {
+        return res.status(500).json(err)
+      })
+  })
+
   app.post('/auth/password/reset', (req, res) => {
     const userId = req.session.authUser._id
     AuthService.resetPassword(
