@@ -76,7 +76,7 @@ export default {
           () => {
             this.$toast.show('Resetado', {
               duration: 1000,
-              icon: 'unlock'
+              icon: 'lock_open'
             })
           },
           error => {

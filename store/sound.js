@@ -1,10 +1,12 @@
 export const state = () => ({
   chat: {
     volume: 0,
-    muted: 0
+    muted: true
   },
-  notification: 0,
-  muted: 0
+  notification: {
+    volue: 0,
+    muted: false
+  }
 })
 
 export const getters = {
