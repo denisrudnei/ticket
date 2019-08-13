@@ -1,0 +1,23 @@
+div {
+  padding: 1.5vw;
+  box-sizing: border-box;
+  border: 1px solid white;
+  border-radius: 5px;
+  text-align: justify;
+  background: #673ab7;
+  margin: 25px 5vw;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+p {
+  font-family: 'Roboto';
+  color:white;
+}
+
+a {
+  padding: 2px;
+  border-radius: 4px;
+  background: white;
+  color: #673ab7;
+  cursor: pointer;
+}
