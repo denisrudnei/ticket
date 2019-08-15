@@ -510,12 +510,13 @@ export default {
       this.readOnlyData = true
       this.$axios.get(`/ticket/${this.ticketData._id}`).then(response => {
         this.ticketData = response.data
-        this.$store.commit('ticket/setActualTicket', this.ticketData)
+        this.$store.commit('ticket/setActualTicket', response.data)
       })
     },
     checkFields() {
       this.ticket.fields = this.ticketComputed.category.fields
-      this.$store.commit('ticket/setActualTicket', this.ticketData)
+      const toUpdate = Object.assign({}, this.ticketData)
+      this.$store.commit('ticket/setActualTicket', toUpdate)
     },
     clearFields() {
       Object.keys(this.ticketData).forEach(key => {

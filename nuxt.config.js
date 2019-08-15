@@ -101,7 +101,9 @@ module.exports = {
       },
       auth0: {
         domain: 'bm-dns.auth0.com',
-        client_id: 'hHLA1yh4Ffvj1xyWhZzEzgk5Hz9GNHY2'
+        client_id: 'hHLA1yh4Ffvj1xyWhZzEzgk5Hz9GNHY2',
+        scope: ['email', 'openid', 'name', 'profile', 'picture'],
+        userinfo_endpoint: 'https://bm-dns.auth0.com/userinfo'
       }
     }
   },

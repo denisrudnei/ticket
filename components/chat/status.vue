@@ -1,6 +1,6 @@
 <template>
   <v-layout row wrap>
-    <v-flex px-2>
+    <v-flex>
       <v-card>
         <v-card-text>
           <v-select :value="user.status" :items="status" box label="Status online" @change="changeStatus" />

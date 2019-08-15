@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import ListTicket from '@/components/ticket/list'
 export default {
   components: {
@@ -24,15 +23,6 @@ export default {
     return {
       tickets: []
     }
-  },
-  computed: mapGetters({
-    user: 'auth/getUser'
-  }),
-
-  mounted() {
-    this.$axios.post('/auth/mergeUser', this.$auth.user).then(response => {
-      this.$store.commit('auth/mergeUser', response.data)
-    })
   }
 }
 </script>

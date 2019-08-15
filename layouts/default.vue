@@ -45,9 +45,9 @@
       <v-spacer />
       <ticket-tree v-show="!miniVariant" />
     </v-navigation-drawer>
+    <analyst-list v-if="logged" />
     <Toolbar
       :logged="logged"
-      :clipped="clipped"
     />
     <TicketDialog />
     <v-content>
@@ -137,10 +137,10 @@
         </v-flex>
       </v-layout>
     </v-content>
-    <Chat
+    <chat
       v-if="logged"
     />
-    <Logout />
+    <logout />
     <v-footer
       fixed
       app
@@ -158,13 +158,15 @@ import TicketDialog from '@/components/ticket/dialog'
 import Chat from '@/components/chat/chat'
 import TicketTree from '@/components/ticket/tree'
 import Logout from '@/components/logout'
+import AnalystList from '@/components/chat/analyst-list'
 export default {
   components: {
     Toolbar,
     TicketDialog,
     Chat,
     TicketTree,
-    Logout
+    Logout,
+    AnalystList
   },
   mixins: [afterLogin],
   data() {

@@ -1,13 +1,13 @@
 <template>
   <v-form>
     <v-text-field
-      v-model="user.email"
+      v-model="userLogin.email"
       placeholder="Login"
       solo
       @keypress.enter="localLogin()"
     />
     <v-text-field
-      v-model="user.password"
+      v-model="userLogin.password"
       placeholder="Senha"
       type="password"
       solo
@@ -30,7 +30,7 @@ export default {
   mixins: [afterLogin],
   data() {
     return {
-      user: {
+      userLogin: {
         email: '',
         password: ''
       }
@@ -45,7 +45,7 @@ export default {
     localLogin() {
       this.$auth
         .loginWith('local', {
-          data: this.user
+          data: this.userLogin
         })
         .then(async () => {
           await this.processInfo()

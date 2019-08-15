@@ -1,5 +1,5 @@
 export const state = () => ({
-  chats: {},
+  chats: [],
   active: '',
   visible: false,
   messages: []
@@ -13,7 +13,9 @@ export const getters = {
     return state.messages
   },
   getActive(state) {
-    return state.chats[state.active]
+    return state.chats.find(chat => {
+      return chat.id === state.active
+    })
   },
   getVisible(state) {
     return state.visible
@@ -22,17 +24,30 @@ export const getters = {
 
 export const mutations = {
   deleteChat(state, id) {
-    delete state.chats[id]
+    state.chats = state.chats.filter(chat => {
+      return chat.id !== id
+    })
   },
   updateChat(state, chat) {
-    state.chats[chat.chatId] = chat
+    state.chats = [
+      chat,
+      ...state.chats.filter(c => {
+        return c.chatId !== chat.id
+      })
+    ]
   },
   createChat(state, info) {
-    state.chats[info.analyst._id] = {
+    const chat = {
       id: info.analyst._id,
       to: info.analyst,
       messages: info.messages
     }
+    state.chats = [
+      chat,
+      ...state.chats.filter(c => {
+        return c.id !== chat.id
+      })
+    ]
   },
   receiveMessage(state, message) {
     state.messages.push(message)
@@ -46,7 +61,9 @@ export const mutations = {
   },
   setActive: function(state, id) {
     state.active = id
-    state.messages = state.chats[id].messages
+    state.messages = state.chats.find(chat => {
+      return chat.id === id
+    }).messages
   }
 }
 
@@ -55,6 +72,7 @@ export const actions = {
     commit('receiveMessage', message)
     commit('send', message)
   },
+
   getMessages: async function({ commit }, analyst) {
     if (!analyst) return
     let messages = []

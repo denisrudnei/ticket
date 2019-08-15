@@ -21,7 +21,6 @@
       >
         Voltar
       </v-btn>
-      <Logout />
     </v-flex>
   </v-layout>
 </template>

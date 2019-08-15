@@ -1,9 +1,10 @@
 <template>
   <v-toolbar
-    :clipped-left="clipped"
     fixed
     :app="app"
     :card="!app"
+    clipped-right
+    clipped-left
     class="primary white--text"
   >
     <v-btn
@@ -27,42 +28,6 @@
         person
       </v-icon>
     </v-btn>
-      
-    <v-menu
-      v-if="logged"
-      offset-y
-      offset-x
-      :nudge-width="250"
-      max-width="35vw"
-      :close-on-content-click="false"
-      max-height="65vh"
-    >
-      <template v-slot:activator="{on}">
-        <v-btn class="primary white--text" icon v-on="on">
-          <v-icon>
-            chat
-          </v-icon>
-        </v-btn>
-      </template>
-      <v-tabs class="primary white--text">
-        <v-tab>
-          Usuários
-        </v-tab>
-        <v-tab-item>
-          <analyst-list
-            v-if="logged"
-          />
-        </v-tab-item>
-        <v-tab>
-          Status
-        </v-tab>
-        <v-tab-item>
-          <v-card>
-            <status />
-          </v-card>
-        </v-tab-item>
-      </v-tabs>
-    </v-menu>
     <Notification
       v-if="logged"
     />
@@ -99,14 +64,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import Notification from '@/components/notification'
-import AnalystList from '@/components/chat/analyst-list'
-import Status from '@/components/chat/status'
 
 export default {
   components: {
-    Notification,
-    AnalystList,
-    Status
+    Notification
   },
   props: {
     app: {
@@ -116,10 +77,6 @@ export default {
     logged: {
       type: Boolean,
       default: false
-    },
-    clipped: {
-      type: Boolean,
-      default: true
     }
   },
   computed: mapGetters({
