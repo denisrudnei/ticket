@@ -1,4 +1,10 @@
 link(rel="stylesheet", href="/main.css", data-inline)
 
-div
-  p Olá #{name}, você solicitou um reset de senha, clique #[a(href=url)  aqui] para configurar uma nova
+body
+  div(class='header')
+    span Reset de senha
+  div(class='content')
+    span Olá #{name}, você está recebendo este email pois solicitou a troca de senha
+  div(class='reset_section')
+    a(href=url, class='reset')  Resetar senha
+    
