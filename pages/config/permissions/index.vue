@@ -1,41 +1,39 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-data-table
         :items="roles"
         :headers="headers"
       >
         <template
-          slot="items"
-          slot-scope="data"
+          v-slot:item.name="{ item }"
         >
-          <td>
-            {{ data.item.name }}
-          </td>
-          <td>
-            {{ data.item.description }}
-          </td>
-          <td>
-            <v-btn
-              class="primary white--text"
-              icon
-              :to="`/config/permissions/edit/${data.item._id}`"
-            >
-              <v-icon>
-                edit
-              </v-icon>
-            </v-btn>
-          </td>
+          {{ item.name }}
+        </template>
+        <template
+          v-slot:item.description="{ item }"
+        >
+          {{ item.description }}
+        </template>
+        <template
+          v-slot:item.actions="{ item }"
+        >
+          <v-btn
+            class="primary white--text"
+            icon
+            :to="`/config/permissions/edit/${item._id}`"
+          >
+            <v-icon>
+              edit
+            </v-icon>
+          </v-btn>
         </template>
       </v-data-table>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -54,7 +52,7 @@ export default {
         },
         {
           text: 'Ações',
-          value: 'edit'
+          value: 'actions'
         }
       ]
     }

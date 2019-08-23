@@ -1,34 +1,31 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-text-field
         v-model="role.name"
         label="Nome [não pode ser alterado]"
-        box
+        filled
         placeholder="Nome"
         readonly
       />
-    </v-flex>
-    <v-flex
-      xs12
-      pa-2
+    </v-col>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-text-field
         v-model="role.description"
         label="Descrição"
-        box
+        filled
         placeholder="Descrição"
       />
-    </v-flex>
-    <v-flex
-      xs12
-      pa-2
+    </v-col>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-btn
         class="primary white--text"
@@ -41,8 +38,8 @@
           save
         </v-icon>
       </v-btn>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

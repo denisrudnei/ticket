@@ -1,10 +1,7 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex>
-      <v-tabs>
+  <v-row>
+    <v-col>
+      <v-tabs show-arrows>
         <v-tab to="/config/permissions">
           Listar
         </v-tab>
@@ -13,8 +10,8 @@
         </v-tab>
       </v-tabs>
       <nuxt-child />
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

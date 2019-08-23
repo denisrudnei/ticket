@@ -1,67 +1,61 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      md8
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      md="8"
+      pa-3
     >
-      <v-layout
-        row
-        wrap
-      >
-        <v-flex
-          xs12
-          md4
-          pa-2
+      <v-row>
+        <v-col
+          cols="12"
+          md="4"
+          pa-3
         >
           <v-text-field
             v-model="address.cep"
             mask="#####-###"
             label="Cep"
-            box
+            filled
           />
-        </v-flex>
-        <v-flex
-          md4
-          xs12
-          pa-2
+        </v-col>
+        <v-col
+          md="4"
+          cols="12"
+          pa-3
         >
           <v-autocomplete
             v-model="address.city"
-            box
+            filled
             label="Cidade"
           />
-        </v-flex>
-        <v-flex
-          md4
-          xs12
-          pa-2
+        </v-col>
+        <v-col
+          md="4"
+          cols="12"
+          pa-3
         >
           <v-autocomplete
             v-model="address.state"
-            box
+            filled
             label="Estado"
           />
-        </v-flex>
-        <v-flex
-          xs12
-          pa-2
+        </v-col>
+        <v-col
+          cols="12"
+          pa-3
         >
           <v-text-field
             v-model="address.street"
-            box
+            filled
             label="Rua"
           />
-        </v-flex>
-      </v-layout>
-    </v-flex>
-    <v-flex
-      md4
-      xs12
-      pa-2
+        </v-col>
+      </v-row>
+    </v-col>
+    <v-col
+      md="4"
+      cols="12"
+      pa-3
     >
       <gmap-autocomplete />
       <v-btn
@@ -87,10 +81,10 @@
           @click="center=m.position"
         />
       </gmap-map>
-    </v-flex>
-    <v-flex
-      xs12
-      pa-2
+    </v-col>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-btn
         class="primary white--text"
@@ -103,8 +97,8 @@
         </v-icon>
         Salvar
       </v-btn>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

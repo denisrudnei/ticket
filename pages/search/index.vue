@@ -1,25 +1,22 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
+  <v-row>
+    <v-col
+      cols="12"
     >
       <ticket-create
         v-model="ticket"
         search
         @input="search(ticket)"  
       />
-    </v-flex>
-    <v-flex
-      xs12
+    </v-col>
+    <v-col
+      cols="12"
     >
       <ticket-list
         :url="'/search/'"
       />
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

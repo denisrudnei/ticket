@@ -3,15 +3,15 @@
     v-model="showModal"
     scrollable
   >
-    <v-layout row wrap>
-      <v-flex xs12 pa-2>
+    <v-row>
+      <v-col cols="12" pa-3>
         <ticket-list
           v-if="showModal"
           :url="`/search/`"
           :modal="true"
         />
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-dialog>
 </template>
 

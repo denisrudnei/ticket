@@ -72,22 +72,22 @@ export const mutations = {
         state.actualTicket = ticket
       }
     }
-    state.tickets = [
-      ...state.tickets.filter(t => {
-        return t._id !== ticket._id
-      }),
-      ticket
-    ]
-    const tickets = state.search.filter(s => {
+    const index = state.tickets.findIndex(t => {
+      return t._id === ticket._id
+    })
+
+    if (index !== -1) {
+      Object.assign(state.tickets[index], ticket)
+    } else {
+      state.tickets.push(ticket)
+    }
+    const searchIndex = state.modalTickets.findIndex(s => {
       return s._id === ticket._id
     })
-    if (tickets.length > 0) {
-      state.search = [
-        ...state.search.filter(s => {
-          return s._id !== ticket._id
-        }),
-        ticket
-      ]
+    if (searchIndex !== -1) {
+      Object.assign(state.modalTickets[searchIndex], ticket)
+    } else {
+      state.modalTickets.push(ticket)
     }
   },
   setTree(state, tree) {

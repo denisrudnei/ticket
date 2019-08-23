@@ -36,6 +36,7 @@
     </v-alert>
     <v-btn
       large
+      tile
       :block="onMobile"
       class="primary white--text"
       @click="register()"

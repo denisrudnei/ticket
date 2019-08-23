@@ -43,7 +43,7 @@
             </template>
             <v-card>
               <v-card-title class="headline">
-                {{ message.name }}
+                {{ message.from.name }}
               </v-card-title>
               <v-card-text>
                 {{ message.content }}
@@ -57,7 +57,7 @@
       <v-card-actions>
         <v-text-field
           v-model="text"
-          box
+          filled
           label="Envie um texto"
           @keydown.enter="addMessage()"
         />

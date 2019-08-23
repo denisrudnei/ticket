@@ -1,8 +1,7 @@
 <template>
-  <v-toolbar
+  <v-app-bar
     fixed
     :app="app"
-    :card="!app"
     clipped-right
     clipped-left
     class="primary white--text"
@@ -19,7 +18,7 @@
     <v-spacer />
     <v-btn
       v-if="logged"
-      flat
+      text
       icon
       class="primary white--text"
       to="/profile"
@@ -33,7 +32,7 @@
     />
     <v-btn
       v-if="logged && user.role === 'admin'"
-      flat
+      text
       title="Configurações"
       to="/config"
       class="white--text"
@@ -50,15 +49,15 @@
       v-if="logged"
       title="Fazer logoff"
       icon
-      flat
-      class="primary white-text"
+      text
+      class="white-text"
       @click="logout()"
     >
-      <v-icon>
+      <v-icon class="white--text">
         exit_to_app
       </v-icon>
     </v-btn>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script>

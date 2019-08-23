@@ -1,10 +1,7 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
+  <v-row>
+    <v-col
+      cols="12"
       pa-3
     >
       <v-card
@@ -25,21 +22,19 @@
           />
         </v-card-actions>
       </v-card>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      notification: null
-    }
-  },
-  async mounted() {
-    const id = this.$router.currentRoute.params.id
-    await this.$axios.get(`/notification/${id}`).then(response => {
-      this.notification = response.data
+  watchQuery: true,
+  asyncData({ $axios, params }) {
+    const id = params.id
+    return $axios.get(`/notification/${id}`).then(response => {
+      return {
+        notification: response.data
+      }
     })
   },
   methods: {

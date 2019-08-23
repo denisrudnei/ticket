@@ -1,11 +1,8 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-data-table
         :items="analysts"
@@ -18,8 +15,8 @@
           <td>{{ data.item.name }}</td>
         </template>
       </v-data-table>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

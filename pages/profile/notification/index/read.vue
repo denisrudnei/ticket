@@ -1,14 +1,11 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex xs12>
+  <v-row>
+    <v-col cols="12">
       <NotificationList
         :notifications="notifications"
       />
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

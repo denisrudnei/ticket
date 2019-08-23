@@ -1,4 +1,4 @@
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
+const colors = require('vuetify/es5/util/colors').default
 const pkg = require('./package')
 
 module.exports = {
@@ -32,17 +32,22 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: ['~/assets/style/app.styl'],
+  css: [],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '@/plugins/vuetify' },
+    { src: '@/plugins/dateFilter', ssr: true },
     { src: '@/plugins/socketIo', ssr: false },
     { src: '@/plugins/apex-charts', ssr: false },
     { src: '@/plugins/google-maps', ssr: false },
     { src: '@/plugins/CKEditor', ssr: false }
+  ],
+
+  devModules: [
+    // Doc: https://github.com/nuxt-community/eslint-module
+    '@nuxtjs/vuetify'
   ],
 
   /*
@@ -63,6 +68,33 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
     proxy: true,
     prefix: '/api'
+  },
+
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    theme: {
+      dark: false,
+      themes: {
+        light: {
+          primary: '#673ab7',
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3
+        },
+        dark: {
+          primary: colors.blue.darken2,
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3
+        }
+      }
+    }
   },
 
   router: {
@@ -116,14 +148,6 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    transpile: ['vuetify/lib'],
-    plugins: [new VuetifyLoaderPlugin()],
-    loaders: {
-      stylus: {
-        import: ['~assets/style/variables.styl']
-      }
-    },
-
     /*
     ** You can extend webpack config here
     */

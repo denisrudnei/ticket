@@ -1,96 +1,90 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <h4>Filtros</h4>
-      <v-layout
-        row
-        wrap
-      >
-        <v-flex
-          xs12
-          md4
-          pa-2
+      <v-row>
+        <v-col
+          cols="12"
+          md="4"
+          pa-3
         >
           <v-autocomplete
             v-model="base.group"
             multiple
-            box
+            filled
             label="Grupos"
             :items="groups.map(g => {return {text: g.name, value: g}})"
           />    
-        </v-flex>
-        <v-flex
-          xs12
-          md4
-          pa-2
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+          pa-3
         >
           <v-autocomplete
             v-model="base.status"
             multiple
-            box
+            filled
             label="Status"
             :items="status.map(g => {return {text: g.name, value: g}})"
           />    
-        </v-flex>
-        <v-flex
-          xs12
-          md4
-          pa-2
+        </v-col>
+        <v-col
+          cols="12"
+          md="4"
+          pa-3
         >
           <v-autocomplete
             v-model="base.openedBy"
             multiple
-            box
+            filled
             label="Aberto por"
             :items="analysts.map(g => {return {text: g.name, value: g}})"
           />    
-        </v-flex>
-      </v-layout>
-    </v-flex>
-    <v-flex
-      xs12
-      md4
-      pa-2
+        </v-col>
+      </v-row>
+    </v-col>
+    <v-col
+      cols="12"
+      md="4"
+      pa-3
     >
       <v-select
         v-model="selectedChartType"
         :items="chartTypes"
-        box
+        filled
         label="Tipo do gráfico"
       />
-    </v-flex>
-    <v-flex
-      xs12
-      md4
-      pa-2
+    </v-col>
+    <v-col
+      cols="12"
+      md="4"
+      pa-3
     >
       <v-select
         v-model="selectedContentType"
         label="Tipo do conteúdo"
         :items="contentType"
-        box
+        filled
       />
-    </v-flex>
-    <v-flex
-      md4
-      xs12
-      pa-2
+    </v-col>
+    <v-col
+      md="4"
+      cols="12"
+      pa-3
     >
       <v-text-field
         v-model="title"
-        box
+        filled
         label="Nome do gráfico"
       />
-    </v-flex>
-    <v-flex
-      xs12
-      pa-2
+    </v-col>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-btn
         :disabled="addDisabled"
@@ -115,22 +109,17 @@
           attach_file
         </v-icon>
       </v-btn>
-    </v-flex>
+    </v-col>
     <no-ssr>
-      <v-flex
+      <v-col
         v-for="chart in charts"
         :key="chart.id"
-        xs12
-        lg4
-        md6
-        pa-2
+        cols="12"
+        md="4"
       >
-        <v-layout
-          row
-          wrap
-        >
-          <v-flex
-            xs11
+        <v-row>
+          <v-col
+            cols="11"
           >
             <h5>{{ chart.id }}</h5>
             <apexchart
@@ -139,9 +128,9 @@
               :type="chart.type"
               :series="chart.series"
             />
-          </v-flex>
-          <v-flex
-            xs1
+          </v-col>
+          <v-col
+            cols="1"
           >
             <v-btn
               class="red white--text"
@@ -152,11 +141,11 @@
                 delete
               </v-icon>
             </v-btn>
-          </v-flex>
-        </v-layout>
-      </v-flex>
+          </v-col>
+        </v-row>
+      </v-col>
     </no-ssr>
-  </v-layout>
+  </v-row>
 </template>
 
 <script>

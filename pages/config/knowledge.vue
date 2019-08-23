@@ -1,7 +1,7 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs12>
-      <v-tabs color="primary" slider-color="white" dark>
+  <v-row>
+    <v-col cols="12">
+      <v-tabs show-arrows color="primary" slider-color="white">
         <v-tab to="/config/knowledge/create">
           Criar documento
         </v-tab>
@@ -10,8 +10,8 @@
         </v-tab>
       </v-tabs>
       <nuxt-child />
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

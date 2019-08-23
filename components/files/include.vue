@@ -1,68 +1,51 @@
 <template>
   <div>
-    <v-btn
-      @click="activateFile()"
-    >
-      Incluir arquivo
-      <v-icon>
-        attach_file
-      </v-icon>
-    </v-btn>
-    <input
-      ref="filePicker"
-      style="display: none"
-      multiple
-      type="file"
-      @change="selectFile()"
-    >
-    <v-layout
-      row
-      wrap
-    >
-      <v-flex
-        xs12
-        pa-2
+    <v-file-input v-model="selectFiles" multiple label="Incluir arquivo" @change="selectFile" />
+    <v-row>
+      <v-col
+        cols="12"
+        pa-3
       >
         <v-data-table
           :items="filePreview"
           :headers="fileHeaders"
         >
           <template
-            v-slot:items="{ item }"
+            v-slot:item.preview="{ item }"
           >
-            <td>
-              <v-menu
-                v-if="item.type.includes('image')"
-                :close-on-content-click="true"
-                :open-on-hover="true"
-                :nudge-width="350"
-                offset-x
+            <v-menu
+              v-if="item.type.includes('image')"
+              :close-on-content-click="true"
+              :open-on-hover="true"
+              :nudge-width="350"
+              offset-x
+            >
+              <template
+                v-slot:activator="{ on }"
               >
-                <template
-                  v-slot:activator="{ on }"
+                <v-img
+                  :src="item.data || `/api/ticket/${item.name}/file`"
+                  v-on="on"
+                />
+              </template>
+              <v-card>
+                <nuxt-link
+                  target="_blank"
+                  :to="`/api/ticket/${item.name}/file`"
                 >
                   <v-img
                     :src="item.data || `/api/ticket/${item.name}/file`"
-                    v-on="on"
                   />
-                </template>
-                <v-card>
-                  <nuxt-link
-                    target="_blank"
-                    :to="`/api/ticket/${item.name}/file`"
-                  >
-                    <v-img
-                      :src="item.data || `/api/ticket/${item.name}/file`"
-                    />
-                  </nuxt-link>
-                </v-card>
-              </v-menu>
-              <audio
-                v-if="item.type.includes('audio')"
-                :src="item.data || `/api/ticket/${item.name}/file`"
-                controls
-              />
-            </td>
+                </nuxt-link>
+              </v-card>
+            </v-menu>
+            <audio
+              v-if="item.type.includes('audio')"
+              :src="item.data || `/api/ticket/${item.name}/file`"
+              controls
+            />
+          </template>
+          <template v-slot:item.old="{ item }">
             <td v-if="item.old">
               <nuxt-link
                 target="_blank"
@@ -71,35 +54,38 @@
                 {{ item.name }}
               </nuxt-link>
             </td>
-            <td v-if="!item.old">
-              {{ item.name }}
-            </td>
-            <td>
-              <v-checkbox
-                v-model="item.old"
-                readonly
-              />
-            </td>
-            <td>{{ item.type }}</td>
-            <td>
-              <v-btn
-                icon
-                class="red white--text"
-                @click="removeFile(item)"
-              >
-                <v-icon>
-                  delete
-                </v-icon>
-              </v-btn>
-            </td>
+          </template>
+          <template v-slot:item.name="{ item }">
+            {{ item.name }}
+          </template>
+          <template v-slot:item.old="{ item }">
+            <v-checkbox
+              v-model="item.old"
+              readonly
+            />
+          </template>
+          <template v-slot:item.type="{ item }">
+            {{ item.type }}
+          </template>
+          <template v-slot:item.remove="{ item }">
+            <v-btn
+              icon
+              class="red white--text"
+              @click="removeFile(item)"
+            >
+              <v-icon>
+                delete
+              </v-icon>
+            </v-btn>
           </template>
         </v-data-table>
-      </v-flex>
-      <v-flex
-        xs12
-        pa-2
+      </v-col>
+      <v-col
+        cols="12"
+        pa-3
       >
         <v-btn
+          tile
           :disabled="files.length === 0"
           class="primary--text"
           @click="sendFiles()"
@@ -111,8 +97,8 @@
             send
           </v-icon>
         </v-btn>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -121,6 +107,7 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
+      selectFiles: null,
       fileHeaders: [
         {
           text: 'Preview',
@@ -172,12 +159,11 @@ export default {
         })
       )
     },
-    selectFile() {
-      const files = this.$refs.filePicker.files
-      this.$store.commit('file/setFiles', files)
+    selectFile(file) {
+      this.$store.commit('file/setFiles', this.selectFiles)
       const vue = this
-      for (let file in Object.keys(files)) {
-        file = files[file]
+      for (let file in Object.keys(this.files)) {
+        file = this.files[file]
         const fileReader = new FileReader()
         const type = file.type
         const preview = {
@@ -215,9 +201,6 @@ export default {
       })
       this.$store.commit('file/setFilePreview', filePreview)
       this.$store.commit('file/setFiles', files)
-    },
-    activateFile() {
-      this.$refs.filePicker.click()
     },
     sendFiles() {
       const formData = new FormData()
@@ -257,5 +240,9 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
+.v-image {
+  width: 15vw;
+  position: relative;
+}
 </style>

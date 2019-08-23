@@ -5,18 +5,24 @@
         Deseja deslogar do sistema?
       </v-card-title>
       <v-card-actions>
-        <v-btn class="primary white--text" block @click="logoutUser()">
-          <v-icon left>
-            done
-          </v-icon>
-          Sim
-        </v-btn>
-        <v-btn class="primary white--text" block @click="back()">
-          <v-icon left>
-            cancel
-          </v-icon>
-          Não
-        </v-btn>
+        <v-row>
+          <v-col>
+            <v-btn tile block class="primary white--text" @click="logoutUser()">
+              <v-icon left>
+                done
+              </v-icon>
+              Sim
+            </v-btn>
+          </v-col>
+          <v-col>
+            <v-btn tile block class="primary white--text" @click="back()">
+              <v-icon left>
+                cancel
+              </v-icon>
+              Não
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -43,4 +49,7 @@ export default {
 </script>
 
 <style>
+.v-dialog {
+  overflow: hidden;
+}
 </style>

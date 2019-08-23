@@ -1,32 +1,26 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
+  <v-row>
+    <v-col
+      cols="12"
     >
       <v-list
         two-line
       >
-        <v-list-tile
+        <v-list-item
           v-for="notification in notifications"
           :key="notification._id"
         >
-          <v-list-tile-content>
-            <v-list-tile-title>
+          <v-list-item-content>
+            <v-list-item-title>
               {{ notification.content }}
-            </v-list-tile-title>
-            <v-list-tile-sub-title>
+            </v-list-item-title>
+            <v-list-item-subtitle>
               {{ new Date(notification.date) | date }}
-            </v-list-tile-sub-title>
-          </v-list-tile-content>
-          <v-list-tile-action>
-            <v-layout
-              row
-              wrap
-            >
-              <v-flex
+            </v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-row>
+              <v-col
                 pa-1
               >
                 <v-btn
@@ -37,8 +31,8 @@
                     info
                   </v-icon>
                 </v-btn>
-              </v-flex>
-              <v-flex
+              </v-col>
+              <v-col
                 pa-1
               >
                 <v-switch
@@ -46,13 +40,13 @@
                   label="Lida?"
                   @change="readNotification(notification)"
                 />
-              </v-flex>
-            </v-layout>
-          </v-list-tile-action>
-        </v-list-tile>
+              </v-col>
+            </v-row>
+          </v-list-item-action>
+        </v-list-item>
       </v-list>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

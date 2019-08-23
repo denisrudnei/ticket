@@ -1,15 +1,12 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
+  <v-row>
+    <v-col
+      cols="12"
+      pa-1
     >
       <v-tabs
-        color="primary"
-        dark
-        slider-color="white"
+        slider-color="primary"
+        show-arrows
       >
         <v-tab to="/config/analyst">
           Analista
@@ -31,8 +28,8 @@
         </v-tab>
       </v-tabs>
       <nuxt-child />
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

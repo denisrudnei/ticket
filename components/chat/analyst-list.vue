@@ -3,18 +3,18 @@
     <v-list
       two-line
     >
-      <v-list-tile>
-        <v-list-tile-action>
+      <v-list-item>
+        <v-list-item-action>
           <v-btn icon class="primary white--text" @click="mini = !mini">
             <v-icon>chat</v-icon>
           </v-btn>
-        </v-list-tile-action>
-        <v-list-tile-content>
+        </v-list-item-action>
+        <v-list-item-content>
           Ocultar o chat
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile>
-        <v-list-tile-action>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-action>
           <v-menu left :close-on-content-click="false" :nudge-width="350">
             <template v-slot:activator="{ on }">
               <v-btn icon class="primary white--text" v-on="on">
@@ -22,16 +22,16 @@
               </v-btn>
             </template>
             <v-card>
-              <v-text-field v-model="searchAnalyst" box label="Buscar analista" />
+              <v-text-field v-model="searchAnalyst" filled label="Buscar analista" />
             </v-card>
           </v-menu>
-        </v-list-tile-action>
-        <v-list-tile-content>
+        </v-list-item-action>
+        <v-list-item-content>
           Buscar
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile>
-        <v-list-tile-action>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-action>
           <v-menu left :close-on-content-click="false" :nudge-width="350">
             <template v-slot:activator="{ on }">
               <v-btn icon class="primary white--text" v-on="on">
@@ -40,119 +40,55 @@
             </template>
             <analyst-status />
           </v-menu>
-        </v-list-tile-action>
-        <v-list-tile-content>
+        </v-list-item-action>
+        <v-list-item-content>
           Alterar status
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-menu
-        v-for="analyst in analysts"
-        :key="analyst._id"
-        offset-x
-      >
-        <template
-          v-slot:activator="{ on }"
-        >
-          <v-list-tile @click="openChat(analyst)">
-            <v-list-tile-avatar
-              v-on="on"
-            >
-              <v-badge
-                overlap
-              >
-                <template
-                  v-slot:badge
-                >
-                  <v-icon
-                    :class="`${getStatus(analyst.status)} white--text`"
-                  >
-                    chat
-                  </v-icon>
-                </template>
-                <v-avatar>
-                  <v-img
-                    :src="analyst.picture"
-                  />
-                </v-avatar>
-              </v-badge>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>
-                {{ analyst.name }}
-              </v-list-tile-title>
-              <v-list-tile-sub-title>
-                {{ analyst.email }}
-              </v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </template>
-        <v-card>
-          <v-layout
-            row
-            wrap
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item v-for="analyst in analysts" :key="analyst._id" @click="openChat(analyst)">
+        <v-list-item-avatar>
+          <v-badge
+            overlap
+            :color="getStatus(analyst.status)"
+            class="white--text"
           >
-            <v-flex
-              xs4
-              pa-2
+            <template
+              v-slot:badge
             >
+              <v-icon class=" white--text">
+                chat
+              </v-icon>
+            </template>
+            <v-avatar>
               <v-img
                 :src="analyst.picture"
-                :alt="analyst.name"
               />
-            </v-flex>
-            <v-flex
-              xs8
-              pa-2
-            >
-              <v-layout
-                row
-                wrap
-              >
-                <v-flex
-                  xs12
-                  pa-2
-                >
-                  {{ analyst.name }}
-                </v-flex>
-                <v-flex
-                  xs12
-                  pa-2
-                >
-                  Ultima vez ativo {{ analyst.lastTimeActive }}
-                </v-flex>
-                <v-flex
-                  xs-12
-                  pa-1
-                >
-                  <v-btn
-                    title="Chamados abertos"
-                    icon
-                    class="white primary--text"
-                    @click="viewRecents(analyst._id)"
-                  >
-                    <v-icon>
-                      work
-                    </v-icon>
-                  </v-btn>
-                </v-flex>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-        </v-card>
-      </v-menu>
+            </v-avatar>
+          </v-badge>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>
+            {{ analyst.name }}
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            {{ analyst.email }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+
       <v-dialog
         v-model="showModal"
         scrollable
       >
         <v-card>
-          <v-layout row wrap>
-            <v-flex xs12 pa-2>
+          <v-row>
+            <v-col cols="12" pa-3>
               <ticket-list
                 v-if="showModal"
                 :url="`/search/`"
               />
-            </v-flex>
-          </v-layout>
+            </v-col>
+          </v-row>
         </v-card>
       </v-dialog>
     </v-list>

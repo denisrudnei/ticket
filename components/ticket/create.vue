@@ -1,8 +1,8 @@
 <template>
-  <v-layout>
-    <v-flex
-      xs12
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-menu
         v-if="readOnlyData"
@@ -15,6 +15,7 @@
           v-slot:activator="{ on }"
         >
           <v-btn
+            tile
             class="primary white--text"
             v-on="on"
           >
@@ -35,7 +36,7 @@
               <v-tab-item>
                 <v-textarea
                   v-model="comment"
-                  box
+                  filled
                   label="Comentário"
                 />
                 <v-btn
@@ -66,23 +67,20 @@
                 </v-icon>
               </v-tab>
               <v-tab-item>
-                <v-layout
-                  row
-                  wrap
-                >
-                  <v-flex
-                    xs12
-                    pa-2
+                <v-row>
+                  <v-col
+                    cols="12"
+                    pa-3
                   >
                     <v-autocomplete
-                      box
+                      filled
                       :items="groups.map(g =>({ text: g.name, value: g }))"
                       label="Grupo"
                     />
-                  </v-flex>
-                  <v-flex
-                    xs12
-                    pa-2
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    pa-3
                   >
                     <v-btn
                       class="primary white--text"
@@ -92,8 +90,8 @@
                         send
                       </v-icon>
                     </v-btn>
-                  </v-flex>
-                </v-layout>
+                  </v-col>
+                </v-row>
               </v-tab-item>
               <v-tab-item />
             </v-tabs>
@@ -104,14 +102,12 @@
         ref="form"
         lazy-validation
       >
-        <v-layout
-          row
-          wrap
-          align-center
+        <v-row
+          align="center"
         >
-          <v-flex
-            xs12
-            md4
+          <v-col
+            cols="12"
+            md="4"
             pa-1
           >
             <v-autocomplete
@@ -120,16 +116,16 @@
               :items="analysts.map(a => { return {text: a.name, value: a} })"
               required
               :readonly="readOnlyData || !search"
-              box
+              filled
               :value-comparator="compare"
               label="Relatado por:"
               append-icon="search"
               @click:append="show('openedBy', ticketComputed.openedBy)"
             />
-          </v-flex>
-          <v-flex
-            xs12
-            md4
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
             pa-1
           >
             <v-autocomplete
@@ -138,16 +134,16 @@
               :items="analysts.map(u => { return {text: u.name, value: u} })"
               required
               :readonly="readOnlyData"
-              box
+              filled
               label="Analista"
               :value-comparator="compare"
               append-icon="search"
               @click:append="show('actualUser', ticketComputed.actualUser)"
             />
-          </v-flex>
-          <v-flex
-            xs12
-            md4
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
             pa-1
           >
             <v-autocomplete
@@ -156,17 +152,17 @@
               :rules="!search ? [v => !!v || 'Necessário preencher uma categoria'] : undefined"
               required
               :readonly="readOnlyData"
-              box
+              filled
               :value-comparator="compare"
               label="Categoria"
               append-icon="search"
               @change="checkFields"
               @click:append="show('category', ticketComputed.category)"
             />
-          </v-flex>
-          <v-flex
-            xs12
-            md4
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
             pa-1
           >
             <v-autocomplete
@@ -175,16 +171,16 @@
               :rules="!search ? [v => !!v || 'Necessário preeencher o grupo'] : undefined"
               required
               :readonly="readOnlyData"
-              box
+              filled
               :value-comparator="compare"
               label="Grupo"
               append-icon="search"
               @click:append="show('group', ticketComputed.group)"
             />
-          </v-flex>
-          <v-flex
-            xs12
-            md4
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
             pa-1
           >
             <v-autocomplete
@@ -193,24 +189,21 @@
               :rules="!search ? [v => !!v || 'Necessário preencher status'] : undefined"
               required
               :readonly="readOnlyData"
-              box
+              filled
               :value-comparator="compare"
               label="Status"
               append-icon="search"
               @click:append="show('status', ticketComputed.status)"
             />
-          </v-flex>
-          <v-flex
-            xs12
-            pa-2
+          </v-col>
+          <v-col
+            cols="12"
+            pa-3
           >
-            <v-layout
-              row
-              wrap
-            >
-              <v-flex
-                xs6
-                pa-2
+            <v-row>
+              <v-col
+                cols="6"
+                pa-3
               >
                 <h3 v-if="!search">
                   Criado em: {{ ticketComputed.created | date }}
@@ -227,7 +220,7 @@
                   >
                     <v-text-field
                       :value="initial | date"
-                      box
+                      filled
                       label="Data em que foi aberto"
                       readonly
                       v-on="on"
@@ -237,10 +230,10 @@
                     v-model="initial"
                   />
                 </v-menu>
-              </v-flex>
-              <v-flex
-                xs6
-                pa-2
+              </v-col>
+              <v-col
+                cols="6"
+                pa-3
               >
                 <h3 v-if="!search">
                   Última modificação: {{ ticketComputed.modified | date }}
@@ -257,7 +250,7 @@
                   >
                     <v-text-field
                       :value="final | date"
-                      box
+                      filled
                       label="Data limite"
                       readonly
                       v-on="on"
@@ -267,12 +260,12 @@
                     v-model="final"
                   />
                 </v-menu>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-          <v-flex
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col
             v-show="!search"
-            xs12
+            cols="12"
             pa-1
           >
             <v-text-field
@@ -280,13 +273,13 @@
               :rules="[v => !!v || 'Necessário preencher o resumo']"
               required
               :readonly="readOnlyData"
-              box
+              filled
               label="Resumo"
             />
-          </v-flex>
-          <v-flex
+          </v-col>
+          <v-col
             v-show="!search"
-            xs12
+            cols="12"
             pa-1
           >
             <v-textarea
@@ -294,16 +287,17 @@
               :rules="[v => !!v || 'Necessário preeencher o corpo deo chamado']"
               required
               :readonly="readOnlyData"
-              box
+              filled
               label="Conteúdo"
             />
-          </v-flex>
-          <v-flex
-            xs12
+          </v-col>
+          <v-col
+            cols="12"
           >
             <v-btn
               v-if="!readOnlyData"
               class="primary"
+              tile
               @click="save()"
             >
               {{ !search ? 'Salvar' : 'Pesquisar' }}
@@ -313,6 +307,7 @@
             </v-btn>
             <v-btn
               v-if="search"
+              tile
               class="primary"
               @click="clearFields()"
             >
@@ -327,18 +322,20 @@
             </v-btn>
             <v-btn
               v-if="editing"
+              tile
               class="primary white--text"
               @click="cancelEdit()"
             >
               Cancelar edição
             </v-btn>
-          </v-flex>
-          <v-flex
+          </v-col>
+          <v-col
             v-show="!search"
-            xs12
+            cols="12"
           >
             <v-tabs
               icons-and-text
+              show-arrows
             >
               <v-tab>
                 Campos
@@ -375,12 +372,12 @@
                 <Comments />
               </v-tab-item>
             </v-tabs>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-form>
-    </v-flex>
+    </v-col>
     <ticket-modal />
-  </v-layout>
+  </v-row>
 </template>
 
 <script>

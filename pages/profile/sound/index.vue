@@ -1,6 +1,6 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs12 md6 pa-2>
+  <v-row>
+    <v-col cols="12" md="6" pa-3>
       <v-subheader>
         Som de notificação do chat
       </v-subheader>
@@ -13,7 +13,7 @@
         append-icon="volume_up"
         prepend-icon="volume_down"
       />
-      <v-flex xs12 pa-2>
+      <v-col cols="12" pa-3>
         <v-checkbox v-model="sound.chat.muted" label="Mutar" />
         <v-btn class="primary white--text" @click="playChat()">
           Testar
@@ -21,10 +21,10 @@
             play_arrow
           </v-icon>
         </v-btn>
-      </v-flex>
-    </v-flex>
+      </v-col>
+    </v-col>
     
-    <v-flex xs12 md6 pa-2>
+    <v-col cols="12" md="6" pa-3>
       <v-subheader>
         Som de notificação geral
       </v-subheader>
@@ -37,7 +37,7 @@
         append-icon="volume_up"
         prepend-icon="volume_down"
       />
-      <v-flex xs12 pa-2>
+      <v-col cols="12" pa-3>
         <v-checkbox v-model="sound.notification.muted" label="Mutar" />
         <v-btn class="primary white--text" @click="playNotification()">
           Testar
@@ -45,17 +45,17 @@
             play_arrow
           </v-icon>
         </v-btn>
-      </v-flex>
-    </v-flex>
-    <v-flex xs12 pa-2>
+      </v-col>
+    </v-col>
+    <v-col cols="12" pa-3>
       <v-btn class="primary" @click="save()">
         Salvar
         <v-icon right>
           save
         </v-icon>
       </v-btn>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

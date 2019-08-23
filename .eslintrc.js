@@ -12,8 +12,11 @@ module.exports = {
     'plugin:prettier/recommended'
   ],
   plugins: [
-    'prettier'
+    'prettier',
+    'vuetify'
   ],
   // add your custom rules here
-  rules: {}
+  rules: {
+    'vuetify/no-deprecated-classes': 'error'
+  }
 }

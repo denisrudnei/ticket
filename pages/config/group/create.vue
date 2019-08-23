@@ -1,11 +1,8 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-form>
         <v-text-field
@@ -20,8 +17,8 @@
           Salvar
         </v-btn>
       </v-form>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

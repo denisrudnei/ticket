@@ -1,14 +1,10 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-    
-      xs12
+  <v-row>
+    <v-col
+      cols="12"
       pa-1
     >
-      <v-tabs color="primary" class="white--text" dark show-arrows>
+      <v-tabs color="primary" class="white--text" show-arrows>
         <v-tab
           to="/profile"
         >
@@ -20,7 +16,8 @@
         <v-tab to="/profile/sound">
           <v-icon left>
             volume_up
-          </v-icon>Configuração de áudio
+          </v-icon>
+          Configuração de áudio
         </v-tab>
         <v-tab to="/profile/path/view">
           <v-icon left>
@@ -54,8 +51,8 @@
         </v-tab>
       </v-tabs>
       <nuxt-child />
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

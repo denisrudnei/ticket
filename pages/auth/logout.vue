@@ -1,11 +1,8 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-5
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-btn
         class="primary white--text"
@@ -21,8 +18,8 @@
       >
         Voltar
       </v-btn>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

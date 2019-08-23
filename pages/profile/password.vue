@@ -1,11 +1,8 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-form
         ref="form"
@@ -14,21 +11,21 @@
           v-model="user.oldPassword"
           placeholder="Senha atual"
           type="password"
-          box
+          filled
           :rules="rules.old"
         />
         <v-text-field
           v-model="user.newPassword"
           placeholder="Nova senha"
           type="password"
-          box
+          filled
           :rules="rules.newPassword"
         />
         <v-text-field
           v-model="user.confirmPassword"
           placeholder="Repita a nova senha"
           type="password"
-          box
+          filled
           :rules="rules.confirm"
         />
         <v-btn
@@ -43,8 +40,8 @@
           </v-icon>
         </v-btn>
       </v-form>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

@@ -1,76 +1,75 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-data-table
         :items="analysts.filter(a => { return a._id !== user._id })"
         :headers="headers"
       >
         <template
-          slot="items"
-          slot-scope="data"
+          v-slot:item.name="{ item }"
         >
-          <td>{{ data.item.name }}</td>
-          <td>{{ data.item.role }}</td>
-          <td>
-            <v-menu
-              :close-on-content-click="false"
+          {{ item.name }}
+        </template>
+        <template
+          v-slot:item.role="{ item }"
+        >
+          {{ item.role }}
+        </template>
+        <template
+          v-slot:item.actions="{ item }"
+        >
+          <v-menu
+            :close-on-content-click="false"
+          >
+            <template
+              v-slot:activator="{ on }"
             >
-              <template
-                v-slot:activator="{ on }"
+              <v-btn
+                class="primary white--text"
+                icon
+                v-on="on"
               >
-                <v-btn
-                  class="primary white--text"
-                  icon
-                  v-on="on"
+                <v-icon>
+                  edit
+                </v-icon>
+              </v-btn>
+            </template>
+            <v-card>
+              <v-row>
+                <v-col
+                  cols="12"
+                  pa-3
                 >
-                  <v-icon>
-                    edit
-                  </v-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-layout
-                  row
-                  wrap
+                  <v-select
+                    v-model="selected"
+                    filled
+                    :items="roles.map(r => { return { text: r.name, value: r }})"
+                  />
+                </v-col>
+                <v-col
+                  cols="12"
+                  pa-3
                 >
-                  <v-flex
-                    xs12
-                    pa-2
+                  <v-btn
+                    class="primary white--text"
+                    icon
+                    @click="updateRole(item._id)"
                   >
-                    <v-select
-                      v-model="selected"
-                      box
-                      :items="roles.map(r => { return { text: r.name, value: r }})"
-                    />
-                  </v-flex>
-                  <v-flex
-                    xs12
-                    pa-2
-                  >
-                    <v-btn
-                      class="primary white--text"
-                      icon
-                      @click="updateRole(data.item._id)"
-                    >
-                      <v-icon>
-                        save
-                      </v-icon>
-                    </v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-card>
-            </v-menu>
-          </td>
+                    <v-icon>
+                      save
+                    </v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-menu>
         </template>
       </v-data-table> 
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

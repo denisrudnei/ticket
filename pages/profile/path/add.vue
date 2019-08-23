@@ -1,35 +1,35 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs4 pa-2>
+  <v-row>
+    <v-col cols="4" pa-3>
       <v-select
         v-model="selected"
-        box
+        filled
         :items="paths.map(v => ({text: v.path, value: v}))"
       />
-    </v-flex>
-    <v-flex xs4 pa-2>
+    </v-col>
+    <v-col cols="4" pa-3>
       <v-select
         v-model="selected.group"
         :disabled="selected.options <= 0"
-        box
+        filled
         :items="selected.options.map(v => ({text: v, value: v}))"
       />
-    </v-flex>
-    <v-flex xs4 pa-2>
+    </v-col>
+    <v-col cols="4" pa-3>
       <v-text-field
         v-model="selected.name"
         :disabled="selected.group === ''"
-        box
+        filled
         placeholder="Nome na listagem"
       />
-    </v-flex>
+    </v-col>
     <v-btn class="primary white--text" :disabled="selected.name === ''" @click="save()">
       <v-icon left>
         save
       </v-icon>
       Salvar
     </v-btn>
-  </v-layout>
+  </v-row>
 </template>
 
 <script>

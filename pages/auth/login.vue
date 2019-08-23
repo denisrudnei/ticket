@@ -16,6 +16,7 @@
     <v-btn
       class="primary white--text"
       large
+      tile
       :block="onMobile"
       @click="localLogin()"
     >

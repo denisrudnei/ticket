@@ -1,13 +1,13 @@
 <template>
-  <v-layout row wrap>
-    <v-flex>
+  <v-row>
+    <v-col>
       <v-card>
         <v-card-text>
           <v-select :value="user.status" :items="status" box label="Status online" @change="changeStatus" />
         </v-card-text>
       </v-card>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

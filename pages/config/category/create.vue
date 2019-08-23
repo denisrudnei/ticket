@@ -1,11 +1,8 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-form>
         <v-autocomplete
@@ -19,8 +16,8 @@
           placeholder="Nome"
           solo
         />
-        <v-flex
-          xs12
+        <v-col
+          cols="12"
         >
           <v-btn
             class="primary white--text"
@@ -28,54 +25,52 @@
           >
             Acicionar campo
           </v-btn>
-        </v-flex>
-        <v-flex
-          xs12
+        </v-col>
+        <v-col
+          cols="12"
         >
-          <v-layout
+          <v-row
             v-for="(field, index) in category.fields"
             :key="index"
-            row
-            wrap
           >
-            <v-flex
-              xs8
-              pa-2
+            <v-col
+              cols="8"
+              pa-3
             >
               <v-text-field
                 v-model="field.text"
                 placeholder="Nome do campo"
-                box
+                filled
               />
-            </v-flex>
-            <v-flex
-              xs2
-              pa-2
+            </v-col>
+            <v-col
+              cols="2"
+              pa-3
             >
               <v-text-field
                 v-model="field.limits.min"
-                box
+                filled
               />
-            </v-flex>
-            <v-flex
-              xs2
-              pa-2
+            </v-col>
+            <v-col
+              cols="2"
+              pa-3
             >
               <v-text-field
                 v-model="field.limits.max"
-                box
+                filled
               />
-            </v-flex>
-            <v-flex
-              xs12
+            </v-col>
+            <v-col
+              cols="12"
             >
-              <v-checkbox
+              <v-checkfilled
                 v-model="field.required"
                 label="Necessário preencher?"
               />
-            </v-flex>
-          </v-layout>
-        </v-flex>
+            </v-col>
+          </v-row>
+        </v-col>
 
         <v-btn
           class="primary white--text"
@@ -84,8 +79,8 @@
           Salvar
         </v-btn>
       </v-form>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
   <v-form>
     <v-text-field v-model="user.email" type="email" solo placeholder="Seu email cadastrado" />
-    <v-btn class="primary white--text" @click="reset()">
+    <v-btn class="primary white--text" tile @click="reset()">
       Enviar email para reset de senha
       <v-icon right>
         mail

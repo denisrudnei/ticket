@@ -1,14 +1,14 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs12>
-      <v-tabs color="primary white--text" dark show-arrows>
+  <v-row>
+    <v-col cols="12">
+      <v-tabs color="primary white--text" show-arrows>
         <v-tab v-for="group in groups" :key="group._id" :to="`/knowledge/group/${group.name}`">
           {{ `(${group.length}) ${group.name}` }}
         </v-tab>
       </v-tabs>
-    </v-flex>
+    </v-col>
     <nuxt-child />
-  </v-layout>
+  </v-row>
 </template>
 
 <script>

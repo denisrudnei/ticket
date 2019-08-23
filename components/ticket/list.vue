@@ -4,197 +4,129 @@
     :headers="headers"
     must-sort
     :loading="loading"
-    :rows-per-page-items="rowsPerPageItems"
-    :total-items="pagination.totalItems"
-    :pagination.sync="pagination"
+    :footer-props.sync="footerProps"
+    :server-items-length.sync="totalItems"
+    :options.sync="options"
   >
-    <template
-      v-slot:items="{ item }"
-    >
-      <td>
-        <v-btn
-          class="primary white--text"
-          icon
-          title="Ver chamado"
-          @click="addTicketsToEdit(item)"
+    <template v-slot:item.actions="{ item }">
+      <v-btn
+        class="primary white--text"
+        icon
+        title="Ver chamado"
+        @click="addTicketsToEdit(item)"
+      >
+        <v-icon>
+          search
+        </v-icon>
+      </v-btn>
+    </template>
+    <template v-slot:item.actualUser="{ item }">
+      <v-menu
+        open-on-hover
+        offset-y
+        :close-on-content-click="false"
+        :nudge-width="200"
+      >
+        <template
+          v-slot:activator="{ on }"
         >
-          <v-icon>
-            search
-          </v-icon>
-        </v-btn>
-        <v-menu
-          :nudge-width="300"
-          :close-on-content-click="false"
-          offset-x
-        >
-          <template
-            v-slot:activator="{ on }"
+          <v-btn
+            tile
+            text
+            block
+            class="primary white--text"
+            v-on="on"
           >
-            <v-btn
-              title="Ações"
-              class="primary white--text"
-              icon
-              v-on="on"
+            {{ item.actualUser.name }}
+          </v-btn>
+        </template>
+        <v-card>
+          <v-list>
+            <v-list-item>
+              <v-list-item-avatar>
+                <v-img :src="item.actualUser.picture" />
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ item.actualUser.name }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ item.actualUser.contactEmail }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-menu>
+    </template>
+    <template v-slot:item.resume="{ item }">
+      {{ item.resume }}
+    </template>
+    <template v-slot:item.status="{ item }">
+      <v-edit-dialog>
+        {{ item.status.name }}
+        <template v-slot:input>
+          <v-row>
+            <v-col
+              cols="12"
+              pa-4
             >
-              <v-icon>
-                build
-              </v-icon>
-            </v-btn>
-          </template>
-          <v-card>
-            <v-layout
-              row
-              wrap
+              <v-form>
+                <v-select
+                  v-model="currentStatus"
+                  :items="status.filter(s => {return s._id !== item.status._id}).map(s => ({ text: s.name, value: s }))"
+                  filled
+                  label="Status"
+                />
+                <v-btn
+                  icon
+                  class="primary white--text"
+                  @click="modifyStatus(item)"
+                >
+                  <v-icon>
+                    send
+                  </v-icon>
+                </v-btn>
+              </v-form>
+            </v-col>
+          </v-row>
+        </template>
+      </v-edit-dialog>
+    </template>
+    <template v-slot:item.group="{ item }">
+      <v-edit-dialog>
+        <template v-slot:input>
+          <v-row>
+            <v-col
+              cols="12"
+              pa-1
             >
-              <v-flex
-                xs12
-                pa-2
+              <v-select
+                v-model="currentGroup"
+                :items="groups.filter(g => {return g._id !== item.group._id}).map(g => ({ text: g.name, value: g }))"
+                filled
+                label="Para qual grupo? "
+              />
+              <v-btn
+                icon
+                class="primary white--text"
+                @click="transferToGroup(item)"
               >
-                <v-menu
-                  offset-x
-                  offset-y
-                  :close-on-content-click="false"
-                >
-                  <template
-                    v-slot:activator="{ on }"
-                  >
-                    <v-btn
-                      class="primary white--text"
-                      block
-                      v-on="on"
-                    >
-                      Transferir
-                      <v-icon
-                        right
-                      >
-                        transfer_within_a_station
-                      </v-icon>
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-layout
-                      row
-                      wrap
-                    >
-                      <v-flex
-                        xs12
-                        pa-1
-                      >
-                        <v-form>
-                          <v-select
-                            v-model="currentGroup"
-                            :items="groups.filter(g => {return g._id !== item.group._id}).map(g => ({ text: g.name, value: g }))"
-                            box
-                            label="Para qual grupo? "
-                          />
-                          <v-btn
-                            icon
-                            class="primary white--text"
-                            @click="transferToGroup(item)"
-                          >
-                            <v-icon>
-                              send
-                            </v-icon>
-                          </v-btn>
-                        </v-form>
-                      </v-flex>
-                    </v-layout>
-                  </v-card>
-                </v-menu>
-                <v-menu
-                  offset-x
-                  :close-on-content-click="false"
-                >
-                  <template
-                    v-slot:activator="{ on }"
-                  >
-                    <v-btn
-                      flat
-                      block
-                      class="primary white--text"
-                      v-on="on"
-                    >
-                      Atualizar status
-                    </v-btn>
-                  </template>
-                  <v-card>
-                    <v-layout
-                      row
-                      wrap
-                    >
-                      <v-flex
-                        xs12
-                        pa-1
-                      >
-                        <v-form>
-                          <v-select
-                            v-model="currentStatus"
-                            :items="status.filter(s => {return s._id !== item.status._id}).map(s => ({ text: s.name, value: s }))"
-                            box
-                            label="Status"
-                          />
-                          <v-btn
-                            icon
-                            class="primary white--text"
-                            @click="modifyStatus(item)"
-                          >
-                            <v-icon>
-                              send
-                            </v-icon>
-                          </v-btn>
-                        </v-form>
-                      </v-flex>
-                    </v-layout>
-                  </v-card>
-                </v-menu>
-              </v-flex>
-            </v-layout>
-          </v-card>
-        </v-menu>
-      </td>
-      <td>
-        <v-menu
-          open-on-hover
-          offset-y
-          :close-on-content-click="false"
-          :nudge-width="200"
-        >
-          <template
-            v-slot:activator="{ on }"
-          >
-            <v-btn
-              class="primary white--text"
-              block
-              flat
-              v-on="on"
-            >
-              {{ item.actualUser.name }}
-            </v-btn>
-          </template>
-          <v-card>
-            <v-list>
-              <v-list-tile>
-                <v-list-tile-avatar>
-                  <v-img :src="item.actualUser.picture" />
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title>
-                    {{ item.actualUser.name }}
-                  </v-list-tile-title>
-                  <v-list-tile-sub-title>
-                    {{ item.actualUser.contactEmail }}
-                  </v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list>
-          </v-card>
-        </v-menu>
-      </td>
-      <td>{{ item.resume }}</td>
-      <td>{{ item.status.name }}</td>
-      <td>{{ item.group.name }}</td>
-      <td> {{ item.category.fullName }}</td>
-      <td>{{ item.created | date }}</td>
+                <v-icon>
+                  send
+                </v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </template>
+        {{ item.group.name }}
+      </v-edit-dialog>
+    </template>
+    <template v-slot:item.category="{ item }">
+      {{ item.category.fullName }}
+    </template>
+    <template v-slot:item.created="{ item }">
+      {{ item.created | date }}
     </template>
     <ticket-modal />
   </v-data-table>
@@ -224,18 +156,22 @@ export default {
       loading: false,
       currentGroup: {},
       currentStatus: {},
-      pagination: {
-        sortBy: 'created',
+      totalItems: 0,
+      footerProps: {
+        itemsPerPageOptions: [10, 15, 25, 50],
+        itemsPerPage: 10
+      },
+      options: {
+        sortBy: ['created'],
         descending: true,
         totalItems: 0,
-        page: 1,
-        rowsPerPage: 5
+        page: 1
       },
-      rowsPerPageItems: [5, 10, 15, 25, 50],
       headers: [
         {
-          text: 'Ações',
-          sortable: false
+          text: 'Ver chamado',
+          sortable: false,
+          value: 'actions'
         },
         {
           text: 'Usuário atual',
@@ -308,13 +244,13 @@ export default {
       this.$store.commit('ticket/setQuery', newValue.query)
       await this.update()
     },
-    pagination: {
+    options: {
       deep: true,
       handler: function(newValue, old) {
         if (
           old.page === newValue.page &&
-          old.rowsPerPage === newValue.rowsPerPage &&
           old.sortBy === newValue.sortBy &&
+          old.itemsPerPage === newValue.itemsPerPage &&
           old.descending === newValue.descending
         )
           return
@@ -322,7 +258,7 @@ export default {
 
         const query = Object.assign({}, this.query, {
           page: newValue.page,
-          limit: newValue.rowsPerPage,
+          limit: this.options.itemsPerPage,
           sortBy: newValue.sortBy,
           descending: newValue.descending ? -1 : 1
         })
@@ -358,21 +294,20 @@ export default {
           } else {
             this.$store.commit('ticket/setTickets', docs)
             this.$store.commit('ticket/setSearch', docs)
-            this.$store.commit('ticket/setTickets', docs)
           }
-          this.pagination.totalItems = parseInt(total)
-          this.pagination.page = parseInt(page)
-          this.pagination.rowsPerPage = parseInt(limit)
+          this.totalItems = parseInt(total)
+          this.options.page = parseInt(page)
+          this.options.itemsPerPage = parseInt(limit)
           this.loading = false
         })
     },
-    setQuery(query) {
+    async setQuery(query) {
       if (this.modal) {
         this.$store.commit('ticket/setModalQuery', query)
       } else {
         this.$store.commit('ticket/setQuery', query)
       }
-      this.update()
+      await this.update()
     },
     modifyStatus(ticket) {
       this.$axios
@@ -407,3 +342,8 @@ export default {
   }
 }
 </script>
+<style>
+td > .v-btn--block {
+  display: inline-flex !important;
+}
+</style>

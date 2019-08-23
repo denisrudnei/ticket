@@ -1,9 +1,9 @@
 <template>
-  <v-layout row wrap>
-    <v-flex
-      xs12
+  <v-row>
+    <v-col
+      cols="12"
     >
-      <v-tabs>
+      <v-tabs show-arrows>
         <v-tab
           to="/profile/notification/all"
         >
@@ -20,11 +20,12 @@
           Não lidas
         </v-tab>
       </v-tabs>
-    </v-flex>
-    <v-flex>
+      </v-tabss></v-tabsshow-arrows>
+    </v-col>
+    <v-col>
       <nuxt-child />
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

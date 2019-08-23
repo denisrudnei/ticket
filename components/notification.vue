@@ -14,7 +14,7 @@
     >
       <v-btn
         icon
-        flat
+        text
         v-on="on"
       >
         <v-badge>
@@ -31,9 +31,8 @@
         </v-badge>
       </v-btn>
     </template>
-    <v-tabs>
+    <v-tabs show-arrows>
       <v-tab
-        right
         title="Ticket"
       >
         <v-icon
@@ -46,35 +45,35 @@
         <v-card
           v-if="notifications.length === 0"
         >
-          <v-layout
-            row
-            wrap
-          >
-            <v-flex
-              xs12
-              pa-2
-            >
-              Nenhuma notificação
-            </v-flex>
-          </v-layout>
+          <v-card-text>
+            <v-row>
+              <v-col
+                cols="12"
+                pa-3
+              >
+                Nenhuma notificação
+              </v-col>
+            </v-row>
+          </v-card-text>
         </v-card>
         <v-list
           v-if="notifications.length > 0"
           two-line
         >
-          <v-list-tile
+          <v-list-item
             v-for="notification in notifications"
             :key="notification._id"
+            :to="`/profile/notification/${notification._id}`"
           >
-            <v-list-tile-content>
-              <v-list-tile-title>
+            <v-list-item-content>
+              <v-list-item-title>
                 {{ notification.content }}
-              </v-list-tile-title>
-              <v-list-tile-sub-title>
+              </v-list-item-title>
+              <v-list-item-subtitle>
                 {{ notification.date | date }}
-              </v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
+              </v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-action>
               <v-btn
                 icon
                 class="primary--text"
@@ -84,8 +83,8 @@
                   info
                 </v-icon>
               </v-btn>
-            </v-list-tile-action>
-          </v-list-tile>
+            </v-list-item-action>
+          </v-list-item>
         </v-list>
       </v-tab-item>
       <v-tab>
@@ -102,7 +101,9 @@
     >
       <v-btn
         v-if="notifications.length > 0"
-        flat
+        tile
+        text
+        block
         @click="readAllNotifications()"
       >
         Marcar todas como lidas
@@ -114,7 +115,8 @@
         </v-icon>
       </v-btn>
       <v-btn
-        flat
+        tile
+        block
         to="/profile/notification/all"
       >
         Ver todas notificações

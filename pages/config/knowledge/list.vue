@@ -1,21 +1,21 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs12>
+  <v-row>
+    <v-col cols="12">
       <v-data-table :items="items" :headers="headers">
-        <template v-slot:items="{item}">
-          <td>{{ item.name }}</td>
-          <td>
-            <v-btn class="primary white--text" icon :to="`/config/knowledge/edit/${item._id}`">
-              <v-icon>edit</v-icon>
-            </v-btn>
-            <v-btn class="primary white--text" icon @click="remove(item)">
-              <v-icon>delete</v-icon>
-            </v-btn>
-          </td>
+        <template v-slot:item.name="{item}">
+          {{ item.name }}
+        </template>
+        <template v-slot:item.actions="{item}">
+          <v-btn class="primary white--text" icon :to="`/config/knowledge/edit/${item._id}`">
+            <v-icon>edit</v-icon>
+          </v-btn>
+          <v-btn class="primary white--text" icon @click="remove(item)">
+            <v-icon>delete</v-icon>
+          </v-btn>
         </template>
       </v-data-table>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

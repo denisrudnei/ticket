@@ -1,26 +1,27 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
-    <v-flex
-      xs12
-      pa-2
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
     >
       <v-data-table
         :items="ticket.comments"
         :headers="headers"
       >
         <template
-          v-slot:items="{ item }"
+          v-slot:item.user="{ item }"
         >
-          <td>{{ item.user.name }}</td>
-          <td>{{ item.date | date }}</td>
-          <td>{{ item.content }}</td>
+          {{ item.user.name }}
+        </template>
+        <template v-slot:item.date="{ item }">
+          {{ item.date | date }}
+        </template>
+        <template v-slot:item.content="{ item }">
+          {{ item.content }}
         </template>
       </v-data-table>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -31,7 +32,7 @@ export default {
       headers: [
         {
           text: 'Nome',
-          value: 'name'
+          value: 'user'
         },
         {
           text: 'Data',

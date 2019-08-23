@@ -1,7 +1,7 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs12>
-      <v-tabs>
+  <v-row>
+    <v-col cols="12">
+      <v-tabs show-arrows>
         <v-tab to="/profile/path/view">
           Pré-visualizar
         </v-tab>
@@ -13,8 +13,8 @@
         </v-tab>
       </v-tabs>
       <nuxt-child />
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

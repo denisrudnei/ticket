@@ -1,42 +1,35 @@
 <template>
   <v-dialog
-    lazy
     :value="dialog === actualTicket._id"
     fullscreen
+    scrollable
   >
     <v-card>
-      <v-card-title>
-        <v-toolbar
-          fixed
-          card
-          class="primary white--text"
-        >
-          <v-toolbar-items>
-            <v-btn
-              class="primary white--text"
-              icon
-              @click="setDialog('')"
-            >
-              <v-icon>
-                close
-              </v-icon>
-            </v-btn>
-            <v-btn class="primary white--text" icon @click="done(dialog)">
-              <v-icon>
-                done
-              </v-icon>
-            </v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
-      </v-card-title>
+      <v-toolbar
+        fixed
+        class="primary white--text"
+      >
+        <v-toolbar-items>
+          <v-btn
+            class="primary white--text"
+            icon
+            @click="setDialog('')"
+          >
+            <v-icon>
+              close
+            </v-icon>
+          </v-btn>
+          <v-btn class="primary white--text" icon @click="done(dialog)">
+            <v-icon>
+              done
+            </v-icon>
+          </v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
       <v-card-text>
-        <v-layout
-          row
-          wrap
-        >
-          <v-flex
-            xs12
-            pa-2
+        <v-row>
+          <v-col
+            cols="12"
           >
             <create-ticket
               v-model="ticket"
@@ -44,8 +37,8 @@
               :ticket="actualTicket"
               @input="update()"
             />
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-card-text>
     </v-card>
   </v-dialog>

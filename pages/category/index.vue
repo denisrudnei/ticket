@@ -1,8 +1,5 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
+  <v-row>
     <v-treeview
       :items="items"
       :load-children="getSub"
@@ -15,7 +12,7 @@
         <v-icon>layers</v-icon>
       </template>
     </v-treeview>
-  </v-layout>
+  </v-row>
 </template>
 
 <script>

@@ -1,8 +1,5 @@
 <template>
-  <v-layout
-    row
-    wrap
-  >
+  <v-row>
     <template
       v-if="error.statusCode === 500"
     >
@@ -18,7 +15,7 @@
     >
       Não foi possível localizar {{ error.path }}
     </template>
-  </v-layout>
+  </v-row>
 </template>
 
 <script>

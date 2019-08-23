@@ -1,16 +1,16 @@
 <template>
-  <v-layout>
-    <v-flex v-if="ticket.category" xs12 pa-2>
+  <v-row>
+    <v-col v-if="ticket.category" cols="12" pa-3>
       <v-text-field
         v-for="field in ticket.category.fields"
         :key="field._id"
         :disabled="!edit"
         :required="field.required"
-        box
+        filled
         :label="field.text"
       />
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

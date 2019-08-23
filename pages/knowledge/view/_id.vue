@@ -20,54 +20,54 @@
       </v-toolbar>
      
       <v-card-text>
-        <v-layout row wrap>
-          <v-flex xs12 pa-2>
+        <v-row>
+          <v-col cols="12" pa-3>
             <h3>Documento criado em: {{ knowledge.created | date }}</h3>
-          </v-flex>
-          <v-flex xs6 pa-2>
+          </v-col>
+          <v-col cols="6" pa-3>
             <v-text-field
               v-model="knowledge.category.fullName"
               label="Categoria"
-              box
+              filled
               readonly
               append-icon="search"
               :value-comparator="compare"
-              @click:append="openModal('category', knowledge.category._id)"
+              @click:append="openModal('category', knowledge.category)"
             />
-          </v-flex>
-          <v-flex xs6 pa-2>
+          </v-col>
+          <v-col cols="6" pa-3>
             <v-text-field
               v-model="knowledge.group.name"
               label="Grupo responsável"
-              box
+              filled
               readonly
               append-icon="search"
               :value-comparator="compare"
-              @click:append="openModal('group', knowledge.group._id)"
+              @click:append="openModal('group', knowledge.group)"
             />
-          </v-flex>
+          </v-col>
           <v-dialog
             v-model="showModal"
             scrollable
           >
-            <v-layout row wrap>
-              <v-flex xs12 pa-2>
+            <v-row>
+              <v-col cols="12" pa-3>
                 <ticket-list
                   v-if="showModal"
                   :url="`/search/`"
                   :modal="true"
                 />
-              </v-flex>
-            </v-layout>
+              </v-col>
+            </v-row>
           </v-dialog>
-          <v-flex xs12 pa-4>
+          <v-col cols="12" pa-4>
             <div ref="preview" v-html="knowledge.preview" />
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </v-card-text>
       <v-divider />
       <v-card-actions>
-        <v-btn class="primary white--text" @click="download()">
+        <v-btn tile class="primary white--text" @click="download()">
           Baixar it
         </v-btn>
       </v-card-actions>
@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import JsPDF from 'jspdf'
 import TicketList from '@/components/ticket/list'
 export default {
   components: {
@@ -85,7 +84,8 @@ export default {
   data() {
     return {
       showModal: false,
-      dialog: true
+      dialog: true,
+      JsPDF: null
     }
   },
   asyncData({ params, $axios }) {
@@ -95,20 +95,24 @@ export default {
       }
     })
   },
+  mounted() {
+    this.JsPDF = require('jspdf')
+  },
   methods: {
     compare(obj1, obj2) {
       return obj1._id === obj2._id
     },
     openModal(field, value) {
       this.showModal = true
-      this.$router.push({
-        query: {
-          [field]: value
-        }
-      })
+      if (Object.prototype.hasOwnProperty.call(value, '_id')) {
+        this.$store.commit('ticket/setModalQuery', {
+          [field]: value._id
+        })
+        this.$store.commit('ticket/setModalList', true)
+      }
     },
     download() {
-      const pdf = new JsPDF()
+      const pdf = new this.JsPDF()
       pdf.fromHTML(this.$refs.preview, 10, 10, {
         width: '190'
       })

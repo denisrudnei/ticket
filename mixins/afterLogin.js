@@ -5,8 +5,8 @@ export default {
   }),
   methods: {
     changeColor() {
-      this.$vuetify.theme.primary =
-        this.user.color || this.$vuetify.theme.primary
+      this.$vuetify.theme.currentTheme.primary =
+        this.user.color || this.$vuetify.theme.currentTheme.primary
     },
     async processInfo() {
       const loggedUser = await this.$axios.post('/auth/user')

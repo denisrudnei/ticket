@@ -1,92 +1,90 @@
 <template>
   <v-form>
-    <v-layout
-      row
-      wrap
-    >
-      <v-flex
-        xs12
-        md8
-        pa-2
+    <v-row>
+      <v-col
+        cols="12"
+        md="8"
+        pa-3
       >
         <v-text-field
           :value="user.name"
-          box
+          filled
           label="Nome para exibição"
           @change="updateName"
         />
         <v-text-field
           v-model="user.email"
-          box
+          filled
           label="Email"
           readonly
         />
         <v-text-field
           :value="user.contactEmail"
-          box
+          filled
           label="Endereço de email para contato"
           @change="updateEmail"
         />
-      </v-flex>
-      <v-flex
-        xs12
-        md4
+      </v-col>
+      <v-col
+        cols="12"
+        md="4"
       >
         <v-card>
-          <v-layout
-            row
-            wrap
-          >
-            <v-flex
-              xs4
-              pa-2
-            >
-              <v-progress-circular
-                :value="(info.opened/info.total) * 100"
-                :size="125"
-                width="10"
-                rotate="90"
-                color="green"
+          <v-card-text>
+            <v-row>
+              <v-col
+                cols="4"
+                pa-3
               >
-                <v-avatar
-                  size="110"
+                <v-progress-circular
+                  :value="(info.opened/info.total) * 100"
+                  :size="125"
+                  width="10"
+                  rotate="90"
+                  color="green"
                 >
-                  <v-img
-                    :src="user.picture"
-                  />
-                </v-avatar>
-              </v-progress-circular>
-            </v-flex>
-            <v-flex
-              xs8
-              pa-2
-            >
-              <v-card-title primary-title>
-                <div class="healine">
-                  Proporção de chamados resolvidos
-                </div>
-              </v-card-title>
-              <v-card-text
-                class="text-xs-center"
+                  <v-avatar
+                    size="110"
+                  >
+                    <v-img
+                      :src="user.picture"
+                    />
+                  </v-avatar>
+                </v-progress-circular>
+              </v-col>
+              <v-col
+                cols="8"
+                pa-3
               >
-                {{ info.opened }} Resolvidos / {{ info.total }} Abertos
-                <hr>
-                ({{ ((info.opened / info.total) * 100).toFixed(2) }}) %
-              </v-card-text>
-            </v-flex>
-          </v-layout>
+                <v-card-title primary-title>
+                  <div class="healine">
+                    Proporção de chamados resolvidos
+                  </div>
+                </v-card-title>
+                <v-card-text
+                  class="text-center"
+                >
+                  {{ info.opened }} Resolvidos / {{ info.total }} Abertos
+                  <hr>
+                  ({{ ((info.opened / info.total) * 100).toFixed(2) }}) %
+                </v-card-text>
+              </v-col>
+            </v-row>
+          </v-card-text>
         </v-card>
-      </v-flex>
-    </v-layout>
-    <v-layout row wrap>
-      <v-flex xs12 pa-2>
-        <color-chooser
-          v-model="primary"
-          @input="updatePrimary()"
-        >
-          Cor primária
-        </color-chooser>
-        <v-btn class="primary white--text" @click="openImageSelection()">
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" pa-3>
+        <v-menu :close-on-content-click="false">
+          <template v-slot:activator="{on}">
+            <v-btn tile class="primary white--text" v-on="on">
+              Cor primária
+            </v-btn>
+          </template>
+          <v-color-picker v-model="$vuetify.theme.currentTheme.primary" mode="hexa" />
+        </v-menu>
+        <v-btn tile class="primary white--text" @click="openImageSelection()">
           <v-icon
             left
           >
@@ -95,6 +93,7 @@
           Selecionar imagem do perfil
         </v-btn>
         <v-btn
+          tile
           class="primary white--text"
           @click="removeImage()"
         >
@@ -106,17 +105,17 @@
           Remover imagem
         </v-btn>
         <input ref="profileImage" type="file" style="display: none" accept="image/*" @change="updateImage()">
-      </v-flex>
-      <v-flex xs12 pa-2>
+      </v-col>
+      <v-col cols="12" pa-3>
         <v-switch :input-value="user.mergePictureWithExternalAccount" label="Atualizar imagem com conta externa automaticamente" @change="updatePictureMerge" />
         <v-switch
           color="primary"
           label="Receber notificações via email?"
         />
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
     <v-btn
-      flat
+      text
       class="primary white--text"
       @click="save()"
     >
@@ -127,14 +126,10 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import ColorChooser from '@/components/colors/chooser'
 export default {
-  components: {
-    ColorChooser
-  },
   data() {
     return {
-      primary: null,
+      primary: '#fffff',
       info: {}
     }
   },
@@ -153,7 +148,7 @@ export default {
       updateEmail: 'auth/updateEmail'
     }),
     updatePrimary() {
-      this.$vuetify.theme.primary = this.primary
+      this.$vuetify.theme.currentTheme.primary = this.primary
       this.$store.commit('auth/setColor', this.primary)
     },
     updatePictureMerge(value) {

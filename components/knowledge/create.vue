@@ -1,31 +1,31 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs12 pa-2>
+  <v-row>
+    <v-col cols="12" pa-3>
       <v-text-field
         v-model="knowledgeData.name"
-        box
+        filled
         label="Nome do documento"
       />
-    </v-flex>
-    <v-flex xs12 md6 pa-2>
+    </v-col>
+    <v-col cols="12" md="6" pa-3>
       <v-select
         v-model="knowledge.category"
-        box
+        filled
         :value-comparator="compare"
         placeholder="Categoria do problema"
         :items="category.map(v => ({text: v.fullName, value: v}))"
       />
-    </v-flex>
-    <v-flex xs12 md6 pa-2>
+    </v-col>
+    <v-col cols="12" md="6" pa-3>
       <v-select
         v-model="knowledge.group"
-        box
+        filled
         :value-comparator="compare"
         :items="group.map(v => ({text: v.name, value: v}))"
         placeholder="Grupo responsável"
       />
-    </v-flex>
-    <v-flex xs12 pa-2>
+    </v-col>
+    <v-col cols="12" pa-3>
       <ckeditor v-model="knowledge.preview" :editor="editor" @ready="configureEditor" />
       <input ref="file" type="file" style="display: none">
       <v-btn class="primary white--text" @click="addFile()">
@@ -33,14 +33,15 @@
         Incluir arquivo
       </v-btn>
       <v-btn
+        tile
         :disabled="disabled"
         class="primary white--text"
         @click="save()"
       >
         Salvar
       </v-btn>
-    </v-flex>
-  </v-layout>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
