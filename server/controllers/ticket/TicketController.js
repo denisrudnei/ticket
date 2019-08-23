@@ -48,7 +48,11 @@ module.exports = (app, io) => {
   )
 
   app.post('/ticket/transfer/:id', (req, res) => {
-    TicketService.transferToGroup(req.params.id, req.body._id)
+    TicketService.transferToGroup(
+      req.params.id,
+      req.body._id,
+      req.session.authUser
+    )
       .then(result => {
         io.emit('updateTicket', result.newTicket)
         io.emit(`notification/${req.body._id}`, result.notification)

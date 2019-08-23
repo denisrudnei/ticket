@@ -49,7 +49,7 @@ describe('Ticket', function() {
   it('Transfer to group', async () => {
     const group = await Group.findOne().exec()
     const ticket = await Ticket.findOne().exec()
-    await TicketService.transferToGroup(ticket._id, group._id)
+    await TicketService.transferToGroup(ticket._id, group._id, ticket.openedBy)
   })
 
   it('Change status', async () => {

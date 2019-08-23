@@ -145,7 +145,7 @@ const TicketService = {
         })
     })
   },
-  transferToGroup(ticketId, groupId) {
+  transferToGroup(ticketId, groupId, analyst) {
     return new Promise(async (resolve, reject) => {
       const ticket = await Ticket.findOne({ _id: ticketId })
         .populate(populateArray)
@@ -163,9 +163,9 @@ const TicketService = {
       const notification = await Notification.create({
         _id: new mongoose.Types.ObjectId(),
         name: 'TicketTransfer',
-        from: ticket.openedBy._id,
+        from: analyst._id,
         to: group.analysts.map(a => a._id),
-        content: `${ticket.openedBy.name} transferiu um chamado para seu grupo`
+        content: `${analyst.name} transferiu um chamado para seu grupo`
       })
 
       ticket.save(err => {
