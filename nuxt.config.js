@@ -45,7 +45,7 @@ module.exports = {
     { src: '@/plugins/CKEditor', ssr: false }
   ],
 
-  devModules: [
+  buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/vuetify'
   ],
