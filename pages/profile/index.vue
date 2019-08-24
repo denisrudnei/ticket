@@ -82,7 +82,7 @@
               Cor primária
             </v-btn>
           </template>
-          <v-color-picker v-model="$vuetify.theme.currentTheme.primary" mode="hexa" />
+          <v-color-picker v-model="primary" mode="hexa" />
         </v-menu>
         <v-btn tile class="primary white--text" @click="openImageSelection()">
           <v-icon
@@ -129,7 +129,7 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   data() {
     return {
-      primary: '#fffff',
+      primary: '#FFFFFF',
       info: {}
     }
   },
@@ -137,6 +137,11 @@ export default {
     user: 'auth/getUser',
     groups: 'group/getGroups'
   }),
+  watch: {
+    primary: function(value) {
+      this.updatePrimary()
+    }
+  },
   created() {
     this.$axios.get('/profile').then(response => {
       this.info = response.data

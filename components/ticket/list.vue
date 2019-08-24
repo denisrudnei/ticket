@@ -21,49 +21,25 @@
       </v-btn>
     </template>
     <template v-slot:item.actualUser="{ item }">
-      <v-menu
-        open-on-hover
-        offset-y
-        :close-on-content-click="false"
-        :nudge-width="200"
-      >
-        <template
-          v-slot:activator="{ on }"
-        >
-          <v-btn
-            tile
-            text
-            block
-            class="primary white--text"
-            v-on="on"
-          >
+      <v-list-item>
+        <v-list-item-avatar>
+          <v-img :src="item.actualUser.picture" />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>
             {{ item.actualUser.name }}
-          </v-btn>
-        </template>
-        <v-card>
-          <v-list>
-            <v-list-item>
-              <v-list-item-avatar>
-                <v-img :src="item.actualUser.picture" />
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title>
-                  {{ item.actualUser.name }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ item.actualUser.contactEmail }}
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-card>
-      </v-menu>
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            {{ item.actualUser.contactEmail }}
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
     </template>
     <template v-slot:item.resume="{ item }">
       {{ item.resume }}
     </template>
     <template v-slot:item.status="{ item }">
-      <v-edit-dialog>
+      <v-edit-dialog large @save="modifyStatus(item)">
         {{ item.status.name }}
         <template v-slot:input>
           <v-row>
@@ -71,30 +47,19 @@
               cols="12"
               pa-4
             >
-              <v-form>
-                <v-select
-                  v-model="currentStatus"
-                  :items="status.filter(s => {return s._id !== item.status._id}).map(s => ({ text: s.name, value: s }))"
-                  filled
-                  label="Status"
-                />
-                <v-btn
-                  icon
-                  class="primary white--text"
-                  @click="modifyStatus(item)"
-                >
-                  <v-icon>
-                    send
-                  </v-icon>
-                </v-btn>
-              </v-form>
+              <v-select
+                v-model="currentStatus"
+                :items="status.filter(s => {return s._id !== item.status._id}).map(s => ({ text: s.name, value: s }))"
+                filled
+                label="Status"
+              />
             </v-col>
           </v-row>
         </template>
       </v-edit-dialog>
     </template>
     <template v-slot:item.group="{ item }">
-      <v-edit-dialog>
+      <v-edit-dialog large @save="transferToGroup(item)">
         <template v-slot:input>
           <v-row>
             <v-col
@@ -107,15 +72,6 @@
                 filled
                 label="Para qual grupo? "
               />
-              <v-btn
-                icon
-                class="primary white--text"
-                @click="transferToGroup(item)"
-              >
-                <v-icon>
-                  send
-                </v-icon>
-              </v-btn>
             </v-col>
           </v-row>
         </template>
@@ -250,6 +206,7 @@ export default {
         if (
           old.page === newValue.page &&
           old.sortBy === newValue.sortBy &&
+          old.sortDesc === newValue.sortDesc &&
           old.itemsPerPage === newValue.itemsPerPage &&
           old.descending === newValue.descending
         )
@@ -259,8 +216,8 @@ export default {
         const query = Object.assign({}, this.query, {
           page: newValue.page,
           limit: this.options.itemsPerPage,
-          sortBy: newValue.sortBy,
-          descending: newValue.descending ? -1 : 1
+          sortBy: newValue.sortBy[0],
+          descending: newValue.sortDesc[0] ? -1 : 1
         })
 
         this.setQuery(query)
