@@ -5,7 +5,13 @@ const StatusSchema = new Schema({
   name: {
     type: String,
     required: [true, 'Necessário identificar o status']
-  }
+  },
+  allowedStatus: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Status'
+    }
+  ]
 })
 
 module.exports = models.Status || model('Status', StatusSchema)

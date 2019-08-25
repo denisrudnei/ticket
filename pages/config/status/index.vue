@@ -8,9 +8,9 @@
         :headers="headers"
       >
         <template
-          v-slot:items="{ item }"
+          v-slot:item.name="{ item }"
         >
-          <td>{{ item.name }}</td>
+          {{ item.name }}
         </template>
       </v-data-table>
     </v-col>
@@ -18,8 +18,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   data() {
     return {
@@ -31,9 +29,13 @@ export default {
       ]
     }
   },
-  computed: mapGetters({
-    status: 'status/getStatus'
-  })
+  asyncData({ $axios }) {
+    return $axios.get('/status').then(response => {
+      return {
+        status: response.data
+      }
+    })
+  }
 }
 </script>
 

@@ -51,7 +51,8 @@
     "snyk": "^1.217.3",
     "socket.io": "^2.2.0",
     "vue-apexcharts": "^1.4.0",
-    "vue2-google-maps": "^0.10.7"
+    "vue2-google-maps": "^0.10.7",
+    "vuedraggable": "^2.23.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
