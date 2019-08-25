@@ -45,7 +45,7 @@
           Alterar status
         </v-list-item-content>
       </v-list-item>
-      <v-list-item v-for="analyst in analysts" :key="analyst._id" @click="openChat(analyst)">
+      <v-list-item v-for="analyst in analysts" v-show="!mini" :key="analyst._id" @click="openChat(analyst)">
         <v-list-item-avatar>
           <v-badge
             overlap

@@ -8,12 +8,15 @@
         :items="items"
       >
         <template
-          slot="items"
-          slot-scope="data"
+          v-slot:item.name="{ item }"
         >
-          <td>{{ data.item.fullName }}</td>
-          <td>{{ (data.item.father !== undefined && data.item.father !== null) ? data.item.father.fullName : 'orfão' }}</td>
-          <td>{{ data.item.subs !== undefined ? data.item.subs.length : 0 }}</td>
+          {{ item.fullName }}
+        </template>
+        <template v-slot:item.father="{ item }">
+          {{ (item.father !== undefined && item.father !== null) ? item.father.fullName : 'orfão' }}
+        </template>
+        <template v-slot:item.children="{ item }">
+          {{ item.subs !== undefined ? item.subs.length : 0 }}
         </template>
       </v-data-table>
     </v-col>
