@@ -6,17 +6,19 @@
         :items="tree"
       >
         <template
-          v-slot:items="{ item }"
+          v-slot:item.name="{ item }"
         >
-          <td>{{ item.name }}</td>
-          <td>{{ item.id }}</td>
-          <td>
-            <v-btn class="primary white--text" icon title="Exluir" @click="deletePath(item._id)">
-              <v-icon>
-                delete
-              </v-icon>
-            </v-btn>
-          </td>
+          {{ item.name }}
+        </template>
+        <template v-slot:item.field="{ item }">
+          {{ item.id }}
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-btn class="primary white--text" icon title="Exluir" @click="deletePath(item._id)">
+            <v-icon>
+              delete
+            </v-icon>
+          </v-btn>
         </template>
       </v-data-table>
     </v-col>
