@@ -104,7 +104,7 @@
           bottom
           right
           fixed
-          direction="top"
+          direction="left"
         >
           <template
             v-slot:activator

@@ -185,7 +185,7 @@
           >
             <v-autocomplete
               v-model="ticketComputed.status"
-              :items="status.map(s => { return { text: s.name, value: s } })"
+              :items="allowedStatus.map(s => { return { text: s.name, value: s } })"
               :rules="!search ? [v => !!v || 'Necessário preencher status'] : undefined"
               required
               :readonly="readOnlyData"
@@ -447,12 +447,25 @@ export default {
     },
     ticketComputed() {
       return Object.assign(this.ticketData, this.ticket)
+    },
+    allowedStatus() {
+      if (this.search) return this.status
+      if (!this.ticketComputed.status) return this.status
+      const statusIndex = this.status.findIndex(s => {
+        return s._id === this.ticketComputed.status._id
+      })
+
+      const result = [this.ticketComputed.status]
+      if (statusIndex !== -1) {
+        result.push(...this.status[statusIndex].allowedStatus)
+      }
+      return result
     }
   },
   created() {
     this.readOnlyData = this.readonly
-    this.$axios.get('/analyst').then(result => {
-      this.analysts = result.data
+    this.$axios.get('/analyst').then(response => {
+      this.analysts = response.data
       if (!this.search && !this.readonly) {
         const openedBy = this.analysts.filter(a => {
           return a._id === this.user._id
@@ -460,14 +473,14 @@ export default {
         this.ticketComputed.openedBy = openedBy
       }
     })
-    this.$axios.get('/group').then(result => {
-      this.groups = result.data
+    this.$axios.get('/group').then(response => {
+      this.groups = response.data
     })
-    this.$axios.get('status').then(result => {
-      this.status = result.data
+    this.$axios.get('status').then(response => {
+      this.status = response.data
     })
-    this.$axios.get('/category').then(result => {
-      this.categories = result.data
+    this.$axios.get('/category').then(response => {
+      this.categories = response.data
     })
   },
   methods: {

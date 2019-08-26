@@ -1,0 +1,92 @@
+<template>
+  <v-row>
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-text-field
+        v-model="actual.name"
+        placeholder="Nome"
+        solo
+      />
+    </v-col>
+    <v-col cols="6">
+      <h4>Status disponíveis</h4>
+      <v-list>
+        <draggable group="status" :list="status">
+          <v-list-item v-for="s in status" :key="s._id" @click="select">
+            <v-list-item-content>
+              {{ s.name }}
+            </v-list-item-content>
+          </v-list-item>
+        </draggable>
+      </v-list>
+    </v-col>
+    <v-col cols="6">
+      <h4>Próximo status possível</h4>
+      <v-list>
+        <draggable group="status" :list="actual.allowedStatus">
+          <v-list-item v-for="s in actual.allowedStatus" :key="s._id">
+            {{ s.name }}
+          </v-list-item>
+        </draggable>
+      </v-list>
+    </v-col>
+    <v-col>
+      <v-btn
+        class="primary white--text"
+        @click="save()"  
+      >
+        Salvar
+      </v-btn>
+    </v-col>
+  </v-row>
+</template>
+
+<script>
+import draggable from 'vuedraggable'
+export default {
+  components: {
+    draggable
+  },
+  props: {
+    value: {
+      type: Object,
+      default: () => {
+        return {
+          name: '',
+          allowedStatus: []
+        }
+      }
+    }
+  },
+  data() {
+    return {
+      status: [],
+      actualData: {
+        name: '',
+        allowedStatus: []
+      }
+    }
+  },
+  computed: {
+    actual() {
+      return Object.assign(this.actualData, this.value)
+    }
+  },
+  created() {
+    this.$axios.get('/status').then(response => {
+      this.status = response.data
+    })
+  },
+  methods: {
+    select() {},
+    save() {
+      this.$emit('input', this.actualData)
+    }
+  }
+}
+</script>
+
+<style>
+</style>

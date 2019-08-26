@@ -1,73 +1,17 @@
 <template>
-  <v-row>
-    <v-col
-      cols="12"
-      pa-3
-    >
-      <v-text-field
-        v-model="actual.name"
-        placeholder="Nome"
-        solo
-      />
-    </v-col>
-    <v-col cols="6">
-      <h4>Status disponíveis</h4>
-      <v-list>
-        <draggable group="status" :list="status">
-          <v-list-item v-for="s in status" :key="s._id" @click="select">
-            <v-list-item-content>
-              {{ s.name }}
-            </v-list-item-content>
-          </v-list-item>
-        </draggable>
-      </v-list>
-    </v-col>
-    <v-col cols="6">
-      <h4>Próximo status possível</h4>
-      <v-list>
-        <draggable group="status" :list="actual.allowedStatus">
-          <v-list-item v-for="s in actual.allowedStatus" :key="s._id">
-            {{ s.name }}
-          </v-list-item>
-        </draggable>
-      </v-list>
-    </v-col>
-    <v-col>
-      <v-btn
-        class="primary white--text"
-        @click="save()"  
-      >
-        Salvar
-      </v-btn>
-    </v-col>
-  </v-row>
+  <status-create @input="save" />
 </template>
 
 <script>
-import draggable from 'vuedraggable'
+import StatusCreate from '@/components/ticket/status/create'
+
 export default {
   components: {
-    draggable
-  },
-  data() {
-    return {
-      actual: {
-        name: '',
-        allowedStatus: []
-      }
-    }
-  },
-  asyncData({ $axios }) {
-    return $axios.get('/status').then(response => {
-      return {
-        status: response.data
-      }
-    })
+    StatusCreate
   },
   methods: {
-    select() {},
-    save() {
-      this.$axios.post('/config/status', this.actual).then(() => {
+    save(status) {
+      this.$axios.post('/config/status', status).then(() => {
         this.$toast.show('Status criado', {
           duration: 1000
         })

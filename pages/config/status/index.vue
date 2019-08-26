@@ -12,6 +12,13 @@
         >
           {{ item.name }}
         </template>
+        <template
+          v-slot:item.edit="{ item }"
+        >
+          <v-btn icon class="primary white--text" :to="`/config/status/edit/${item._id}`">
+            <v-icon>edit</v-icon>
+          </v-btn>
+        </template>
       </v-data-table>
     </v-col>
   </v-row>
@@ -25,6 +32,10 @@ export default {
         {
           text: 'Nome',
           value: 'name'
+        },
+        {
+          text: 'Editar',
+          value: 'edit'
         }
       ]
     }
