@@ -11,26 +11,38 @@
       />
     </v-col>
     <v-col cols="6">
-      <h4>Status disponíveis</h4>
-      <v-list>
-        <draggable group="status" :list="status">
-          <v-list-item v-for="s in status" :key="s._id" @click="select">
-            <v-list-item-content>
-              {{ s.name }}
-            </v-list-item-content>
-          </v-list-item>
-        </draggable>
-      </v-list>
+      <v-card>
+        <v-card-title>
+          <h4>Status disponíveis</h4>
+        </v-card-title>
+        <v-card-text>
+          <v-list>
+            <draggable group="status" :list="status">
+              <v-list-item v-for="s in status" :key="s._id" @click="select">
+                <v-list-item-content>
+                  {{ s.name }}
+                </v-list-item-content>
+              </v-list-item>
+            </draggable>
+          </v-list>
+        </v-card-text>
+      </v-card>
     </v-col>
     <v-col cols="6">
-      <h4>Próximo status possível</h4>
-      <v-list>
-        <draggable group="status" :list="actual.allowedStatus">
-          <v-list-item v-for="s in actual.allowedStatus" :key="s._id">
-            {{ s.name }}
-          </v-list-item>
-        </draggable>
-      </v-list>
+      <v-card>
+        <v-card-title>
+          <h4>Próximo status possível</h4>
+        </v-card-title>
+        <v-card-text>
+          <v-list>
+            <draggable group="status" :list="actual.allowedStatus">
+              <v-list-item v-for="s in actual.allowedStatus" :key="s._id" @click="select">
+                {{ s.name }}
+              </v-list-item>
+            </draggable>
+          </v-list>
+        </v-card-text>
+      </v-card>
     </v-col>
     <v-col>
       <v-btn
