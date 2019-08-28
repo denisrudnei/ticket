@@ -34,6 +34,7 @@
     </v-col>
     <v-col>
       <v-btn
+        :disabled="actual.name.length === 0"
         class="primary white--text"
         @click="save()"  
       >
