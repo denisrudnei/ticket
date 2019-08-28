@@ -34,4 +34,10 @@ describe('NotificationService', function() {
     const notification = await Notification.findOne().exec()
     await NotificationService.unRead(user._id, notification._id)
   })
+
+  it('Read all notifications', async () => {
+    const user = await Analyst.findOne().exec()
+    const notification = await Notification.findOne().exec()
+    await NotificationService.readall(user._id, notification._id)
+  })
 })

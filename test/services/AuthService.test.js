@@ -5,6 +5,11 @@ const Analyst = require('../../server/models/Analyst')
 const password = faker.internet.password()
 const email = faker.internet.email()
 
+const req = {
+  protocol: 'http',
+  hostname: '0.0.0.0'
+}
+
 describe('Auth', function() {
   this.timeout(0)
   it('Register new user', async () => {
@@ -27,6 +32,12 @@ describe('Auth', function() {
 
   it('Login', async () => {
     await AuthService.login(email, password)
+  })
+
+  it('Login with incorrect email', async () => {
+    try {
+      await AuthService.login('incorrect', 'incorrect')
+    } catch {}
   })
 
   it('Merge user', async () => {
@@ -89,5 +100,14 @@ describe('Auth', function() {
       'incorrect password',
       'newPassword'
     ).catch(() => {})
+  })
+
+  it('Generate email to reset password', async () => {
+    await AuthService.generateEmailToReset(email, req)
+  })
+
+  it('Reset with token', async () => {
+    const token = await AuthService.generateEmailToReset(email, req)
+    await AuthService.resetPasswordWithToken(token, 'new password')
   })
 })
