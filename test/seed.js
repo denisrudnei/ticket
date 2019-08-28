@@ -5,6 +5,7 @@ const CategorySeed = require('./seeds/CategorySeed')
 const TicketSeed = require('./seeds/TicketSeed')
 const GroupSeed = require('./seeds/GroupSeed')
 const StatusSeed = require('./seeds/StatusSeed')
+const NotificationSeed = require('./seeds/NotificationSeed')
 
 const data = [
   {
@@ -22,6 +23,10 @@ const data = [
   {
     model: 'Group',
     documents: GroupSeed.seed(5)
+  },
+  {
+    model: 'Notification',
+    documents: NotificationSeed.seed(5)
   }
 ]
 
@@ -32,7 +37,8 @@ const models = [
   './server/models/ticket/Category.js',
   './server/models/Path.js',
   './server/models/ticket/Ticket.js',
-  './server/models/Address.js'
+  './server/models/Address.js',
+  './server/models/Notification.js'
 ]
 
 const seed = {

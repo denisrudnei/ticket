@@ -119,7 +119,7 @@
       >
         <v-row>
           <v-col
-            cols="11"
+            cols="12"
           >
             <h5>{{ chart.id }}</h5>
             <apexchart
@@ -130,14 +130,15 @@
             />
           </v-col>
           <v-col
-            cols="1"
+            cols="12"
           >
             <v-btn
+              block
               class="red white--text"
-              icon
               @click="removeChart(chart)"
             >
-              <v-icon>
+              Remover da listagem
+              <v-icon right>
                 delete
               </v-icon>
             </v-btn>

@@ -1,38 +1,33 @@
-const Notification = require('../models/Notification')
-
-const fields = ['to', 'from']
+const NotificationService = require('../../server/services/NotificationService')
 
 module.exports = (app, io) => {
   app.get('/notification/:id', (req, res) => {
-    Notification.findOne({ _id: req.params.id })
-      .populate(fields)
-      .exec((err, notification) => {
-        if (err) return res.status(500).json(err)
-        return res.status(200).json(notification)
-      })
+    NotificationService.getOne(req.params.id).then(notifications => {
+      return res.status(200).json(notifications)
+    })
   })
 
   app.post('/notification/', (req, res) => {
-    Notification.find({
-      to: {
-        $in: [req.session.authUser._id]
-      }
+    const userId = req.session.authUser._id
+    NotificationService.getAll(userId).then(notifications => {
+      return res.status(200).json(notifications)
     })
-      .populate(fields)
-      .exec((err, notifications) => {
-        if (err) return res.status(500).json(err)
-        return res.status(200).json(notifications)
-      })
   })
 
   app.post('/notification/:id/read', async (req, res) => {
-    const notification = await Notification.findOne({
-      _id: req.params.id
-    }).populate(fields)
+    const userId = req.session.authUser._id
+    NotificationService.toggleRead(userId, req.params.id).then(
+      notifification => {
+        io.emit('readNotification', notifification)
+        return res.status(202).json(notifification)
+      }
+    )
+  })
 
-    notification.read = req.body.read
-    io.emit('readNotification', notification)
-    notification.save()
-    return res.status(200).json(notification)
+  app.post('/notification/readall', (req, res) => {
+    const userId = req.session.authUser._id
+    NotificationService.readall(userId).then(notifications => {
+      return res.status(200).json(notifications)
+    })
   })
 }

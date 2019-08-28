@@ -37,6 +37,7 @@
               >
                 <v-switch
                   :input-value="notification.read"
+                  :value="user._id"
                   label="Lida?"
                   @change="readNotification(notification)"
                 />
@@ -50,6 +51,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {
     notifications: {
@@ -59,13 +61,13 @@ export default {
       }
     }
   },
+  computed: mapGetters({
+    user: 'auth/getUser'
+  }),
   methods: {
     readNotification(notification) {
       this.$axios
-        .post(`/notification/${notification._id}/read`, {
-          ...notification,
-          read: !notification.read
-        })
+        .post(`/notification/${notification._id}/read`, notification)
         .then(response => {
           this.$store.commit('notification/updateNotification', response.data)
           this.$toast.show('Lida', {

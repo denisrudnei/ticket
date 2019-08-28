@@ -1,20 +1,26 @@
 export const state = () => ({
   notifications: [],
-  unread: []
+  unread: [],
+  read: []
 })
 
 export const getters = {
-  getNotifications(state) {
-    return state.notifications
-  },
-  getUnread(state) {
-    return state.notifications.filter(n => {
-      return n.read === false
+  getNotifications(state, getters, rootState, rootGetters) {
+    const user = rootGetters['auth/getUser']
+    return state.notifications.filter(notification => {
+      return notification.to.map(t => t._id).includes(user._id)
     })
   },
-  getRead(state) {
-    return state.notifications.filter(n => {
-      return n.read
+  getUnread(state, getters, rootState, rootGetters) {
+    const user = rootGetters['auth/getUser']
+    return getters.getNotifications.filter(notification => {
+      return !notification.read.includes(user._id)
+    })
+  },
+  getRead(state, getters, rootState, rootGetters) {
+    const user = rootGetters['auth/getUser']
+    return getters.getNotifications.filter(notification => {
+      return notification.read.includes(user._id)
     })
   }
 }

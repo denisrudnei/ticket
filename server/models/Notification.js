@@ -14,15 +14,17 @@ const NotificationSchema = new Schema({
   ],
   date: {
     type: Date,
-    default: new Date()
+    default: Date.now
   },
   name: String,
   content: String,
   type: String,
-  read: {
-    type: Boolean,
-    default: false
-  }
+  read: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Analyst'
+    }
+  ]
 })
 
 NotificationSchema.pre('find', function() {

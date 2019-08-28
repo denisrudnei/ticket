@@ -12,6 +12,7 @@ export default {
   components: {
     NotificationList
   },
+
   computed: mapGetters({
     notifications: 'notification/getNotifications'
   })
