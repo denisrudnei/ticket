@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col
-      cols="12"
+      cols="11"
       pa-3
     >
       <v-card
@@ -26,6 +26,37 @@
           />
         </v-card-actions>
       </v-card>
+    </v-col>
+    <v-col cols="1">
+      <v-row>
+        <v-btn
+          outlined
+          :disabled="prev(notification) === undefined"
+          fab
+          color="primary"
+          icon
+          @click="goTo(prev(notification))"
+        >
+          <v-icon>
+            keyboard_arrow_up
+          </v-icon>
+        </v-btn>
+      </v-row>
+      <br>
+      <v-row>
+        <v-btn
+          outlined
+          :disabled="next(notification) === undefined"
+          fab
+          color="primary"
+          icon
+          @click="goTo(next(notification))"
+        >
+          <v-icon>
+            keyboard_arrow_down
+          </v-icon>
+        </v-btn>
+      </v-row>
     </v-col>
   </v-row>
 </template>
@@ -52,9 +83,25 @@ export default {
     })
   },
   computed: mapGetters({
-    user: 'auth/getUser'
+    user: 'auth/getUser',
+    notifications: 'notification/getNotifications'
   }),
   methods: {
+    prev(notification) {
+      const index = this.notifications.findIndex(ntf => {
+        return ntf._id === notification._id
+      })
+      return this.notifications[index - 1]
+    },
+    next(notification) {
+      const index = this.notifications.findIndex(ntf => {
+        return ntf._id === notification._id
+      })
+      return this.notifications[index + 1]
+    },
+    goTo(notification) {
+      this.$router.push(`/profile/notification/${notification._id}`)
+    },
     read() {
       const id = this.notification._id
       this.$axios
