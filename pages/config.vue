@@ -35,7 +35,9 @@
 <script>
 export default {
   created() {
-    this.$router.push('/config/analyst')
+    if (this.$route.path === '/config') {
+      this.$router.push('/config/analyst')
+    }
   }
 }
 </script>
