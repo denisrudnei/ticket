@@ -23,6 +23,7 @@ export default {
           duration: 1000,
           icon: 'done'
         })
+        this.$router.push('/config/status/')
       })
     }
   }

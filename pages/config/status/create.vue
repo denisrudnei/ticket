@@ -16,6 +16,7 @@ export default {
           duration: 1000
         })
       })
+      this.$router.push('/config/status/')
     }
   }
 }
