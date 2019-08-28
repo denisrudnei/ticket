@@ -26,7 +26,9 @@
       />
     </v-col>
     <v-col cols="12" pa-3>
-      <ckeditor v-model="knowledge.preview" :editor="editor" @ready="configureEditor" />
+      <no-ssr>
+        <ckeditor v-model="knowledge.preview" :editor="editor" @ready="configureEditor" />
+      </no-ssr>
       <input ref="file" type="file" style="display: none">
       <v-btn class="primary white--text" @click="addFile()">
         <v-icon>attach_file</v-icon>
@@ -45,7 +47,6 @@
 </template>
 
 <script>
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import compareObjectsWithId from '@/mixins/compareObjectsWithId'
 import ImageUploadAdapter from '@/plugins/image-upload-adapter'
 export default {
@@ -63,7 +64,7 @@ export default {
   },
   data() {
     return {
-      editor: ClassicEditor,
+      editor: null,
       items: [],
       category: [],
       group: [],
@@ -87,6 +88,9 @@ export default {
         this.knowledge.group === ''
       )
     }
+  },
+  mounted() {
+    this.editor = require('@ckeditor/ckeditor5-build-classic')
   },
   async created() {
     const category = await this.$axios.get('/category/')
