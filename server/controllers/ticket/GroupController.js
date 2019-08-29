@@ -11,6 +11,16 @@ module.exports = app => {
       })
   })
 
+  app.get('/group/:id', (req, res) => {
+    GroupService.getOne(req.params.id)
+      .then(group => {
+        return res.status(200).json(group)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  })
+
   app.post('/config/group', (req, res) => {
     GroupService.create(req.body)
       .then(() => {
@@ -25,6 +35,16 @@ module.exports = app => {
     GroupService.insertAnalyst(req.params.groupId, req.body._id)
       .then(() => {
         return res.sendStatus(201)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  })
+
+  app.put('/config/group/:id', (req, res) => {
+    GroupService.edit(req.params.id, req.body)
+      .then(group => {
+        return res.status(200).json(group)
       })
       .catch(e => {
         return res.status(500).json(e)

@@ -1,41 +1,20 @@
 <template>
-  <v-row>
-    <v-col
-      cols="12"
-      pa-3
-    >
-      <v-form>
-        <v-text-field
-          v-model="group.name"
-          placeholder="Nome"
-          solo
-        />
-        <v-btn
-          class="primary white--text"
-          @click="save()"  
-        >
-          Salvar
-        </v-btn>
-      </v-form>
-    </v-col>
-  </v-row>
+  <create-group @input="save" />
 </template>
 
 <script>
+import CreateGroup from '@/components/ticket/group/create'
 export default {
-  data() {
-    return {
-      group: {
-        name: ''
-      }
-    }
+  components: {
+    CreateGroup
   },
   methods: {
-    save() {
-      this.$axios.post('/config/group', this.group).then(() => {
+    save(group) {
+      this.$axios.post('/config/group', group).then(() => {
         this.$toast.show('Grupo criado', {
           duration: 1000
         })
+        this.$router.push('/config/group')
       })
     }
   }

@@ -121,6 +121,15 @@
             </v-card>
           </v-menu>
         </template>
+        <template
+          v-slot:item.edit="{ item }"
+        >
+          <v-btn class="primary white--text" icon :to="`/config/group/edit/${item._id}`">
+            <v-icon>
+              edit
+            </v-icon>
+          </v-btn>
+        </template>
       </v-data-table>
     </v-col>
   </v-row>
@@ -145,6 +154,10 @@ export default {
         {
           text: 'Ações',
           value: 'actions'
+        },
+        {
+          text: 'Editar',
+          value: 'edit'
         }
       ]
     }
