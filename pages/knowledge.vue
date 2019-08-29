@@ -29,7 +29,7 @@ export default {
     })
   },
   mounted() {
-    if (this.groups.length > 0) {
+    if (this.$route.path === '/knowledge' && this.groups.length > 0) {
       this.$router.push(`/knowledge/group/${this.groups[0].name}`)
     }
   }
