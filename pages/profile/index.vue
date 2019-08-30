@@ -30,6 +30,11 @@
         md="4"
       >
         <v-card>
+          <v-card-title primary-title>
+            <div class="healine">
+              Proporção de chamados resolvidos
+            </div>
+          </v-card-title>
           <v-card-text>
             <v-row>
               <v-col
@@ -56,11 +61,6 @@
                 cols="8"
                 pa-3
               >
-                <v-card-title primary-title>
-                  <div class="healine">
-                    Proporção de chamados resolvidos
-                  </div>
-                </v-card-title>
                 <v-card-text
                   class="text-center"
                 >
