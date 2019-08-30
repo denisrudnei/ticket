@@ -7,7 +7,7 @@ const AuthService = {
   login(email, password) {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
-        email: email
+        email: email.toLowerCase()
       })
         .select('+password +email +role')
         .exec((err, user) => {
