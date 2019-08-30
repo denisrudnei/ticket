@@ -20,6 +20,17 @@ describe('Groups', () => {
     await GroupService.insertAnalyst(group._id, analyst._id)
   })
 
+  it('Get one group', async () => {
+    const group = await Group.findOne().exec()
+    await GroupService.getOne(group._id)
+  })
+
+  it('Edit group info', async () => {
+    const group = await Group.findOne().exec()
+    group.name = 'test'
+    await GroupService.edit(group._id, group)
+  })
+
   it('Remove analyst', async () => {
     const analyst = await Analyst.findOne().exec()
     const group = await Group.findOne().exec()
