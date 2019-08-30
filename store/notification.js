@@ -7,9 +7,14 @@ export const state = () => ({
 export const getters = {
   getNotifications(state, getters, rootState, rootGetters) {
     const user = rootGetters['auth/getUser']
-    return state.notifications.filter(notification => {
-      return notification.to.map(t => t._id).includes(user._id)
-    })
+    return state.notifications
+      .filter(notification => {
+        return notification.to.map(t => t._id).includes(user._id)
+      })
+      .sort((ntf1, ntf2) => {
+        if (ntf1.date === ntf2.date) return 0
+        return ntf1 > ntf2 ? 1 : -1
+      })
   },
   getUnread(state, getters, rootState, rootGetters) {
     const user = rootGetters['auth/getUser']
