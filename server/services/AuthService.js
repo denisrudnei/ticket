@@ -8,7 +8,7 @@ const AuthService = {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
         email: {
-          $regex: new RegExp(email, 'i')
+          $regex: new RegExp(`^${email}$`, 'i')
         }
       })
         .select('+password +email +role')
