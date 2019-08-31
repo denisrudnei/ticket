@@ -31,6 +31,7 @@
           :to="item.to"
           router
           exact
+          :title="item.title"
         >
           <v-list-item-action>
             <v-icon>
