@@ -13,7 +13,7 @@
         >
           <v-text-field
             v-model="address.cep"
-            mask="#####-###"
+            v-mask="mask"
             label="Cep"
             filled
           />
@@ -102,10 +102,15 @@
 </template>
 
 <script>
+import { mask } from 'vue-the-mask'
 import { mapGetters } from 'vuex'
 export default {
+  directives: {
+    mask
+  },
   data() {
     return {
+      mask: '#####-###',
       address: {},
       center: { lat: 45.508, lng: -73.587 },
       markers: [],
