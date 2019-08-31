@@ -234,7 +234,7 @@ export default {
 </script>
 
 <style>
-.v-badge__badge.v-icon {
+.v-badge__badge .v-icon {
   font-size: 14px !important;
 }
 </style>
