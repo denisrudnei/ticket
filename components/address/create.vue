@@ -163,7 +163,7 @@ export default {
       )
     },
     address() {
-      return Object.assign(this.value, this.addressData)
+      return Object.assign(this.addressData, this.value)
     },
     ...mapGetters({
       user: 'auth/getUser'
