@@ -14,8 +14,7 @@ module.exports = app => {
           user: response
         })
       })
-      .catch(e => {
-        console.log(e)
+      .catch(() => {
         return res.sendStatus(400)
       })
   })
