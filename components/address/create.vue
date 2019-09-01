@@ -8,6 +8,11 @@
       <v-row>
         <v-col
           cols="12"
+        >
+          <v-text-field v-model="address.name" label="Nome" filled />
+        </v-col>
+        <v-col
+          cols="12"
           md="4"
           pa-3
         >
@@ -23,10 +28,10 @@
           cols="12"
           pa-3
         >
-          <v-autocomplete
-            v-model="address.city"
+          <v-text-field
+            v-model="address.country"
             filled
-            label="Cidade"
+            label="País"
           />
         </v-col>
         <v-col
@@ -34,14 +39,26 @@
           cols="12"
           pa-3
         >
-          <v-autocomplete
+          <v-text-field
             v-model="address.state"
             filled
             label="Estado"
           />
         </v-col>
         <v-col
+          md="4"
           cols="12"
+          pa-3
+        >
+          <v-text-field
+            v-model="address.city"
+            filled
+            label="Cidade"
+          />
+        </v-col>
+        <v-col
+          cols="12"
+          md="8"
           pa-3
         >
           <v-text-field
@@ -88,6 +105,7 @@
     >
       <v-btn
         class="primary white--text"
+        :disabled="disabled"
         @click="save()"
       >
         <v-icon
@@ -108,31 +126,47 @@ export default {
   directives: {
     mask
   },
+  props: {
+    value: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       mask: '#####-###',
-      address: {},
+      addressData: {
+        cep: '',
+        name: '',
+        city: '',
+        state: '',
+        country: '',
+        street: ''
+      },
       center: { lat: 45.508, lng: -73.587 },
       markers: [],
       places: [],
       currentPlace: null
     }
   },
-  computed: mapGetters({
-    user: 'auth/getUser'
-  }),
-  created() {
-    this.$axios.get('/profile/address').then(response => {
-      if (!response.data) {
-        this.address = {
-          cep: '',
-          city: '',
-          street: '',
-          state: ''
-        }
-      } else {
-        this.address = response.data
-      }
+  computed: {
+    disabled() {
+      return (
+        this.address.name === '' ||
+        this.address.cep === '' ||
+        this.address.city === '' ||
+        this.address.state === '' ||
+        this.address.country === '' ||
+        this.address.street === ''
+      )
+    },
+    address() {
+      return Object.assign(this.value, this.addressData)
+    },
+    ...mapGetters({
+      user: 'auth/getUser'
     })
   },
   mounted() {
@@ -161,20 +195,7 @@ export default {
     },
     updateCenter(center) {},
     save() {
-      this.$axios.post('/address', this.address).then(
-        () => {
-          this.$toast.show('Atualizado com sucesso', {
-            duration: 1000,
-            icon: 'done'
-          })
-        },
-        () => {
-          this.$toast.error('Falha ao cadastrar/inseir', {
-            duration: 1000,
-            icon: 'error'
-          })
-        }
-      )
+      this.$emit('input', this.address)
     }
   }
 }

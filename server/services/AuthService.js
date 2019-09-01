@@ -26,7 +26,9 @@ const AuthService = {
   register(user) {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
-        email: user.email
+        email: {
+          $regex: new RegExp(`^${user.email}$`, 'i')
+        }
       })
         .exec()
         .then(userFromDB => {
@@ -55,9 +57,12 @@ const AuthService = {
   mergeUser(email, userBody) {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
-        email: email
+        email: {
+          $regex: new RegExp(`^${email}$`, 'i')
+        }
       })
-        .select('+email +mergePictureWithExternalAccount +role +color')
+        .select('+email +mergePictureWithExternalAccount +role +color +address')
+        .populate(['address'])
         .exec((err, analyst) => {
           if (err || analyst === null) {
             Analyst.create(

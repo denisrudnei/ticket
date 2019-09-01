@@ -67,6 +67,7 @@ module.exports = app => {
       name: req.body.name,
       contactEmail: req.body.contactEmail,
       color: req.body.color,
+      address: req.body.address,
       mergePictureWithExternalAccount: req.body.mergePictureWithExternalAccount
     }
     AnalystService.updateAnalyst(userId, analyst)

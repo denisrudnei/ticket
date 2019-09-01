@@ -24,6 +24,13 @@
           label="Endereço de email para contato"
           @change="updateEmail"
         />
+        <v-select
+          :value="user.address"
+          filled
+          label="Localização"
+          :items="addresses.map(a => ({text: a.name, value: a}))"
+          @change="updateAddress"
+        />
       </v-col>
       <v-col
         cols="12"
@@ -142,6 +149,13 @@ export default {
       this.updatePrimary()
     }
   },
+  asyncData({ $axios }) {
+    return $axios.get('/address').then(response => {
+      return {
+        addresses: response.data
+      }
+    })
+  },
   created() {
     this.$axios.get('/profile').then(response => {
       this.info = response.data
@@ -150,7 +164,8 @@ export default {
   methods: {
     ...mapMutations({
       updateName: 'auth/updateName',
-      updateEmail: 'auth/updateEmail'
+      updateEmail: 'auth/updateEmail',
+      updateAddress: 'auth/updateAddress'
     }),
     updatePrimary() {
       this.$vuetify.theme.currentTheme.primary = this.primary

@@ -74,6 +74,10 @@ export default {
       if (size > 2) return `${size} pessoas receberam a notificação`
     }
   },
+  computed: mapGetters({
+    user: 'auth/getUser',
+    notifications: 'notification/getNotifications'
+  }),
   asyncData({ $axios, params }) {
     const id = params.id
     return $axios.get(`/notification/${id}`).then(response => {
@@ -82,10 +86,6 @@ export default {
       }
     })
   },
-  computed: mapGetters({
-    user: 'auth/getUser',
-    notifications: 'notification/getNotifications'
-  }),
   methods: {
     prev(notification) {
       const index = this.notifications.findIndex(ntf => {

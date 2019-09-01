@@ -20,6 +20,9 @@ export const mutations = {
   updateEmail(state, contactEmail) {
     state.user.contactEmail = contactEmail
   },
+  updateAddress(state, address) {
+    state.user.address = address
+  },
   updatemergePictureWithExternalAccount(state, merge) {
     state.user.mergePictureWithExternalAccount = merge
   },

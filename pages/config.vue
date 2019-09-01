@@ -20,6 +20,9 @@
         <v-tab to="/config/status">
           Status
         </v-tab>
+        <v-tab to="/config/address">
+          Configurar endereços
+        </v-tab>
         <v-tab to="/config/knowledge/list">
           Base de conhecimento
         </v-tab>

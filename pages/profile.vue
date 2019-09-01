@@ -26,14 +26,6 @@
           Listagem em árvore
         </v-tab>
         <v-tab
-          to="/profile/address"
-        >
-          <v-icon left>
-            streetview
-          </v-icon>
-          Endereço
-        </v-tab>
-        <v-tab
           to="/profile/notification/all"
         >
           <v-icon left>

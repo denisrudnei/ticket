@@ -2,6 +2,9 @@ const { models, model, Schema } = require('mongoose')
 
 const AddressSchema = new Schema({
   _id: Schema.Types.ObjectId,
+  name: {
+    type: String
+  },
   street: {
     type: String
   },

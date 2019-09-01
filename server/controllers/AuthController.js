@@ -1,3 +1,4 @@
+const jsonwebtoken = require('jsonwebtoken')
 const AuthService = require('../services/AuthService')
 
 module.exports = app => {
@@ -5,9 +6,16 @@ module.exports = app => {
     AuthService.login(req.body.email, req.body.password)
       .then(result => {
         req.session.authUser = result
-        return res.json(result)
+        const response = jsonwebtoken.sign(
+          JSON.stringify(result),
+          process.env.JWT_TOKEN
+        )
+        return res.json({
+          user: response
+        })
       })
-      .catch(() => {
+      .catch(e => {
+        console.log(e)
         return res.sendStatus(400)
       })
   })
