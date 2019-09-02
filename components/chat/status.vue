@@ -1,13 +1,7 @@
 <template>
-  <v-row>
-    <v-col>
-      <v-card>
-        <v-card-text>
-          <v-select :value="user.status" :items="status" box label="Status online" @change="changeStatus" />
-        </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-card>
+    <v-select :value="user.status" :items="status" filled label="Status online" @change="changeStatus" />
+  </v-card>
 </template>
 
 <script>

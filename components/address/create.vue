@@ -154,12 +154,9 @@ export default {
   computed: {
     disabled() {
       return (
-        this.address.name === '' ||
-        this.address.cep === '' ||
-        this.address.city === '' ||
-        this.address.state === '' ||
-        this.address.country === '' ||
-        this.address.street === ''
+        Object.values(this.address).filter(v => {
+          return v === ''
+        }).length > 0
       )
     },
     address() {
