@@ -39,11 +39,11 @@ const populateArray = [
 ]
 
 const TicketService = {
-  getTickets(sortBy, page, limit) {
+  getTickets(filter, sortBy, page, limit) {
     // TODO sorting not works with doc ref
     return new Promise((resolve, reject) => {
       Ticket.paginate(
-        {},
+        filter,
         {
           page: page,
           limit: limit,
@@ -56,6 +56,19 @@ const TicketService = {
         }
       )
     })
+  },
+  getAll(sortBy, page, limit) {
+    return this.getTickets({}, sortBy, page, limit)
+  },
+  getOpenedByMe(analystId, sortBy, page, limit) {
+    return this.getTickets(
+      {
+        openedBy: analystId
+      },
+      sortBy,
+      page,
+      limit
+    )
   },
   getOne(ticketId) {
     return new Promise((resolve, reject) => {

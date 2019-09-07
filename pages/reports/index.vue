@@ -110,7 +110,7 @@
         </v-icon>
       </v-btn>
     </v-col>
-    <no-ssr>
+    <client-only>
       <v-col
         v-for="chart in charts"
         :key="chart.id"
@@ -145,7 +145,7 @@
           </v-col>
         </v-row>
       </v-col>
-    </no-ssr>
+    </client-only>
   </v-row>
 </template>
 

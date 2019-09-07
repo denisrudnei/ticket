@@ -179,8 +179,18 @@ export default {
       items: [
         {
           icon: 'bookmarks',
-          title: 'Chamados',
+          title: 'Listagem total',
           to: '/'
+        },
+        {
+          icon: 'build',
+          title: 'Chamados sendo tratados',
+          to: '/ticket/profile/actualUser'
+        },
+        {
+          icon: 'person',
+          title: 'Abertos por mim',
+          to: '/ticket/profile/openedBy'
         },
         {
           icon: 'insert_chart',

@@ -10,9 +10,37 @@ module.exports = (app, io) => {
     }
 
     const page = parseInt(req.query.page) || 1
-    const limit = parseInt(req.query.limit) || 5
+    const limit = parseInt(req.query.limit) || 10
 
-    TicketService.getTickets(sortBy, page, limit)
+    TicketService.getAll(sortBy, page, limit)
+      .then(result => {
+        return res.status(200).json(result)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  })
+
+  app.get('/ticket/profile/:type', (req, res) => {
+    const type = req.params.type
+    let sortBy = req.query.sortBy || 'created'
+    const descending = parseInt(req.query.descending) || -1
+    sortBy = {
+      [sortBy]: descending
+    }
+
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 10
+    const actualUser = req.session.authUser._id
+
+    TicketService.getTickets(
+      {
+        [type]: actualUser
+      },
+      sortBy,
+      page,
+      limit
+    )
       .then(result => {
         return res.status(200).json(result)
       })

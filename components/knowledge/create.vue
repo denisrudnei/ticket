@@ -26,9 +26,9 @@
       />
     </v-col>
     <v-col cols="12" pa-3>
-      <no-ssr>
+      <client-only>
         <ckeditor v-model="knowledge.preview" :editor="editor" @ready="configureEditor" />
-      </no-ssr>
+      </client-only>
       <input ref="file" type="file" style="display: none">
       <v-btn class="primary white--text" @click="addFile()">
         <v-icon>attach_file</v-icon>
