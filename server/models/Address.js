@@ -5,6 +5,9 @@ const AddressSchema = new Schema({
   name: {
     type: String
   },
+  country: {
+    type: String
+  },
   street: {
     type: String
   },

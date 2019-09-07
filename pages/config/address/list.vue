@@ -5,14 +5,17 @@
         <template v-slot:item.name="{ item }">
           {{ item.name }}
         </template>
+        <template v-slot:item.street="{ item }">
+          {{ item.street }}
+        </template>
         <template v-slot:item.state="{ item }">
           {{ item.state }}
         </template>
         <template v-slot:item.city="{ item }">
           {{ item.city }}
         </template>
-        <template v-slot:item.street="{ item }">
-          {{ item.street }}
+        <template v-slot:item.country="{ item }">
+          {{ item.country }}
         </template>
         <template v-slot:item.edit="{ item }">
           <v-btn class="primary white--text" icon :to="`/config/address/edit/${item._id}`">
@@ -45,6 +48,10 @@ export default {
         {
           text: 'Rua',
           value: 'street'
+        },
+        {
+          text: 'País',
+          value: 'country'
         },
         {
           text: 'Editar',

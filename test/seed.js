@@ -6,6 +6,7 @@ const TicketSeed = require('./seeds/TicketSeed')
 const GroupSeed = require('./seeds/GroupSeed')
 const StatusSeed = require('./seeds/StatusSeed')
 const NotificationSeed = require('./seeds/NotificationSeed')
+const AddressSeed = require('./seeds/AddressSeed')
 
 const data = [
   {
@@ -27,6 +28,10 @@ const data = [
   {
     model: 'Notification',
     documents: NotificationSeed.seed(5)
+  },
+  {
+    model: 'Address',
+    documents: AddressSeed.seed(5)
   }
 ]
 

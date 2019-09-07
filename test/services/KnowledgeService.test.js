@@ -4,7 +4,8 @@ const Category = require('../../server/models/ticket/Category')
 const Group = require('../../server/models/ticket/Group')
 const KnowledgeStatus = require('../../server/models/knowledge/KnowledgeStatus')
 
-describe('Knowledge', () => {
+describe('Knowledge', function() {
+  this.timeout(0)
   it('Get all knowledges', async () => {
     await KnowledgeService.getAll()
   })

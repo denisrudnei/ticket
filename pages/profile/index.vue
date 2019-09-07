@@ -28,7 +28,7 @@
           :value="user.address"
           filled
           label="Localização"
-          :items="addresses.map(a => ({text: a.name, value: a}))"
+          :items="addresses.map(a => ({text: `${a.name} | ${a.city}, ${a.state} - ${a.country}`, value: a}))"
           @change="updateAddress"
         />
       </v-col>
