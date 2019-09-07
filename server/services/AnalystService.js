@@ -27,6 +27,17 @@ const AnalystService = {
     })
   },
 
+  getOne(analystId) {
+    return new Promise((resolve, reject) => {
+      Analyst.findOne({
+        _id: analystId
+      }).exec((err, analyst) => {
+        if (err) return reject(err)
+        return resolve(analyst)
+      })
+    })
+  },
+
   getConfigAnalysts() {
     return new Promise((resolve, reject) => {
       Analyst.find({})

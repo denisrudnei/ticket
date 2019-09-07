@@ -395,7 +395,6 @@
         </v-row>
       </v-form>
     </v-col>
-    <ticket-modal />
   </v-row>
 </template>
 
@@ -406,15 +405,14 @@ import FileInclude from '@/components/files/include'
 import Logs from '@/components/ticket/logs'
 import Comments from '@/components/ticket/comments'
 import compareObjectsWithId from '@/mixins/compareObjectsWithId'
-import TicketModal from '@/components/ticket/ticket-modal'
+import showModal from '@/mixins/showModal'
 
 export default {
   components: {
     Fields,
     FileInclude,
     Logs,
-    Comments,
-    TicketModal
+    Comments
   },
   filters: {
     date(value) {
@@ -422,7 +420,7 @@ export default {
       return newDate.toLocaleDateString()
     }
   },
-  mixins: [compareObjectsWithId],
+  mixins: [compareObjectsWithId, showModal],
   props: {
     search: Boolean,
     readonly: {
@@ -503,15 +501,6 @@ export default {
     })
   },
   methods: {
-    show(property, value) {
-      if (value === null || value === undefined) return
-      if (Object.prototype.hasOwnProperty.call(value, '_id')) {
-        this.$store.commit('ticket/setModalQuery', {
-          [property]: value._id
-        })
-        this.$store.commit('ticket/setModalList', true)
-      }
-    },
     addComment() {
       this.$axios
         .post(`/ticket/comment/${this.ticketComputed._id}`, {

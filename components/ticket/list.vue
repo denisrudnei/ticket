@@ -84,7 +84,6 @@
     <template v-slot:item.created="{ item }">
       {{ item.created | date }}
     </template>
-    <ticket-modal />
   </v-data-table>
 </template>
 

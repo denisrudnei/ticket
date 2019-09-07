@@ -17,6 +17,11 @@ describe('Analyst', function() {
     await AnalystService.getConfigAnalysts()
   })
 
+  it('Get one analyst', async () => {
+    const toFind = await Analyst.findOne().exec()
+    await AnalystService.getOne(toFind._id)
+  })
+
   it('Remove user image', async () => {
     await AnalystService.removeImage(analyst._id)
   })

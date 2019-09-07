@@ -55,6 +55,7 @@ const seed = () => {
         content: faker.lorem.paragraph(),
         category: categoryResult._id,
         actualUser: analystResult._id,
+        affectedUser: analystResult._id,
         openedBy: analystResult._id,
         group: groupResult._id,
         status: statusResult._id

@@ -69,7 +69,14 @@ const TicketSchema = new Schema({
 })
 
 TicketSchema.pre('find', function() {
-  this.populate(['status', 'group', 'openedBy', 'actualUser', 'category'])
+  this.populate([
+    'status',
+    'group',
+    'openedBy',
+    'affectedUser',
+    'actualUser',
+    'category'
+  ])
 })
 
 async function createLog(ticket) {

@@ -11,6 +11,16 @@ module.exports = app => {
       })
   })
 
+  app.get('/analyst/:id', (req, res) => {
+    AnalystService.getOne(req.params.id)
+      .then(analyst => {
+        return res.status(200).json(analyst)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  })
+
   app.get('/config/analyst', (_, res) => {
     AnalystService.getConfigAnalysts()
       .then(analysts => {
