@@ -21,7 +21,7 @@
       </v-btn>
     </template>
     <template v-slot:item.actualUser="{ item }">
-      <v-list-item>
+      <v-list-item :to="`/analyst/${item.actualUser._id}`">
         <v-list-item-avatar>
           <v-img :src="item.actualUser.picture" />
         </v-list-item-avatar>

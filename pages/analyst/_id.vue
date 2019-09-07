@@ -40,8 +40,7 @@ export default {
         analyst: response.data
       }
     })
-  },
-  methods: {}
+  }
 }
 </script>
 
