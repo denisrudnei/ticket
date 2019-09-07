@@ -123,6 +123,25 @@
               @click:append="show('openedBy', ticketComputed.openedBy)"
             />
           </v-col>
+
+          <v-col
+            cols="12"
+            md="4"
+            pa-1
+          >
+            <v-autocomplete
+              v-model="ticketComputed.affectedUser"
+              :rules="!search ? [v => !!v || 'Necessário preencher']: undefined"
+              :items="analysts.map(u => { return {text: u.name, value: u} })"
+              required
+              :readonly="readOnlyData"
+              filled
+              label="Usuário final afetado"
+              :value-comparator="compare"
+              append-icon="search"
+              @click:append="show('affectedUser', ticketComputed.affectedUser)"
+            />
+          </v-col>
           <v-col
             cols="12"
             md="4"

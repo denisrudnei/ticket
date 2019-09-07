@@ -14,6 +14,9 @@ const populateArray = [
     path: 'actualUser'
   },
   {
+    path: 'affectedUser'
+  },
+  {
     path: 'logs',
     select: {
       date: 1,
@@ -79,7 +82,8 @@ const TicketService = {
             resume: ticketBody.resume,
             content: ticketBody.content,
             category: ticketBody.category._id,
-            actualUser: ticketBody.actualUser._id
+            actualUser: ticketBody.actualUser._id,
+            affectedUser: ticketBody.affectedUser._id
           }
         }
       ).exec(async err => {
