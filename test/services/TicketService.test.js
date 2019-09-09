@@ -32,7 +32,7 @@ describe('Ticket', function() {
     const sort = {
       category: -1
     }
-    await TicketService.getAll(sort, 1, 10)
+    await TicketService.getTickets({}, sort, 1, 10)
   })
 
   it('Get one tickt by id', async () => {

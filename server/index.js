@@ -1,5 +1,6 @@
 const express = require('express')
 const consola = require('consola')
+const morgan = require('morgan')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 const server = require('http').createServer(app)
@@ -61,6 +62,7 @@ async function start() {
   // Build only in dev mode
   if (config.dev) {
     const builder = new Builder(nuxt)
+    app.use(morgan('dev'))
     await builder.build()
   } else {
     await nuxt.ready()

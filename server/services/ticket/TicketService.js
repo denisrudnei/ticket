@@ -57,19 +57,6 @@ const TicketService = {
       )
     })
   },
-  getAll(sortBy, page, limit) {
-    return this.getTickets({}, sortBy, page, limit)
-  },
-  getOpenedByMe(analystId, sortBy, page, limit) {
-    return this.getTickets(
-      {
-        openedBy: analystId
-      },
-      sortBy,
-      page,
-      limit
-    )
-  },
   getOne(ticketId) {
     return new Promise((resolve, reject) => {
       Ticket.findOne({
@@ -168,7 +155,7 @@ const TicketService = {
         .populate(populateArray)
         .exec()
 
-      const group = await Group.findOne({ _id: groupId })
+      const group = await Group.findOne({ _id: groupId }).populate(['analysts'])
 
       ticket.group = group._id
 
@@ -181,7 +168,7 @@ const TicketService = {
         _id: new mongoose.Types.ObjectId(),
         name: 'TicketTransfer',
         from: analyst._id,
-        to: group.analysts.map(a => a._id),
+        to: group.analysts,
         content: `${analyst.name} transferiu um chamado para seu grupo`
       })
 

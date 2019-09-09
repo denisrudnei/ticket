@@ -12,7 +12,7 @@ module.exports = (app, io) => {
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 10
 
-    TicketService.getAll(sortBy, page, limit)
+    TicketService.getTickets({}, sortBy, page, limit)
       .then(result => {
         return res.status(200).json(result)
       })
