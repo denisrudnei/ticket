@@ -14,17 +14,27 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
   props: {
     edit: {
       type: Boolean,
       default: false
+    },
+    value: {
+      type: Object,
+      default: () => ({})
     }
   },
-  computed: mapGetters({
-    ticket: 'ticket/getActualTicket'
-  })
+  data() {
+    return {
+      ticketData: {}
+    }
+  },
+  computed: {
+    ticket() {
+      return Object.assign(this.ticketData, this.value)
+    }
+  }
 }
 </script>
 

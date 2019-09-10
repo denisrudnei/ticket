@@ -15,6 +15,9 @@
         <template v-slot:item.father="{ item }">
           {{ (item.father !== undefined && item.father !== null) ? item.father.fullName : 'orfão' }}
         </template>
+        <template v-slot:item.group="{ item }">
+          {{ !item.defaultGroup ? '' : item.defaultGroup.name }}
+        </template>
         <template v-slot:item.children="{ item }">
           {{ item.subs !== undefined ? item.subs.length : 0 }}
         </template>
@@ -44,6 +47,10 @@ export default {
         {
           text: 'Quantidade de filhas',
           value: 'children'
+        },
+        {
+          text: 'Grupo',
+          value: 'group'
         },
         {
           text: 'Editar',

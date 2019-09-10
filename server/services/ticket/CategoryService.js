@@ -44,7 +44,32 @@ const CategoryService = {
   getCategories() {
     return new Promise((resolve, reject) => {
       Category.find({})
-        .populate(['father', 'subs'])
+        .populate([
+          {
+            path: 'father',
+            select: {
+              fullName: 1,
+              name: 1,
+              description: 1,
+              subs: 0
+            }
+          },
+          {
+            path: 'subs',
+            select: {
+              name: 1,
+              fullName: 1,
+              father: 0
+            }
+          },
+          {
+            path: 'defaultGroup',
+            select: {
+              name: 1,
+              analysts: 0
+            }
+          }
+        ])
         .exec((err, categories) => {
           if (err) return reject(err)
           return resolve(categories)
@@ -54,7 +79,17 @@ const CategoryService = {
   getOne(name) {
     return new Promise((resolve, reject) => {
       Category.findOne({ name: name })
-        .populate(['defaultGroup'])
+        .populate([
+          {
+            path: 'defaultGroup',
+            select: {
+              name: 1,
+              fullName: 1,
+              description: 1,
+              analysts: 0
+            }
+          }
+        ])
         .exec((err, result) => {
           if (err) return reject(err)
           return resolve(result)

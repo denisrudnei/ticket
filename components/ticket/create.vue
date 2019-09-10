@@ -366,7 +366,7 @@
                 <v-icon>build</v-icon>
               </v-tab>
               <v-tab-item>
-                <Fields :edit="!readOnlyData" />
+                <Fields :edit="!readOnlyData" v-model="ticketComputed"/>
               </v-tab-item>
               <v-tab>
                 Logs
@@ -547,7 +547,7 @@ export default {
     changeDefaultGroup() {
       if (!this.ticketComputed.category.defaultGroup) return
       const index = this.groups.findIndex(g => {
-        return g._id === this.ticketComputed.category.defaultGroup
+        return g._id === this.ticketComputed.category.defaultGroup._id
       })
       if (
         this.ticketComputed.group === undefined ||
@@ -565,9 +565,7 @@ export default {
         )
       )
         return
-      this.value.fields = this.ticketComputed.category.fields
-      const toUpdate = Object.assign({}, this.ticketData)
-      this.$store.commit('ticket/setActualTicket', toUpdate)
+      this.ticketComputed.fields = this.ticketComputed.category.fields
     },
     clearFields() {
       Object.keys(this.ticketData).forEach(key => {
