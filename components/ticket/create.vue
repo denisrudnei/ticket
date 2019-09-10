@@ -393,7 +393,7 @@
                 </v-icon>
               </v-tab>
               <v-tab-item>
-                <Comments />
+                <comments v-model="ticketComputed"/>
               </v-tab-item>
             </v-tabs>
           </v-col>
@@ -458,6 +458,7 @@ export default {
       ticketData: {
         resume: '',
         content: '',
+        comments: [],
         group: {},
         category: {},
         created: new Date(),
@@ -510,12 +511,14 @@ export default {
   },
   methods: {
     addComment() {
+      const comment = {
+        content: this.comment
+      }
       this.$axios
-        .post(`/ticket/comment/${this.ticketComputed._id}`, {
-          content: this.comment
-        })
+        .post(`/ticket/comment/${this.ticketComputed._id}`, comment)
         .then(() => {
           this.comment = ''
+          this.ticketComputed.comments.push(comment)
         })
     },
     save() {

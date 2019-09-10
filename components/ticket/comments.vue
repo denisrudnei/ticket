@@ -25,10 +25,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
+  props: {
+    value: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
+      ticketData: {},
       headers: [
         {
           text: 'Nome',
@@ -45,9 +51,11 @@ export default {
       ]
     }
   },
-  computed: mapGetters({
-    ticket: 'ticket/getActualTicket'
-  })
+  computed: {
+    ticket() {
+      return Object.assign(this.ticketData, this.value)
+    }
+  }
 }
 </script>
 
