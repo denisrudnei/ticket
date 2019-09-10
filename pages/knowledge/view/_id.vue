@@ -46,20 +46,6 @@
               @click:append="openModal('group', knowledge.group)"
             />
           </v-col>
-          <v-dialog
-            v-model="showModal"
-            scrollable
-          >
-            <v-row>
-              <v-col cols="12" pa-3>
-                <ticket-list
-                  v-if="showModal"
-                  :url="`/search/`"
-                  :modal="true"
-                />
-              </v-col>
-            </v-row>
-          </v-dialog>
           <v-col cols="12" pa-4>
             <div ref="preview" v-html="knowledge.preview" />
           </v-col>
@@ -76,11 +62,7 @@
 </template>
 
 <script>
-import TicketList from '@/components/ticket/list'
 export default {
-  components: {
-    TicketList
-  },
   data() {
     return {
       showModal: false,
