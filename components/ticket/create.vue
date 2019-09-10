@@ -118,12 +118,12 @@
               :readonly="readOnlyData || !search"
               filled
               :value-comparator="compare"
+              :clearable="search"
               label="Relatado por:"
               append-icon="search"
               @click:append="show('openedBy', ticketComputed.openedBy)"
             />
           </v-col>
-
           <v-col
             cols="12"
             md="4"
@@ -137,7 +137,7 @@
               :readonly="readOnlyData"
               filled
               label="Usuário final afetado"
-              :clearable="search || editing"
+              :clearable="search || editing || !readonly"
               :value-comparator="compare"
               append-icon="search"
               @click:append="show('affectedUser', ticketComputed.affectedUser)"
@@ -156,7 +156,7 @@
               :readonly="readOnlyData"
               filled
               label="Analista"
-              :clearable="search || editing"
+              :clearable="search || editing || !readonly"
               :value-comparator="compare"
               append-icon="search"
               @click:append="show('actualUser', ticketComputed.actualUser)"
@@ -174,7 +174,7 @@
               required
               :readonly="readOnlyData"
               filled
-              :clearable="search || editing"
+              :clearable="search || editing || !readonly"
               :value-comparator="compare"
               label="Categoria"
               append-icon="search"
@@ -194,7 +194,7 @@
               required
               :readonly="readOnlyData"
               filled
-              :clearable="search || editing"
+              :clearable="search || editing || !readonly"
               :value-comparator="compare"
               label="Grupo"
               append-icon="search"
@@ -213,7 +213,7 @@
               required
               :readonly="readOnlyData"
               filled
-              :clearable="search || editing"
+              :clearable="search || editing || !readonly"
               :value-comparator="compare"
               label="Status"
               append-icon="search"
