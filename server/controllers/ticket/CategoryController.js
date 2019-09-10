@@ -31,6 +31,12 @@ module.exports = app => {
       })
   })
 
+  app.put('/category/:id/', (req, res) => {
+    CategoryService.edit(req.params.id, req.body).then(() => {
+      return res.sendStatus(202)
+    })
+  })
+
   app.post('/config/category', (req, res) => {
     const category = {
       name: req.body.name,

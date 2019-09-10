@@ -30,6 +30,12 @@ describe('CategoryService', function() {
     console.log(category.fullName)
   })
 
+  it('Edit category', async () => {
+    const category = await Category.findOne()
+    category.name = 'test name'
+    await CategoryService.edit(category._id, category)
+  })
+
   it('Create a new category with fields', async () => {
     const field1 = {
       text: 'text of field',

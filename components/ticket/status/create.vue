@@ -7,7 +7,7 @@
       <v-text-field
         v-model="actual.name"
         placeholder="Nome"
-        solo
+        filled
       />
     </v-col>
     <v-col cols="6">

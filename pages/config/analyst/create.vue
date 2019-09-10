@@ -8,18 +8,18 @@
         <v-text-field
           v-model="analyst.name"
           placeholder="Nome"
-          solo
+          filled
         />
         <v-text-field
           v-model="analyst.email"
           placeholder="Email"
-          solo
+          filled
         />
         <v-select
           v-model="analyst.group"
           :items="groups.map(g => { return { text: g.name, value: g } })"
           placeholder="Grupo"
-          solo
+          filled
           label="Grupo"
         />
         <v-btn

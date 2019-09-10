@@ -8,11 +8,10 @@
         <v-text-field
           v-model="group.name"
           placeholder="Nome"
-          solo
+          filled
         />
       </v-form>
     </v-col>
-
     <v-col>
       <v-card>
         <v-card-title>Disponíveis</v-card-title>
@@ -20,7 +19,7 @@
           <v-text-field v-model="search" label="Pesquisar" />
           <v-list>
             <draggable group="group" :list="analysts">
-              <v-list-item v-for="analyst in analysts" :key="analyst._id">
+              <v-list-item v-for="analyst in analysts" :key="analyst._id" @click="select">
                 {{ analyst.name }}
               </v-list-item>
             </draggable>
@@ -34,7 +33,7 @@
         <v-card-text>
           <v-list>
             <draggable group="group" :list="group.analysts">
-              <v-list-item v-for="analyst in group.analysts" :key="analyst._id">
+              <v-list-item v-for="analyst in group.analysts" :key="analyst._id" @click="select">
                 {{ analyst.name }}
               </v-list-item>
             </draggable>
@@ -95,7 +94,8 @@ export default {
   methods: {
     save(group) {
       this.$emit('input', group)
-    }
+    },
+    select() {}
   }
 }
 </script>

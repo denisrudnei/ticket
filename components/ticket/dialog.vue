@@ -32,9 +32,8 @@
             cols="12"
           >
             <create-ticket
-              v-model="ticket"
+              v-model="actualTicket"
               :readonly="true"
-              :ticket="actualTicket"
               @input="update()"
             />
           </v-col>
@@ -52,15 +51,19 @@ export default {
   components: {
     CreateTicket
   },
-  data() {
-    return {
-      ticket: {}
-    }
+  computed: {
+    actualTicket: {
+      get() {
+        return this.$store.getters['ticket/getActualTicket']
+      },
+      set(value) {
+        this.$store.commit('ticket/setActualTicket', value)
+      }
+    },
+    ...mapGetters({
+      dialog: 'ticket/getDialog'
+    })
   },
-  computed: mapGetters({
-    dialog: 'ticket/getDialog',
-    actualTicket: 'ticket/getActualTicket'
-  }),
   methods: {
     setDialog() {
       this.$store.commit('ticket/setDialog', '')
@@ -88,7 +91,7 @@ export default {
       this.$axios
         .put(
           `/ticket/${this.actualTicket._id}`,
-          this.transformPopulatedToIds(this.ticket)
+          this.transformPopulatedToIds(this.actualTicket)
         )
         .then(() => {
           this.$toast.show('Atualizado', {

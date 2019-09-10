@@ -137,6 +137,7 @@
               :readonly="readOnlyData"
               filled
               label="Usuário final afetado"
+              :clearable="search || editing"
               :value-comparator="compare"
               append-icon="search"
               @click:append="show('affectedUser', ticketComputed.affectedUser)"
@@ -155,6 +156,7 @@
               :readonly="readOnlyData"
               filled
               label="Analista"
+              :clearable="search || editing"
               :value-comparator="compare"
               append-icon="search"
               @click:append="show('actualUser', ticketComputed.actualUser)"
@@ -172,10 +174,11 @@
               required
               :readonly="readOnlyData"
               filled
+              :clearable="search || editing"
               :value-comparator="compare"
               label="Categoria"
               append-icon="search"
-              @change="checkFields"
+              @change="changeCategory"
               @click:append="show('category', ticketComputed.category)"
             />
           </v-col>
@@ -191,6 +194,7 @@
               required
               :readonly="readOnlyData"
               filled
+              :clearable="search || editing"
               :value-comparator="compare"
               label="Grupo"
               append-icon="search"
@@ -209,6 +213,7 @@
               required
               :readonly="readOnlyData"
               filled
+              :clearable="search || editing"
               :value-comparator="compare"
               label="Status"
               append-icon="search"
@@ -427,10 +432,13 @@ export default {
       type: Boolean,
       default: false
     },
-    ticket: {
+    value: {
       type: Object,
       default: () => {
-        return {}
+        return {
+          group: {},
+          category: {}
+        }
       }
     }
   },
@@ -450,6 +458,8 @@ export default {
       ticketData: {
         resume: '',
         content: '',
+        group: {},
+        category: {},
         created: new Date(),
         modified: new Date()
       }
@@ -459,15 +469,13 @@ export default {
     ...mapGetters({
       user: 'auth/getUser'
     }),
-    value() {
-      return this.ticketData
-    },
     ticketComputed() {
-      return Object.assign(this.ticketData, this.ticket)
+      return Object.assign(this.ticketData, this.value)
     },
     allowedStatus() {
       if (this.search) return this.status
       if (!this.ticketComputed.status) return this.status
+      if (!this.editing) return this.status
       const statusIndex = this.status.findIndex(s => {
         return s._id === this.ticketComputed.status._id
       })
@@ -512,7 +520,7 @@ export default {
     },
     save() {
       if (!this.search && this.$refs.form.validate()) {
-        this.$emit('input', this.ticketComputed)
+        this.$emit('input', this.ticketData)
         this.readOnlyData = true
         this.editing = false
       } else {
@@ -528,11 +536,36 @@ export default {
       this.readOnlyData = true
       this.$axios.get(`/ticket/${this.ticketData._id}`).then(response => {
         this.ticketData = response.data
-        this.$store.commit('ticket/setActualTicket', response.data)
       })
     },
+    changeCategory() {
+      if (this.search) return
+      if (!this.ticketComputed.category) return
+      this.checkFields()
+      this.changeDefaultGroup()
+    },
+    changeDefaultGroup() {
+      if (!this.ticketComputed.category.defaultGroup) return
+      const index = this.groups.findIndex(g => {
+        return g._id === this.ticketComputed.category.defaultGroup
+      })
+      if (
+        this.ticketComputed.group === undefined ||
+        (Object.prototype.hasOwnProperty.call(this.ticketComputed, 'group'),
+        !Object.prototype.hasOwnProperty.call(this.ticketComputed.group, '_id'))
+      ) {
+        this.ticketComputed.group = this.groups[index]
+      }
+    },
     checkFields() {
-      this.ticket.fields = this.ticketComputed.category.fields
+      if (
+        !Object.prototype.hasOwnProperty.call(
+          this.ticketComputed.category,
+          'fields'
+        )
+      )
+        return
+      this.value.fields = this.ticketComputed.category.fields
       const toUpdate = Object.assign({}, this.ticketData)
       this.$store.commit('ticket/setActualTicket', toUpdate)
     },

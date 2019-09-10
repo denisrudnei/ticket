@@ -18,6 +18,11 @@
         <template v-slot:item.children="{ item }">
           {{ item.subs !== undefined ? item.subs.length : 0 }}
         </template>
+        <template v-slot:item.edit="{ item }">
+          <v-btn icon class="primary white--text" :to="`/config/category/edit/${item.name}`">
+            <v-icon>edit</v-icon>
+          </v-btn>
+        </template>
       </v-data-table>
     </v-col>
   </v-row>
@@ -39,6 +44,10 @@ export default {
         {
           text: 'Quantidade de filhas',
           value: 'children'
+        },
+        {
+          text: 'Editar',
+          value: 'edit'
         }
       ],
       items: []

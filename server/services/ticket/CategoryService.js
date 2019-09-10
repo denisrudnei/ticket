@@ -53,9 +53,29 @@ const CategoryService = {
   },
   getOne(name) {
     return new Promise((resolve, reject) => {
-      Category.findOne({ name: name }, (err, result) => {
+      Category.findOne({ name: name })
+        .populate(['defaultGroup'])
+        .exec((err, result) => {
+          if (err) return reject(err)
+          return resolve(result)
+        })
+    })
+  },
+  edit(categoryId, category) {
+    return new Promise((resolve, reject) => {
+      Category.updateOne(
+        { _id: categoryId },
+        {
+          $set: {
+            name: category.name,
+            father: category.father,
+            description: category.description,
+            defaultGroup: category.defaultGroup
+          }
+        }
+      ).exec(err => {
         if (err) return reject(err)
-        return resolve(result)
+        return resolve()
       })
     })
   },

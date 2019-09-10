@@ -8,6 +8,9 @@
         <v-tab to="/search/analyst">
           Analistas
         </v-tab>
+        <v-tab to="/search/category">
+          Categorias
+        </v-tab>
       </v-tabs>
       <nuxt-child />
     </v-col>

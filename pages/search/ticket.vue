@@ -80,8 +80,6 @@ export default {
           Object.prototype.hasOwnProperty.call(ticket[k], '_id')
         ) {
           newTicket[k] = ticket[k]._id
-        } else {
-          newTicket[k] = ticket[k]
         }
       })
       const fieldsToExclude = ['created', 'modified', 'resume', 'content']
