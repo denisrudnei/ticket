@@ -5,7 +5,7 @@
       pa-3
     >
       <v-data-table
-        :items="ticket.comments"
+        :items="actualTicket.comments"
         :headers="headers"
       >
         <template
@@ -25,16 +25,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  props: {
-    value: {
-      type: Object,
-      default: () => ({})
-    }
-  },
   data() {
     return {
-      ticketData: {},
       headers: [
         {
           text: 'Nome',
@@ -51,11 +45,9 @@ export default {
       ]
     }
   },
-  computed: {
-    ticket() {
-      return Object.assign(this.ticketData, this.value)
-    }
-  }
+  computed: mapGetters({
+    actualTicket: 'ticket/getActualTicket'
+  })
 }
 </script>
 

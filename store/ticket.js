@@ -63,6 +63,11 @@ export const mutations = {
       query: query
     })
   },
+  addComment(state, comment) {
+    if (!Object.prototype.hasOwnProperty.call(state.actualTicket, 'comments'))
+      return
+    state.actualTicket.comments.push(comment)
+  },
   setModalQuery(state, modalQuery) {
     state.modalQuery = modalQuery
   },

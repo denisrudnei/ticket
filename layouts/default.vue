@@ -224,6 +224,11 @@ export default {
       this.$store.commit('ticket/updateTicket', ticket)
     })
 
+    this.$socket.on('notifyTicketUpdate', notification => {
+      if (this.user._id === notification.user) return
+      this.$store.dispatch('notification/ticketsToEdit/notify', notification)
+    })
+
     this.$socket.on('addTicket', ticket => {
       // TODO
       this.$store.dispatch('ticket/updateTree')

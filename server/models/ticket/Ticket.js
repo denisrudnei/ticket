@@ -79,30 +79,6 @@ TicketSchema.pre('find', function() {
   ])
 })
 
-async function createLog(ticket) {
-  const log = await Log.create({
-    _id: new Types.ObjectId(),
-    oldStatus: ticket.status,
-    date: new Date(),
-    user: ticket.actualUser,
-    group: ticket.group
-  })
-  ticket.logs.push(log)
-}
-
-TicketSchema.pre('save', async function(next) {
-  const ticket = this
-  await createLog(ticket)
-  next()
-})
-
-// TODO
-TicketSchema.pre('findOneAndUpdate', async function(next) {
-  const ticket = this
-  await createLog(ticket)
-  next()
-})
-
 TicketSchema.plugin(mongoosePaginate)
 
 module.exports = models.Ticket || model('Ticket', TicketSchema)

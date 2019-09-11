@@ -183,33 +183,36 @@ const TicketService = {
   },
   commentOnTicket(ticketId, userId, content) {
     return new Promise((resolve, reject) => {
-      Ticket.findOne({
-        _id: ticketId
-      })
-        .populate(populateArray)
-        .exec(async (err, ticket) => {
-          if (err) return reject(ticket)
-
-          const comment = await Comment.create({
-            _id: new mongoose.Types.ObjectId(),
-            user: userId,
-            content: content
-          })
-          ticket.comments.push(comment)
-          ticket.save(async err => {
-            if (err)
-              return reject(
-                new Error({
-                  message: 'Error'
-                })
-              )
-            const newTicket = await Ticket.findOne({
+      Comment.create(
+        {
+          _id: new mongoose.Types.ObjectId(),
+          user: userId,
+          content: content
+        },
+        (err, comment) => {
+          if (err) reject(err)
+          Ticket.updateOne(
+            {
               _id: ticketId
-            }).populate(populateArray)
-
-            return resolve(newTicket)
+            },
+            {
+              $addToSet: {
+                comments: [comment]
+              }
+            }
+          ).exec(err => {
+            if (err) return reject(err)
+            Comment.findOne({
+              _id: comment._id
+            })
+              .populate(['user'])
+              .exec((err, toReturn) => {
+                if (err) return reject(err)
+                return resolve(toReturn)
+              })
           })
-        })
+        }
+      )
     })
   },
   insertFile(ticketId, files) {

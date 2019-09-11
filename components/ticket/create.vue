@@ -366,7 +366,7 @@
                 <v-icon>build</v-icon>
               </v-tab>
               <v-tab-item>
-                <Fields :edit="!readOnlyData" v-model="ticketComputed"/>
+                <Fields v-model="ticketComputed" :edit="!readOnlyData" />
               </v-tab-item>
               <v-tab>
                 Logs
@@ -393,7 +393,7 @@
                 </v-icon>
               </v-tab>
               <v-tab-item>
-                <comments v-model="ticketComputed"/>
+                <comments />
               </v-tab-item>
             </v-tabs>
           </v-col>
@@ -516,14 +516,14 @@ export default {
       }
       this.$axios
         .post(`/ticket/comment/${this.ticketComputed._id}`, comment)
-        .then(() => {
+        .then(response => {
           this.comment = ''
-          this.ticketComputed.comments.push(comment)
+          this.$store.commit('ticket/addComment', response.data)
         })
     },
     save() {
       if (!this.search && this.$refs.form.validate()) {
-        this.$emit('input', this.ticketData)
+        this.$emit('input', this.ticketComputed)
         this.readOnlyData = true
         this.editing = false
       } else {
@@ -554,8 +554,11 @@ export default {
       })
       if (
         this.ticketComputed.group === undefined ||
-        (Object.prototype.hasOwnProperty.call(this.ticketComputed, 'group'),
-        !Object.prototype.hasOwnProperty.call(this.ticketComputed.group, '_id'))
+        (Object.prototype.hasOwnProperty.call(this.ticketComputed, 'group') &&
+          !Object.prototype.hasOwnProperty.call(
+            this.ticketComputed.group,
+            '_id'
+          ))
       ) {
         this.ticketComputed.group = this.groups[index]
       }

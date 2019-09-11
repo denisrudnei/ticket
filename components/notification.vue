@@ -94,7 +94,15 @@
           group
         </v-icon>
       </v-tab>
-      <v-tab-item />
+      <v-tab-item>
+        <v-list>
+          <v-list-item v-for="notification in notificationTicketsToEdit" :key="notification.ticket" @click="setActual(notification.ticket)">
+            <v-list-item-content>
+              {{ `${notification.user.name} atualizou um chamado que está em sua pilha de trabalho` }}
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-tab-item>
     </v-tabs>
     <v-card
       class="fixed-footer"
@@ -134,12 +142,30 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  computed: mapGetters({
-    notifications: 'notification/getUnread',
-    logged: 'auth/getLoggedIn',
-    user: 'auth/getUser',
-    groups: 'group/getGroups'
-  }),
+  computed: {
+    notificationTicketsToEdit() {
+      return this.$store.getters[
+        'notification/ticketsToEdit/getTicketsToEdit'
+      ].map(ntf => {
+        const userIndex = this.analysts.findIndex(a => {
+          return a._id === ntf.user
+        })
+        const user = this.analysts[userIndex]
+        return {
+          ticket: ntf.ticket,
+          user
+        }
+      })
+    },
+    ...mapGetters({
+      analysts: 'analyst/getAnalysts',
+      notifications: 'notification/getUnread',
+      logged: 'auth/getLoggedIn',
+      user: 'auth/getUser',
+      groups: 'group/getGroups',
+      ticketsToEdit: 'ticket/getTicketsToEdit'
+    })
+  },
   mounted() {
     if (this.user !== undefined && this.user._id !== undefined) {
       this.$axios.post('/notification/').then(response => {
@@ -152,6 +178,23 @@ export default {
       this.$axios.post(`/notification/readall`).then(response => {
         this.$store.commit('notification/setNotifications', response.data)
       })
+    },
+    setActual(ticketId) {
+      const ticketIndex = this.ticketsToEdit.findIndex(t => {
+        return t._id === ticketId
+      })
+      if (ticketIndex !== -1) {
+        this.$store.commit(
+          'ticket/setActualTicket',
+          this.ticketsToEdit[ticketIndex]
+        )
+        this.$store.commit('ticket/setDialog', ticketId)
+      } else {
+        this.$store.commit(
+          'notification/ticketsToEdit/removeNotification',
+          ticketId
+        )
+      }
     }
   }
 }
