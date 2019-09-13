@@ -17,16 +17,13 @@
 
 <script>
 export default {
-  data() {
-    return {
-      items: []
-    }
-  },
-  created() {
-    this.$axios.get('/category').then(response => {
-      this.items = response.data.filter(c => {
-        return c.father === undefined
-      })
+  asyncData({ $axios }) {
+    return $axios.get('/category').then(response => {
+      return {
+        items: response.data.filter(c => {
+          return c.father === null
+        })
+      }
     })
   },
   methods: {
