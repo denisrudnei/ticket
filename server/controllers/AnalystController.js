@@ -1,7 +1,7 @@
 const AnalystService = require('../services/AnalystService')
 
-module.exports = app => {
-  app.get('/analyst', (req, res) => {
+module.exports = {
+  getAll: (req, res) => {
     AnalystService.getAnalysts()
       .then(analysts => {
         return res.status(200).json(analysts)
@@ -9,9 +9,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/analyst/:id', (req, res) => {
+  getOne: (req, res) => {
     AnalystService.getOne(req.params.id)
       .then(analyst => {
         return res.status(200).json(analyst)
@@ -19,9 +19,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/config/analyst', (_, res) => {
+  getConfigAnalysts: (_, res) => {
     AnalystService.getConfigAnalysts()
       .then(analysts => {
         return res.status(200).json(analysts)
@@ -29,9 +29,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.post('/config/analyst', (req, res) => {
+  create: (req, res) => {
     AnalystService.create(req.body)
       .then(() => {
         return res.sendStatus(201)
@@ -39,9 +39,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.post('/analyst/:id/groups', (req, res) => {
+  getGroups: (req, res) => {
     const userId = req.params.id
     AnalystService.getGroups(userId)
       .then(groups => {
@@ -50,9 +50,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.put('/analyst/sound/', (req, res, next) => {
+  editSound: (req, res, next) => {
     const userId = req.session.authUser._id
     const soundConfig = {
       chat: {
@@ -69,9 +69,9 @@ module.exports = app => {
         res.sendStatus(201)
       })
       .catch(next)
-  })
+  },
 
-  app.put('/analyst', (req, res) => {
+  edit: (req, res) => {
     const userId = req.session.authUser._id
     const analyst = {
       name: req.body.name,
@@ -87,9 +87,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.put('/analyst/image', (req, res) => {
+  updateImge: (req, res) => {
     const userId = req.session.authUser._id
     const file = req.files.image
     AnalystService.updateImage(userId, file)
@@ -99,9 +99,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.delete('/analyst/image', (req, res) => {
+  removeImage: (req, res) => {
     const userId = req.session.authUser._id
     AnalystService.removeImage(userId)
       .then(() => {
@@ -110,9 +110,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.delete('/analyst/:id', (req, res) => {
+  remove: (req, res) => {
     const userId = req.params.id
     AnalystService.remove(userId)
       .then(() => {
@@ -121,5 +121,5 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  }
 }

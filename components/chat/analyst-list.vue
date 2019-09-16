@@ -133,9 +133,9 @@ export default {
     })
   },
   mounted() {
-    this.$socket.on('chat/status/update', newInfo => {
-      this.$store.commit('analyst/updateStatus', newInfo)
-    })
+    // this.$socket.on('chat/status/update', newInfo => {
+    //   this.$store.commit('analyst/updateStatus', newInfo)
+    // })
   },
   methods: {
     openChat(analyst) {

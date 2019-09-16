@@ -1,7 +1,7 @@
 const GroupService = require('../../services/ticket/GroupService')
 
-module.exports = app => {
-  app.get('/group', (req, res) => {
+module.exports = {
+  getAll: (req, res) => {
     GroupService.getAll()
       .then(groups => {
         return res.status(200).json(groups)
@@ -9,9 +9,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/group/:id', (req, res) => {
+  getOne: (req, res) => {
     GroupService.getOne(req.params.id)
       .then(group => {
         return res.status(200).json(group)
@@ -19,9 +19,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.post('/config/group', (req, res) => {
+  create: (req, res) => {
     GroupService.create(req.body)
       .then(() => {
         res.sendStatus(201)
@@ -29,9 +29,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.post('/config/group/analyst/:groupId', (req, res) => {
+  insertAnalyst: (req, res) => {
     GroupService.insertAnalyst(req.params.groupId, req.body._id)
       .then(() => {
         return res.sendStatus(201)
@@ -39,9 +39,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.put('/config/group/:id', (req, res) => {
+  edit: (req, res) => {
     GroupService.edit(req.params.id, req.body)
       .then(group => {
         return res.status(200).json(group)
@@ -49,9 +49,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.delete('/config/group/analyst/:groupId/:analystId', (req, res) => {
+  remove: (req, res) => {
     GroupService.removeAnalyst(req.params.groupId, req.params.analystId)
       .then(() => {
         return res.sendStatus(201)
@@ -59,5 +59,5 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  }
 }

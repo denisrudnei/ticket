@@ -1,7 +1,7 @@
 const Ticket = require('../../models/ticket/Ticket')
 
-module.exports = app => {
-  app.get('/search', (req, res) => {
+module.exports = {
+  searchTicket: (req, res) => {
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 5
     const filterKeys = Object.keys(Ticket.schema.paths)
@@ -20,5 +20,5 @@ module.exports = app => {
         return res.status(200).json(result)
       }
     )
-  })
+  }
 }

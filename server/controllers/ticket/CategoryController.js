@@ -1,7 +1,7 @@
 const CategoryService = require('../../services/ticket/CategoryService')
 
-module.exports = app => {
-  app.get('/category', (_, res) => {
+module.exports = {
+  getCategories: (_, res) => {
     CategoryService.getCategories()
       .then(result => {
         return res.status(200).json(result)
@@ -9,9 +9,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/category/:name', (req, res) => {
+  getOne: (req, res) => {
     CategoryService.getOne(req.params.name)
       .then(result => {
         return res.status(200).json(result)
@@ -19,9 +19,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/category/:id/subs', (req, res) => {
+  getSubs: (req, res) => {
     CategoryService.getSubsForCategory(req.params.id)
       .then(result => {
         return res.status(200).json(result)
@@ -29,15 +29,15 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.put('/category/:id/', (req, res) => {
+  edit: (req, res) => {
     CategoryService.edit(req.params.id, req.body).then(() => {
       return res.sendStatus(202)
     })
-  })
+  },
 
-  app.post('/config/category', (req, res) => {
+  create: (req, res) => {
     const category = {
       name: req.body.name,
       father: req.body.father,
@@ -50,5 +50,5 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  }
 }

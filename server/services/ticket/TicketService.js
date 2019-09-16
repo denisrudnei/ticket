@@ -118,10 +118,7 @@ const TicketService = {
           content: `${newTicket.openedBy.name} abriu um novo chamado`
         })
 
-        return resolve({
-          newTicket: newTicket,
-          notification: notification
-        })
+        return resolve(newTicket)
       })
     })
   },

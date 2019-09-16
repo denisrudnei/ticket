@@ -1,7 +1,7 @@
 const knowledgeStatusService = require('../../services/knowledge/KnowledgeStatusService')
 
-module.exports = app => {
-  app.get('/knowledge/status/', (_, res) => {
+module.exports = {
+  getAll: (_, res) => {
     knowledgeStatusService
       .getAll()
       .then(result => {
@@ -10,5 +10,5 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  }
 }

@@ -1,7 +1,7 @@
 const KnowledgeService = require('../../services/knowledge/KnowledgeService')
 
-module.exports = app => {
-  app.get('/knowledge', (req, res) => {
+module.exports = {
+  getUncategorized: (req, res) => {
     KnowledgeService.getUncategorized()
       .then(result => {
         return res.status(200).json(result)
@@ -9,9 +9,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/knowledge/all', (_, res) => {
+  getAll: (_, res) => {
     KnowledgeService.getAll()
       .then(result => {
         return res.status(200).json(result)
@@ -19,9 +19,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/knowledge/view/:id', (req, res) => {
+  getOne: (req, res) => {
     const id = req.params.id
     KnowledgeService.getOne(id)
       .then(knowledge => {
@@ -30,9 +30,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/knowledge/:id/file', (req, res) => {
+  getFile: (req, res) => {
     const id = req.params.id
     KnowledgeService.getFile(id)
       .then(file => {
@@ -41,9 +41,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/knowledge/:id/files', (req, res) => {
+  getAllFiles: (req, res) => {
     const id = req.params.id
     KnowledgeService.getAllFiles(id)
       .then(file => {
@@ -52,9 +52,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/knowledge/group/:groupName', (req, res) => {
+  getByKnowledgeGroup: (req, res) => {
     const groupName = req.params.groupName
     KnowledgeService.getByKnowledgeGroup(groupName)
       .then(result => {
@@ -63,9 +63,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.post('/knowledge/', (req, res) => {
+  create: (req, res) => {
     const knowledge = req.body
 
     KnowledgeService.create(knowledge)
@@ -75,9 +75,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.put('/knowledge/:id', (req, res) => {
+  edit: (req, res) => {
     const knowledge = req.body
 
     KnowledgeService.updateKnowledge(req.params.id, knowledge)
@@ -87,9 +87,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.post('/knowledge/tempFile', (req, res) => {
+  addTempFile: (req, res) => {
     const file = req.files.file
     KnowledgeService.addTempFile(file)
       .then(data => {
@@ -98,9 +98,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.post('/knowledge/:id/file', (req, res) => {
+  addFile: (req, res) => {
     const file = req.files.file
     const id = req.params.id
     KnowledgeService.addFile(id, file)
@@ -110,9 +110,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.delete('/knowledge/:id', (req, res) => {
+  remove: (req, res) => {
     const knowledgeId = req.params.id
     KnowledgeService.remove(knowledgeId)
       .then(() => {
@@ -121,5 +121,5 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  }
 }

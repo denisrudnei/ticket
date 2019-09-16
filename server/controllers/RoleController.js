@@ -1,7 +1,7 @@
 const RoleService = require('../services/RoleService')
 
-module.exports = app => {
-  app.get('/role', (req, res) => {
+module.exports = {
+  getAll: (req, res) => {
     RoleService.getRoles()
       .then(roles => {
         return res.status(200).json(roles)
@@ -9,9 +9,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.put('/config/role/:id', (req, res) => {
+  updateRole: (req, res) => {
     RoleService.updateRole(req.params.id, req.body)
       .then(() => {
         return res.sendStatus(201)
@@ -19,9 +19,9 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.post('/config/role/:id', (req, res) => {
+  setAnalystRole: (req, res) => {
     RoleService.setAnalystRole(req.params.id, req.body.name)
       .then(() => {
         return res.sendStatus(201)
@@ -29,5 +29,5 @@ module.exports = app => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  }
 }

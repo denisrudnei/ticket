@@ -1,19 +1,23 @@
-const express = require('express')
+const path = require('path')
 const consola = require('consola')
 const morgan = require('morgan')
 const { Nuxt, Builder } = require('nuxt')
-const app = express()
-const server = require('http').createServer(app)
-const apiRouter = express.Router()
+const { GraphQLServer } = require('graphql-yoga')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const io = require('socket.io')(server)
 const session = require('express-session')
 const compression = require('compression')
 const fileUploader = require('express-fileupload')
 const acl = require('express-acl')
+const resolvers = require('./resolvers')
+const routes = require('./routes/index')
 
-app.use(
+const server = new GraphQLServer({
+  typeDefs: path.resolve(__dirname, 'schemas.graphql'),
+  resolvers
+})
+
+server.express.use(
   session({
     secret: process.env.SESSION_KEY,
     resave: false,
@@ -26,11 +30,11 @@ acl.config({
   roleSearchPath: 'session.authUser.role'
 })
 
-apiRouter.use(acl.authorize)
+// server.express.use('/api', acl.authorize)
 
-app.use(bodyParser.json())
+server.express.use(bodyParser.json())
 
-app.use(
+server.express.use(
   fileUploader({
     limits: {
       fileSize: 10 * 1024 * 1024
@@ -38,11 +42,11 @@ app.use(
   })
 )
 
-app.use(compression())
+server.express.use(compression())
 
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost/test',
-  { useNewUrlParser: true }
+  { useNewUrlParser: true, useUnifiedTopology: true }
 )
 
 // Import and Set Nuxt.js options
@@ -62,7 +66,7 @@ async function start() {
   // Build only in dev mode
   if (config.dev) {
     const builder = new Builder(nuxt)
-    app.use(morgan('dev'))
+    server.express.use(morgan('dev'))
     await builder.build()
   } else {
     await nuxt.ready()
@@ -72,32 +76,22 @@ async function start() {
     if (err) consola.error(err)
   })
 
-  require('./controllers/AuthController')(apiRouter)
-  require('./controllers/AddressController')(apiRouter)
-  require('./controllers/ProfileController')(apiRouter, io)
-  require('./controllers/ticket/TicketController')(apiRouter, io)
-  require('./controllers/AnalystController')(apiRouter)
-  require('./controllers/RoleController')(apiRouter)
-  require('./controllers/ticket/CategoryController')(apiRouter)
-  require('./controllers/ticket/GroupController')(apiRouter)
-  require('./controllers/ticket/StatusController')(apiRouter)
-  require('./controllers/ticket/SearchController')(apiRouter)
-  require('./controllers/NotificationController')(apiRouter, io)
-  require('./controllers/ChatController')(apiRouter, io)
-  require('./controllers/knowledge/KnowledgeController')(apiRouter)
-  require('./controllers/knowledge/KnowledgeStatusController')(apiRouter)
-  app.use('/api', apiRouter)
+  server.express.use('/api', routes)
+ 
 
-  // Give nuxt middleware to express
-  app.use(nuxt.render)
-
-  app.use((err, req, res, next) => {
+  server.express.use((err, req, res, next) => {
     consola.error(err)
     res.status(500).json(err.message)
   })
 
-  // Listen the server
-  server.listen(port, host)
+  server.start({
+    port: port,
+    endpoint: '/graphql',
+    playground: '/playground'
+  })
+
+  server.express.use(nuxt.render)
+
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
     badge: true

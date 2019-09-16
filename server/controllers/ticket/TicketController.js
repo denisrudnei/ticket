@@ -1,24 +1,7 @@
-const { body, param, validationResult } = require('express-validator')
 const TicketService = require('../../services/ticket/TicketService')
-const LogService = require('../../services/ticket/LogService')
 
-module.exports = (app, io) => {
-  const notifyTicketUpdate = (req, res, next) => {
-    io.emit('notifyTicketUpdate', {
-      user: req.session.authUser._id,
-      ticket: req.params.id
-    })
-    next()
-  }
-
-  async function createLog(req, res, next) {
-    const ticket = await TicketService.getOne(req.params.id)
-    const user = req.session.authUser._id
-    await LogService.createTicketLog(user, ticket)
-    next()
-  }
-
-  app.get('/ticket', (req, res) => {
+module.exports = {
+  getTickets: (req, res) => {
     let sortBy = req.query.sortBy || 'created'
     const descending = parseInt(req.query.descending) || -1
     sortBy = {
@@ -35,9 +18,9 @@ module.exports = (app, io) => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/ticket/profile/:type', (req, res) => {
+  getByProfile: (req, res) => {
     const type = req.params.type
     let sortBy = req.query.sortBy || 'created'
     const descending = parseInt(req.query.descending) || -1
@@ -63,93 +46,61 @@ module.exports = (app, io) => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.post(
-    '/ticket',
-    [
-      body('openedBy', 'Preencha o analista').exists(),
-      body('actualUser', 'Preencha o usuário atual').exists(),
-      body('group', 'Preencha um grupo').exists(),
-      body('status', 'Preencha um status').exists(),
-      body('resume').exists(),
-      body('content').exists()
-    ],
-    (req, res) => {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) return res.status(400).json(errors.mapped())
+  create: (req, res) => {
+    TicketService.create(req.body)
+      .then(result => {
+        // io.emit(`notification/${req.body.group._id}`, result.notification)
+        // io.emit('addTicket', result.newTicket)
+        return res.status(200).json(result.newTicket)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  },
 
-      TicketService.create(req.body)
-        .then(result => {
-          io.emit(`notification/${req.body.group._id}`, result.notification)
-          io.emit('addTicket', result.newTicket)
-          return res.status(200).json(result.newTicket)
-        })
-        .catch(e => {
-          return res.status(500).json(e)
-        })
-    }
-  )
+  transfer: (req, res) => {
+    TicketService.transferToGroup(
+      req.params.id,
+      req.body._id,
+      req.session.authUser
+    )
+      .then(result => {
+        // io.emit('updateTicket', result.newTicket)
+        // io.emit(`notification/${req.body._id}`, result.notification)
+        return res.status(200).json(result.newTicket)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  },
 
-  app.post(
-    '/ticket/transfer/:id',
-    notifyTicketUpdate,
-    createLog,
-    (req, res) => {
-      TicketService.transferToGroup(
-        req.params.id,
-        req.body._id,
-        req.session.authUser
-      )
-        .then(result => {
-          io.emit('updateTicket', result.newTicket)
-          io.emit(`notification/${req.body._id}`, result.notification)
-          return res.status(200).json(result.newTicket)
-        })
-        .catch(e => {
-          return res.status(500).json(e)
-        })
-    }
-  )
+  updateStatus: async (req, res) => {
+    await TicketService.changeStatus(req.params.id, req.body._id)
+      .then(result => {
+        // io.emit('updateTicket', result)
+        return res.status(200).json(result)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  },
 
-  app.post(
-    '/ticket/updateStatus/:id',
-    notifyTicketUpdate,
-    createLog,
-    async (req, res) => {
-      await TicketService.changeStatus(req.params.id, req.body._id)
-        .then(result => {
-          io.emit('updateTicket', result)
-          return res.status(200).json(result)
-        })
-        .catch(e => {
-          return res.status(500).json(e)
-        })
-    }
-  )
+  comment: (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) return res.status(400).json(errors.mapped())
+    const userId = req.session.authUser._id
+    TicketService.commentOnTicket(req.params.id, userId, req.body.content)
+      .then(result => {
+        return res.status(201).json(result)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  },
 
-  app.post(
-    '/ticket/comment/:id',
-    [
-      body('content', 'Preencha o comentário').exists(),
-      param('id', 'Precisa de um id').exists()
-    ],
-    notifyTicketUpdate,
-    (req, res) => {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) return res.status(400).json(errors.mapped())
-      const userId = req.session.authUser._id
-      TicketService.commentOnTicket(req.params.id, userId, req.body.content)
-        .then(result => {
-          return res.status(201).json(result)
-        })
-        .catch(e => {
-          return res.status(500).json(e)
-        })
-    }
-  )
-
-  app.get('/ticket/:id', (req, res) => {
+  getOne: (req, res) => {
     TicketService.getOne(req.params.id)
       .then(result => {
         return res.status(200).json(result)
@@ -157,20 +108,20 @@ module.exports = (app, io) => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.put('/ticket/:id', notifyTicketUpdate, createLog, (req, res) => {
+  edit: (req, res) => {
     TicketService.updateOne(req.params.id, req.body)
       .then(result => {
-        io.emit('updateTicket', result)
+        // io.emit('updateTicket', result)
         res.sendStatus(202)
       })
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.get('/ticket/:id/file', (req, res) => {
+  getFile: (req, res) => {
     TicketService.getFile(req.params.id)
       .then(result => {
         return res.end(result)
@@ -178,36 +129,26 @@ module.exports = (app, io) => {
       .catch(e => {
         return res.status(500).json(e)
       })
-  })
+  },
 
-  app.delete(
-    '/ticket/:id/:file/file',
-    notifyTicketUpdate,
-    createLog,
-    async (req, res) => {
-      await TicketService.removeFile(req.params.id, req.params.file)
-        .then(() => {
-          return res.sendStatus(201)
-        })
-        .catch(e => {
-          return res.status(500).json(e)
-        })
-    }
-  )
+  deleteFile: async (req, res) => {
+    await TicketService.removeFile(req.params.id, req.params.file)
+      .then(() => {
+        return res.sendStatus(201)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  },
 
-  app.post(
-    '/ticket/:id/file',
-    notifyTicketUpdate,
-    createLog,
-    async (req, res) => {
-      const files = Object.values(req.files)
-      await TicketService.insertFile(req.params.id, files)
-        .then(result => {
-          return res.status(200).json(result)
-        })
-        .catch(e => {
-          return res.status(500).json(e)
-        })
-    }
-  )
+  sendFile: async (req, res) => {
+    const files = Object.values(req.files)
+    await TicketService.insertFile(req.params.id, files)
+      .then(result => {
+        return res.status(200).json(result)
+      })
+      .catch(e => {
+        return res.status(500).json(e)
+      })
+  }
 }

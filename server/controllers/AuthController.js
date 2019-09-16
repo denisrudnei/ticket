@@ -1,8 +1,8 @@
 const jsonwebtoken = require('jsonwebtoken')
 const AuthService = require('../services/AuthService')
 
-module.exports = app => {
-  app.post('/auth/login', (req, res) => {
+module.exports = {
+  login: (req, res) => {
     AuthService.login(req.body.email, req.body.password)
       .then(result => {
         req.session.authUser = result
@@ -17,20 +17,20 @@ module.exports = app => {
       .catch(() => {
         return res.sendStatus(400)
       })
-  })
+  },
 
-  app.post('/auth/user', (req, res) => {
+  getUser: (req, res) => {
     res.json({
       user: req.session.authUser
     })
-  })
+  },
 
-  app.post('/auth/logout', (req, res) => {
+  logout: (req, res) => {
     delete req.session.authUser
     res.sendStatus(200)
-  })
+  },
 
-  app.post('/auth/register', (req, res, next) => {
+  register: (req, res, next) => {
     const user = {
       name: req.body.name,
       email: req.body.email,
@@ -41,9 +41,9 @@ module.exports = app => {
         return res.sendStatus(201)
       })
       .catch(next)
-  })
+  },
 
-  app.post('/auth/mergeUser', (req, res, next) => {
+  mergeUser: (req, res, next) => {
     AuthService.mergeUser(req.body.email, req.body)
       .then(result => {
         req.session.authUser = result
@@ -52,9 +52,9 @@ module.exports = app => {
       .catch(e => {
         next(e)
       })
-  })
+  },
 
-  app.post('/auth/redefine', (req, res) => {
+  redefinePassword: (req, res) => {
     const user = req.body
     AuthService.generateEmailToReset(user.email, req)
       .then(() => {
@@ -63,9 +63,9 @@ module.exports = app => {
       .catch(err => {
         return res.status(500).json(err)
       })
-  })
+  },
 
-  app.post('/auth/redefine-password/:token', (req, res) => {
+  resetWithToken: (req, res) => {
     const user = req.body
     const token = req.params.token
     AuthService.resetPasswordWithToken(token, user.password)
@@ -75,9 +75,9 @@ module.exports = app => {
       .catch(err => {
         return res.status(500).json(err)
       })
-  })
+  },
 
-  app.post('/auth/password/reset', (req, res) => {
+  reset: (req, res) => {
     const userId = req.session.authUser._id
     AuthService.resetPassword(
       userId,
@@ -92,5 +92,5 @@ module.exports = app => {
           message: 'Senha antiga errada'
         })
       })
-  })
+  }
 }

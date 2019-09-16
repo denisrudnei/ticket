@@ -1,20 +1,11 @@
 <template>
   <v-row>
-    <template
-      v-if="error.statusCode === 500"
-    >
-      {{ error.message }}
-    </template>
-    <template
-      v-if="error.statusCode === 403"
-    >
-      Acesso negado ao recurso {{ error.path }}
-    </template>
-    <template
-      v-if="error.statusCOe === 404"
-    >
-      Não foi possível localizar {{ error.path }}
-    </template>
+    <v-col cols="12">
+      Error {{ error.statusCode }}
+    </v-col>
+    <v-col cols="12">
+      Path {{ error.path }}
+    </v-col>
   </v-row>
 </template>
 

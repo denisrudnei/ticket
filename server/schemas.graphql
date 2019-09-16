@@ -1,0 +1,126 @@
+type Category {
+  id: ID
+  name: String
+  description: String
+  defaultGroup: Group
+  father: Category
+  subs: [Category]
+  fields: [CategoryField]
+}
+
+type CategoryField {
+  id: ID
+  required: Boolean
+  text: String
+  limits: CategoryFieldLimit
+  value: String
+}
+
+type CategoryFieldLimit {
+  min: Int,
+  max: Int
+}
+
+type Status {
+  id: ID
+  name: String
+  allowedStatus: [Status]
+}
+
+type Group {
+  id: ID
+  name: String
+  analysts: [Analyst]
+}
+
+type TicketPagination {
+  docs: [Ticket],
+  total: Int,
+  page: Int,
+  pages: Int,
+  limit: Int
+}
+
+type Address {
+  id: ID
+  name: String
+  country: String
+  street: String
+  cep: String
+  city: String
+  state: String
+}
+
+type Analyst {
+  id: ID
+  name: String
+  status: String,
+  lastTimeActive: Datetime
+  contactEmail: String
+  role: String
+  color: String
+  address: Address
+  description: String
+  active: Boolean
+  picture: String
+  sounds: Sound
+}
+
+type SoundConfig {
+  volume: Float
+  muted: Boolean
+}
+
+type Sound {
+  chat: SoundConfig,
+  notification: SoundConfig
+}
+
+type Comment {
+  id: ID
+  user: Analyst
+  content: String
+  date: Datetime
+}
+
+type Log {
+  id: ID
+  user: Analyst
+  date: Datetime
+  oldStatus: Status
+  group: Group
+  newStatus: Status
+}
+
+type Ticket {
+  id: ID
+  resume: String
+  content: String
+  status: Status
+  comments: [Comment]
+  logs: [Log]
+  category: Category
+  group: Group
+  affectedUser: Analyst
+  actualUser: Analyst
+  openedBy: Analyst
+  created: Datetime
+  modified: Datetime
+}
+
+type Query {
+  TicketById(id: ID): Ticket,
+  Tickets(descending: Int, sortyBy: String, page: Int, limit: Int): TicketPagination,
+  Status: [Status],
+  FindStatus(example: String): [Status]
+  Group: [Group]
+  Category: [Category]
+  Analyst: [Analyst]
+}
+
+type Mutation {
+  Login(email: String, password: String): Analyst
+  CreateTicket(openedBy: ID, affectedUser: ID, actualUser: ID, resume: ID, content: ID, group: ID, Status: ID): Ticket
+}
+
+scalar Datetime

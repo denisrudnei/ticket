@@ -84,16 +84,15 @@ export default {
     logged: 'auth/getLogged'
   }),
   mounted() {
-    this.$socket.on('message', value => {
-      this.$store.commit('chat/receiveMessage', value)
-    })
-    this.$socket.on(`message/${this.user._id}`, message => {
-      this.$toast.show('Mensagem recebida', {
-        duration: 1000
-      })
-
-      this.$store.commit('chat/receiveMessage', message)
-    })
+    // this.$socket.on('message', value => {
+    //   this.$store.commit('chat/receiveMessage', value)
+    // })
+    // this.$socket.on(`message/${this.user._id}`, message => {
+    //   this.$toast.show('Mensagem recebida', {
+    //     duration: 1000
+    //   })
+    //   this.$store.commit('chat/receiveMessage', message)
+    // })
   },
   created() {
     this.$axios.get('/analyst').then(response => {

@@ -20,7 +20,6 @@
           Não lidas
         </v-tab>
       </v-tabs>
-      </v-tabss></v-tabsshow-arrows>
     </v-col>
     <v-col>
       <nuxt-child />

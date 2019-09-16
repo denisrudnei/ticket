@@ -39,7 +39,7 @@ module.exports = {
   */
   plugins: [
     { src: '@/plugins/dateFilter', ssr: true },
-    { src: '@/plugins/socketIo', ssr: false },
+    // { src: '@/plugins/socketIo', ssr: false },
     { src: '@/plugins/apex-charts', ssr: false },
     { src: '@/plugins/google-maps', ssr: false },
     { src: '@/plugins/CKEditor', ssr: false }
@@ -47,7 +47,8 @@ module.exports = {
 
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxt/typescript-build'
   ],
 
   /*
