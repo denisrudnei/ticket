@@ -13,6 +13,11 @@
     "group": "user",
     "permissions": [
       {
+        "resource": "/playground/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
         "resource": "/api/auth/*",
         "methods": "*",
         "action": "allow"

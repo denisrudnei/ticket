@@ -30,7 +30,7 @@ acl.config({
   roleSearchPath: 'session.authUser.role'
 })
 
-// server.express.use('/api', acl.authorize)
+server.express.use('/api', acl.authorize)
 
 server.express.use(bodyParser.json())
 
@@ -77,7 +77,6 @@ async function start() {
   })
 
   server.express.use('/api', routes)
- 
 
   server.express.use((err, req, res, next) => {
     consola.error(err)
@@ -86,8 +85,8 @@ async function start() {
 
   server.start({
     port: port,
-    endpoint: '/graphql',
-    playground: '/playground'
+    endpoint: '/api/graphql',
+    playground: '/api/playground'
   })
 
   server.express.use(nuxt.render)
