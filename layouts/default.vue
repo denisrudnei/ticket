@@ -210,10 +210,8 @@ export default {
     groups: 'group/getGroups',
     ticketsToEdit: 'ticket/getTicketsToEdit'
   }),
-  async created() {
+  created() {
     if (this.logged) {
-      const response = await this.$axios.get('/group')
-      this.$store.commit('group/setGroups', response.data)
       this.processInfo()
     }
   },

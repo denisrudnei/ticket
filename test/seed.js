@@ -53,7 +53,8 @@ const seed = {
       await mongoose.connect(
         process.env.MONGODB_TESTING_URI || 'mongodb://127.0.0.1/testing',
         {
-          useNewUrlParser: true
+          useNewUrlParser: true,
+          useUnifiedTopology: true
         },
         async function(err) {
           if (err) return reject(err)

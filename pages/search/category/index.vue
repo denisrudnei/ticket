@@ -1,10 +1,13 @@
 <template>
   <v-row>
     <v-treeview
+      open-all
       :items="items"
       :load-children="getSub"
       item-children="subs"
       on-icon="layers"
+      activatable
+      open-on-click
     >
       <template
         v-slot:prepend="{ item }"

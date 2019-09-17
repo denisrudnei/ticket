@@ -13,8 +13,13 @@
     "group": "user",
     "permissions": [
       {
-        "resource": "/playground/*",
+        "resource": "/api/playground/*",
         "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/api/graphql/*",
+        "methods": ["POST"],
         "action": "allow"
       },
       {
