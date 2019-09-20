@@ -4,6 +4,9 @@ const CategoryResolver = {
   Query: {
     Category: () => {
       return CategoryService.getCategories()
+    },
+    GetSubs: (_, { categoryId }) => {
+      return CategoryService.getSubsForCategory(categoryId)
     }
   }
 }

@@ -1,39 +1,56 @@
 <template>
   <v-row>
-    <v-treeview
-      open-all
-      :items="items"
-      :load-children="getSub"
-      item-children="subs"
-      on-icon="layers"
-      activatable
-      open-on-click
-    >
-      <template
-        v-slot:prepend="{ item }"
+    <v-col>
+      <v-treeview
+        :items="items"
+        item-children="subs"
+        on-icon="layers"
+        open-on-click
       >
-        <v-icon>layers</v-icon>
-      </template>
-    </v-treeview>
+        <template
+          v-slot:prepend="{ item }"
+        >
+          <v-icon>layers</v-icon>
+        </template>
+        <template v-slot:label="{item}">
+          <span @click="getSub(item)">
+            {{ item.name }}
+          </span>
+        </template>
+      </v-treeview>
+    </v-col>
   </v-row>
 </template>
 
 <script>
+import category from '@/graphql/query/search/category/category.graphql'
+import getSubs from '@/graphql/query/search/category/subs.graphql'
 export default {
   asyncData({ $axios }) {
-    return $axios.get('/category').then(response => {
-      return {
-        items: response.data.filter(c => {
-          return c.father === null
-        })
-      }
-    })
+    return $axios
+      .post('/graphql', {
+        query: category
+      })
+      .then(response => {
+        return {
+          items: response.data.data.Category.filter(c => {
+            return c.father === null
+          })
+        }
+      })
   },
   methods: {
     getSub(item) {
-      this.$axios.get(`/category/${item._id}/subs`).then(response => {
-        item.subs = response.data.subs
-      })
+      this.$axios
+        .post('/graphql', {
+          query: getSubs,
+          variables: {
+            categoryId: item._id
+          }
+        })
+        .then(response => {
+          return response.data.data.GetSubs
+        })
     }
   }
 }

@@ -11,10 +11,10 @@ export default {
   methods: {
     save(category) {
       this.$axios.post('/config/category', category).then(() => {
-        this.loadData()
         this.$toast.show('Categoria criada', {
           duration: 1000
         })
+        this.$router.push('/config/category')
       })
     }
   }

@@ -1,0 +1,14 @@
+query {
+  Category {
+    _id
+    father {
+      _id
+      name
+    }
+    name
+    subs {
+      _id
+      name
+    }
+  }
+}

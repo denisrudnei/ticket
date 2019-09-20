@@ -3,9 +3,9 @@
     <v-list
       two-line
     >
-      <v-list-item>
+      <v-list-item @click="mini = !mini">
         <v-list-item-action>
-          <v-btn icon class="primary white--text" @click="mini = !mini">
+          <v-btn icon class="primary white--text">
             <v-icon>chat</v-icon>
           </v-btn>
         </v-list-item-action>
@@ -75,22 +75,6 @@
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-
-      <v-dialog
-        v-model="showModal"
-        scrollable
-      >
-        <v-card>
-          <v-row>
-            <v-col cols="12" pa-3>
-              <ticket-list
-                v-if="showModal"
-                :url="`/search/`"
-              />
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-dialog>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -98,10 +82,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import AnalystStatus from './status'
-import TicketList from '@/components/ticket/list'
+import analystList from '@/graphql/query/chat/analyst-list.graphql'
 export default {
   components: {
-    TicketList,
     AnalystStatus
   },
   data() {
@@ -128,9 +111,13 @@ export default {
     }
   },
   created() {
-    this.$axios.get('/analyst').then(reponse => {
-      this.$store.commit('analyst/setAnalysts', reponse.data)
-    })
+    this.$axios
+      .post('/graphql', {
+        query: analystList
+      })
+      .then(reponse => {
+        this.$store.commit('analyst/setAnalysts', reponse.data.data.Analyst)
+      })
   },
   mounted() {
     // this.$socket.on('chat/status/update', newInfo => {

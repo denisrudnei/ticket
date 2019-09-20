@@ -116,6 +116,7 @@ type Query {
   FindStatus(example: String): [Status]
   Group: [Group]
   Category: [Category]
+  GetSubs(categoryId: ID): [Category]
   Analyst: [Analyst]
 }
 

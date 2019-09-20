@@ -62,5 +62,6 @@ query getTickets ($sortBy: String, $page: Int, $limit: Int, $descending: Int) {
   Analyst {
     _id
     name
+    picture
   }
 }

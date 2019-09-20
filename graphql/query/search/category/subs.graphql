@@ -1,0 +1,9 @@
+query GetSubs($categoryId: ID){
+  GetSubs (categoryId: $categoryId) {
+    _id
+    name
+    subs {
+      name
+    }
+  }
+}
