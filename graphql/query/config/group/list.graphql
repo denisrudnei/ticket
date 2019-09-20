@@ -1,0 +1,15 @@
+query {
+  Group {
+    _id
+    name
+    analysts {
+      _id
+      name
+      picture
+    }
+  }
+  Analyst {
+    _id
+    name
+  }
+}

@@ -1,6 +1,7 @@
 type Category {
-  id: ID
+  _id: ID
   name: String
+  fullName: String
   description: String
   defaultGroup: Group
   father: Category
@@ -9,7 +10,7 @@ type Category {
 }
 
 type CategoryField {
-  id: ID
+  _id: ID
   required: Boolean
   text: String
   limits: CategoryFieldLimit
@@ -22,13 +23,13 @@ type CategoryFieldLimit {
 }
 
 type Status {
-  id: ID
+  _id: ID
   name: String
   allowedStatus: [Status]
 }
 
 type Group {
-  id: ID
+  _id: ID
   name: String
   analysts: [Analyst]
 }
@@ -42,7 +43,7 @@ type TicketPagination {
 }
 
 type Address {
-  id: ID
+  _id: ID
   name: String
   country: String
   street: String
@@ -52,7 +53,7 @@ type Address {
 }
 
 type Analyst {
-  id: ID
+  _id: ID
   name: String
   status: String,
   lastTimeActive: Datetime
@@ -77,14 +78,14 @@ type Sound {
 }
 
 type Comment {
-  id: ID
+  _id: ID
   user: Analyst
   content: String
   date: Datetime
 }
 
 type Log {
-  id: ID
+  _id: ID
   user: Analyst
   date: Datetime
   oldStatus: Status
@@ -93,7 +94,7 @@ type Log {
 }
 
 type Ticket {
-  id: ID
+  _id: ID
   resume: String
   content: String
   status: Status
@@ -109,8 +110,8 @@ type Ticket {
 }
 
 type Query {
-  TicketById(id: ID): Ticket,
-  Tickets(descending: Int, sortyBy: String, page: Int, limit: Int): TicketPagination,
+  TicketById(_id: ID): Ticket,
+  Tickets(descending: Int, sortBy: String, page: Int, limit: Int): TicketPagination,
   Status: [Status],
   FindStatus(example: String): [Status]
   Group: [Group]
@@ -120,7 +121,9 @@ type Query {
 
 type Mutation {
   Login(email: String, password: String): Analyst
-  CreateTicket(openedBy: ID, affectedUser: ID, actualUser: ID, resume: ID, content: ID, group: ID, Status: ID): Ticket
+  CreateTicket(actualUser: ID, affectedUser: ID, resume: String, content: String, group: ID, status: ID, category: ID): Ticket
+  TransferTicket(ticketId: ID, groupId: ID): Ticket
+  ChangeStatus(ticketId: ID, statusId: ID): Ticket
 }
 
 scalar Datetime

@@ -88,8 +88,6 @@ module.exports = {
   },
 
   comment: (req, res) => {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) return res.status(400).json(errors.mapped())
     const userId = req.session.authUser._id
     TicketService.commentOnTicket(req.params.id, userId, req.body.content)
       .then(result => {

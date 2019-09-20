@@ -27,4 +27,14 @@ LogSchema.pre('find', function() {
   this.populate(['user', 'group', 'oldStatus', 'newStatus'])
 })
 
+LogSchema.set('toJSON', {
+  getters: true,
+  virtuals: true
+})
+
+LogSchema.set('toObject', {
+  getters: true,
+  virtuals: true
+})
+
 module.exports = models.Log || model('Log', LogSchema)

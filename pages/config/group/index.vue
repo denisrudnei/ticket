@@ -137,7 +137,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
+import list from '@/graphql/query/config/group/list.graphql'
 export default {
   data() {
     return {
@@ -166,14 +166,15 @@ export default {
     groups: 'group/getGroups',
     analysts: 'analyst/getAnalysts'
   }),
-  async mounted() {
-    await this.$axios.get('/group').then(response => {
-      this.$store.commit('group/setGroups', response.data)
-    })
-
-    await this.$axios.get('/analyst').then(response => {
-      this.$store.commit('analyst/setAnalysts', response.data)
-    })
+  fetch({ $axios, store }) {
+    $axios
+      .post('/graphql', {
+        query: list
+      })
+      .then(response => {
+        store.commit('group/setGroups', response.data.data.Group)
+        store.commit('analyst/setAnalysts', response.data.data.Analyst)
+      })
   },
   methods: {
     addToGroup(group, analyst) {

@@ -10,5 +10,15 @@ const KnowledgeFileSchema = new Schema({
   }
 })
 
+KnowledgeFileSchema.set('toObject', {
+  virtuals: true,
+  getters: true
+})
+
+KnowledgeFileSchema.set('toJSON', {
+  virtuals: true,
+  getters: true
+})
+
 module.exports =
   models.KnowledgeFile || model('KnowledgeFile', KnowledgeFileSchema)

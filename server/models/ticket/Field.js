@@ -1,5 +1,5 @@
 const { models, model, Schema } = require('mongoose')
-const fieldSchema = new Schema({
+const FieldSchema = new Schema({
   _id: Schema.Types.ObjectId,
   required: {
     type: Boolean,
@@ -22,4 +22,14 @@ const fieldSchema = new Schema({
   }
 })
 
-module.exports = models.Field || model('Field', fieldSchema)
+FieldSchema.set('toJSON', {
+  getters: true,
+  virtuals: true
+})
+
+FieldSchema.set('toObject', {
+  getters: true,
+  virtuals: true
+})
+
+module.exports = models.Field || model('Field', FieldSchema)

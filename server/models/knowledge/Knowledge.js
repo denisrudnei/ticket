@@ -41,4 +41,14 @@ KnowledgeSchema.pre('findOne', function() {
   this.populate(['category', 'group', 'status'])
 })
 
+KnowledgeSchema.set('toJSON', {
+  virtuals: true,
+  getters: true
+})
+
+KnowledgeSchema.set('toObject', {
+  virtuals: true,
+  getters: true
+})
+
 module.exports = models.Knowledge || model('Knowledge', KnowledgeSchema)

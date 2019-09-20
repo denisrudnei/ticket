@@ -1,0 +1,6 @@
+query {
+  Status {
+    _id,
+    name
+  }
+}

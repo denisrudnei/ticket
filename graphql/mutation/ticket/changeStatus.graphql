@@ -1,0 +1,11 @@
+mutation ChangeStatus($ticketId: ID, $statusId: ID) {
+  ChangeStatus(ticketId: $ticketId, statusId: $statusId) {
+    _id
+    status {
+      allowedStatus {
+        _id
+        name
+      }
+    }
+  }
+}

@@ -89,7 +89,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-const querystring = require('querystring')
+import list from '@/graphql/query/ticket/list.graphql'
+import changeStatus from '@/graphql/mutation/ticket/changeStatus.graphql'
+import transferToGroup from '@/graphql/mutation/ticket/transferToGroup.graphql'
+// const querystring = require('querystring')
 
 export default {
   props: {
@@ -224,12 +227,6 @@ export default {
     }
   },
   async created() {
-    this.$axios.get('/group').then(response => {
-      this.$store.commit('group/setGroups', response.data)
-    })
-    this.$axios.get('/status').then(response => {
-      this.$store.commit('status/setStatus', response.data)
-    })
     const query = this.$route.query
     if (query.ticket !== undefined && query.ticket !== null) {
       await this.$store.dispatch('ticket/findTicket', query.ticket)
@@ -242,15 +239,31 @@ export default {
     async update() {
       const query = this.query
       await this.$axios
-        .get(`${this.url}?${querystring.encode(query)}`)
+        .post(`/graphql`, {
+          query: list,
+          variables: {
+            sortBy: query.sortBy || 'created',
+            page: query.page || 1,
+            limit: query.limit || 10,
+            descending: query.descending || 1
+          }
+        })
         .then(response => {
-          const { docs, total, limit, page } = response.data
+          const { docs, total, limit, page } = response.data.data.Tickets
+          this.$store.commit('status/setStatus', response.data.data.Status)
+          this.$store.commit(
+            'category/setCategories',
+            response.data.data.Category
+          )
+          this.$store.commit('group/setGroups', response.data.data.Group)
+          this.$store.commit('analyst/setAnalysts', response.data.data.Analyst)
           if (this.modal) {
             this.$store.commit('ticket/setModalTickets', docs)
           } else {
             this.$store.commit('ticket/setTickets', docs)
             this.$store.commit('ticket/setSearch', docs)
           }
+
           this.totalItems = parseInt(total)
           this.options.page = parseInt(page)
           this.options.itemsPerPage = parseInt(limit)
@@ -267,7 +280,13 @@ export default {
     },
     modifyStatus(ticket) {
       this.$axios
-        .post(`/ticket/updateStatus/${ticket._id}`, this.currentStatus)
+        .post('/graphql', {
+          query: changeStatus,
+          variables: {
+            ticketId: ticket._id,
+            statusId: this.currentStatus._id
+          }
+        })
         .then(() => {
           this.$toast.show('Status alterado', {
             duration: 5000
@@ -276,7 +295,13 @@ export default {
     },
     transferToGroup(ticket) {
       this.$axios
-        .post(`/ticket/transfer/${ticket._id}`, this.currentGroup)
+        .post('/graphql', {
+          query: transferToGroup,
+          variables: {
+            ticketId: ticket._id,
+            groupId: this.currentGroup._id
+          }
+        })
         .then(() => {
           this.$toast.show(
             `Movido com sucesso ao grupo ${this.currentGroup.name}`,

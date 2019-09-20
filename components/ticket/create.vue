@@ -411,7 +411,7 @@ import Logs from '@/components/ticket/logs'
 import Comments from '@/components/ticket/comments'
 import compareObjectsWithId from '@/mixins/compareObjectsWithId'
 import showModal from '@/mixins/showModal'
-
+import create from '@/graphql/query/ticket/create.graphql'
 export default {
   components: {
     Fields,
@@ -490,24 +490,22 @@ export default {
   },
   created() {
     this.readOnlyData = this.readonly
-    this.$axios.get('/analyst').then(response => {
-      this.analysts = response.data
-      if (!this.search && !this.readonly) {
-        const openedBy = this.analysts.filter(a => {
-          return a._id === this.user._id
-        })[0]
-        this.ticketComputed.openedBy = openedBy
-      }
-    })
-    this.$axios.get('/group').then(response => {
-      this.groups = response.data
-    })
-    this.$axios.get('status').then(response => {
-      this.status = response.data
-    })
-    this.$axios.get('/category').then(response => {
-      this.categories = response.data
-    })
+    this.$axios
+      .post('/graphql', {
+        query: create
+      })
+      .then(response => {
+        this.analysts = response.data.data.Analyst
+        if (!this.search && !this.readonly) {
+          const openedBy = this.analysts.filter(a => {
+            return a._id === this.user._id
+          })[0]
+          this.ticketComputed.openedBy = openedBy
+        }
+        this.groups = response.data.data.Group
+        this.status = response.data.data.Status
+        this.categories = response.data.data.Category
+      })
   },
   methods: {
     addComment() {
@@ -557,7 +555,7 @@ export default {
         (Object.prototype.hasOwnProperty.call(this.ticketComputed, 'group') &&
           !Object.prototype.hasOwnProperty.call(
             this.ticketComputed.group,
-            '_id'
+            'id'
           ))
       ) {
         this.ticketComputed.group = this.groups[index]

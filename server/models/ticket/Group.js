@@ -17,4 +17,14 @@ GroupSchema.pre('find', function() {
   this.populate(['analysts'])
 })
 
+GroupSchema.set('toJSON', {
+  getters: true,
+  virtuals: true
+})
+
+GroupSchema.set('toObject', {
+  getters: true,
+  virtuals: true
+})
+
 module.exports = models.Group || model('Group', GroupSchema)

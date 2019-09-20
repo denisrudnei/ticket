@@ -22,4 +22,14 @@ const AddressSchema = new Schema({
   }
 })
 
+AddressSchema.set('toJSON', {
+  getters: true,
+  virtuals: true
+})
+
+AddressSchema.set('toObject', {
+  getters: true,
+  virtuals: true
+})
+
 module.exports = models.Address || model('Address', AddressSchema)

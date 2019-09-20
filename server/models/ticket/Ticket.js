@@ -79,6 +79,16 @@ TicketSchema.pre('find', function() {
   ])
 })
 
+TicketSchema.set('toJSON', {
+  getters: true,
+  virtuals: true
+})
+
+TicketSchema.set('toObject', {
+  getters: true,
+  virtuals: true
+})
+
 TicketSchema.plugin(mongoosePaginate)
 
 module.exports = models.Ticket || model('Ticket', TicketSchema)

@@ -1,33 +1,19 @@
-const express = require('express')
-const router = express.Router()
-const AuthRoute = require('./AuthRoute')
-const TicketRoute = require('./ticket/TicketRoute')
-const CategoryRoute = require('./ticket/CategoryRoute')
-const GroupRoute = require('./ticket/GroupRoute')
-const StatusRoute = require('./ticket/StatusRoute')
-const SearchRoute = require('./ticket/SearchRoute')
-const AddressRoute = require('./AddressRoute')
-const AnalystRoute = require('./AnalystRoute')
-const RoleRoute = require('./RoleRoute')
-const ProfileRoute = require('./ProfileRoute')
-const ChatRoute = require('./ChatRoute')
-const NotificationRoute = require('./NotificationRoute')
-const KnowledgeRoute = require('./knowledge/KnowledgeRoute')
-const KnowledgeStatusRoute = require('./knowledge/KnowledgeStatusRoute')
+const fs = require('fs')
+const path = require('path')
+const router = require('express').Router()
 
-router.use(AuthRoute)
-router.use(TicketRoute)
-router.use(CategoryRoute)
-router.use(GroupRoute)
-router.use(StatusRoute)
-router.use(SearchRoute)
-router.use(AddressRoute)
-router.use(AnalystRoute)
-router.use(RoleRoute)
-router.use(ProfileRoute)
-router.use(ChatRoute)
-router.use(NotificationRoute)
-router.use(KnowledgeRoute)
-router.use(KnowledgeStatusRoute)
+const folder = path.resolve(__dirname)
+
+fs.readdirSync(folder).forEach(file => {
+  const m = require(path.join(folder, file))
+  if (!file.includes('.js')) {
+    Object.keys(m).forEach(innerModule => {
+      if (innerModule !== 'index.js') {
+        router.use(m[innerModule])
+      }
+    })
+  }
+  if (file !== 'index.js' && file.includes('.js')) router.use(m)
+})
 
 module.exports = router

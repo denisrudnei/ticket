@@ -8,4 +8,14 @@ const FileSchema = new Schema({
   }
 })
 
+FileSchema.set('toJSON', {
+  getters: true,
+  virtuals: true
+})
+
+FileSchema.set('toObject', {
+  getters: true,
+  virtuals: true
+})
+
 module.exports = models.File || model('File', FileSchema)

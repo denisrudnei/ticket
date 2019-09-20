@@ -1,0 +1,27 @@
+query {
+  Status {
+    _id
+    name
+    allowedStatus {
+      _id
+      name
+    }
+  }
+  Group {
+    _id
+    name
+  }
+  Analyst {
+    _id
+    name
+  }
+  Category {
+    _id
+    name
+    subs {
+      _id
+      name
+    }
+    fullName
+  }
+}

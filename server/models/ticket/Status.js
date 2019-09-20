@@ -14,4 +14,14 @@ const StatusSchema = new Schema({
   ]
 })
 
+StatusSchema.set('toJSON', {
+  getters: true,
+  virtuals: true
+})
+
+StatusSchema.set('toObject', {
+  getters: true,
+  virtuals: true
+})
+
 module.exports = models.Status || model('Status', StatusSchema)

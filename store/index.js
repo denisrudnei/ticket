@@ -9,20 +9,39 @@ export const mutations = {
     state.show = true
   }
 }
-
+const query = `query {
+  Status {
+    _id
+    name
+    allowedStatus {
+      _id
+      name
+    }
+  }
+  Group {
+    _id
+    name
+  }
+  Category {
+    _id
+    name
+    fullName
+  }
+  Analyst {
+    name
+  }
+}`
 export const actions = {
   downloadInfo: function({ commit }) {
-    this.$axios.get('/status').then(response => {
-      commit('status/setStatus', response.data)
-    })
-    this.$axios.get('/category').then(response => {
-      commit('category/setCategories', response.data)
-    })
-    this.$axios.get('/group').then(response => {
-      commit('group/setGroups', response.data)
-    })
-    this.$axios.get('/analyst').then(reponse => {
-      commit('analyst/setAnalysts', reponse.data)
-    })
+    this.$axios
+      .post('/graphql', {
+        query
+      })
+      .then(response => {
+        commit('status/setStatus', response.data.data.Status)
+        commit('category/setCategories', response.data.data.Category)
+        commit('group/setGroups', response.data.data.Group)
+        commit('analyst/setAnalysts', response.data.data.Analyst)
+      })
   }
 }

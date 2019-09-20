@@ -10,4 +10,14 @@ const RoleSchema = new Schema({
   }
 })
 
+RoleSchema.set('toJSON', {
+  getters: true,
+  virtuals: true
+})
+
+RoleSchema.set('toObject', {
+  getters: true,
+  virtuals: true
+})
+
 module.exports = models.Role || model('Role', RoleSchema)

@@ -10,5 +10,15 @@ const KnowledgeStatusSchema = new Schema({
   }
 })
 
+KnowledgeStatusSchema.set('toObject', {
+  virtuals: true,
+  getters: true
+})
+
+KnowledgeStatusSchema.set('toJSON', {
+  virtuals: true,
+  getters: true
+})
+
 module.exports =
   models.KnowledgeStatus || model('KnowledgeStatus', KnowledgeStatusSchema)

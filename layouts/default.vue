@@ -176,6 +176,7 @@ export default {
   data() {
     return {
       fab: true,
+      data: {},
       items: [
         {
           icon: 'bookmarks',
@@ -212,6 +213,7 @@ export default {
   }),
   created() {
     if (this.logged) {
+      this.$store.dispatch('downloadInfo')
       this.processInfo()
     }
   },

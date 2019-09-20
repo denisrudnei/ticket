@@ -12,13 +12,16 @@ mongoose.connect(
 )
 
 const config = require('../nuxt.config.js')
-const resolvers = require('./resolvers')
+const resolvers = require('./resolvers/index')
 const CheckACL = require('./models/CheckACL')
 config.dev = !(process.env.NODE_ENV === 'production')
 
 const server = new GraphQLServer({
   typeDefs: path.resolve(__dirname, 'schemas.graphql'),
-  resolvers
+  resolvers,
+  context: async req => ({
+    req: req.request
+  })
 })
 
 async function start() {
@@ -47,7 +50,10 @@ async function start() {
   server.start({
     port: port,
     endpoint: '/api/graphql',
-    playground: '/api/playground'
+    playground: '/api/playground',
+    cors: {
+      credentials: true
+    }
   })
 
   server.express.use(nuxt.render)

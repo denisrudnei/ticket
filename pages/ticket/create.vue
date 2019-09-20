@@ -7,7 +7,7 @@
 
 <script>
 import TicketCreate from '@/components/ticket/create'
-
+import create from '@/graphql/mutation/ticket/create.graphql'
 export default {
   components: {
     TicketCreate
@@ -20,7 +20,18 @@ export default {
   methods: {
     create() {
       this.$axios
-        .post('/ticket', this.ticket)
+        .post('/graphql', {
+          query: create,
+          variables: {
+            affectedUser: this.ticket.affectedUser._id,
+            actualUser: this.ticket.actualUser._id,
+            status: this.ticket.status._id,
+            group: this.ticket.group._id,
+            category: this.ticket.category._id,
+            resume: this.ticket.resume,
+            content: this.ticket.content
+          }
+        })
         .then(() => {
           this.$router.push('/')
         })

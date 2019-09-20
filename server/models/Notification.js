@@ -31,5 +31,15 @@ NotificationSchema.pre('find', function() {
   this.populate(['to', 'from'])
 })
 
+NotificationSchema.set('toJSON', {
+  getters: true,
+  virtuals: true
+})
+
+NotificationSchema.set('toObject', {
+  getters: true,
+  virtuals: true
+})
+
 module.exports =
   models.Notification || model('Notification', NotificationSchema)

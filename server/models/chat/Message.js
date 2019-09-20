@@ -23,4 +23,9 @@ const MessageSchema = new Schema({
   }
 })
 
+MessageSchema.set('toJSON', {
+  virtuals: true,
+  getters: true
+})
+
 module.exports = models.Message || model('Message', MessageSchema)
