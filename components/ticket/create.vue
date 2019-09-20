@@ -555,7 +555,7 @@ export default {
         (Object.prototype.hasOwnProperty.call(this.ticketComputed, 'group') &&
           !Object.prototype.hasOwnProperty.call(
             this.ticketComputed.group,
-            'id'
+            '_id'
           ))
       ) {
         this.ticketComputed.group = this.groups[index]
