@@ -1,0 +1,9 @@
+subscription {
+  ChangeStatus {
+    _id
+    status {
+      _id
+      name
+    }
+  }
+}

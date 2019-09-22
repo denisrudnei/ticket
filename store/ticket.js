@@ -1,3 +1,5 @@
+import actualTicket from '@/graphql/query/ticket/actualTicket.graphql'
+
 export const state = () => ({
   tickets: [],
   modalTickets: [],
@@ -127,9 +129,16 @@ export const actions = {
     commit('insertTicket', ticket)
   },
   findTicket: async function({ commit }, id) {
-    await this.$axios.get(`/ticket/${id}`).then(response => {
-      commit('setActualTicket', response.data)
-    })
+    await this.$axios
+      .post('/graphql', {
+        query: actualTicket,
+        variables: {
+          id
+        }
+      })
+      .then(response => {
+        commit('setActualTicket', response.data.data.TicketById)
+      })
   },
   updateTree: async function({ commit }) {
     await this.$axios.get('/info/path').then(response => {

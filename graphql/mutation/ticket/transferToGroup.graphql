@@ -1,8 +1,6 @@
-mutation transferToGroup($ticketId: ID, $groupId: ID) {
+#import "@/graphql/fragments/ticketList.graphql"
+mutation transferToGroup($ticketId: ID!, $groupId: ID!) {
   TransferTicket(ticketId: $ticketId, groupId: $groupId)  {
-    _id
-    group {
-      name
-    }
+    ...ticketList
   }
 }

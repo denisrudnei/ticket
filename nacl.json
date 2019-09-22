@@ -18,6 +18,11 @@
         "action": "allow"
       },
       {
+        "resource": "/api/subscriptions/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
         "resource": "/api/graphql/*",
         "methods": ["POST"],
         "action": "allow"

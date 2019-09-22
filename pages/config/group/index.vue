@@ -166,14 +166,14 @@ export default {
     groups: 'group/getGroups',
     analysts: 'analyst/getAnalysts'
   }),
-  fetch({ $axios, store }) {
-    $axios
-      .post('/graphql', {
+  fetch({ $apollo, store }) {
+    $apollo
+      .query({
         query: list
       })
       .then(response => {
-        store.commit('group/setGroups', response.data.data.Group)
-        store.commit('analyst/setAnalysts', response.data.data.Analyst)
+        store.commit('group/setGroups', response.data.Group)
+        store.commit('analyst/setAnalysts', response.data.Analyst)
       })
   },
   methods: {

@@ -490,21 +490,21 @@ export default {
   },
   created() {
     this.readOnlyData = this.readonly
-    this.$axios
-      .post('/graphql', {
+    this.$apollo
+      .query({
         query: create
       })
       .then(response => {
-        this.analysts = response.data.data.Analyst
+        this.analysts = response.data.Analyst
         if (!this.search && !this.readonly) {
           const openedBy = this.analysts.filter(a => {
             return a._id === this.user._id
           })[0]
           this.ticketComputed.openedBy = openedBy
         }
-        this.groups = response.data.data.Group
-        this.status = response.data.data.Status
-        this.categories = response.data.data.Category
+        this.groups = response.data.Group
+        this.status = response.data.Status
+        this.categories = response.data.Category
       })
   },
   methods: {

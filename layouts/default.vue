@@ -162,6 +162,7 @@ import TicketTree from '@/components/ticket/tree'
 import Logout from '@/components/logout'
 import AnalystList from '@/components/chat/analyst-list'
 import TicketModal from '@/components/ticket/ticket-modal'
+import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
 export default {
   components: {
     Toolbar,
@@ -211,13 +212,17 @@ export default {
     groups: 'group/getGroups',
     ticketsToEdit: 'ticket/getTicketsToEdit'
   }),
-  created() {
+  mounted() {
     if (this.logged) {
-      this.$store.dispatch('downloadInfo')
       this.processInfo()
+      this.$apollo.subscribe({
+        query: changeStatus
+      })
+
+      // TODO listen updates
     }
   },
-  mounted() {
+  created() {
     // this.$socket.on('updateTicket', ticket => {
     //   // TODO
     //   this.$store.dispatch('ticket/updateTree')

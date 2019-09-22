@@ -41,15 +41,15 @@ export default {
   },
   methods: {
     getSub(item) {
-      this.$axios
-        .post('/graphql', {
+      this.$apollo
+        .query({
           query: getSubs,
           variables: {
             categoryId: item._id
           }
         })
         .then(response => {
-          return response.data.data.GetSubs
+          return response.data.GetSubs
         })
     }
   }

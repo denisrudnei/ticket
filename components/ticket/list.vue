@@ -89,11 +89,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import list from '@/graphql/query/ticket/list.graphql'
 import changeStatus from '@/graphql/mutation/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/mutation/ticket/transferToGroup.graphql'
-// const querystring = require('querystring')
-
+import ticketSearch from '@/graphql/query/search/ticket.graphql'
 export default {
   props: {
     url: {
@@ -238,25 +236,37 @@ export default {
   methods: {
     async update() {
       const query = this.query
-      await this.$axios
-        .post(`/graphql`, {
-          query: list,
+      const fields = [
+        'category',
+        'affectedUser',
+        'actualUser',
+        'openedBy',
+        'status',
+        'group'
+      ]
+      const attributes = {}
+      Object.keys(query).forEach(key => {
+        if (fields.includes(key)) {
+          attributes[key] = query[key]
+        }
+      })
+      await this.$apollo
+        .query({
+          query: ticketSearch,
           variables: {
             sortBy: query.sortBy || 'created',
             page: query.page || 1,
             limit: query.limit || 10,
-            descending: query.descending || 1
+            descending: query.descending || -1,
+            attributes
           }
         })
         .then(response => {
-          const { docs, total, limit, page } = response.data.data.Tickets
-          this.$store.commit('status/setStatus', response.data.data.Status)
-          this.$store.commit(
-            'category/setCategories',
-            response.data.data.Category
-          )
-          this.$store.commit('group/setGroups', response.data.data.Group)
-          this.$store.commit('analyst/setAnalysts', response.data.data.Analyst)
+          const { docs, total, limit, page } = response.data.Tickets
+          this.$store.commit('status/setStatus', response.data.Status)
+          this.$store.commit('category/setCategories', response.data.Category)
+          this.$store.commit('group/setGroups', response.data.Group)
+          this.$store.commit('analyst/setAnalysts', response.data.Analyst)
           if (this.modal) {
             this.$store.commit('ticket/setModalTickets', docs)
           } else {
@@ -279,30 +289,35 @@ export default {
       await this.update()
     },
     modifyStatus(ticket) {
-      this.$axios
-        .post('/graphql', {
-          query: changeStatus,
+      this.$apollo
+        .mutate({
+          mutation: changeStatus,
           variables: {
             ticketId: ticket._id,
             statusId: this.currentStatus._id
           }
         })
-        .then(() => {
+        .then(response => {
+          this.$store.commit('ticket/updateTicket', response.data.ChangeStatus)
           this.$toast.show('Status alterado', {
             duration: 5000
           })
         })
     },
     transferToGroup(ticket) {
-      this.$axios
-        .post('/graphql', {
-          query: transferToGroup,
+      this.$apollo
+        .mutate({
+          mutation: transferToGroup,
           variables: {
             ticketId: ticket._id,
             groupId: this.currentGroup._id
           }
         })
-        .then(() => {
+        .then(response => {
+          this.$store.commit(
+            'ticket/updateTicket',
+            response.data.TransferTicket
+          )
           this.$toast.show(
             `Movido com sucesso ao grupo ${this.currentGroup.name}`,
             {
@@ -319,6 +334,7 @@ export default {
       await this.$store.commit('ticket/setActualTicket', ticket)
       await this.$store.commit('ticket/setDialog', ticket._id)
       await this.$store.commit('ticket/addTicketsToEdit', ticket)
+      await this.$store.dispatch('ticket/findTicket', ticket._id)
     }
   }
 }

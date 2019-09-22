@@ -1,39 +1,6 @@
-mutation CreateTicket($affectedUser: ID, $actualUser: ID, $resume: String, $content: String, $status: ID, $group: ID, $category: ID) {
+#import "@/graphql/fragments/ticketList.graphql"
+mutation CreateTicket($affectedUser: ID!, $actualUser: ID!, $resume: String!, $content: String!, $status: ID!, $group: ID!, $category: ID!) {
   CreateTicket(affectedUser: $affectedUser, actualUser: $actualUser, resume: $resume, content: $content, status: $status, group: $group, category: $category) {
-    _id
-    openedBy {
-      _id
-      name
-    }
-    affectedUser {
-      _id
-      name
-    }
-    actualUser {
-      _id
-      name
-      picture
-    }
-    category {
-      _id
-      fullName
-      name
-    }
-    group {
-      _id
-      name
-    }
-    status {
-      _id
-      name
-      allowedStatus {
-        _id
-        name
-      }
-    }
-    resume
-    content
-    created
-    modified
+    ...ticketList
   }
 }

@@ -3,9 +3,7 @@
     <v-col
       cols="12"
     >
-      <list-ticket
-        url="/ticket/"
-      />
+      <list-ticket />
     </v-col>
   </v-row>
 </template>
@@ -15,6 +13,9 @@ import ListTicket from '@/components/ticket/list'
 export default {
   components: {
     ListTicket
+  },
+  created() {
+    this.$store.commit('ticket/setQuery', { page: 1 })
   }
 }
 </script>

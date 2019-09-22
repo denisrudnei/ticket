@@ -20,6 +20,7 @@
     "@ckeditor/ckeditor5-vue": "^1.0.0",
     "@models/index": "file:server/models",
     "@models/ticket": "file:server/models/ticket",
+    "@nuxtjs/apollo": "^4.0.0-rc13.1",
     "@nuxtjs/auth": "^4.8.4",
     "@nuxtjs/axios": "^5.6.0",
     "@nuxtjs/google-analytics": "^2.2.0",
@@ -54,8 +55,7 @@
     "vue-apexcharts": "^1.5.0",
     "vue-the-mask": "^0.11.1",
     "vue2-google-maps": "^0.10.7",
-    "vuedraggable": "^2.23.0",
-    "webpack-graphql-loader": "^1.0.2"
+    "vuedraggable": "^2.23.0"
   },
   "devDependencies": {
     "@nuxt/types": "^0.2.14",

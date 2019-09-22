@@ -1,0 +1,42 @@
+#import "@/graphql/fragments/ticketList.graphql"
+query GetTicket($id: ID) {
+  TicketById(_id: $id) {
+    ...ticketList
+    category {
+      fields {
+        required
+        text
+        limits {
+          min
+          max
+        }
+        value
+      }
+    }
+    logs {
+      user {
+        _id
+        name
+        picture
+      }
+      date
+      group {
+        _id
+        name
+      }
+      oldStatus {
+        _id
+        name
+      }
+    }
+    comments {
+      user {
+        _id
+        name
+      }
+      content
+      date
+    }
+    
+  }
+}

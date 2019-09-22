@@ -1,5 +1,5 @@
 const { models, model, Schema } = require('mongoose')
-
+const TicketEnums = require('../enums/TicketEnum')
 const NotificationSchema = new Schema({
   _id: Schema.Types.ObjectId,
   from: {
@@ -18,7 +18,17 @@ const NotificationSchema = new Schema({
   },
   name: String,
   content: String,
-  type: String,
+  type: {
+    type: String,
+    enum: [
+      TicketEnums.TICKET_CHANGE_STATUS,
+      TicketEnums.TICKET_TRANSFER_TO_GROUPs,
+      TicketEnums.TICKET_EDIT
+    ]
+  },
+  meta: {
+    type: Object
+  },
   read: [
     {
       type: Schema.Types.ObjectId,

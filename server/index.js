@@ -2,16 +2,18 @@ const path = require('path')
 const consola = require('consola')
 const morgan = require('morgan')
 const { Nuxt, Builder } = require('nuxt')
-const { GraphQLServer } = require('graphql-yoga')
+const { GraphQLServer, PubSub } = require('graphql-yoga')
 const mongoose = require('mongoose')
-const app = require('./app')
 
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost/test',
   { useNewUrlParser: true, useUnifiedTopology: true }
 )
 
+const pubSub = new PubSub()
+
 const config = require('../nuxt.config.js')
+const app = require('./app')
 const resolvers = require('./resolvers/index')
 const CheckACL = require('./models/CheckACL')
 config.dev = !(process.env.NODE_ENV === 'production')
@@ -20,7 +22,8 @@ const server = new GraphQLServer({
   typeDefs: path.resolve(__dirname, 'schemas.graphql'),
   resolvers,
   context: async req => ({
-    req: req.request
+    req: req.request,
+    pubSub
   })
 })
 
@@ -51,9 +54,7 @@ async function start() {
     port: port,
     endpoint: '/api/graphql',
     playground: '/api/playground',
-    cors: {
-      credentials: true
-    }
+    subscriptions: '/api/subscriptions'
   })
 
   server.express.use(nuxt.render)

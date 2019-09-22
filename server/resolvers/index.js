@@ -3,7 +3,8 @@ const path = require('path')
 
 const resolvers = {
   Query: {},
-  Mutation: {}
+  Mutation: {},
+  Subscription: {}
 }
 
 const folder = path.resolve(__dirname)

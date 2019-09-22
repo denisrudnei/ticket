@@ -110,16 +110,14 @@ export default {
         })
     }
   },
-  created() {
-    this.$axios
-      .post('/graphql', {
+  mounted() {
+    this.$apollo
+      .query({
         query: analystList
       })
       .then(reponse => {
-        this.$store.commit('analyst/setAnalysts', reponse.data.data.Analyst)
+        this.$store.commit('analyst/setAnalysts', reponse.data.Analyst)
       })
-  },
-  mounted() {
     // this.$socket.on('chat/status/update', newInfo => {
     //   this.$store.commit('analyst/updateStatus', newInfo)
     // })
