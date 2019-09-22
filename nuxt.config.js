@@ -75,10 +75,7 @@ module.exports = {
     includeNodeModules: true,
     clientConfigs: {
       default: {
-        httpEndpoint: '/api/graphql',
-        wsEndpoint: `ws://${process.env.HOST}:${
-          process.env.PORT
-        }/api/subscriptions`
+        httpEndpoint: '/api/graphql'
       }
     }
   },
