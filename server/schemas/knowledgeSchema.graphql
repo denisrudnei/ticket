@@ -1,0 +1,20 @@
+type Knowledge {
+  _id: ID
+  name: String!
+  created: Datetime!
+  category: Category!
+  group: Group!
+  status: KnowledgeStatus
+  preview: String!
+  files: [KnowledgeFile]
+}
+
+type KnowledgeStatus {
+  name: String!
+  description: String
+}
+
+type KnowledgeFile {
+  name: String!
+  url: String
+}

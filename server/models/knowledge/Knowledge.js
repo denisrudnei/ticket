@@ -28,7 +28,7 @@ const KnowledgeSchema = new Schema({
   files: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Knowledgefile'
+      ref: 'KnowledgeFile'
     }
   ]
 })

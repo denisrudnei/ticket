@@ -1,122 +1,14 @@
-type Category {
-  _id: ID
-  name: String
-  fullName: String
-  description: String
-  defaultGroup: Group
-  father: Category
-  subs: [Category]
-  fields: [Field]
-}
-
-type Field {
-  _id: ID
-  required: Boolean
-  text: String
-  limits: FieldLimit
-  value: String
-}
-
-type FieldLimit {
-  min: Int,
-  max: Int
-}
-
-type Status {
-  _id: ID
-  name: String
-  allowedStatus: [Status]
-}
-
-type Group {
-  _id: ID
-  name: String
-  analysts: [Analyst]
-}
-
-type TicketPagination {
-  docs: [Ticket],
-  total: Int,
-  page: Int,
-  pages: Int,
-  limit: Int
-}
-
-type Address {
-  _id: ID
-  name: String
-  country: String
-  street: String
-  cep: String
-  city: String
-  state: String
-}
-
-type Analyst {
-  _id: ID
-  name: String
-  status: String,
-  lastTimeActive: Datetime
-  contactEmail: String
-  role: String
-  color: String
-  address: Address
-  description: String
-  active: Boolean
-  picture: String
-  sounds: Sound
-}
-
-type SoundConfig {
-  volume: Float
-  muted: Boolean
-}
-
-type Sound {
-  chat: SoundConfig,
-  notification: SoundConfig
-}
-
-type Comment {
-  _id: ID
-  user: Analyst
-  content: String
-  date: Datetime
-}
-
-type Log {
-  _id: ID
-  user: Analyst
-  date: Datetime
-  oldStatus: Status
-  group: Group
-  newStatus: Status
-}
-
-type Ticket {
-  _id: ID
-  resume: String
-  content: String
-  status: Status
-  comments: [Comment]
-  logs: [Log]
-  category: Category
-  group: Group
-  affectedUser: Analyst
-  actualUser: Analyst
-  openedBy: Analyst
-  created: Datetime
-  modified: Datetime
-}
-
-input TicketAttributes {
-  actualUser: String
-  openedBy: String
-  affectedUser: String
-  category: String
-  status: String
-  group: String
-}
+#import Knowledge from "./schemas/knowledgeSchema.graphql"
+#import Ticket from "./schemas/ticketSchema.graphql"
+#import Log from "./schemas/logSchema.graphql"
+#import Category from "./schemas/categorySchema.graphql"
+#import Status from "./schemas/statusSchema.graphql"
+#import Field from "./schemas/fieldSchema.graphql"
+#import Group from "./schemas/groupSchema.graphql"
+#import Analyst from "./schemas/analystSchema.graphql"
+#import Address from "./schemas/addressSchema.graphql"
+#import Comment from "./schemas/commentSchema.graphql"
+#import Sound from "./schemas/soundSchema.graphql"
 
 type Query {
   TicketById(_id: ID): Ticket,
@@ -128,6 +20,8 @@ type Query {
   GetSubs(categoryId: ID): [Category]
   Analyst: [Analyst],
   SearchTicket(page: Int, limit: Int, descending: Int, sortBy: String, attributes: TicketAttributes): TicketPagination
+  Knowledge: [Knowledge]
+  KnowledgeById(_id: ID): Knowledge
 }
 
 type Mutation {

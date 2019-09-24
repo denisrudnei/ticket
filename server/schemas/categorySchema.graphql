@@ -1,0 +1,10 @@
+type Category {
+  _id: ID
+  name: String
+  fullName: String
+  description: String
+  defaultGroup: Group
+  father: Category
+  subs: [Category]
+  fields: [Field]
+}

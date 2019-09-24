@@ -1,0 +1,6 @@
+
+type Group {
+  _id: ID
+  name: String
+  analysts: [Analyst]
+}

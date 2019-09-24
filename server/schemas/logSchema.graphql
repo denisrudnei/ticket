@@ -1,0 +1,8 @@
+type Log {
+  _id: ID
+  user: Analyst
+  date: Datetime
+  oldStatus: Status
+  group: Group
+  newStatus: Status
+}

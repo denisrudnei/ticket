@@ -1,0 +1,14 @@
+type Analyst {
+  _id: ID
+  name: String
+  status: String,
+  lastTimeActive: Datetime
+  contactEmail: String
+  role: String
+  color: String
+  address: Address
+  description: String
+  active: Boolean
+  picture: String
+  sounds: Sound
+}

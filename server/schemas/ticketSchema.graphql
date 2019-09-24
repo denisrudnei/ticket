@@ -1,0 +1,32 @@
+type Ticket {
+  _id: ID
+  resume: String!
+  content: String!
+  status: Status!
+  comments: [Comment]!
+  logs: [Log]!
+  category: Category!
+  group: Group!
+  affectedUser: Analyst!
+  actualUser: Analyst
+  openedBy: Analyst!
+  created: Datetime!
+  modified: Datetime!
+}
+
+type TicketPagination {
+  docs: [Ticket],
+  total: Int,
+  page: Int,
+  pages: Int,
+  limit: Int
+}
+
+input TicketAttributes {
+  actualUser: String
+  openedBy: String
+  affectedUser: String
+  category: String
+  status: String
+  group: String
+}

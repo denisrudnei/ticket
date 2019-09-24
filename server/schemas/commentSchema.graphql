@@ -1,0 +1,6 @@
+type Comment {
+  _id: ID
+  user: Analyst
+  content: String
+  date: Datetime
+}
