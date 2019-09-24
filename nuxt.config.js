@@ -78,7 +78,7 @@ module.exports = {
         httpEndpoint: `http://${process.env.HOST || '0.0.0.0'}:${process.env
           .PORT || 3000}/api/graphql`,
         wsEndpoint: `ws://${process.env.HOST}:${
-          process.env.PORT
+          process.env.PORT || 3000
         }/api/subscriptions`
       }
     }
