@@ -53,7 +53,10 @@ async function start() {
   server.start({
     port: port,
     endpoint: '/api/graphql',
-    playground: '/api/playground'
+    playground: '/api/playground',
+    subscriptions: {
+      path: `/api/subscriptions`
+    }
   })
 
   server.express.use(nuxt.render)

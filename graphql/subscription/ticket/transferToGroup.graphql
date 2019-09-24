@@ -1,6 +1,6 @@
 #import "@/graphql/fragments/ticketList.graphql"
 subscription {
-  ChangeStatus {
+  TransferToGroup {
     ...ticketList
   }
 }

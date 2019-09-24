@@ -163,6 +163,8 @@ import Logout from '@/components/logout'
 import AnalystList from '@/components/chat/analyst-list'
 import TicketModal from '@/components/ticket/ticket-modal'
 import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
+import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
+
 export default {
   components: {
     Toolbar,
@@ -213,10 +215,32 @@ export default {
     ticketsToEdit: 'ticket/getTicketsToEdit'
   }),
   mounted() {
+    const vue = this
+    function updateTicket(data) {
+      vue.$store.commit('ticket/updateTicket', data)
+    }
     if (this.logged) {
       this.processInfo()
-      this.$apollo.subscribe({
+      const statusChangedSubscription = this.$apollo.subscribe({
         query: changeStatus
+      })
+
+      const transferToGroupSubscription = this.$apollo.subscribe({
+        query: transferToGroup
+      })
+
+      statusChangedSubscription.subscribe({
+        next({ data }) {
+          updateTicket(data.ChangeStatus)
+        },
+        error(data) {}
+      })
+
+      transferToGroupSubscription.subscribe({
+        next({ data }) {
+          updateTicket(data.TransferToGroup)
+        },
+        error(data) {}
       })
 
       // TODO listen updates
