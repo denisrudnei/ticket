@@ -141,6 +141,9 @@ export default {
   watch: {
     dialog: function(value) {
       this.updateFiles()
+    },
+    ticket: function(value) {
+      this.updateFiles()
     }
   },
   mounted() {
