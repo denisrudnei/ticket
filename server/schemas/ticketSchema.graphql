@@ -6,6 +6,7 @@ type Ticket {
   comments: [Comment]!
   logs: [Log]!
   category: Category!
+  files: [File]
   group: Group!
   affectedUser: Analyst!
   actualUser: Analyst

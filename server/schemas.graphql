@@ -9,6 +9,7 @@
 #import Address from "./schemas/addressSchema.graphql"
 #import Comment from "./schemas/commentSchema.graphql"
 #import Sound from "./schemas/soundSchema.graphql"
+#import File from "./schemas/fileSchema.graphql"
 
 type Query {
   TicketById(_id: ID): Ticket,

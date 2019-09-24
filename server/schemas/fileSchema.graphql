@@ -1,0 +1,5 @@
+type File {
+  name: String
+  data: String
+  type: String
+}

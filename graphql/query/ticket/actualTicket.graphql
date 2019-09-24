@@ -29,6 +29,11 @@ query GetTicket($id: ID) {
         name
       }
     }
+    files {
+      name
+      type
+      data
+    }
     comments {
       user {
         _id
