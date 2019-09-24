@@ -120,6 +120,7 @@ export default {
       options: {
         sortBy: ['created'],
         descending: true,
+        sortDesc: [true],
         totalItems: 0,
         page: 1
       },
@@ -219,6 +220,8 @@ export default {
           sortBy: newValue.sortBy[0],
           descending: newValue.sortDesc[0] ? -1 : 1
         })
+        /* eslint-disable */
+        console.log(newValue.sortDesc[0])
 
         this.setQuery(query)
       }
