@@ -89,6 +89,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
 import changeStatus from '@/graphql/mutation/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/mutation/ticket/transferToGroup.graphql'
 import ticketSearch from '@/graphql/query/search/ticket.graphql'
@@ -253,7 +254,7 @@ export default {
       })
       await this.$apollo
         .query({
-          query: ticketSearch,
+          query: ggl(ticketSearch),
           variables: {
             sortBy: query.sortBy || 'created',
             page: query.page || 1,
@@ -292,7 +293,7 @@ export default {
     modifyStatus(ticket) {
       this.$apollo
         .mutate({
-          mutation: changeStatus,
+          mutation: ggl(changeStatus),
           variables: {
             ticketId: ticket._id,
             statusId: this.currentStatus._id
@@ -308,7 +309,7 @@ export default {
     transferToGroup(ticket) {
       this.$apollo
         .mutate({
-          mutation: transferToGroup,
+          mutation: ggl(transferToGroup),
           variables: {
             ticketId: ticket._id,
             groupId: this.currentGroup._id

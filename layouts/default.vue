@@ -154,6 +154,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
 import afterLogin from '@/mixins/afterLogin'
 import Toolbar from '@/components/toolbar'
 import TicketDialog from '@/components/ticket/dialog'
@@ -164,7 +165,6 @@ import AnalystList from '@/components/chat/analyst-list'
 import TicketModal from '@/components/ticket/ticket-modal'
 import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
-import configureApollo from '@/mixins/configureApollo'
 export default {
   components: {
     Toolbar,
@@ -175,7 +175,7 @@ export default {
     AnalystList,
     TicketModal
   },
-  mixins: [afterLogin, configureApollo],
+  mixins: [afterLogin],
   data() {
     return {
       fab: true,
@@ -214,37 +214,25 @@ export default {
     groups: 'group/getGroups',
     ticketsToEdit: 'ticket/getTicketsToEdit'
   }),
-  mounted() {
-    this.setApolloUrl()
-    const vue = this
-    function updateTicket(data) {
-      vue.$store.commit('ticket/updateTicket', data)
+  apollo: {
+    $subscribe: {
+      changeStatus: {
+        query: ggl(changeStatus),
+        result({ data }) {
+          this.$store.commit('ticket/updateTicket', data.ChangeStatus)
+        }
+      },
+      transferToGroup: {
+        query: ggl(transferToGroup),
+        result({ data }) {
+          this.$store.commit('ticket/updateTicket', data.TransferToGroup)
+        }
+      }
     }
+  },
+  mounted() {
     if (this.logged) {
       this.processInfo()
-      const statusChangedSubscription = this.$apollo.subscribe({
-        query: changeStatus
-      })
-
-      const transferToGroupSubscription = this.$apollo.subscribe({
-        query: transferToGroup
-      })
-
-      statusChangedSubscription.subscribe({
-        next({ data }) {
-          updateTicket(data.ChangeStatus)
-        },
-        error(data) {}
-      })
-
-      transferToGroupSubscription.subscribe({
-        next({ data }) {
-          updateTicket(data.TransferToGroup)
-        },
-        error(data) {}
-      })
-
-      // TODO listen updates
     }
   },
   created() {

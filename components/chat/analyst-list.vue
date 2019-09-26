@@ -81,6 +81,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
 import AnalystStatus from './status'
 import analystList from '@/graphql/query/chat/analyst-list.graphql'
 export default {
@@ -113,7 +114,7 @@ export default {
   mounted() {
     this.$apollo
       .query({
-        query: analystList
+        query: ggl(analystList)
       })
       .then(reponse => {
         this.$store.commit('analyst/setAnalysts', reponse.data.Analyst)

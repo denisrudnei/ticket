@@ -41,7 +41,8 @@ module.exports = {
     { src: '@/plugins/dateFilter', ssr: true },
     { src: '@/plugins/apex-charts', ssr: false },
     { src: '@/plugins/google-maps', ssr: false },
-    { src: '@/plugins/CKEditor', ssr: false }
+    { src: '@/plugins/CKEditor', ssr: false },
+    { src: '@/plugins/apolloConfig', ssr: false }
   ],
 
   buildModules: [
@@ -59,28 +60,13 @@ module.exports = {
     '@nuxtjs/pwa',
     '@nuxtjs/toast',
     '@nuxtjs/auth',
-    '@nuxtjs/google-analytics',
-    '@nuxtjs/apollo'
+    '@nuxtjs/google-analytics'
   ],
-  /*
-  ** Axios module configuration
-  */
+
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
     proxy: true,
     prefix: '/api'
-  },
-
-  apollo: {
-    includeNodeModules: true,
-    clientConfigs: {
-      default: {
-        httpEndpoint: '/api/graphql',
-        wsEndpoint: `ws://${process.env.HOST}:${
-          process.env.PORT
-        }/api/subscriptions`
-      }
-    }
   },
 
   vuetify: {
@@ -174,6 +160,11 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+      config.module.rules.push({
+        test: /\.graphql?$/,
+        exclude: /node_modules/,
+        loader: 'webpack-graphql-loader'
+      })
     }
   }
 }

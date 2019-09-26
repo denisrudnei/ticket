@@ -137,6 +137,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
 import list from '@/graphql/query/config/group/list.graphql'
 export default {
   data() {
@@ -169,7 +170,7 @@ export default {
   fetch({ $apollo, store }) {
     $apollo
       .query({
-        query: list
+        query: ggl(list)
       })
       .then(response => {
         store.commit('group/setGroups', response.data.Group)

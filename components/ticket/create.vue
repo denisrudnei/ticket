@@ -235,7 +235,6 @@
                 <v-menu
                   v-if="search"
                   v-model="menuDateInitial"
-                  full-width
                   max-width="290"
                   :close-on-content-click="false"
                 >
@@ -405,6 +404,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
 import Fields from '@/components/ticket/fields'
 import FileInclude from '@/components/files/include'
 import Logs from '@/components/ticket/logs'
@@ -492,7 +492,7 @@ export default {
     this.readOnlyData = this.readonly
     this.$apollo
       .query({
-        query: create
+        query: ggl(create)
       })
       .then(response => {
         this.analysts = response.data.Analyst
