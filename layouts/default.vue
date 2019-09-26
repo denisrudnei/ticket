@@ -164,7 +164,7 @@ import AnalystList from '@/components/chat/analyst-list'
 import TicketModal from '@/components/ticket/ticket-modal'
 import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
-
+import configureApollo from '@/mixins/configureApollo'
 export default {
   components: {
     Toolbar,
@@ -175,7 +175,7 @@ export default {
     AnalystList,
     TicketModal
   },
-  mixins: [afterLogin],
+  mixins: [afterLogin, configureApollo],
   data() {
     return {
       fab: true,
@@ -215,6 +215,7 @@ export default {
     ticketsToEdit: 'ticket/getTicketsToEdit'
   }),
   mounted() {
+    this.setApolloUrl()
     const vue = this
     function updateTicket(data) {
       vue.$store.commit('ticket/updateTicket', data)

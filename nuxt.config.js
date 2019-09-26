@@ -4,11 +4,6 @@ const pkg = require('./package')
 module.exports = {
   mode: 'universal',
 
-  env: {
-    HOST: process.env.HOST || '0.0.0.0',
-    PORT: process.env.PORT || 3000
-  },
-
   /*
   ** Headers of the page
   */
@@ -80,9 +75,7 @@ module.exports = {
     includeNodeModules: true,
     clientConfigs: {
       default: {
-        httpEndpoint: `http://${process.env.HOST}:${
-          process.env.PORT
-        }/api/graphql`,
+        httpEndpoint: '/api/graphql',
         wsEndpoint: `ws://${process.env.HOST}:${
           process.env.PORT
         }/api/subscriptions`
