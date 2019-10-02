@@ -5,6 +5,9 @@ const KnowledgeResolver = {
     Knowledge: () => {
       return KnowledgeService.getAll()
     },
+    KnowledgeByGroup: (_, {groupName}) => {
+      return KnowledgeService.getByKnowledgeGroup(groupName)
+    },
     KnowledgeById: (_, { _id }) => {
       return KnowledgeService.getOne(_id)
     }

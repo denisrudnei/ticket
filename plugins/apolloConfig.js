@@ -6,42 +6,54 @@ import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { getMainDefinition } from 'apollo-utilities'
+import fetch from 'node-fetch'
+import ws from 'ws'
 
-const httpLink = createHttpLink({
-  uri: '/api/graphql'
-})
+export default ({ app, req }, inject) => {
+  const url = process.client ? window.location.host : req.headers.host
 
-const wsLink = new WebSocketLink({
-  uri: `ws://${window.location.host}/api/subscriptions`,
-  options: {
-    reconnect: true
-  }
-})
+  const httpLink = createHttpLink({
+    uri: `http://${url}/api/graphql`,
+    fetch,
+    credentials: 'include',
+    ...(process.server ? { headers: req.headers } : undefined)
+  })
 
-const link = split(
-  ({ query }) => {
-    const definition = getMainDefinition(query)
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    )
-  },
-  wsLink,
-  httpLink
-)
+  const wsLink = new WebSocketLink({
+    uri: `ws://${url}/api/subscriptions`,
+    options: {
+      reconnect: true
+    },
+    ...(process.server ? { webSocketImpl: ws } : undefined)
+  })
 
-const cache = new InMemoryCache()
+  const link = split(
+    ({ query }) => {
+      const definition = getMainDefinition(query)
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      )
+    },
+    wsLink,
+    httpLink
+  )
 
-const apolloClient = new ApolloClient({
-  link,
-  cache,
-  connectToDevTools: true
-})
+  const cache = new InMemoryCache()
 
-const apolloProvider = new VueApollo({
-  defaultClient: apolloClient
-})
+  const apolloClient = new ApolloClient({
+    link,
+    cache,
+    connectToDevTools: true,
+    ssrMode: process.server
+  })
 
-Vue.prototype.$apolloProvider = apolloProvider
+  const apolloProvider = new VueApollo({
+    defaultClient: apolloClient
+  })
 
-Vue.use(VueApollo)
+  Vue.use(VueApollo)
+
+  Vue.prototype.$apolloProvider = apolloProvider
+  app.$apollo = apolloProvider.defaultClient
+}

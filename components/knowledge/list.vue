@@ -19,6 +19,9 @@
 </template>
 
 <script>
+import ggl from 'graphql-tag'
+import KnowledgeListByGroup from '@/graphql/query/knowledge/listByGroup.graphql'
+import KnowledgeListAll from '@/graphql/query/knowledge/list.graphql'
 export default {
   data() {
     return {
@@ -41,23 +44,44 @@ export default {
   },
   watch: {
     $route(newValue) {
-      if (newValue.params.id) {
-        this.$axios
-          .get(`/knowledge/group/${newValue.params.id}`)
+      if (newValue.params.groupName) {
+        this.$apollo
+          .query({
+            query: ggl(KnowledgeListByGroup),
+            variables: {
+              groupName: newValue.params.groupName
+            }
+          })
           .then(response => {
-            this.items = response.data
+            this.items = response.data.knowledge
           })
       }
     }
   },
-  created() {
-    const url =
-      this.$route.params.id !== undefined
-        ? `/knowledge/group/${this.$route.params.id}`
-        : '/knowledge'
-    this.$axios.get(url).then(response => {
-      this.items = response.data
-    })
+  mounted() {
+    const groupName = this.$route.params.groupName
+
+    // if (groupName) {
+    const query = groupName ? KnowledgeListByGroup : KnowledgeListAll
+    this.$apollo
+      .query({
+        query: ggl(query),
+        variables: {
+          groupName: groupName
+        }
+      })
+      .then(response => {
+        this.items = response.data.knowledge
+      })
+    // } else {
+    //   this.$apollo
+    //     .query({
+    //       query: ggl(KnowledgeListAll)
+    //     })
+    //     .then(response => {
+    //       this.items = response.data.Knowledge
+    //     })
+    // }
   }
 }
 </script>

@@ -42,7 +42,7 @@ module.exports = {
     { src: '@/plugins/apex-charts', ssr: false },
     { src: '@/plugins/google-maps', ssr: false },
     { src: '@/plugins/CKEditor', ssr: false },
-    { src: '@/plugins/apolloConfig', ssr: false }
+    { src: '@/plugins/apolloConfig', ssr: true }
   ],
 
   buildModules: [

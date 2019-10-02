@@ -19,10 +19,11 @@ type Query {
   Group: [Group]
   Category: [Category]
   GetSubs(categoryId: ID): [Category]
-  Analyst: [Analyst],
+  Analyst: [Analyst]
   SearchTicket(page: Int, limit: Int, descending: Int, sortBy: String, attributes: TicketAttributes): TicketPagination
   Knowledge: [Knowledge]
-  KnowledgeById(_id: ID): Knowledge
+  KnowledgeByGroup(groupName: String!): [Knowledge]
+  KnowledgeById(_id: ID!): Knowledge
 }
 
 type Mutation {

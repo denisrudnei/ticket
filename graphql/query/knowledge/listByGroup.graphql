@@ -1,0 +1,6 @@
+#import "@/graphql/fragments/knowledge.graphql"
+query KnowledgeByGroup($groupName: String!) {
+  knowledge: KnowledgeByGroup(groupName: $groupName) {
+    ...list
+  }
+}

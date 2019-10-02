@@ -1,0 +1,15 @@
+#import "@/graphql/fragments/knowledge.graphql"
+query KnowledgeById($_id: ID!){
+  knowledge: KnowledgeById(_id: $_id) {
+    ...list
+    group {
+      _id
+      name
+    }
+    category {
+      _id
+      name
+    }
+    preview
+  }
+}

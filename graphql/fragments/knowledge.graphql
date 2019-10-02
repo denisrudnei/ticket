@@ -1,0 +1,8 @@
+fragment list on Knowledge {
+  _id
+  name
+  created
+  status {
+    name
+  }
+}
