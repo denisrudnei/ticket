@@ -13,7 +13,9 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint",
     "test": "nyc --reporter=html --reporter=text mocha --exit",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^12.4.0",
@@ -58,7 +60,7 @@
     "node-fetch": "^2.6.0",
     "nodemailer": "^6.3.0",
     "nuxt": "^2.9.2",
-    "snyk": "^1.228.5",
+    "snyk": "^1.230.3",
     "socket.io": "^2.3.0",
     "vue-apexcharts": "^1.5.0",
     "vue-apollo": "^3.0.0-rc.6",
@@ -104,5 +106,6 @@
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "supertest": "^4.0.2"
-  }
+  },
+  "snyk": true
 }
