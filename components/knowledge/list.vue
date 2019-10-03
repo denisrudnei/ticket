@@ -60,8 +60,6 @@ export default {
   },
   mounted() {
     const groupName = this.$route.params.groupName
-
-    // if (groupName) {
     const query = groupName ? KnowledgeListByGroup : KnowledgeListAll
     this.$apollo
       .query({
@@ -73,15 +71,6 @@ export default {
       .then(response => {
         this.items = response.data.knowledge
       })
-    // } else {
-    //   this.$apollo
-    //     .query({
-    //       query: ggl(KnowledgeListAll)
-    //     })
-    //     .then(response => {
-    //       this.items = response.data.Knowledge
-    //     })
-    // }
   }
 }
 </script>
