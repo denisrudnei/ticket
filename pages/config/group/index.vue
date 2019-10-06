@@ -167,8 +167,8 @@ export default {
     groups: 'group/getGroups',
     analysts: 'analyst/getAnalysts'
   }),
-  fetch({ $apollo, store }) {
-    $apollo
+  fetch({ app, store }) {
+    app.$apollo
       .query({
         query: ggl(list)
       })

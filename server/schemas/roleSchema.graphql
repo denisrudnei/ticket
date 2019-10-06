@@ -1,0 +1,5 @@
+type Role {
+  _id: ID
+  name: String
+  description: String
+}

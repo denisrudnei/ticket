@@ -1,0 +1,7 @@
+query {
+  roles: Role {
+    _id
+    name
+    description
+  }
+}

@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
+import RoleList from '@/graphql/query/role/list.graphql'
 export default {
   data() {
     return {
@@ -57,11 +58,16 @@ export default {
       ]
     }
   },
-  computed: mapGetters({
-    roles: 'role/getRoles'
-  }),
-  mounted() {
-    this.$store.dispatch('role/downloadRoles')
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(RoleList)
+      })
+      .then(response => {
+        return {
+          roles: response.data.roles
+        }
+      })
   }
 }
 </script>

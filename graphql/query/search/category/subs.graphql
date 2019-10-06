@@ -1,5 +1,5 @@
 query GetSubs($categoryId: ID){
-  GetSubs (categoryId: $categoryId) {
+  category: GetSubs (categoryId: $categoryId) {
     _id
     name
     subs {

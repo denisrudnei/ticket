@@ -23,17 +23,18 @@
 </template>
 
 <script>
+import ggl from 'graphql-tag'
 import category from '@/graphql/query/search/category/category.graphql'
 import getSubs from '@/graphql/query/search/category/subs.graphql'
 export default {
-  asyncData({ $axios }) {
-    return $axios
-      .post('/graphql', {
-        query: category
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(category)
       })
       .then(response => {
         return {
-          items: response.data.data.Category.filter(c => {
+          items: response.data.category.filter(c => {
             return c.father === null
           })
         }
@@ -43,13 +44,13 @@ export default {
     getSub(item) {
       this.$apollo
         .query({
-          query: getSubs,
+          query: ggl(getSubs),
           variables: {
             categoryId: item._id
           }
         })
         .then(response => {
-          return response.data.GetSubs
+          return response.data.category
         })
     }
   }

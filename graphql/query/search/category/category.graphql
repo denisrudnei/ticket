@@ -1,5 +1,5 @@
 query {
-  Category {
+  category: Category {
     _id
     father {
       _id

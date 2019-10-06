@@ -53,11 +53,13 @@ export default {
   computed: mapGetters({
     roles: 'role/getRoles'
   }),
-  created() {
-    const id = this.$router.currentRoute.params.id
-    this.$store.dispatch('role/downloadRoles')
-    this.role = this.roles.find(r => {
-      return r._id === id
+  asyncData({ $axios, params }) {
+    return $axios.get('/role').then(response => {
+      return {
+        role: response.data.find(r => {
+          return r._id === params.id
+        })
+      }
     })
   },
   methods: {

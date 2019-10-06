@@ -264,7 +264,6 @@
                 <v-menu
                   v-if="search"
                   v-model="menuDateFinal"
-                  full-width
                   max-width="290"
                   :close-on-content-click="false"
                 >

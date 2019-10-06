@@ -10,6 +10,7 @@
 #import Comment from "./schemas/commentSchema.graphql"
 #import Sound from "./schemas/soundSchema.graphql"
 #import File from "./schemas/fileSchema.graphql"
+#import Role from './schemas/roleSchema.graphql'
 
 type Query {
   TicketById(_id: ID): Ticket,
@@ -24,6 +25,7 @@ type Query {
   Knowledge: [Knowledge]
   KnowledgeByGroup(groupName: String!): [Knowledge]
   KnowledgeById(_id: ID!): Knowledge
+  Role: [Role]
 }
 
 type Mutation {
