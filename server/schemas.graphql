@@ -13,14 +13,14 @@
 
 type Query {
   TicketById(_id: ID): Ticket,
-  Tickets(descending: Int, sortBy: String, page: Int, limit: Int): TicketPagination,
+  Tickets(descending: Int = -1, sortBy: String = "created", page: Int = 1, limit: Int = 10): TicketPagination,
   Status: [Status],
   FindStatus(example: String): [Status]
   Group: [Group]
   Category: [Category]
   GetSubs(categoryId: ID): [Category]
   Analyst: [Analyst]
-  SearchTicket(page: Int, limit: Int, descending: Int, sortBy: String, attributes: TicketAttributes): TicketPagination
+  SearchTicket(page: Int = 1, limit: Int = 10, descending: Int = -1, sortBy: String = "created", attributes: TicketAttributes): TicketPagination
   Knowledge: [Knowledge]
   KnowledgeByGroup(groupName: String!): [Knowledge]
   KnowledgeById(_id: ID!): Knowledge
