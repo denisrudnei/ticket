@@ -10,17 +10,24 @@ import fetch from 'node-fetch'
 import ws from 'ws'
 
 export default ({ app, req }, inject) => {
-  const url = process.client ? window.location.host : req.headers.host
+  const url = {
+    protocol: process.client
+      ? window.location.protocol.replace(':', '')
+      : req.protocol,
+    host: process.client ? window.location.host : req.headers.host
+  }
 
   const httpLink = createHttpLink({
-    uri: `http://${url}/api/graphql`,
+    uri: `${url.protocol}://${url.host}/api/graphql`,
     fetch,
     credentials: 'include',
     ...(process.server ? { headers: req.headers } : undefined)
   })
 
+  const wsOrWss = url.protocol.includes('https') ? 'wss://' : 'ws://'
+
   const wsLink = new WebSocketLink({
-    uri: `ws://${url}/api/subscriptions`,
+    uri: `${wsOrWss}${url.host}/api/subscriptions`,
     options: {
       reconnect: true
     },
