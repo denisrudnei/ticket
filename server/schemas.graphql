@@ -16,7 +16,7 @@ type Query {
   TicketById(_id: ID): Ticket,
   Tickets(descending: Int = -1, sortBy: String = "created", page: Int = 1, limit: Int = 10): TicketPagination,
   Status: [Status],
-  FindStatus(example: String): [Status]
+  FindStatus(_id: ID!): Status!
   Group: [Group]
   Category: [Category]
   GetSubs(categoryId: ID): [Category]

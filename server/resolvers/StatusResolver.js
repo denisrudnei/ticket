@@ -5,8 +5,8 @@ const StatusResolver = {
     Status: () => {
       return StatusService.getStatus()
     },
-    FindStatus: (_, { id }) => {
-      return StatusService.getOne(id)
+    FindStatus: (_, { _id }) => {
+      return StatusService.getOne(_id)
     }
   }
 }
