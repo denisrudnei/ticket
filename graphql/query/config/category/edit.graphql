@@ -1,0 +1,24 @@
+query edit($name: String!) {
+  category: CategoryByName(name: $name) {
+    _id
+    name
+    description
+    defaultGroup {
+      _id
+      name
+    }
+    fields {
+      required
+      limits {
+        min
+        max
+      }
+      value
+      text
+    }
+  }
+  groups: Group {
+    _id
+    name
+  }
+}

@@ -3,18 +3,27 @@
 </template>
 
 <script>
+import ggl from 'graphql-tag'
 import CategoryCreate from '@/components/ticket/category/create'
+import CategoryEdit from '@/graphql/query/config/category/edit.graphql'
 export default {
   components: {
     CategoryCreate
   },
-  asyncData({ params, $axios }) {
+  asyncData({ params, app }) {
     const name = params.name
-    return $axios.get(`/category/${name}`).then(response => {
-      return {
-        category: response.data
-      }
-    })
+    return app.$apollo
+      .query({
+        query: ggl(CategoryEdit),
+        variables: {
+          name: name
+        }
+      })
+      .then(response => {
+        return {
+          category: response.data.category
+        }
+      })
   },
   methods: {
     update(category) {

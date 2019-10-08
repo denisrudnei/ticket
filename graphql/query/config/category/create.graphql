@@ -1,0 +1,10 @@
+query {
+  category: Category {
+    _id
+    fullName
+  }
+  group: Group {
+    _id
+    name
+  }
+}

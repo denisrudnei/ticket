@@ -42,7 +42,8 @@ module.exports = {
     { src: '@/plugins/apex-charts', ssr: false },
     { src: '@/plugins/google-maps', ssr: false },
     { src: '@/plugins/CKEditor', ssr: false },
-    { src: '@/plugins/apolloConfig', ssr: true }
+    { src: '@/plugins/apolloConfig', ssr: true },
+    { src: '@/plugins/vue-hotkey', ssr: false }
   ],
 
   buildModules: [

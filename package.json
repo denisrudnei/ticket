@@ -62,6 +62,7 @@
     "nuxt": "^2.10.0",
     "snyk": "^1.230.3",
     "socket.io": "^2.3.0",
+    "v-hotkey": "^0.7.0",
     "vue-apexcharts": "^1.5.0",
     "vue-apollo": "^3.0.0-rc.7",
     "vue-the-mask": "^0.11.1",

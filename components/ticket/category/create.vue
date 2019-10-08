@@ -92,7 +92,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
+import create from '@/graphql/query/config/category/create.graphql'
 export default {
   props: {
     value: {
@@ -109,6 +110,7 @@ export default {
   data() {
     return {
       categories: [],
+      groups: [],
       categoryData: {
         name: '',
         father: null,
@@ -122,20 +124,19 @@ export default {
     },
     categoriesComputed() {
       return this.categories.map(c => ({ text: c.fullName, value: c }))
-    },
-    ...mapGetters({
-      groups: 'group/getGroups'
-    })
+    }
   },
-  created() {
-    this.loadData()
+  mounted() {
+    this.$apollo
+      .query({
+        query: ggl(create)
+      })
+      .then(response => {
+        this.categories = response.data.category
+        this.groups = response.data.group
+      })
   },
   methods: {
-    loadData() {
-      this.$axios.get('/category').then(response => {
-        this.categories = response.data
-      })
-    },
     addField() {
       this.category.fields.push({
         text: '',

@@ -51,7 +51,7 @@
       :logged="logged"
     />
     <TicketDialog />
-    <v-content>
+    <v-content v-hotkey="keymap">
       <v-container fluid>
         <v-row no-gutters>
           <template
@@ -143,6 +143,7 @@
     />
     <ticket-modal v-if="logged" />
     <logout />
+    <hotkey-help />
     <v-footer
       fixed
       app
@@ -165,6 +166,7 @@ import AnalystList from '@/components/chat/analyst-list'
 import TicketModal from '@/components/ticket/ticket-modal'
 import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
+import hotkeyHelp from '@/components/hotkeyHelp'
 export default {
   components: {
     Toolbar,
@@ -173,13 +175,22 @@ export default {
     TicketTree,
     Logout,
     AnalystList,
-    TicketModal
+    TicketModal,
+    hotkeyHelp
   },
   mixins: [afterLogin],
   data() {
     return {
       fab: true,
       data: {},
+      keymap: {
+        'alt+b': () => this.$router.push('/knowledge'),
+        'alt+o': () => this.$router.push('/ticket/create'),
+        'alt+c': () => this.$router.push('/config'),
+        'alt+enter': () => {
+          this.$store.commit('hotkeys/toggleShow')
+        }
+      },
       items: [
         {
           icon: 'bookmarks',
@@ -236,6 +247,11 @@ export default {
     }
   },
   created() {
+    this.$store.commit('hotkeys/setHotkeys', [
+      'ALT + B | Base de conhecimento',
+      'ALT + C | Configurações',
+      'ALT + O | Abrir novo chamado'
+    ])
     // this.$socket.on('updateTicket', ticket => {
     //   // TODO
     //   this.$store.dispatch('ticket/updateTree')

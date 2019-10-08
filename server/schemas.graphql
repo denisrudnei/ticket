@@ -19,6 +19,7 @@ type Query {
   FindStatus(_id: ID!): Status!
   Group: [Group]
   Category: [Category]
+  CategoryByName(name: String!): Category!
   GetSubs(categoryId: ID): [Category]
   Analyst: [Analyst]
   SearchTicket(page: Int = 1, limit: Int = 10, descending: Int = -1, sortBy: String = "created", attributes: TicketAttributes): TicketPagination

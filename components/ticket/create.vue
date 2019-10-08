@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row v-hotkey="keymap">
     <v-col
       cols="12"
       pa-3
@@ -10,6 +10,7 @@
         :close-on-content-click="false"
         :nudge-width="500"
         max-height="45vw"
+        v-model="action.active"
       >
         <template
           v-slot:activator="{ on }"
@@ -19,7 +20,7 @@
             class="primary white--text"
             v-on="on"
           >
-            Ações
+            <u>A</u>ções
           </v-btn>
         </template>
         <v-card>
@@ -443,6 +444,9 @@ export default {
   },
   data() {
     return {
+      action: {
+        active: false
+      },
       editing: false,
       menuDateInitial: false,
       menuDateFinal: false,
@@ -462,6 +466,11 @@ export default {
         category: {},
         created: new Date(),
         modified: new Date()
+      },
+      keymap: {
+        'alt+a': () => {
+          this.action.active = true
+        }
       }
     }
   },
