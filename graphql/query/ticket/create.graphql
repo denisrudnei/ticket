@@ -17,6 +17,10 @@ query {
   }
   Category {
     _id
+    defaultGroup {
+      _id
+      name
+    }
     name
     subs {
       _id
