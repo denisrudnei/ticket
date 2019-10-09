@@ -184,6 +184,7 @@ export default {
       fab: true,
       data: {},
       keymap: {
+        'alt+p': () => this.$router.push('/profile'),
         'alt+b': () => this.$router.push('/knowledge'),
         'alt+o': () => this.$router.push('/ticket/create'),
         'alt+c': () => this.$router.push('/config'),
@@ -248,6 +249,7 @@ export default {
   },
   created() {
     this.$store.commit('hotkeys/setHotkeys', [
+      'ALT + P | Perfil',
       'ALT + B | Base de conhecimento',
       'ALT + C | Configurações',
       'ALT + O | Abrir novo chamado'
