@@ -99,6 +99,12 @@
           </template>
         </v-row>
         <nuxt />
+        <template v-if="logged">
+          <chat/>
+          <ticket-modal />
+          <logout />
+          <hotkey-help />
+        </template>
         <v-speed-dial
           v-if="logged && ticketsToEdit.length > 0"
           v-model="fab"
@@ -138,12 +144,7 @@
         </v-speed-dial>
       </v-container>
     </v-content>
-    <chat
-      v-if="logged"
-    />
-    <ticket-modal v-if="logged" />
-    <logout />
-    <hotkey-help />
+  
     <v-footer
       fixed
       app
@@ -186,6 +187,7 @@ export default {
       keymap: {
         'alt+p': () => this.$router.push('/profile'),
         'alt+b': () => this.$router.push('/knowledge'),
+        'alt+n': () => this.$router.push('/profile/notification/all'),
         'alt+o': () => this.$router.push('/ticket/create'),
         'alt+c': () => this.$router.push('/config'),
         'alt+enter': () => {
@@ -252,6 +254,7 @@ export default {
       'ALT + P | Perfil',
       'ALT + B | Base de conhecimento',
       'ALT + C | Configurações',
+      'ALT + N | Notificações',
       'ALT + O | Abrir novo chamado'
     ])
     // this.$socket.on('updateTicket', ticket => {

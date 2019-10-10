@@ -6,11 +6,11 @@
     >
       <v-menu
         v-if="readOnlyData"
+        v-model="action.active"
         offset-y
         :close-on-content-click="false"
         :nudge-width="500"
         max-height="45vw"
-        v-model="action.active"
       >
         <template
           v-slot:activator="{ on }"
