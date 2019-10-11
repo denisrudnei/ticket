@@ -1,0 +1,14 @@
+#import "@/graphql/fragments/participantInfo.graphql"
+subscription NewMessage($to: ID!) {
+  message: NewMessage(to: $to) {
+    _id
+    content
+    date
+    to {
+      ...participantInfo
+    }
+    from {
+      ...participantInfo
+    }
+  }
+}

@@ -5,7 +5,7 @@ module.exports = {
     const toId = req.body.to._id
     const fromId = req.session.authUser._id
     const content = req.body.content
-    ChatService.create(fromId, toId, content)
+    ChatService.addMessage(fromId, toId, content)
       .then(messageToSend => {
         // io.emit(`message/${req.body.to._id}`, req.body)
         return res.status(200).json(messageToSend)

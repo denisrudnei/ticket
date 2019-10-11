@@ -1,3 +1,6 @@
+import ggl from 'graphql-tag'
+import getOneChat from '@/graphql/query/chat/getOneChat.graphql'
+import sendMessage from '@/graphql/mutation/chat/sendMessage.graphql'
 export const state = () => ({
   chats: [],
   active: '',
@@ -14,7 +17,7 @@ export const getters = {
   },
   getActive(state) {
     return state.chats.find(chat => {
-      return chat.id === state.active
+      return chat._id === state.active
     })
   },
   getVisible(state) {
@@ -25,35 +28,38 @@ export const getters = {
 export const mutations = {
   deleteChat(state, id) {
     state.chats = state.chats.filter(chat => {
-      return chat.id !== id
+      return chat._id !== id
     })
   },
   updateChat(state, chat) {
     state.chats = [
       chat,
       ...state.chats.filter(c => {
-        return c.chatId !== chat.id
+        return c.chatId !== chat._id
       })
     ]
   },
+  setChats(state, chats) {
+    state.chats = chats
+  },
+  addChat(state, chat) {
+    state.chats.push(chat)
+  },
   createChat(state, info) {
     const chat = {
-      id: info.analyst._id,
+      _id: info.analyst._id,
       to: info.analyst,
       messages: info.messages
     }
     state.chats = [
       chat,
       ...state.chats.filter(c => {
-        return c.id !== chat.id
+        return c._id !== chat._id
       })
     ]
   },
-  receiveMessage(state, message) {
+  addMessage(state, message) {
     state.messages.push(message)
-  },
-  send(state, message) {
-    this.$axios.post('/chat/message', message)
   },
   setVisible(state, visible) {
     state.visible = visible
@@ -61,31 +67,38 @@ export const mutations = {
   },
   setActive: function(state, id) {
     state.active = id
-    state.messages = state.chats.find(chat => {
-      return chat.id === id
-    }).messages
+  },
+  setMessages(state, messages) {
+    state.messages = messages
   }
 }
 
 export const actions = {
-  addMessage: ({ commit }, message) => {
-    commit('receiveMessage', message)
-    commit('send', message)
+  getOneChat: async function({ commit }, to) {
+    await this.app.$apollo
+      .query({
+        query: ggl(getOneChat),
+        variables: {
+          to: to
+        }
+      })
+      .then(response => {
+        commit('addChat', response.data.chat)
+        commit('setActive', response.data.chat._id)
+        commit('setMessages', response.data.chat.messages)
+      })
   },
-
-  getMessages: async function({ commit }, analyst) {
-    if (!analyst) return
-    let messages = []
-
-    const current = this.getters['auth/getUser']
-    if (current !== undefined && current._id !== undefined) {
-      await this.$axios.get(`/chat/message/${analyst._id}`).then(response => {
-        messages = response.data
+  send({ commit }, message) {
+    this.app.$apollo
+      .mutate({
+        mutation: ggl(sendMessage),
+        variables: {
+          to: message.to,
+          message: message.content
+        }
       })
-      commit('createChat', {
-        analyst: analyst,
-        messages: messages
+      .then(response => {
+        commit('addMessage', response.data.message)
       })
-    }
   }
 }

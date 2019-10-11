@@ -1,0 +1,20 @@
+
+query {
+  chat: Chat {
+    _id
+    messages {
+      _id
+      to {
+        _id
+        name
+        picture
+      }
+      from {
+        _id
+        name
+        picture
+      }
+      content
+    }
+  }
+}

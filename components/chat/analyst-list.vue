@@ -97,7 +97,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'auth/getUser'
+      user: 'auth/getUser',
+      chats: 'chat/getChats'
     }),
     analysts() {
       return this.$store.getters['analyst/getAnalysts']
@@ -116,8 +117,9 @@ export default {
       .query({
         query: ggl(analystList)
       })
-      .then(reponse => {
-        this.$store.commit('analyst/setAnalysts', reponse.data.Analyst)
+      .then(response => {
+        this.$store.commit('analyst/setAnalysts', response.data.analyst)
+        this.$store.commit('chat/setChats', response.data.chat)
       })
     // this.$socket.on('chat/status/update', newInfo => {
     //   this.$store.commit('analyst/updateStatus', newInfo)
@@ -126,8 +128,8 @@ export default {
   methods: {
     openChat(analyst) {
       this.$store.commit('chat/setVisible', true)
-      this.$store.commit('chat/setActive', analyst._id)
-      this.$store.dispatch('chat/getMessages', analyst)
+      this.$store.dispatch('chat/getOneChat', analyst._id)
+      // this.$store.commit('chat/setActive', analyst._id)
     },
     getStatus(status) {
       const colors = [

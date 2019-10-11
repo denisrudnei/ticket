@@ -76,6 +76,12 @@ const AnalystSchema = new Schema({
       }
     }
   },
+  chats: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Chat'
+    }
+  ],
   paths: [
     {
       type: Schema.Types.ObjectId,

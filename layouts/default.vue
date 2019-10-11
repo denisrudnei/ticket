@@ -100,7 +100,7 @@
         </v-row>
         <nuxt />
         <template v-if="logged">
-          <chat/>
+          <chat />
           <ticket-modal />
           <logout />
           <hotkey-help />

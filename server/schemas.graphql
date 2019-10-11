@@ -11,6 +11,8 @@
 #import Sound from "./schemas/soundSchema.graphql"
 #import File from "./schemas/fileSchema.graphql"
 #import Role from './schemas/roleSchema.graphql'
+#import Chat from './schemas/chatSchema.graphql'
+#import Message from './schemas/messageSchema.graphql'
 
 type Query {
   TicketById(_id: ID): Ticket,
@@ -27,6 +29,8 @@ type Query {
   KnowledgeByGroup(groupName: String!): [Knowledge]
   KnowledgeById(_id: ID!): Knowledge
   Role: [Role]
+  Chat: [Chat]
+  GetOneChat(to: ID!): Chat!
 }
 
 type Mutation {
@@ -34,12 +38,14 @@ type Mutation {
   CreateTicket(actualUser: ID!, affectedUser: ID!, resume: String!, content: String!, group: ID!, status: ID!, category: ID!): Ticket
   TransferTicket(ticketId: ID!, groupId: ID!): Ticket
   ChangeStatus(ticketId: ID!, statusId: ID!): Ticket
+  SendMessage(to: ID!, message: String!): Message
 }
 
 type Subscription {
   TransferToGroup: Ticket!,
   ChangeStatus: Ticket!,
   EditTicket: Ticket!
+  NewMessage(to: ID!): Message!
 }
 
 scalar Datetime

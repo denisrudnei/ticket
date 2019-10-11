@@ -1,0 +1,23 @@
+#import "@/graphql/fragments/participantInfo.graphql"
+query GetOneChat($to: ID!){
+  chat: GetOneChat(to: $to) {
+    _id
+    participants {
+      ...participantInfo
+    }
+    messages {
+      _id
+      to {
+        _id
+        name
+        picture
+      }
+      from {
+        _id
+        name
+        picture
+      }
+      content
+    }
+  }
+}

@@ -1,7 +1,15 @@
 query {
-  Analyst {
+  analyst: Analyst {
+    _id
     name
-    contactEmail
     picture
+  }
+  chat: Chat {
+    _id
+    participants {
+      _id
+      name
+      picture
+    }
   }
 }

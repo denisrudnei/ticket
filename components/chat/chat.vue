@@ -9,10 +9,9 @@
         class="primary white--text"
       >
         <v-avatar>
-          <img :src="chat.to.picture">
+          <img :src="other(chat.participants).picture">
         </v-avatar>
         <v-spacer />
-        {{ chat.to.name }}
         <v-toolbar-items>
           <v-btn
             icon
@@ -68,6 +67,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
+import Chat from '@/graphql/query/chat/chat.graphql'
+import newMessage from '@/graphql/subscription/chat/newMessage.graphql'
 export default {
   data() {
     return {
@@ -83,39 +85,48 @@ export default {
     visible: 'chat/getVisible',
     logged: 'auth/getLogged'
   }),
-  mounted() {
-    // this.$socket.on('message', value => {
-    //   this.$store.commit('chat/receiveMessage', value)
-    // })
-    // this.$socket.on(`message/${this.user._id}`, message => {
-    //   this.$toast.show('Mensagem recebida', {
-    //     duration: 1000
-    //   })
-    //   this.$store.commit('chat/receiveMessage', message)
-    // })
+  apollo: {
+    $subscribe: {
+      newMessage: {
+        query: ggl(newMessage),
+        variables() {
+          return { to: this.user._id }
+        },
+        result({ data }) {
+          this.$store.commit('chat/addMessage', data.message)
+          this.$toast.show('Mensagem recebida', {
+            duration: 1000,
+            icon: 'chat'
+          })
+        }
+      }
+    }
   },
   created() {
-    this.$axios.get('/analyst').then(response => {
-      response.data.forEach(a => {
-        this.$store.dispatch('chat/getMessages', a)
+    this.$apollo
+      .query({
+        query: ggl(Chat)
       })
-    })
+      .then(response => {
+        this.$store.commit('chat/setChats', response.data.chat)
+      })
   },
   methods: {
     addMessage() {
-      this.$store.dispatch('chat/addMessage', {
-        chatId: this.chat.id,
+      this.$store.dispatch('chat/send', {
         content: this.text,
         date: new Date(),
-        name: this.user.name,
-        picture: this.user.picture,
-        to: this.chat.to,
-        from: this.user
+        to: this.other(this.chat.participants)._id
       })
       this.text = ''
     },
     hide() {
       this.$store.commit('chat/setVisible', false)
+    },
+    other(value) {
+      return value.find(participant => {
+        return participant._id !== this.user._id
+      })
     }
   }
 }

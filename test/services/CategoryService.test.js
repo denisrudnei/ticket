@@ -27,7 +27,6 @@ describe('CategoryService', function() {
 
   it('Show full name', async () => {
     const category = await Category.findOne()
-    console.log(category.fullName)
   })
 
   it('Edit category', async () => {

@@ -28,4 +28,8 @@ MessageSchema.set('toJSON', {
   getters: true
 })
 
+MessageSchema.pre('find', function() {
+  this.populate(['to', 'from'])
+})
+
 module.exports = models.Message || model('Message', MessageSchema)
