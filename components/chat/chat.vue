@@ -44,9 +44,9 @@
               <v-card-title class="headline">
                 {{ message.from.name }}
               </v-card-title>
+          
               <v-card-text>
-                {{ message.content }}
-                <hr>
+                <div v-html="message.content"></div>
                 <sub>{{ message.date | date }}</sub>
               </v-card-text>
             </v-card>
@@ -54,12 +54,20 @@
         </v-timeline>
       </v-card-text>
       <v-card-actions>
-        <v-text-field
-          v-model="text"
-          filled
-          label="Envie um texto"
-          @keydown.enter="addMessage()"
-        />
+        <v-row>
+          <v-col cols="12">
+            <client-only>
+              <ckeditor v-model="text" :editor="editor" @ready="configureEditor" />
+            </client-only>
+          </v-col>
+          <v-col cols="12">
+            <v-btn icon @click="addMessage()">
+              <v-icon>
+                send
+              </v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -70,9 +78,11 @@ import { mapGetters } from 'vuex'
 import ggl from 'graphql-tag'
 import Chat from '@/graphql/query/chat/chat.graphql'
 import newMessage from '@/graphql/subscription/chat/newMessage.graphql'
+import ImageUploadAdapter from '@/plugins/image-upload-adapter'
 export default {
   data() {
     return {
+      editor: '',
       text: ''
     }
   },
@@ -102,6 +112,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.editor = require('@ckeditor/ckeditor5-build-classic')
+  },
   created() {
     this.$apollo
       .query({
@@ -127,6 +140,11 @@ export default {
       return value.find(participant => {
         return participant._id !== this.user._id
       })
+    },
+    configureEditor(editor) {
+      editor.plugins.get('FileRepository').createUploadAdapter = loader => {
+        return new ImageUploadAdapter(loader, this.$axios)
+      }
     }
   }
 }

@@ -17,6 +17,7 @@ query GetOneChat($to: ID!){
         name
         picture
       }
+      date
       content
     }
   }
