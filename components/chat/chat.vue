@@ -55,7 +55,7 @@
       </v-card-text>
       <v-card-actions>
         <v-row>
-          <v-col cols="12">
+          <v-col cols="12" id="editor">
             <client-only>
               <ckeditor v-model="text" :editor="editor" @ready="configureEditor" />
             </client-only>
@@ -151,4 +151,11 @@ export default {
 </script>
 
 <style>
+figure > img {
+  max-width: 100%;
+}
+
+.ck-editor__editable_inline {
+  max-height: 15vh !important;
+}
 </style>

@@ -86,6 +86,7 @@ export const actions = {
         commit('addChat', response.data.chat)
         commit('setActive', response.data.chat._id)
         commit('setMessages', response.data.chat.messages)
+        commit('setVisible', response.data.chat._id)
       })
   },
   send({ commit }, message) {

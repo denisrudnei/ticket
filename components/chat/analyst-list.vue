@@ -127,9 +127,7 @@ export default {
   },
   methods: {
     openChat(analyst) {
-      this.$store.commit('chat/setVisible', true)
       this.$store.dispatch('chat/getOneChat', analyst._id)
-      // this.$store.commit('chat/setActive', analyst._id)
     },
     getStatus(status) {
       const colors = [
