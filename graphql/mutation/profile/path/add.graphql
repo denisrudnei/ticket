@@ -1,0 +1,16 @@
+mutation AddPath($path: PathInput!){
+  path: AddPath(path: $path) {
+    _id
+    name
+    url
+    children {
+      _id
+      name
+      url
+      children {
+        _id
+        name
+      }
+    }
+  }
+}

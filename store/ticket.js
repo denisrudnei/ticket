@@ -100,6 +100,19 @@ export const mutations = {
   setTree(state, tree) {
     state.tree = tree
   },
+  addTreeItem(state, item) {
+    state.tree = [
+      item,
+      ...state.tree.filter(i => {
+        return i._id !== item._id
+      })
+    ]
+  },
+  removeTreeItem(state, id) {
+    state.tree = state.tree.filter(item => {
+      return item._id !== id
+    })
+  },
   setDialog(state, ticketId) {
     state.dialog = ticketId
   },

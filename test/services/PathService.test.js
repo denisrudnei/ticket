@@ -1,5 +1,6 @@
 const PathService = require('../../server/services/PathService')
 const Analyst = require('../../server/models/Analyst')
+const Path = require('../../server/models/Path')
 describe('PathService', function() {
   this.timeout(0)
 
@@ -11,6 +12,16 @@ describe('PathService', function() {
       name: 'Por grupo'
     }
     await PathService.create(path, userId)
+  })
+
+  it('Get one path', async () => {
+    const path = await Path.findOne()
+    await PathService.getOnePathTree(path._id)
+  })
+
+  it('Get paths from user', async () => {
+    const user = await Analyst.findOne()
+    await PathService.getPathsTree(user._id)
   })
 
   it('Get all refs', async () => {

@@ -1,0 +1,3 @@
+mutation($userId: ID!, $path: ID!) {
+  user: RemovePath(userId: $userId, path: $path)
+}

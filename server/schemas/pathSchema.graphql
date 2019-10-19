@@ -1,0 +1,19 @@
+type Path {
+  _id: ID!
+  objectName: String
+  property: String
+  name: String!
+}
+
+type PathTree {
+  _id: ID
+  name: String
+  url: String
+  children: [PathTree]
+}
+
+input PathInput {
+  name: String
+  objectName: String
+  property: String
+}

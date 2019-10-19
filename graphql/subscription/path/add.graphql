@@ -1,0 +1,15 @@
+subscription($userId: ID!) {
+  pathItem: NewPath(userId: $userId) {
+    name
+    _id
+    url
+    children {
+      name
+      _id
+      url
+      children {
+        name
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+query {
+  path: Path {
+    _id
+    name
+    objectName
+    property
+  }
+}

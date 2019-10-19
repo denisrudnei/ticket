@@ -29,6 +29,12 @@
         <v-tab to="/config/permissions">
           Permissões
         </v-tab>
+        <v-tab to="/config/playground">
+          <v-icon left>
+            format_shapes
+          </v-icon>
+          API
+        </v-tab>
       </v-tabs>
       <nuxt-child />
     </v-col>

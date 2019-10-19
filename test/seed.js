@@ -7,6 +7,7 @@ const GroupSeed = require('./seeds/GroupSeed')
 const StatusSeed = require('./seeds/StatusSeed')
 const NotificationSeed = require('./seeds/NotificationSeed')
 const AddressSeed = require('./seeds/AddressSeed')
+const PathSeed = require('./seeds/PathSeed')
 
 const data = [
   {
@@ -32,6 +33,10 @@ const data = [
   {
     model: 'Address',
     documents: AddressSeed.seed(5)
+  },
+  {
+    model: 'Path',
+    documents: PathSeed.seed(5)
   }
 ]
 
@@ -43,7 +48,8 @@ const models = [
   './server/models/Path.js',
   './server/models/ticket/Ticket.js',
   './server/models/Address.js',
-  './server/models/Notification.js'
+  './server/models/Notification.js',
+  './server/models/Path.js'
 ]
 
 const seed = {

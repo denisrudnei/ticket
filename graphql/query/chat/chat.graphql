@@ -1,7 +1,10 @@
-
+#import "@/graphql/fragments/participantInfo.graphql"
 query {
   chat: Chat {
     _id
+    participants {
+      ...participantInfo
+    }
     messages {
       _id
       to {

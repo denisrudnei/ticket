@@ -4,12 +4,12 @@
       <v-select
         v-model="selected"
         filled
-        :items="paths.map(v => ({text: v.path, value: v}))"
+        :items="paths.map(v => ({text: v.objectName, value: v}))"
       />
     </v-col>
     <v-col cols="4" pa-3>
       <v-select
-        v-model="selected.group"
+        v-model="selected.property"
         :disabled="selected.options <= 0"
         filled
         :items="selected.options.map(v => ({text: v, value: v}))"
@@ -18,7 +18,7 @@
     <v-col cols="4" pa-3>
       <v-text-field
         v-model="selected.name"
-        :disabled="selected.group === ''"
+        :disabled="selected.objectName === ''"
         filled
         placeholder="Nome na listagem"
       />
@@ -33,30 +33,60 @@
 </template>
 
 <script>
+import ggl from 'graphql-tag'
+import ref from '@/graphql/query/profile/path/ref.graphql'
+import add from '@/graphql/mutation/profile/path/add.graphql'
+import tree from '@/graphql/query/profile/path/tree.graphql'
+import list from '@/graphql/query/profile/path/list.graphql'
 export default {
   data() {
     return {
       selected: {
         options: [],
-        group: '',
+        objectName: '',
+        property: '',
         name: ''
       }
     }
   },
-  asyncData({ $axios }) {
-    return $axios.get('/info/path/refs').then(response => {
-      return {
-        paths: response.data
-      }
-    })
+  asyncData({ app, $axios }) {
+    return app.$apollo
+      .query({
+        query: ggl(ref)
+      })
+      .then(response => {
+        return {
+          paths: response.data.ref
+        }
+      })
   },
   methods: {
     save() {
-      this.$axios.post('/info/path', this.selected).then(() => {
-        this.$toast.show('Cadastrado', {
-          duration: 5000
+      this.$apollo
+        .mutate({
+          mutation: ggl(add),
+          variables: {
+            path: {
+              name: this.selected.name,
+              objectName: this.selected.objectName,
+              property: this.selected.property
+            }
+          },
+          refetchQueries: [
+            {
+              query: ggl(list)
+            },
+            {
+              query: ggl(tree)
+            }
+          ]
         })
-      })
+        .then(response => {
+          this.$store.commit('ticket/addTreeItem', response.data.path)
+          this.$toast.show('Cadastrado', {
+            duration: 5000
+          })
+        })
     }
   }
 }

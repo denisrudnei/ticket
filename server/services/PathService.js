@@ -9,7 +9,9 @@ const PathService = {
       Path.create(
         {
           _id: new mongoose.Types.ObjectId(),
-          ...path
+          name: path.name,
+          objectName: path.objectName,
+          property: path.property
         },
         (err, path) => {
           if (err) return reject(err)
@@ -22,9 +24,9 @@ const PathService = {
                 paths: path
               }
             }
-          ).exec((err, result) => {
+          ).exec(err => {
             if (err) return reject(err)
-            return resolve(result)
+            return resolve(this.getOnePathTree(path._id))
           })
         }
       )
@@ -85,13 +87,13 @@ const PathService = {
     return new Promise((resolve, reject) => {
       const paths = Object.values(Ticket.schema.paths)
       const pathsWithObjects = paths.filter(v => {
-        return v.options.ref !== undefined
+        return v.options.ref !== undefined && v.options.ref !== null
       })
       const onlyWithObjectId = pathsWithObjects.filter(o => {
         return o.instance === 'ObjectID'
       })
       const pathsWithRefs = onlyWithObjectId.map(v => ({
-        path: v.path,
+        objectName: v.path,
         options: getOptions(v.options.ref)
       }))
       return resolve(pathsWithRefs)
@@ -100,11 +102,60 @@ const PathService = {
 
   getPaths(userId) {
     return new Promise((resolve, reject) => {
-      function getId(base, path) {
-        return base.map(v => {
-          return v[path]._id
+      Analyst.findOne({
+        _id: userId
+      })
+        .select('+paths')
+        .populate(['paths'])
+        .exec((err, result) => {
+          if (err) reject(err)
+          resolve(result.paths)
+        })
+    })
+  },
+
+  getOnePathTree(pathId) {
+    return new Promise((resolve, reject) => {
+      function getId(object, property) {
+        return object.map(value => {
+          return value[property]._id
         })[0]
       }
+      Path.findOne({
+        _id: pathId
+      }).exec(async (err, path) => {
+        if (err) reject(err)
+        const tickets = await Ticket.find({})
+        const base = _(tickets)
+          .groupBy(`${path.objectName}.${path.property}`)
+          .value()
+        const children = Object.keys(base)
+          .filter(value => {
+            return value !== 'undefined'
+          })
+          .map(k => {
+            return {
+              _id: `(${base[k].length}) ${k}`,
+              name: `(${base[k].length}) ${k}`,
+              url: `/search?${path.objectName}=${getId(
+                base[k],
+                path.objectName
+              )}`,
+              children: []
+            }
+          })
+        const response = {
+          _id: path._id,
+          id: path.property,
+          name: path.name,
+          children: children
+        }
+        resolve(response)
+      })
+    })
+  },
+  getPathsTree(userId) {
+    return new Promise((resolve, reject) => {
       Analyst.findOne({
         _id: userId
       })
@@ -112,43 +163,23 @@ const PathService = {
         .populate('paths')
         .exec(async (err, user) => {
           if (err) return reject(err)
-          const tickets = await Ticket.find({})
-          const response = user.paths
-            .map(leaf => {
-              const base = _(tickets)
-                .groupBy(leaf.fullPath)
-                .value()
-              const children = Object.keys(base)
-                .filter(value => {
-                  return value !== 'undefined'
-                })
-                .map(k => {
-                  return {
-                    id: `(${base[k].length}) ${k}`,
-                    name: `(${base[k].length}) ${k}`,
-                    url: `/search?${leaf.path}=${getId(base[k], leaf.path)}`,
-                    children: []
-                  }
-                })
-              return {
-                _id: leaf._id,
-                id: leaf.group,
-                name: leaf.name,
-                children: children
-              }
-            })
-            .filter(value => {
+          const response = user.paths.map(path => {
+            return this.getOnePathTree(path._id)
+          })
+          Promise.all(response).then(results => {
+            const result = results.filter(value => {
               return value.children.length > 0
             })
-          return resolve(response)
+            return resolve(result)
+          })
         })
     })
   },
 
-  remove(id) {
+  remove(userId, pathId) {
     return new Promise((resolve, reject) => {
       Path.deleteOne({
-        _id: id
+        _id: pathId
       }).exec(err => {
         if (err) return reject(err)
         Analyst.updateMany(
@@ -156,13 +187,13 @@ const PathService = {
           {
             $pull: {
               paths: {
-                $in: [id]
+                $in: [pathId]
               }
             }
           }
         ).exec(err => {
           if (err) return reject(err)
-          resolve()
+          resolve(userId)
         })
       })
     })

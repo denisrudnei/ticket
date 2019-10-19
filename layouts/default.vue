@@ -144,7 +144,6 @@
         </v-speed-dial>
       </v-container>
     </v-content>
-  
     <v-footer
       fixed
       app

@@ -21,8 +21,8 @@ module.exports = {
   createPath: (req, res) => {
     const path = {
       name: req.body.name,
-      path: req.body.path,
-      group: req.body.group
+      objectName: req.body.objectName,
+      property: req.body.property
     }
     const userId = req.session.authUser._id
     PathService.create(path, userId)
@@ -37,7 +37,7 @@ module.exports = {
 
   getPaths: (req, res) => {
     const userId = req.session.authUser._id
-    PathService.getPaths(userId)
+    PathService.getPathsTree(userId)
       .then(result => {
         return res.status(200).json(result)
       })

@@ -1,36 +1,41 @@
-#import Knowledge from "./schemas/knowledgeSchema.graphql"
-#import Ticket from "./schemas/ticketSchema.graphql"
-#import Log from "./schemas/logSchema.graphql"
-#import Category from "./schemas/categorySchema.graphql"
-#import Status from "./schemas/statusSchema.graphql"
-#import Field from "./schemas/fieldSchema.graphql"
-#import Group from "./schemas/groupSchema.graphql"
-#import Analyst from "./schemas/analystSchema.graphql"
-#import Address from "./schemas/addressSchema.graphql"
-#import Comment from "./schemas/commentSchema.graphql"
-#import Sound from "./schemas/soundSchema.graphql"
-#import File from "./schemas/fileSchema.graphql"
-#import Role from './schemas/roleSchema.graphql'
-#import Chat from './schemas/chatSchema.graphql'
-#import Message from './schemas/messageSchema.graphql'
+# import Knowledge from "./schemas/knowledgeSchema.graphql"
+# import Ticket from "./schemas/ticketSchema.graphql"
+# import Log from "./schemas/logSchema.graphql"
+# import Category from "./schemas/categorySchema.graphql"
+# import Status from "./schemas/statusSchema.graphql"
+# import Field from "./schemas/fieldSchema.graphql"
+# import Group from "./schemas/groupSchema.graphql"
+# import Analyst from "./schemas/analystSchema.graphql"
+# import Address from "./schemas/addressSchema.graphql"
+# import Comment from "./schemas/commentSchema.graphql"
+# import Sound from "./schemas/soundSchema.graphql"
+# import File from "./schemas/fileSchema.graphql"
+# import Role from "./schemas/roleSchema.graphql"
+# import Chat from "./schemas/chatSchema.graphql"
+# import Message from "./schemas/messageSchema.graphql"
+# import Path from "./schemas/pathSchema.graphql"
+# import Ref from "./schemas/refSchema.graphql"
 
 type Query {
   TicketById(_id: ID): Ticket,
   Tickets(descending: Int = -1, sortBy: String = "created", page: Int = 1, limit: Int = 10): TicketPagination,
   Status: [Status],
   FindStatus(_id: ID!): Status!
-  Group: [Group]
-  Category: [Category]
+  Group: [Group]!
+  Category: [Category]!
   CategoryByName(name: String!): Category!
   GetSubs(categoryId: ID): [Category]
-  Analyst: [Analyst]
+  Analyst: [Analyst!]!
   SearchTicket(page: Int = 1, limit: Int = 10, descending: Int = -1, sortBy: String = "created", attributes: TicketAttributes): TicketPagination
-  Knowledge: [Knowledge]
-  KnowledgeByGroup(groupName: String!): [Knowledge]
-  KnowledgeById(_id: ID!): Knowledge
-  Role: [Role]
-  Chat: [Chat]
+  Knowledge: [Knowledge!]!
+  KnowledgeByGroup(groupName: String!): [Knowledge]!
+  KnowledgeById(_id: ID!): Knowledge!
+  Role: [Role!]!
+  Chat: [Chat!]!
   GetOneChat(to: ID!): Chat!
+  Path: [Path]!
+  PathTree: [PathTree]
+  Ref: [Ref!]!
 }
 
 type Mutation {
@@ -38,7 +43,9 @@ type Mutation {
   CreateTicket(actualUser: ID!, affectedUser: ID!, resume: String!, content: String!, group: ID!, status: ID!, category: ID!): Ticket
   TransferTicket(ticketId: ID!, groupId: ID!): Ticket
   ChangeStatus(ticketId: ID!, statusId: ID!): Ticket
-  SendMessage(to: ID!, message: String!): Message
+  SendMessage(to: ID!, message: String!): Message!
+  AddPath(path: PathInput!): PathTree!
+  RemovePath(userId: ID!, path: ID!): ID!
 }
 
 type Subscription {
@@ -46,6 +53,8 @@ type Subscription {
   ChangeStatus: Ticket!,
   EditTicket: Ticket!
   NewMessage(to: ID!): Message!
+  NewPath(userId: ID!): PathTree!
+  RemovePath(userId: ID!): ID!
 }
 
 scalar Datetime

@@ -1,0 +1,6 @@
+query {
+  ref: Ref {
+    objectName
+    options
+  }
+}

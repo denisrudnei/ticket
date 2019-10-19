@@ -1,43 +1,78 @@
 <template>
-  <v-treeview
-    :items="tree"
-    open-on-click
-    item-key="_id"
-    activatable
-  >
-    <template
-      v-slot:prepend="{ item }"
-    >
-      <v-icon
-        v-if="item.children.length === 0"
+  <ApolloQuery :query="treeQuery">
+    <template v-slot="{result: {loading, error, data}}">
+      <v-treeview
+        v-if="data"
+        :items="data.tree"
+        open-on-click
+        item-key="_id"
+        activatable
       >
-        layers
-      </v-icon>
+        <template
+          v-slot:prepend="{ item }"
+        >
+          <v-icon
+            v-if="item.children.length === 0"
+          >
+            layers
+          </v-icon>
+        </template>
+        <template
+          v-slot:label="{ item }"
+        >
+          <span v-if="item.children.length > 0">{{ item.name }}</span>
+          <nuxt-link
+            v-if="item.children.length === 0"
+            :to="item.url"
+          >
+            {{ item.name }}
+          </nuxt-link>
+        </template>
+      </v-treeview>
     </template>
-    <template
-      v-slot:label="{ item }"
-    >
-      <span v-if="item.children.length > 0">{{ item.name }}</span>
-      <nuxt-link
-        v-if="item.children.length === 0"
-        :to="item.url"
-      >
-        {{ item.name }}
-      </nuxt-link>
-    </template>
-  </v-treeview>
+  </ApolloQuery>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
+import tree from '@/graphql/query/profile/path/tree.graphql'
+import removePath from '@/graphql/subscription/path/removePath.graphql'
+import add from '@/graphql/subscription/path/add.graphql'
 export default {
-  computed: mapGetters({
-    tree: 'ticket/getTree'
-  }),
-  created() {
-    this.$axios.get('/info/path').then(response => {
-      this.$store.commit('ticket/setTree', response.data)
+  computed: {
+    treeQuery() {
+      return ggl(tree)
+    },
+    ...mapGetters({
+      user: 'auth/getUser'
     })
+  },
+  apollo: {
+    $subscribe: {
+      RemovePath: {
+        query: ggl(removePath),
+        variables() {
+          return {
+            userId: this.user._id
+          }
+        },
+        result({ data }) {
+          this.$store.commit('ticket/removeTreeItem', data.path)
+        }
+      },
+      NewPath: {
+        query: ggl(add),
+        variables() {
+          return {
+            userId: this.user._id
+          }
+        },
+        result({ data }) {
+          this.$store.commit('ticket/addTreeItem', data.pathItem)
+        }
+      }
+    }
   }
 }
 </script>

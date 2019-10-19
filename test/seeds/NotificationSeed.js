@@ -8,7 +8,7 @@ const seed = number => {
   const template = () => ({
     _id: new mongoose.Types.ObjectId(),
     name: 'notification',
-    content: 'Notication created',
+    content: 'Notification created',
     to: analysts,
     from: analysts[0]
   })

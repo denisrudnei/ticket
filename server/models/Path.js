@@ -2,22 +2,16 @@ const { models, model, Schema } = require('mongoose')
 
 const PathSchema = new Schema({
   _id: Schema.Types.ObjectId,
-  path: {
-    type: String,
-    required: true
+  objectName: {
+    type: String
   },
-  group: {
-    type: String,
-    required: true
+  property: {
+    type: String
   },
   name: {
     type: String,
     required: true
   }
-})
-
-PathSchema.virtual('fullPath').get(function() {
-  return `${this.path}.${this.group}`
 })
 
 PathSchema.set('toJSON', {

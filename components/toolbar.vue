@@ -30,6 +30,9 @@
     <Notification
       v-if="logged"
     />
+    <v-btn v-if="logged && user.role === 'admin'" title="API" icon to="/config/playground" class="white--text">
+      <v-icon>format_shapes</v-icon>
+    </v-btn>
     <v-btn
       v-if="logged && user.role === 'admin'"
       text
