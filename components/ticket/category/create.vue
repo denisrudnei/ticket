@@ -23,6 +23,9 @@
           :items="groups.map(g => ({text: g.name, value: g}))"
           filled
         />
+        <v-col cols="12">
+          <v-textarea v-model="category.description" filled placeholder="Descrição" />
+        </v-col>
         <v-col
           cols="12"
         >
