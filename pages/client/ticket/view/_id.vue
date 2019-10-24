@@ -15,6 +15,14 @@
     <v-col cols="12">
       <v-text-field :value="ticket.content" readonly filled label="Conteúdo" />
     </v-col>
+    <v-tabs>
+      <v-tab>
+        Arquivos
+      </v-tab>
+      <v-tab-item>
+        <v-data-table />
+      </v-tab-item>
+    </v-tabs>
   </v-row>
 </template>
 
