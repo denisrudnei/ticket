@@ -5,12 +5,12 @@
     </v-col>
     <v-col cols="12">
       <v-row>
-        <v-col v-for="ticket in tickets" :key="ticket._id" cols="4">
+        <v-col v-for="ticket in tickets" :key="ticket._id" cols="12" md="4">
           <v-card tile :color="color()" class="white--text" dark>
             <v-card-text>
               <v-row>
                 <v-col cols="12" md="4">
-                  <v-progress-circular color="white" :size="100" :value="100">
+                  <v-progress-circular color="white" :size="100" :value="sla()">
                     {{ sla() }}
                   </v-progress-circular>
                 </v-col>
