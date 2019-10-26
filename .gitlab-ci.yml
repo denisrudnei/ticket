@@ -3,10 +3,6 @@ image: node:latest
 services:
   - mongo:latest
 
-cache:
-  paths:
-    - node_modules/
-
 variables:
   MONGODB_TESTING_URI: 'mongodb://mongo/testing'
 
