@@ -28,7 +28,7 @@
                   <v-text-field filled :value="ticket.modified | date" label="Modificado em" />
                 </v-col>
                 <v-col cols="12">
-                  <v-btn :to="`/client/ticket/view/${ticket._id}`">
+                  <v-btn :to="`/client/ticket/view/${ticket._id}`" block tile>
                     Ver detalhes
                     <v-icon right>
                       search
@@ -118,6 +118,7 @@ export default {
           query: ggl(listTicket),
           variables: {
             page: page || 1,
+            limit: 9,
             attributes: {
               openedBy: this.user._id
             }
@@ -132,5 +133,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+p {
+  word-break: break-word !important;
+}
 </style>

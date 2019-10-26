@@ -1,5 +1,5 @@
-query SearchTicket($attributes: TicketAttributes, $page: Int!) {
-  ticket: SearchTicket(attributes: $attributes, page: $page) {
+query SearchTicket($attributes: TicketAttributes, $page: Int!, $limit: Int!) {
+  ticket: SearchTicket(attributes: $attributes, page: $page, limit: $limit) {
     docs {
       _id
       resume
