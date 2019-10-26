@@ -8,6 +8,8 @@ const StatusSeed = require('./seeds/StatusSeed')
 const NotificationSeed = require('./seeds/NotificationSeed')
 const AddressSeed = require('./seeds/AddressSeed')
 const PathSeed = require('./seeds/PathSeed')
+const SlaSeed = require('./seeds/SlaSeed')
+const PrioritySeed = require('./seeds/PrioritySeed')
 
 const data = [
   {
@@ -37,6 +39,14 @@ const data = [
   {
     model: 'Path',
     documents: PathSeed.seed(5)
+  },
+  {
+    model: 'Priority',
+    documents: PrioritySeed.seed(5)
+  },
+  {
+    model: 'Sla',
+    documents: SlaSeed.seed(5)
   }
 ]
 
@@ -49,7 +59,9 @@ const models = [
   './server/models/ticket/Ticket.js',
   './server/models/Address.js',
   './server/models/Notification.js',
-  './server/models/Path.js'
+  './server/models/Path.js',
+  './server/models/ticket/Priority',
+  './server/models/ticket/Sla'
 ]
 
 const seed = {

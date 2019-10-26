@@ -3,6 +3,7 @@ const fields = ['to', 'from']
 const TicketService = require('../services/ticket/TicketService')
 const GroupService = require('../services/ticket/GroupService')
 const AnalystService = require('../services/AnalystService')
+const Log = require('../models/ticket/Log')
 const mongoose = require('mongoose')
 
 const NotificationService = {
