@@ -4,9 +4,21 @@ type Category {
   fullName: String
   description: String
   defaultGroup: Group
+  defaultStatus: Status
+  defaultPriority: Priority
   father: Category
   sla: Sla
-  priority: Priority
   subs: [Category]
   fields: [Field]
+}
+
+input CategoryInput {
+  name: String
+  fullName: String
+  description: String
+  defaultGroup: ID
+  defaultStatus: ID
+  sla: ID
+  father: ID
+  defaultPriority: ID
 }

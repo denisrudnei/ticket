@@ -1,7 +1,8 @@
-query {
-  category: Category {
+query CategoryByName($name: String!) {
+  category: CategoryByName(name: $name) {
     _id
     fullName
+    name
     defaultStatus {
       _id
       name
@@ -16,17 +17,8 @@ query {
       weight
     }
   }
-  group: Group {
+  analyst: Analyst {
     _id
     name
-  }
-  status: Status {
-    _id
-    name
-  }
-  priority: Priority {
-    _id
-    name
-    weight
   }
 }

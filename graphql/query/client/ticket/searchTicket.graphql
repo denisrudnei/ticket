@@ -1,0 +1,20 @@
+query SearchTicket($attributes: TicketAttributes, $page: Int!) {
+  ticket: SearchTicket(attributes: $attributes, page: $page) {
+    docs {
+      _id
+      resume
+      status {
+        _id
+        name
+      }
+      group {
+        _id
+        name
+      }
+      created
+      modified
+    }
+    page
+    pages
+  }
+}

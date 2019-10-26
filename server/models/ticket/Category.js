@@ -32,7 +32,7 @@ const CategorySchema = new Schema({
       ref: 'Field'
     }
   ],
-  priority: {
+  defaultPriority: {
     type: Schema.Types.ObjectId,
     ref: 'Priority'
   },

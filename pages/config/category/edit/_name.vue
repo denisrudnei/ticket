@@ -7,7 +7,8 @@
 <script>
 import ggl from 'graphql-tag'
 import CategoryCreate from '@/components/ticket/category/create'
-import CategoryEdit from '@/graphql/query/config/category/edit.graphql'
+import CategoryEditList from '@/graphql/query/config/category/edit.graphql'
+import CategoryEdit from '@/graphql/mutation/config/category/editCategory.graphql'
 export default {
   components: {
     CategoryCreate
@@ -16,7 +17,7 @@ export default {
     const name = params.name
     return app.$apollo
       .query({
-        query: ggl(CategoryEdit),
+        query: ggl(CategoryEditList),
         variables: {
           name: name
         }
@@ -28,14 +29,36 @@ export default {
       })
   },
   methods: {
-    update(category) {
-      this.$axios.put(`/category/${category._id}`, category).then(() => {
-        this.$toast.show('Categoria atualizada', {
-          duration: 5000,
-          icon: 'done'
+    update(newValue) {
+      this.$apollo
+        .mutate({
+          mutation: ggl(CategoryEdit),
+          variables: {
+            categoryId: newValue._id,
+            category: {
+              name: newValue.name,
+              description: newValue.description,
+              defaultGroup: newValue.defaultGroup._id,
+              defaultStatus: newValue.defaultStatus._id,
+              defaultPriority: newValue.defaultPriority._id
+            }
+          },
+          refetchQueries: [
+            {
+              query: ggl(CategoryEditList),
+              variables: {
+                name: newValue.name
+              }
+            }
+          ]
         })
-        this.$router.push('/config/category')
-      })
+        .then(() => {
+          this.$toast.show('Categoria atualizada', {
+            duration: 5000,
+            icon: 'done'
+          })
+          this.$router.push('/config/category')
+        })
     }
   }
 }

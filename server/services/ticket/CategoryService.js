@@ -68,6 +68,19 @@ const CategoryService = {
               name: 1,
               analysts: 0
             }
+          },
+          {
+            path: 'defaultStatus',
+            select: {
+              name: 1
+            }
+          },
+          {
+            path: 'defaultPriority',
+            select: {
+              name: 1,
+              weight: 1
+            }
           }
         ])
         .exec((err, categories) => {
@@ -88,6 +101,19 @@ const CategoryService = {
               description: 1,
               analysts: 0
             }
+          },
+          {
+            path: 'defaultStatus',
+            select: {
+              name: 1
+            }
+          },
+          {
+            path: 'defaultPriority',
+            select: {
+              name: 1,
+              weight: 1
+            }
           }
         ])
         .exec((err, result) => {
@@ -105,7 +131,9 @@ const CategoryService = {
             name: category.name,
             father: category.father,
             description: category.description,
-            defaultGroup: category.defaultGroup
+            defaultGroup: category.defaultGroup,
+            defaultStatus: category.defaultStatus,
+            defaultPriority: category.defaultPriority
           }
         }
       ).exec(err => {

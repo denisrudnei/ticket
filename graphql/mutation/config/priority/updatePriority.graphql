@@ -1,0 +1,3 @@
+mutation UpdatePriority($priority: PriorityInput!) {
+  UpdatePriority(priority: $priority)
+}

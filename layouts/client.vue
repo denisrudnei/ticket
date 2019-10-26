@@ -18,6 +18,18 @@
             Abrir chamado
           </v-list-item-content>
         </v-list-item>
+        <v-list-item to="/client/profile">
+          <v-list-item-action>
+            <v-icon>person</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>Perfil</v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="logout">
+          <v-list-item-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>Deslogar</v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-content>
@@ -29,11 +41,26 @@
         </v-row>
       </v-container>
     </v-content>
+    <logout v-if="logged" />
   </v-app>
 </template>
 
 <script>
-export default {}
+import { mapGetters } from 'vuex'
+import logout from '@/components/logout'
+export default {
+  components: {
+    logout
+  },
+  computed: mapGetters({
+    logged: 'auth/getLoggedIn'
+  }),
+  methods: {
+    logout() {
+      this.$store.commit('logout/setLogout', true)
+    }
+  }
+}
 </script>
 
 <style>

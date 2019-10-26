@@ -30,7 +30,7 @@
           filled
         />
         <v-autocomplete
-          v-model="category.priority"
+          v-model="category.defaultPriority"
           filled
           label="Prioridade padrão"
           :items="priority.map(p => ({text: p.name, value: p}))"
@@ -131,6 +131,7 @@ export default {
       categoryData: {
         name: '',
         father: null,
+        defaultStatus: {},
         fields: []
       }
     }

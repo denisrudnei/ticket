@@ -168,6 +168,7 @@ import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
 import hotkeyHelp from '@/components/hotkeyHelp'
 export default {
+  middleware: ['adminMiddleware'],
   components: {
     Toolbar,
     TicketDialog,

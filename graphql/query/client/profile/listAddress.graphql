@@ -1,0 +1,6 @@
+query {
+  address: Address {
+    street
+    name
+  }
+}

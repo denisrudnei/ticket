@@ -1,0 +1,3 @@
+mutation UpdateManyPriorities($priorities: [PriorityInput!]!) {
+  UpdateManyPriorities(priorities: $priorities) 
+}

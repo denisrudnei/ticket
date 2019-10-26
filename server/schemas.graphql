@@ -24,6 +24,7 @@ type Query {
   Status: [Status],
   FindStatus(_id: ID!): Status!
   Group: [Group]!
+  Address: [Address!]!
   Category: [Category]!
   CategoryByName(name: String!): Category!
   GetSubs(categoryId: ID): [Category]
@@ -54,6 +55,8 @@ type Mutation {
   CreatePriority(priority: PriorityInput!): Boolean
   UpdatePriority(priority: PriorityInput!): Boolean
   UpdateManyPriorities(priorities: [PriorityInput!]!): [Boolean]
+  CreateCategory(category: CategoryInput!): Category
+  EditCategory(categoryId: ID!, category: CategoryInput!): Boolean
 }
 
 type Subscription {

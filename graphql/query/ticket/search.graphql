@@ -1,0 +1,23 @@
+query {
+  status: Status {
+    _id
+    name
+  }
+  group: Group {
+    _id
+    name
+  }
+  category: Category {
+    _id
+    name
+  }
+  analyst: Analyst {
+    _id
+    name
+  }
+  priority: Priority {
+    _id
+    name
+    weight
+  }
+}

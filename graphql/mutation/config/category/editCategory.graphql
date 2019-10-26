@@ -1,0 +1,3 @@
+mutation EditCategory($categoryId: ID!, $category: CategoryInput!) {
+  EditCategory(categoryId: $categoryId, category: $category)
+}

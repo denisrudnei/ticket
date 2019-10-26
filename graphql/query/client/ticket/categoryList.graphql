@@ -1,0 +1,20 @@
+query {
+  category: Category {
+    _id
+    name
+    fullName
+    description
+    defaultGroup {
+      _id
+      name
+    }
+    defaultStatus {
+      _id
+      name
+    }
+    defaultPriority {
+      _id
+      name
+    }
+  }
+}

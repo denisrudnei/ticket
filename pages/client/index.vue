@@ -6,23 +6,20 @@
     <v-col cols="12">
       <v-row>
         <v-col v-for="ticket in tickets" :key="ticket._id" cols="12" md="4">
-          <v-card tile :color="color()" class="white--text" dark>
+          <v-card tile :color="color(ticket._id)" class="white--text" dark>
             <v-card-text>
               <v-row>
-                <v-col cols="12" md="4">
-                  <v-progress-circular color="white" :size="100" :value="sla()">
-                    {{ sla() }}
-                  </v-progress-circular>
-                </v-col>
-                <v-col cols="12" md="8">
+                <v-col cols="12">
                   <nuxt-link :to="`/client/ticket/view/${ticket._id}`" tag="span">
-                    <v-card-title>
-                      {{ ticket.resume }}
+                    <v-card-title class="text-center">
+                      <p>{{ ticket.resume }}</p>
                     </v-card-title>
                   </nuxt-link>
                 </v-col>
                 <v-col cols="12">
-                  <v-progress-linear height="10" :value="sla()" color="white" />
+                  <v-progress-linear striped height="15" :value="sla(ticket._id)" color="black">
+                    {{ sla(ticket._id) }} %
+                  </v-progress-linear>
                 </v-col>
                 <v-col cols="12">
                   <v-text-field readonly label="Status" :value="ticket.status.name" filled />
@@ -44,11 +41,14 @@
         </v-col>
       </v-row>
     </v-col>
+    <v-pagination v-model="page" :value="page" :total-visible="10" :length="pages" />
   </v-row>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
+import listTicket from '@/graphql/query/client/ticket/searchTicket.graphql'
 export default {
   layout: 'client',
   filters: {
@@ -59,7 +59,15 @@ export default {
   data() {
     return {
       search: '',
-      ticketsData: []
+      ticketsData: [],
+      page: 1,
+      pages: 0,
+      slas: []
+    }
+  },
+  watch: {
+    page(value) {
+      this.getTickets(value)
     }
   },
   computed: {
@@ -73,19 +81,52 @@ export default {
     }
   },
   mounted() {
-    this.$axios
-      .get(`/ticket/profile/openedBy/?openedBy=${this.user._id}`)
-      .then(response => {
-        this.ticketsData = response.data.docs
-      })
+    this.getTickets()
   },
   methods: {
-    color() {
-      const colors = ['red', 'green', 'orange', 'blue', 'purple', 'black']
-      return colors[Math.round(Math.random() * colors.length)]
+    color(id) {
+      const sla = this.slas.find(s => {
+        return s.id === id
+      })
+      if (!sla) {
+        this.sla(id)
+        return 'black'
+      }
+      if (sla.number <= 90) return 'green'
+      if (sla.number >= 100) return 'red'
+      return 'orange'
     },
-    sla() {
-      return `${Math.round(Math.random() * 100)} %`
+    sla(id) {
+      const number = Math.round(Math.random() * 100)
+      const findSla = this.slas.findIndex(sla => {
+        return sla.id === id
+      })
+      const sla = {
+        id,
+        number
+      }
+      if (findSla !== -1) {
+        return this.slas[findSla].number
+      } else {
+        this.slas.push(sla)
+      }
+      return sla.number
+    },
+    getTickets(page) {
+      this.$apollo
+        .query({
+          query: ggl(listTicket),
+          variables: {
+            page: page || 1,
+            attributes: {
+              openedBy: this.user._id
+            }
+          }
+        })
+        .then(response => {
+          this.pages = response.data.ticket.pages
+          this.ticketsData = response.data.ticket.docs
+        })
     }
   }
 }
