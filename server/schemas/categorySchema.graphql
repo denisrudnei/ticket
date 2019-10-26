@@ -5,6 +5,8 @@ type Category {
   description: String
   defaultGroup: Group
   father: Category
+  sla: Sla
+  priority: Priority
   subs: [Category]
   fields: [Field]
 }

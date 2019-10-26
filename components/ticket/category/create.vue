@@ -23,6 +23,18 @@
           :items="groups.map(g => ({text: g.name, value: g}))"
           filled
         />
+        <v-autocomplete
+          v-model="category.defaultStatus"
+          placeholder="Status padrão"
+          :items="status.map(s => ({text: s.name, value: s}))"
+          filled
+        />
+        <v-autocomplete
+          v-model="category.priority"
+          filled
+          label="Prioridade padrão"
+          :items="priority.map(p => ({text: p.name, value: p}))"
+        />
         <v-col cols="12">
           <v-textarea v-model="category.description" filled placeholder="Descrição" />
         </v-col>
@@ -114,6 +126,8 @@ export default {
     return {
       categories: [],
       groups: [],
+      status: [],
+      priority: [],
       categoryData: {
         name: '',
         father: null,
@@ -137,6 +151,8 @@ export default {
       .then(response => {
         this.categories = response.data.category
         this.groups = response.data.group
+        this.priority = response.data.priority
+        this.status = response.data.status
       })
   },
   methods: {

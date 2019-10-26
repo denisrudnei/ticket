@@ -3,6 +3,9 @@ type Ticket {
   resume: String!
   content: String!
   status: Status!
+  address: Address
+  priority: Priority
+  sla: Sla
   comments: [Comment]!
   logs: [Log]!
   category: Category!
@@ -11,8 +14,8 @@ type Ticket {
   affectedUser: Analyst!
   actualUser: Analyst
   openedBy: Analyst!
-  created: Datetime!
-  modified: Datetime!
+  created: Datetime
+  modified: Datetime
 }
 
 type TicketPagination {
@@ -30,4 +33,15 @@ input TicketAttributes {
   category: String
   status: String
   group: String
+}
+
+input TicketCreateInput {
+  actualUser: ID!
+  affectedUser: ID!
+  resume: String!
+  content: String!
+  group: ID!
+  status: ID!
+  category: ID!
+  priority: ID!
 }

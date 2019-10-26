@@ -11,7 +11,11 @@ const StatusSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'Status'
     }
-  ]
+  ],
+  slaRun: {
+    type: Boolean,
+    default: true
+  }
 })
 
 StatusSchema.set('toJSON', {

@@ -46,7 +46,7 @@
               </v-card-title>
           
               <v-card-text>
-                <div v-html="message.content"></div>
+                <div v-html="message.content" />
                 <sub>{{ message.date | date }}</sub>
               </v-card-text>
             </v-card>
@@ -55,7 +55,7 @@
       </v-card-text>
       <v-card-actions>
         <v-row>
-          <v-col cols="12" id="editor">
+          <v-col id="editor" cols="12">
             <client-only>
               <ckeditor v-model="text" :editor="editor" @ready="configureEditor" />
             </client-only>

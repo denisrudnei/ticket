@@ -50,7 +50,6 @@ export default {
         })
         .then(async () => {
           await this.processInfo()
-          this.$router.push('/')
         })
         .catch(() => {
           this.$toast.error('Falha ao logar', {

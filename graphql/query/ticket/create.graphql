@@ -28,4 +28,9 @@ query {
     }
     fullName
   }
+  priority: Priority {
+    _id
+    name
+    weight
+  }
 }

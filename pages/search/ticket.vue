@@ -21,8 +21,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
 import TicketCreate from '@/components/ticket/create'
 import TicketList from '@/components/ticket/list'
+import searchQuery from '@/graphql/query/ticket/search.graphql'
 export default {
   components: {
     TicketCreate,
@@ -56,19 +58,19 @@ export default {
       this.data = this.$router.currentRoute.query
     }
   },
-  async mounted() {
-    await this.$axios.get('/status').then(response => {
-      this.$store.commit('status/setStatus', response.data)
-    })
-    await this.$axios.get('/category').then(response => {
-      this.$store.commit('category/setCategories', response.data)
-    })
-    await this.$axios.get('/group').then(response => {
-      this.$store.commit('group/setGroups', response.data)
-    })
-    await this.$axios.get('/analyst').then(reponse => {
-      this.$store.commit('analyst/setAnalysts', reponse.data)
-    })
+  fetch({ app, $store }) {
+    app.$apollo
+      .query({
+        query: ggl(searchQuery)
+      })
+      .then(response => {
+        $store.commit('status/setStatus', response.data.status)
+        $store.commit('category/setCategories', response.data.category)
+        $store.commit('group/setGroups', response.data.group)
+        $store.commit('analyst/setAnalysts', response.data.analyst)
+      })
+  },
+  mounted() {
     this.data = this.$router.currentRoute.query
   },
   methods: {

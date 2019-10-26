@@ -1,5 +1,6 @@
 const TicketService = require('../services/ticket/TicketService')
 const TicketEnum = require('../enums/TicketEnum')
+const LogService = require('../services/ticket/LogService')
 
 const TicketResolver = {
   Query: {
@@ -36,21 +37,37 @@ const TicketResolver = {
       })
       return ticket
     },
-    CreateTicket: (
-      _,
-      { group, status, actualUser, category, resume, content },
-      { req }
-    ) => {
-      const ticket = {
+    CreateTicket: (_, { ticket }, { req }) => {
+      const {
         group,
         status,
         category,
         actualUser,
+        affectedUser,
+        resume,
+        content,
+        priority
+      } = ticket
+      const newTicket = {
+        group,
+        status,
+        category,
+        actualUser,
+        affectedUser,
         openedBy: req.session.authUser,
         resume,
-        content
+        content,
+        priority
       }
-      return TicketService.create(ticket)
+      return TicketService.create(newTicket)
+    },
+    EditTicket: (_, { _id, ticket }, { req }) => {
+      const userId = req.session.authUser._id
+      LogService.createTicketLog(userId, {
+        ...ticket,
+        _id
+      })
+      return TicketService.updateOne(_id, ticket)
     }
   },
   Subscription: {

@@ -7,4 +7,13 @@ query {
     _id
     name
   }
+  status: Status {
+    _id
+    name
+  }
+  priority: Priority {
+    _id
+    name
+    weight
+  }
 }

@@ -11,6 +11,9 @@
         <v-tab to="/config/analyst">
           Analista
         </v-tab>
+        <v-tab to="/config/priority">
+          Prioridade
+        </v-tab>
         <v-tab to="/config/category">
           Categorias
         </v-tab>

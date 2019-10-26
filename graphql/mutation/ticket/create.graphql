@@ -1,6 +1,6 @@
 #import "@/graphql/fragments/ticketList.graphql"
-mutation CreateTicket($affectedUser: ID!, $actualUser: ID!, $resume: String!, $content: String!, $status: ID!, $group: ID!, $category: ID!) {
-  CreateTicket(affectedUser: $affectedUser, actualUser: $actualUser, resume: $resume, content: $content, status: $status, group: $group, category: $category) {
+mutation CreateTicket($ticket: TicketCreateInput!) {
+  CreateTicket(ticket: $ticket) {
     ...ticketList
   }
 }

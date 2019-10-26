@@ -23,13 +23,16 @@ export default {
         .post('/graphql', {
           query: create,
           variables: {
-            affectedUser: this.ticket.affectedUser._id,
-            actualUser: this.ticket.actualUser._id,
-            status: this.ticket.status._id,
-            group: this.ticket.group._id,
-            category: this.ticket.category._id,
-            resume: this.ticket.resume,
-            content: this.ticket.content
+            ticket: {
+              actualUser: this.ticket.actualUser._id,
+              affectedUser: this.ticket.affectedUser._id,
+              resume: this.ticket.resume,
+              content: this.ticket.content,
+              group: this.ticket.group._id,
+              category: this.ticket.category._id,
+              priority: this.ticket.priority._id,
+              status: this.ticket.status._id
+            }
           }
         })
         .then(() => {

@@ -223,6 +223,25 @@
           </v-col>
           <v-col
             cols="12"
+            md="4"
+            pa-1
+          >
+            <v-select
+              v-model="ticketComputed.priority"
+              :items="priorities.map(p => { return { text: `${p.weight} - ${p.name}`, value: p } })"
+              :rules="!search ? [v => !!v || 'Prioridade requirida'] : undefined"
+              required
+              :readonly="readOnlyData"
+              filled
+              :clearable="search || editing || !readonly"
+              :value-comparator="compare"
+              label="Prioridade"
+              append-icon="search"
+              @click:append="show('priority', ticketComputed.priority)"
+            />
+          </v-col>
+          <v-col
+            cols="12"
             pa-3
           >
             <v-row>
@@ -437,7 +456,8 @@ export default {
       default: () => {
         return {
           group: {},
-          category: {}
+          category: {},
+          priority: {}
         }
       }
     }
@@ -455,6 +475,7 @@ export default {
       groups: [],
       status: [],
       categories: [],
+      priorities: [],
       initial: new Date().toISOString().substr(0, 10),
       final: new Date().toISOString().substr(0, 10),
       comment: '',
@@ -464,6 +485,7 @@ export default {
         comments: [],
         group: {},
         category: {},
+        priority: {},
         created: new Date(),
         modified: new Date()
       },
@@ -513,6 +535,7 @@ export default {
         this.groups = response.data.Group
         this.status = response.data.Status
         this.categories = response.data.Category
+        this.priorities = response.data.priority
       })
   },
   methods: {

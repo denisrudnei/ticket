@@ -1,5 +1,7 @@
 <template>
-  <category-create v-model="category" editing @input="update" />
+  <div>
+    <category-create v-model="category" editing @input="update" />
+  </div>
 </template>
 
 <script>

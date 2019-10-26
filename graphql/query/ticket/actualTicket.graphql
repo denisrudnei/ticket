@@ -42,6 +42,10 @@ query GetTicket($id: ID) {
       content
       date
     }
-    
+    priority {
+      _id
+      name
+      weight
+    }
   }
 }

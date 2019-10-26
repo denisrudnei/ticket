@@ -35,6 +35,7 @@ const populateArray = [
   },
   'status',
   'group',
+  'priority',
   'category'
 ]
 

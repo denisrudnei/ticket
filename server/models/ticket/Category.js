@@ -22,12 +22,24 @@ const CategorySchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Group'
   },
+  defaultStatus: {
+    type: Schema.Types.ObjectId,
+    ref: 'Status'
+  },
   fields: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Field'
     }
-  ]
+  ],
+  priority: {
+    type: Schema.Types.ObjectId,
+    ref: 'Priority'
+  },
+  sla: {
+    type: Schema.Types.ObjectId,
+    ref: 'Sla'
+  }
 })
 
 CategorySchema.virtual('fullName').get(function() {
