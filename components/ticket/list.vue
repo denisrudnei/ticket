@@ -20,6 +20,9 @@
         </v-icon>
       </v-btn>
     </template>
+    <template v-slot:item.ticketNumber="{ item }">
+      {{ item.ticketNumber }}
+    </template>
     <template v-slot:item.actualUser="{ item }">
       <v-list-item :to="`/analyst/${item.actualUser._id}`">
         <v-list-item-avatar>
@@ -130,6 +133,10 @@ export default {
           text: 'Ver chamado',
           sortable: false,
           value: 'actions'
+        },
+        {
+          text: 'Número do chamado',
+          value: 'ticketNumber'
         },
         {
           text: 'Usuário atual',

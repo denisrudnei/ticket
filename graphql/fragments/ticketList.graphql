@@ -1,5 +1,6 @@
 fragment ticketList on Ticket {
   _id
+  ticketNumber
   openedBy {
     _id
     name

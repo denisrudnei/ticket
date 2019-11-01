@@ -16,6 +16,9 @@
                     </v-card-title>
                   </nuxt-link>
                 </v-col>
+                <v-col>
+                  Número do chamado: {{ ticket.ticketNumber }}
+                </v-col>
                 <v-col cols="12">
                   <v-progress-linear striped height="15" :value="sla(ticket._id)" color="black">
                     {{ sla(ticket._id) }} %

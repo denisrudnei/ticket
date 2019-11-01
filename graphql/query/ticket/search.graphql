@@ -1,4 +1,5 @@
 query {
+  ticketNumber
   status: Status {
     _id
     name
