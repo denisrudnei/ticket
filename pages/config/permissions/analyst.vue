@@ -38,32 +38,34 @@
               </v-btn>
             </template>
             <v-card>
-              <v-row>
-                <v-col
-                  cols="12"
-                  pa-3
-                >
-                  <v-select
-                    v-model="selected"
-                    filled
-                    :items="roles.map(r => { return { text: r.name, value: r }})"
-                  />
-                </v-col>
-                <v-col
-                  cols="12"
-                  pa-3
-                >
-                  <v-btn
-                    class="primary white--text"
-                    icon
-                    @click="updateRole(item._id)"
+              <v-card-text>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    pa-3
                   >
-                    <v-icon>
-                      save
-                    </v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
+                    <v-select
+                      v-model="selected"
+                      filled
+                      :items="roles.map(r => { return { text: r.name, value: r }})"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    pa-3
+                  >
+                    <v-btn
+                      class="primary white--text"
+                      icon
+                      @click="updateRole(item._id)"
+                    >
+                      <v-icon>
+                        save
+                      </v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
             </v-card>
           </v-menu>
         </template>

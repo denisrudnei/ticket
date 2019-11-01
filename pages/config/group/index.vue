@@ -167,14 +167,16 @@ export default {
     groups: 'group/getGroups',
     analysts: 'analyst/getAnalysts'
   }),
-  fetch({ app, store }) {
-    app.$apollo
+  asyncData({ app, store }) {
+    return app.$apollo
       .query({
         query: ggl(list)
       })
       .then(response => {
-        store.commit('group/setGroups', response.data.Group)
-        store.commit('analyst/setAnalysts', response.data.Analyst)
+        return {
+          analysts: response.data.Analyst,
+          groups: response.data.Group
+        }
       })
   },
   methods: {
