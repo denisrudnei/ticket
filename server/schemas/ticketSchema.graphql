@@ -16,6 +16,7 @@ type Ticket {
   openedBy: Analyst!
   created: Datetime
   modified: Datetime
+  ticketNumber: Int
 }
 
 type TicketPagination {

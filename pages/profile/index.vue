@@ -38,8 +38,10 @@
       >
         <v-card>
           <v-card-title primary-title>
-            <div class="healine">
-              Proporção de chamados resolvidos
+            <div class="healine text-center">
+              <span>
+                Proporção de chamados resolvidos
+              </span>
             </div>
           </v-card-title>
           <v-card-text>
@@ -224,5 +226,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+span {
+  word-break: break-word !important;
+}
 </style>

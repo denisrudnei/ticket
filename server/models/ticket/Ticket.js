@@ -1,5 +1,15 @@
-const { models, model, Schema, Types } = require('mongoose')
+const { models, model, Schema, Types, createConnection } = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate')
+const mongooseAutoIncrement = require('mongoose-auto-increment')
+const connection = createConnection(
+  process.env.MONGODB_URI || 'mongodb://localhost/test',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+)
+
+mongooseAutoIncrement.initialize(connection)
 
 const TicketSchema = new Schema(
   {
@@ -103,5 +113,9 @@ TicketSchema.set('toObject', {
 })
 
 TicketSchema.plugin(mongoosePaginate)
+TicketSchema.plugin(mongooseAutoIncrement.plugin, {
+  model: 'Ticket',
+  field: 'ticketNumber'
+})
 
 module.exports = models.Ticket || model('Ticket', TicketSchema)

@@ -8,6 +8,7 @@ query KnowledgeById($_id: ID!){
     }
     category {
       _id
+      fullName
       name
     }
     preview
