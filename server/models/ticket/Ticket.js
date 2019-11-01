@@ -1,13 +1,6 @@
-const { models, model, Schema, Types, createConnection } = require('mongoose')
+const { models, model, Schema, connection } = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate')
 const mongooseAutoIncrement = require('mongoose-auto-increment')
-const connection = createConnection(
-  process.env.MONGODB_URI || 'mongodb://localhost/test',
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  }
-)
 
 mongooseAutoIncrement.initialize(connection)
 
