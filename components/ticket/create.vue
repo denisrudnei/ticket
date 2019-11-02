@@ -574,22 +574,24 @@ export default {
       if (this.search) return
       if (!this.ticketComputed.category) return
       this.checkFields()
-      this.changeDefaultGroup()
+      this.changeValue('groups', 'group', 'defaultGroup')
+      this.changeValue('status', 'status', 'defaultStatus')
+      this.changeValue('priorities', 'priority', 'defaultPriority')
     },
-    changeDefaultGroup() {
-      if (!this.ticketComputed.category.defaultGroup) return
-      const index = this.groups.findIndex(g => {
-        return g._id === this.ticketComputed.category.defaultGroup._id
+    changeValue(search, type, defaultAttr) {
+      if (!this.ticketComputed.category[defaultAttr]) return
+      const index = this[search].findIndex(s => {
+        return s._id === this.ticketComputed.category[defaultAttr]._id
       })
       if (
-        this.ticketComputed.group === undefined ||
-        (Object.prototype.hasOwnProperty.call(this.ticketComputed, 'group') &&
+        this.ticketComputed[type] === undefined ||
+        (Object.prototype.hasOwnProperty.call(this.ticketComputed, type) &&
           !Object.prototype.hasOwnProperty.call(
-            this.ticketComputed.group,
+            this.ticketComputed[type],
             '_id'
           ))
       ) {
-        this.ticketComputed.group = this.groups[index]
+        this.ticketComputed[type] = this[search][index]
       }
     },
     checkFields() {

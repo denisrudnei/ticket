@@ -21,6 +21,14 @@ query {
       _id
       name
     }
+    defaultStatus {
+      _id
+      name
+    }
+    defaultPriority {
+      _id
+      name
+    }
     name
     subs {
       _id
