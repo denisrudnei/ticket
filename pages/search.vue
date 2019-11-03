@@ -2,8 +2,11 @@
   <v-row>
     <v-col>
       <v-tabs show-arrows>
-        <v-tab to="/search/ticket/">
+        <v-tab to="/search/ticket">
           Tickets
+        </v-tab>
+        <v-tab to="/search/manyTickets">
+          Vários chamados por número
         </v-tab>
         <v-tab to="/search/analyst">
           Analistas

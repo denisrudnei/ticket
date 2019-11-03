@@ -251,7 +251,9 @@ export default {
         'actualUser',
         'openedBy',
         'status',
-        'group'
+        'group',
+        'ticketNumber',
+        'ids'
       ]
       const attributes = {}
       Object.keys(query).forEach(key => {

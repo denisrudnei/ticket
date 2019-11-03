@@ -34,6 +34,8 @@ input TicketAttributes {
   category: String
   status: String
   group: String
+  priority: String
+  ticketNumber: [Int]
 }
 
 input TicketCreateInput {
