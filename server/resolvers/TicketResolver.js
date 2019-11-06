@@ -19,19 +19,20 @@ const TicketResolver = {
     }
   },
   Mutation: {
-    ChangeStatus: async (_, { ticketId, statusId }, { pubSub }) => {
+    ChangeStatus: async (_, { ticketId, statusId }, { pubSub, req }) => {
+      const user = req.session.authUser
       const ticket = TicketService.changeStatus(ticketId, statusId)
+      LogService.createTicketLog(user._id, ticket)
       pubSub.publish(TicketEnum.TICKET_CHANGE_STATUS, {
         ChangeStatus: ticket
       })
       return ticket
     },
     TransferTicket: (_, { ticketId, groupId }, { req, pubSub }) => {
-      const ticket = TicketService.transferToGroup(
-        ticketId,
-        groupId,
-        req.session.authUser
-      )
+      const user = req.session.authUser
+      const ticket = TicketService.transferToGroup(ticketId, groupId)
+      // TODO
+      LogService.createTicketLog(user._id, ticket)
       pubSub.publish(TicketEnum.TICKET_TRANSFER_TO_GROUP, {
         TransferToGroup: ticket
       })

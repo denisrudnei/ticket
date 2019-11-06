@@ -17,6 +17,8 @@ type Ticket {
   created: Datetime
   modified: Datetime
   ticketNumber: Int
+  father: Ticket
+  children: [Ticket]
 }
 
 type TicketPagination {

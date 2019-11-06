@@ -23,6 +23,9 @@
     <template v-slot:item.ticketNumber="{ item }">
       {{ item.ticketNumber }}
     </template>
+    <template v-slot:item.priority="{ item }">
+      {{ item.priority.name }}
+    </template>
     <template v-slot:item.actualUser="{ item }">
       <v-list-item :to="`/analyst/${item.actualUser._id}`">
         <v-list-item-avatar>
@@ -87,6 +90,9 @@
     <template v-slot:item.created="{ item }">
       {{ item.created | date }}
     </template>
+    <template v-slot:item.modified="{ item }">
+      {{ item.modified | date }}
+    </template>
   </v-data-table>
 </template>
 
@@ -139,6 +145,10 @@ export default {
           value: 'ticketNumber'
         },
         {
+          text: 'Prioridade',
+          value: 'priority'
+        },
+        {
           text: 'Usuário atual',
           value: 'actualUser'
         },
@@ -161,6 +171,10 @@ export default {
         {
           text: 'Data de criação',
           value: 'created'
+        },
+        {
+          text: 'Última modificação',
+          value: 'modified'
         }
       ]
     }
@@ -252,6 +266,7 @@ export default {
         'openedBy',
         'status',
         'group',
+        'priority',
         'ticketNumber',
         'ids'
       ]

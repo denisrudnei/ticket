@@ -1,10 +1,12 @@
 <template>
   <v-row>
     <v-col cols="4">
-      <v-text-field
+      <v-textarea
         v-model="ticketsText"
-        label="Números"
         filled
+        label="Vários chamados em lista"
+        append-icon="add"
+        @click:append="addOneNumber(ticketsText)"
         @keyup="update"
       />
     </v-col>
@@ -15,7 +17,15 @@
         </v-card-title>
         <v-card-text>
           <template v-for="ticket in ticketsNumbers">
-            <v-chip :key="ticket" label class="ma-2 primary white--text" ma-2>
+            <v-chip
+              :key="ticket"
+              label
+              class="ma-2"
+              color="primary"
+              text-color="white"
+              close
+              @click:close="removeNumber(ticket)"
+            >
               <v-icon class="white--text">
                 bolt
               </v-icon>
@@ -53,9 +63,16 @@ export default {
   },
   methods: {
     update(evt) {
-      this.ticketsText = this.ticketsText.replace(/[^\d]/g, '')
+      this.ticketsText = this.ticketsText.replace(/[^\d|,| ]/g, '')
       if (evt.key === 'Enter') {
-        this.ticketsNumbers.push(parseInt(this.ticketsText))
+        const numbers = Array.from(
+          new Set(
+            this.ticketsText.split(/[,| ]/).filter(number => {
+              return !isNaN(parseInt(number))
+            })
+          )
+        )
+        this.ticketsNumbers.push(...numbers)
         this.ticketsText = ''
       }
     },
@@ -64,6 +81,11 @@ export default {
         ticketNumber: this.ticketsNumbers.map(n => parseInt(n))
       }
       this.$store.commit('ticket/setQuery', query)
+    },
+    removeNumber(value) {
+      this.ticketsNumbers = this.ticketsNumbers.filter(number => {
+        return number !== value
+      })
     }
   }
 }

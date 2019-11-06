@@ -1,6 +1,9 @@
 fragment ticketList on Ticket {
   _id
   ticketNumber
+  priority {
+    name
+  }
   openedBy {
     _id
     name
@@ -32,7 +35,6 @@ fragment ticketList on Ticket {
     }
   }
   resume
-  content
   created
   modified
 }

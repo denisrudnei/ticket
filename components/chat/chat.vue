@@ -44,7 +44,6 @@
               <v-card-title class="headline">
                 {{ message.from.name }}
               </v-card-title>
-          
               <v-card-text>
                 <div v-html="message.content" />
                 <sub>{{ message.date | date }}</sub>

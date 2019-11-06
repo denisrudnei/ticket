@@ -62,6 +62,16 @@ const TicketSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Sla'
     },
+    father: {
+      type: Schema.Types.ObjectId,
+      ref: 'Ticket'
+    },
+    children: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Ticket'
+      }
+    ],
     files: [
       {
         type: Object

@@ -7,7 +7,7 @@
             <v-list-item-action>
               <v-btn class="primary white--text">
                 <v-icon left>
-                  bolt
+                  priority_high
                 </v-icon>
                 {{ item.weight }}
               </v-btn>

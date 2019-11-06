@@ -2,6 +2,7 @@
 query GetTicket($id: ID) {
   TicketById(_id: $id) {
     ...ticketList
+    content
     category {
       fields {
         required

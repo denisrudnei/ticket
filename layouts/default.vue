@@ -132,12 +132,12 @@
           <v-btn
             v-for="ticket in ticketsToEdit"
             :key="ticket._id"
-            :title="ticket._id"
             class="primary white--text"
-            fab
+            :title="ticket.resume"
             @click="setDialog(ticket)"
           >
-            <v-icon>
+            {{ ticket.ticketNumber }}
+            <v-icon right>
               search
             </v-icon>
           </v-btn>
