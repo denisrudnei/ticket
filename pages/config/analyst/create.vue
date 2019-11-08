@@ -26,7 +26,7 @@
           class="primary white--text"
           @click="save"  
         >
-          Criar
+          {{ $t('create') }}
         </v-btn>
       </v-form>
     </v-col>

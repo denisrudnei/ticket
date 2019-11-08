@@ -133,53 +133,55 @@ export default {
         sortDesc: [true],
         totalItems: 0,
         page: 1
-      },
-      headers: [
+      }
+    }
+  },
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Ver chamado',
+          text: this.$t('see_ticket'),
           sortable: false,
           value: 'actions'
         },
         {
-          text: 'Número do chamado',
+          text: this.$t('number_of_ticket'),
           value: 'ticketNumber'
         },
         {
-          text: 'Prioridade',
+          text: this.$t('priority'),
           value: 'priority'
         },
         {
-          text: 'Usuário atual',
+          text: this.$t('actual_user'),
           value: 'actualUser'
         },
         {
-          text: 'Resumo',
+          text: this.$t('resume'),
           value: 'resume'
         },
         {
-          text: 'Status',
+          text: this.$t('status'),
           value: 'status'
         },
         {
-          text: 'Grupo',
+          text: this.$t('group'),
           value: 'group'
         },
         {
-          text: 'Categoria',
+          text: this.$t('category'),
           value: 'category'
         },
         {
-          text: 'Data de criação',
+          text: this.$t('creation_date'),
           value: 'created'
         },
         {
-          text: 'Última modificação',
+          text: this.$t('modified_date'),
           value: 'modified'
         }
       ]
-    }
-  },
-  computed: {
+    },
     query: {
       get() {
         if (this.modal) return this.$store.getters['ticket/getModalQuery']

@@ -43,7 +43,8 @@ module.exports = {
     { src: '@/plugins/google-maps', ssr: false },
     { src: '@/plugins/CKEditor', ssr: false },
     { src: '@/plugins/apolloConfig', ssr: true },
-    { src: '@/plugins/vue-hotkey', ssr: false }
+    { src: '@/plugins/vue-hotkey', ssr: false },
+    { src: '@/plugins/i18n', ssr: true }
   ],
 
   buildModules: [

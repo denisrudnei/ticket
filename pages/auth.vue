@@ -23,7 +23,7 @@
                 class="primary white--text"
                 to="/auth/login"
               >
-                Logar
+                {{ $t('login') }}
                 <v-icon
                   right
                 >
@@ -39,7 +39,7 @@
                 class="primary white--text"
                 @click="login()"
               >
-                Login externo
+                {{ $t('external_login') }}
                 <v-icon right>
                   import_export
                 </v-icon>
@@ -53,7 +53,7 @@
                 class="primary white--text"
                 to="/auth/reset"
               >
-                Resetar senha
+                {{ $t('reset_password') }}
                 <v-icon right>
                   lock
                 </v-icon>
@@ -67,7 +67,7 @@
                 class="primary white--text"
                 to="/auth/register"
               >
-                Registrar
+                {{ $t('register') }}
                 <v-icon right>
                   create
                 </v-icon>

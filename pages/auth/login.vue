@@ -2,13 +2,13 @@
   <v-form>
     <v-text-field
       v-model="userLogin.email"
-      placeholder="Login"
+      :placeholder="$t('login')"
       solo
       @keypress.enter="localLogin()"
     />
     <v-text-field
       v-model="userLogin.password"
-      placeholder="Senha"
+      :placeholder="$t('password')"
       type="password"
       solo
       @keypress.enter="localLogin()"
@@ -20,7 +20,7 @@
       :block="onMobile"
       @click="localLogin()"
     >
-      Logar
+      {{ $t('login') }}
     </v-btn>
   </v-form>
 </template>

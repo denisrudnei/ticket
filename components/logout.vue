@@ -2,7 +2,7 @@
   <v-dialog :value="logout" max-width="50vw" persistent>
     <v-card>
       <v-card-title class="headline">
-        Deseja deslogar do sistema?
+        {{ $t('do_you_want_logout') }}
       </v-card-title>
       <v-card-actions>
         <v-row>
@@ -11,7 +11,7 @@
               <v-icon left>
                 done
               </v-icon>
-              Sim
+              {{ $t('yes') }}
             </v-btn>
           </v-col>
           <v-col>
@@ -19,7 +19,7 @@
               <v-icon left>
                 cancel
               </v-icon>
-              Não
+              {{ $t('no') }}
             </v-btn>
           </v-col>
         </v-row>

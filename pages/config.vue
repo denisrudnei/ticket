@@ -9,28 +9,28 @@
         show-arrows
       >
         <v-tab to="/config/analyst">
-          Analista
+          {{ $t('analysts') }}
         </v-tab>
         <v-tab to="/config/priority">
-          Prioridade
+          {{ $t('priority') }}
         </v-tab>
         <v-tab to="/config/category">
-          Categorias
+          {{ $t('categories') }}
         </v-tab>
         <v-tab to="/config/group">
-          Grupos
+          {{ $t('groups') }}
         </v-tab>
         <v-tab to="/config/status">
-          Status
+          {{ $t('status') }}
         </v-tab>
         <v-tab to="/config/address">
-          Configurar endereços
+          {{ $t('config_addresses') }}
         </v-tab>
         <v-tab to="/config/knowledge/list">
-          Base de conhecimento
+          {{ $t('knowledge_base') }}
         </v-tab>
         <v-tab to="/config/permissions">
-          Permissões
+          {{ $t('permissions') }}
         </v-tab>
         <v-tab to="/config/playground">
           <v-icon left>

@@ -64,7 +64,7 @@
                 tile
                 block
               >
-                Criar incidente
+                {{ $t('create_ticket') }}
                 <v-icon right>
                   offline_bolt
                 </v-icon>
@@ -77,7 +77,7 @@
                 tile
                 block
               >
-                Pesquisar
+                {{ $t('search') }}
                 <v-icon right>
                   search
                 </v-icon>
@@ -90,7 +90,7 @@
                 tile
                 block
               >
-                Base de conhecimento
+                {{ $t('knowledge_base') }}
                 <v-icon right>
                   folder
                 </v-icon>

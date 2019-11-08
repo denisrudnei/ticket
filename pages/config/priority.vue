@@ -3,10 +3,10 @@
     <v-col>
       <v-tabs>
         <v-tab to="/config/priority/create">
-          Criar
+          {{ $t('create') }}
         </v-tab>
         <v-tab to="/config/priority/list">
-          Listar
+          {{ $t('list') }}
         </v-tab>
       </v-tabs>
       <nuxt-child />

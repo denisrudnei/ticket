@@ -9,7 +9,7 @@
           Adicionar
         </v-tab>
         <v-tab to="/profile/path/list">
-          Listar
+          {{$t('list')}}
         </v-tab>
       </v-tabs>
       <nuxt-child />

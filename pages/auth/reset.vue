@@ -1,8 +1,8 @@
 <template>
   <v-form>
-    <v-text-field v-model="user.email" type="email" solo placeholder="Seu email cadastrado" />
+    <v-text-field v-model="user.email" type="email" solo :placeholder="$t('you_registered_email')" />
     <v-btn class="primary white--text" tile @click="reset()">
-      Enviar email para reset de senha
+      {{ $t('send_email') }}
       <v-icon right>
         mail
       </v-icon>

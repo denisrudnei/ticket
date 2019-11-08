@@ -3,7 +3,7 @@
     <v-text-field
       v-model="user.email"
       solo
-      label="Email"
+      :label="$t('email')"
     />
     <v-alert
       v-if="errors.email"
@@ -14,7 +14,7 @@
     <v-text-field
       v-model="user.name"
       solo
-      label="Nome de exibição"
+      :label="$t('exhibition_name')"
     />
     <v-alert
       v-if="errors.name"
@@ -25,7 +25,7 @@
     <v-text-field
       v-model="user.password"
       solo
-      label="Senha"
+      :label="$t('password')"
       type="password"
     />
     <v-alert

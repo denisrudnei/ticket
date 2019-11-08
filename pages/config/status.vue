@@ -5,12 +5,12 @@
     >
       <v-tabs show-arrows>
         <v-tab to="/config/status">
-          Listar
+          {{ $t('list') }}
         </v-tab>
         <v-tab
           to="/config/status/create"
         >
-          Criar
+          {{ $t('create') }}
         </v-tab>
       </v-tabs>
       <nuxt-child />

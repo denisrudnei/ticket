@@ -5,12 +5,12 @@
     >
       <v-tabs show-arrows>
         <v-tab to="/config/category">
-          Listar
+          {{ $t('list') }}
         </v-tab>
         <v-tab
           to="/config/category/create"
         >
-          Criar
+          {{ $t('create') }}
         </v-tab>
       </v-tabs>
       <nuxt-child />

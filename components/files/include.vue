@@ -8,7 +8,7 @@
       >
         <v-data-table
           :items="filePreview"
-          :headers="fileHeaders"
+          :headers="headers"
         >
           <template
             v-slot:item.preview="{ item }"
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       selectFiles: null,
-      fileHeaders: [
+      headers: [
         {
           text: 'Preview',
           value: 'preview'

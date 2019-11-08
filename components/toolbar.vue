@@ -40,7 +40,7 @@
       to="/config"
       class="white--text"
     >
-      Configurações
+      {{ $t('configurations') }}
       <v-icon
         right
         class="white--text"
@@ -48,6 +48,23 @@
         settings_applications
       </v-icon>
     </v-btn>
+    <v-menu :close-on-content-click="false">
+      <template v-slot:activator="{on}">
+        <v-btn text class="primary white--text" :title="$t('language')" v-on="on">
+          <v-icon>
+            language
+          </v-icon>
+        </v-btn>        
+      </template>
+      <v-card>
+        <v-card-title>
+          {{ $t('language') }}
+        </v-card-title>
+        <v-card-text>
+          <v-select v-model="$i18n.locale" :placeholder="$t('language')" filled :items="locales" @change="updateLanguage" />
+        </v-card-text>
+      </v-card>
+    </v-menu>
     <v-btn
       v-if="logged"
       title="Fazer logoff"
@@ -82,9 +99,13 @@ export default {
     }
   },
   computed: mapGetters({
-    user: 'auth/getUser'
+    user: 'auth/getUser',
+    locales: 'locale/getLocales'
   }),
   methods: {
+    updateLanguage(value) {
+      this.$store.commit('locale/setLocale', value)
+    },
     logout() {
       this.$store.commit('logout/setLogout', true)
     }
