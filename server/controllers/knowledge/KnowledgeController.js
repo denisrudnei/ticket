@@ -1,8 +1,8 @@
 const KnowledgeService = require('../../services/knowledge/KnowledgeService')
 
 module.exports = {
-  getUncategorized: (req, res) => {
-    KnowledgeService.getUncategorized()
+  getUnCategorized: (req, res) => {
+    KnowledgeService.getUnCategorized()
       .then(result => {
         return res.status(200).json(result)
       })

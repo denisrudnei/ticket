@@ -22,7 +22,7 @@ const KnowledgeService = {
       })
     })
   },
-  getUncategorized() {
+  getUnCategorized() {
     return new Promise((resolve, reject) => {
       Knowledge.find({
         group: null

@@ -11,7 +11,7 @@ describe('Knowledge', function() {
   })
 
   it('Get not categorized', async () => {
-    await KnowledgeService.getUncategorized()
+    await KnowledgeService.getUnCategorized()
   })
 
   it('Create new knowledge', async () => {

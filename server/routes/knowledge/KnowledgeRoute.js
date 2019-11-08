@@ -1,20 +1,20 @@
 const express = require('express')
 const router = express.Router()
-const KnowledgeControoler = require('../../controllers/knowledge/KnowledgeController')
+const KnowledgeController = require('../../controllers/knowledge/KnowledgeController')
 
-router.get('/knowledge', KnowledgeControoler.getUncategorized)
-router.get('/knowledge/all', KnowledgeControoler.getAll)
-router.get('/knowledge/view/:id', KnowledgeControoler.getOne)
-router.get('/knowledge/:id/file', KnowledgeControoler.getFile)
-router.get('/knowledge/:id/files', KnowledgeControoler.getAllFiles)
+router.get('/knowledge', KnowledgeController.getUnCategorized)
+router.get('/knowledge/all', KnowledgeController.getAll)
+router.get('/knowledge/view/:id', KnowledgeController.getOne)
+router.get('/knowledge/:id/file', KnowledgeController.getFile)
+router.get('/knowledge/:id/files', KnowledgeController.getAllFiles)
 router.get(
   '/knowledge/group/:groupName',
-  KnowledgeControoler.getByKnowledgeGroup
+  KnowledgeController.getByKnowledgeGroup
 )
-router.post('/knowledge/', KnowledgeControoler.create)
-router.put('/knowledge/:id', KnowledgeControoler.edit)
-router.post('/knowledge/tempFile', KnowledgeControoler.addTempFile)
-router.post('/knowledge/:id/file', KnowledgeControoler.addFile)
-router.delete('/knowledge/:id', KnowledgeControoler.remove)
+router.post('/knowledge/', KnowledgeController.create)
+router.put('/knowledge/:id', KnowledgeController.edit)
+router.post('/knowledge/tempFile', KnowledgeController.addTempFile)
+router.post('/knowledge/:id/file', KnowledgeController.addFile)
+router.delete('/knowledge/:id', KnowledgeController.remove)
 
 module.exports = router
