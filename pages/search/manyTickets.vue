@@ -33,6 +33,14 @@
             </v-chip>
           </template>
         </v-card-text>
+        <v-card-actions>
+          <v-btn v-if="ticketsNumbers.length > 0" class="primary white--text" @click="ticketsNumbers = []">
+            Remover todos
+            <v-icon right>
+              remove
+            </v-icon>
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-col>
     <v-col cols="12">
@@ -63,16 +71,18 @@ export default {
   },
   methods: {
     update(evt) {
-      this.ticketsText = this.ticketsText.replace(/[^\d|,| ]/g, '')
+      this.ticketsText = this.ticketsText.replace(/[^\d|,| |\n]/g, '')
       if (evt.key === 'Enter') {
         const numbers = Array.from(
           new Set(
-            this.ticketsText.split(/[,| ]/).filter(number => {
+            this.ticketsText.split(/[^\d]/).filter(number => {
               return !isNaN(parseInt(number))
             })
           )
         )
-        this.ticketsNumbers.push(...numbers)
+        this.ticketsNumbers = Array.from(
+          new Set([...this.ticketsNumbers, ...numbers])
+        )
         this.ticketsText = ''
       }
     },
