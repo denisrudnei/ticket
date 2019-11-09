@@ -14,7 +14,7 @@
             <v-btn
               v-if="logged"
               icon
-              @click.stop="miniVariant = !miniVariant"
+              @click.stop="toggleMini"
             >
               <v-icon>
                 {{ miniVariant ? 'chevron_right' : 'chevron_left' }}
@@ -22,7 +22,7 @@
             </v-btn>
           </v-list-item-action>
           <v-list-item-content>
-            Ocular barra
+            {{ $t('hide_bar') }}
           </v-list-item-content>
         </v-list-item>
         <v-list-item
@@ -194,40 +194,44 @@ export default {
           this.$store.commit('hotkeys/toggleShow')
         }
       },
-      items: [
-        {
-          icon: 'bookmarks',
-          title: 'Listagem total',
-          to: '/'
-        },
-        {
-          icon: 'build',
-          title: 'Chamados sendo tratados',
-          to: '/ticket/profile/actualUser'
-        },
-        {
-          icon: 'person',
-          title: 'Abertos por mim',
-          to: '/ticket/profile/openedBy'
-        },
-        {
-          icon: 'insert_chart',
-          title: 'Relatórios',
-          to: '/reports'
-        }
-      ],
       miniVariant: true,
       right: true,
       clipped: true
     }
   },
-  computed: mapGetters({
-    tickets: 'ticket/getTickets',
-    logged: 'auth/getLoggedIn',
-    user: 'auth/getUser',
-    groups: 'group/getGroups',
-    ticketsToEdit: 'ticket/getTicketsToEdit'
-  }),
+  computed: {
+    items() {
+      return [
+        {
+          icon: 'bookmarks',
+          title: this.$t('total_listing'),
+          to: '/'
+        },
+        {
+          icon: 'build',
+          title: this.$t('tickets_being_handled'),
+          to: '/ticket/profile/actualUser'
+        },
+        {
+          icon: 'person',
+          title: this.$t('opened_by_me'),
+          to: '/ticket/profile/openedBy'
+        },
+        {
+          icon: 'insert_chart',
+          title: this.$t('reports'),
+          to: '/reports'
+        }
+      ]
+    },
+    ...mapGetters({
+      tickets: 'ticket/getTickets',
+      logged: 'auth/getLoggedIn',
+      user: 'auth/getUser',
+      groups: 'group/getGroups',
+      ticketsToEdit: 'ticket/getTicketsToEdit'
+    })
+  },
   apollo: {
     $subscribe: {
       changeStatus: {
@@ -245,6 +249,8 @@ export default {
     }
   },
   mounted() {
+    const miniState = localStorage.getItem('mini')
+    if (miniState) this.miniVariant = JSON.parse(miniState)
     if (this.logged) {
       this.processInfo()
     }
@@ -276,6 +282,12 @@ export default {
     // })
   },
   methods: {
+    toggleMini() {
+      this.miniVariant = !this.miniVariant
+      /* eslint-disable */
+      console.log(this.miniVariant)
+      localStorage.setItem('mini', this.miniVariant)
+    },
     fetchUrl(item) {
       this.$router.push('/search/' + item.name)
     },

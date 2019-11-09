@@ -7,7 +7,7 @@
       <v-form>
         <v-text-field
           v-model="group.name"
-          placeholder="Nome"
+          :placeholder="$t('name')"
           filled
         />
       </v-form>
@@ -16,7 +16,7 @@
       <v-card>
         <v-card-title>Disponíveis</v-card-title>
         <v-card-text>
-          <v-text-field v-model="search" label="Pesquisar" />
+          <v-text-field v-model="search" :label="$t('search')" />
           <v-list>
             <draggable group="group" :list="analysts">
               <v-list-item v-for="analyst in analysts" :key="analyst._id" @click="select">
@@ -47,7 +47,7 @@
         class="primary white--text"
         @click="save(group)"  
       >
-        Salvar
+        {{ $t('save') }}
       </v-btn>
     </v-col>
   </v-row>

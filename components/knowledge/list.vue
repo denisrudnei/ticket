@@ -25,21 +25,25 @@ import KnowledgeListAll from '@/graphql/query/knowledge/list.graphql'
 export default {
   data() {
     return {
-      headers: [
+      items: []
+    }
+  },
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         },
         {
-          text: 'Data de criação',
+          text: this.$t('creation_date'),
           value: 'created'
         },
         {
-          text: 'Status',
+          text: this.$t('status'),
           value: 'status'
         }
-      ],
-      items: []
+      ]
     }
   },
   watch: {

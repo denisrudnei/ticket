@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-file-input v-model="selectFiles" multiple label="Incluir arquivo" @change="selectFile" />
+    <v-file-input v-model="selectFiles" multiple :label="$t('add_file')" @change="selectFile" />
     <v-row>
       <v-col
         cols="12"
@@ -90,7 +90,7 @@
           class="primary--text"
           @click="sendFiles()"
         >
-          Enviar arquivos
+          {{ $t('send_files') }}
           <v-icon
             right
           >
@@ -107,37 +107,41 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      selectFiles: null,
-      headers: [
+      selectFiles: null
+    }
+  },
+  computed: {
+    headers() {
+      return [
         {
           text: 'Preview',
           value: 'preview'
         },
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         },
         {
-          text: 'Anexado',
+          text: this.$t('attached'),
           value: 'old'
         },
         {
-          text: 'Tipo',
+          text: this.$t('type'),
           value: 'type'
         },
         {
-          text: 'Remover',
+          text: this.$t('remove'),
           value: 'remove'
         }
       ]
-    }
+    },
+    ...mapGetters({
+      files: 'file/getFiles',
+      filePreview: 'file/getFilePreview',
+      dialog: 'ticket/getDialog',
+      ticket: 'ticket/getActualTicket'
+    })
   },
-  computed: mapGetters({
-    files: 'file/getFiles',
-    filePreview: 'file/getFilePreview',
-    dialog: 'ticket/getDialog',
-    ticket: 'ticket/getActualTicket'
-  }),
   watch: {
     dialog: function(value) {
       this.updateFiles()

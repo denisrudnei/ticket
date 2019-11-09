@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col>
-      <v-text-field v-model="search" filled label="Pesquisar" prepend-icon="search" />
+      <v-text-field v-model="search" filled :label="$t('search')" prepend-icon="search" />
     </v-col>
     <v-col cols="12">
       <v-row>

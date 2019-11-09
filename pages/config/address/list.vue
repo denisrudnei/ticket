@@ -31,30 +31,34 @@
 export default {
   data() {
     return {
-      addresses: [],
-      headers: [
+      addresses: []
+    }
+  },
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         },
         {
-          text: 'Estado',
+          text: this.$t('state'),
           value: 'state'
         },
         {
-          text: 'Cidade',
+          text: this.$t('city'),
           value: 'city'
         },
         {
-          text: 'Rua',
+          text: this.$t('street'),
           value: 'street'
         },
         {
-          text: 'País',
+          text: this.$t('country'),
           value: 'country'
         },
         {
-          text: 'Editar',
+          text: this.$t('edit'),
           value: 'edit'
         }
       ]

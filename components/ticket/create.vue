@@ -20,7 +20,7 @@
             class="primary white--text"
             v-on="on"
           >
-            <u>A</u>ções
+            {{ $t('actions') }}
           </v-btn>
         </template>
         <v-card>
@@ -29,7 +29,7 @@
               icons-and-text
             >
               <v-tab>
-                Adicionar comentário
+                {{ $t('add_comment') }}
                 <v-icon>
                   chat
                 </v-icon>
@@ -38,7 +38,7 @@
                 <v-textarea
                   v-model="comment"
                   filled
-                  label="Comentário"
+                  :label="$t('comment')"
                 />
                 <v-btn
                   icon
@@ -51,7 +51,7 @@
                 </v-btn>
               </v-tab-item>
               <v-tab>
-                Incluir arquivo
+                {{ $t('add_file') }}
                 <v-icon>
                   attach_file
                 </v-icon>
@@ -62,7 +62,7 @@
                 />
               </v-tab-item>
               <v-tab>
-                Transferir
+                {{ $t('transfer') }}
                 <v-icon>
                   send
                 </v-icon>
@@ -76,7 +76,7 @@
                     <v-autocomplete
                       filled
                       :items="groups.map(g =>({ text: g.name, value: g }))"
-                      label="Grupo"
+                      :label="$t('group')"
                     />
                   </v-col>
                   <v-col
@@ -120,7 +120,7 @@
               filled
               :value-comparator="compare"
               :clearable="search"
-              label="Relatado por:"
+              :label="$t('opened_by')"
               append-icon="search"
               @click:append="show('openedBy', ticketComputed.openedBy)"
             />
@@ -137,7 +137,7 @@
               required
               :readonly="readOnlyData"
               filled
-              label="Usuário final afetado"
+              :label="$t('affected_user')"
               :clearable="search || editing || !readonly"
               :value-comparator="compare"
               append-icon="search"
@@ -156,7 +156,7 @@
               required
               :readonly="readOnlyData"
               filled
-              label="Analista"
+              :label="$t('analyst')"
               :clearable="search || editing || !readonly"
               :value-comparator="compare"
               append-icon="search"
@@ -177,7 +177,7 @@
               filled
               :clearable="search || editing || !readonly"
               :value-comparator="compare"
-              label="Categoria"
+              :label="$t('category')"
               append-icon="search"
               @change="changeCategory"
               @click:append="show('category', ticketComputed.category)"
@@ -197,7 +197,7 @@
               filled
               :clearable="search || editing || !readonly"
               :value-comparator="compare"
-              label="Grupo"
+              :label="$t('group')"
               append-icon="search"
               @click:append="show('group', ticketComputed.group)"
             />
@@ -216,7 +216,7 @@
               filled
               :clearable="search || editing || !readonly"
               :value-comparator="compare"
-              label="Status"
+              :label="$t('status')"
               append-icon="search"
               @click:append="show('status', ticketComputed.status)"
             />
@@ -235,7 +235,7 @@
               filled
               :clearable="search || editing || !readonly"
               :value-comparator="compare"
-              label="Prioridade"
+              :label="$t('priority')"
               append-icon="search"
               @click:append="show('priority', ticketComputed.priority)"
             />
@@ -250,7 +250,7 @@
                 pa-3
               >
                 <h3 v-if="!search">
-                  Criado em: {{ ticketComputed.created | date }}
+                  {{ $t('creation_date') }}: {{ ticketComputed.created | date }}
                 </h3>
                 <v-menu
                   v-if="search"
@@ -264,7 +264,7 @@
                     <v-text-field
                       :value="initial | date"
                       filled
-                      label="Data em que foi aberto"
+                      :label="$t('creation_date')"
                       readonly
                       v-on="on"
                     />
@@ -279,7 +279,7 @@
                 pa-3
               >
                 <h3 v-if="!search">
-                  Última modificação: {{ ticketComputed.modified | date }}
+                  {{ $t('modified_date') }}: {{ ticketComputed.modified | date }}
                 </h3>
                 <v-menu
                   v-if="search"
@@ -316,7 +316,7 @@
               required
               :readonly="readOnlyData"
               filled
-              label="Resumo"
+              :label="$t('resume')"
             />
           </v-col>
           <v-col
@@ -330,7 +330,7 @@
               required
               :readonly="readOnlyData"
               filled
-              label="Conteúdo"
+              :label="$t('content')"
             />
           </v-col>
           <v-col
@@ -342,7 +342,7 @@
               tile
               @click="save()"
             >
-              {{ !search ? 'Salvar' : 'Pesquisar' }}
+              {{ !search ? $t('save') : $t('search') }}
               <v-icon right>
                 save
               </v-icon>
@@ -353,14 +353,14 @@
               class="primary"
               @click="clearFields()"
             >
-              Limpar campos
+              {{ $t('clear_fields') }}
             </v-btn>
             <v-btn
               v-if="readOnlyData"
               class="primary white--text"
               @click="edit()"
             >
-              Editar
+              {{ $t('edit') }}
             </v-btn>
             <v-btn
               v-if="editing"
@@ -380,14 +380,14 @@
               show-arrows
             >
               <v-tab>
-                Campos
+                {{ $t('fields') }}
                 <v-icon>build</v-icon>
               </v-tab>
               <v-tab-item>
                 <Fields v-model="ticketComputed" :edit="!readOnlyData" />
               </v-tab-item>
               <v-tab>
-                Logs
+                {{ $t('logs') }}
                 <v-icon>
                   history
                 </v-icon>
@@ -396,7 +396,7 @@
                 <Logs />
               </v-tab-item>
               <v-tab>
-                Arquivos
+                {{ $t('files') }}
                 <v-icon>
                   attach_file
                 </v-icon>
@@ -405,7 +405,7 @@
                 <file-include />
               </v-tab-item>
               <v-tab>
-                Comentários
+                {{ $t('comments') }}
                 <v-icon>
                   comment
                 </v-icon>

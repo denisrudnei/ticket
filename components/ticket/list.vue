@@ -12,7 +12,7 @@
       <v-btn
         class="primary white--text"
         icon
-        title="Ver chamado"
+        :title="$t('see_ticket')"
         @click="addTicketsToEdit(item)"
       >
         <v-icon>
@@ -57,7 +57,7 @@
                 v-model="currentStatus"
                 :items="status.find(s => {return s._id === item.status._id}).allowedStatus.map(s => ({ text: s.name, value: s }))"
                 filled
-                label="Status"
+                :label="$t('status')"
               />
             </v-col>
           </v-row>

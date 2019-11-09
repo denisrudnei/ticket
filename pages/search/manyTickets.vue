@@ -13,7 +13,7 @@
     <v-col cols="8">
       <v-card>
         <v-card-title>
-          Chamados para pesquisar
+          {{ $t('tickets_to_search') }}
         </v-card-title>
         <v-card-text>
           <template v-for="ticket in ticketsNumbers">
@@ -35,7 +35,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn v-if="ticketsNumbers.length > 0" class="primary white--text" @click="ticketsNumbers = []">
-            Remover todos
+            {{ $t('remove_all') }}
             <v-icon right>
               remove
             </v-icon>
@@ -45,7 +45,7 @@
     </v-col>
     <v-col cols="12">
       <v-btn class="primary white--text" @click="search">
-        Pesquisar
+        {{ $t('search') }}
         <v-icon right>
           search
         </v-icon>
