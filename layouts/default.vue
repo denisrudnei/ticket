@@ -284,8 +284,6 @@ export default {
   methods: {
     toggleMini() {
       this.miniVariant = !this.miniVariant
-      /* eslint-disable */
-      console.log(this.miniVariant)
       localStorage.setItem('mini', this.miniVariant)
     },
     fetchUrl(item) {
