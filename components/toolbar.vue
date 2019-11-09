@@ -98,12 +98,20 @@ export default {
       default: false
     }
   },
+  mounted() {
+    const lang = localStorage.getItem('language')
+    if (lang) {
+      this.$store.commit('locale/setLocale', lang)
+      this.$i18n.locale = lang
+    }
+  },
   computed: mapGetters({
     user: 'auth/getUser',
     locales: 'locale/getLocales'
   }),
   methods: {
     updateLanguage(value) {
+      localStorage.setItem('language', value)
       this.$store.commit('locale/setLocale', value)
     },
     logout() {
