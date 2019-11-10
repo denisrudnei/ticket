@@ -2,6 +2,7 @@ fragment ticketList on Ticket {
   _id
   ticketNumber
   priority {
+    _id
     name
   }
   openedBy {

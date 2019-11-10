@@ -166,6 +166,7 @@ import AnalystList from '@/components/chat/analyst-list'
 import TicketModal from '@/components/ticket/ticket-modal'
 import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
+import editTicket from '@/graphql/subscription/ticket/editTicket.graphql'
 import hotkeyHelp from '@/components/hotkeyHelp'
 export default {
   middleware: ['adminMiddleware'],
@@ -238,6 +239,12 @@ export default {
         query: ggl(changeStatus),
         result({ data }) {
           this.$store.commit('ticket/updateTicket', data.ChangeStatus)
+        }
+      },
+      editTicket: {
+        query: ggl(editTicket),
+        result({ data }) {
+          this.$store.commit('ticket/updateTicket', data.ticket)
         }
       },
       transferToGroup: {

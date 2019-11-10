@@ -45,8 +45,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
 import CreateTicket from '@/components/ticket/create'
-
+import ticketEdit from '@/graphql/mutation/ticket/editTicket.graphql'
 export default {
   components: {
     CreateTicket
@@ -72,28 +73,25 @@ export default {
       this.$store.commit('ticket/removeFromEdit', id)
       this.setDialog()
     },
-    transformPopulatedToIds(ticket) {
-      const result = {}
-      const dontReplace = ['comments', 'logs', 'created', 'modified']
-      for (const field in ticket) {
-        if (dontReplace.includes(field)) continue
-        if (Object.prototype.hasOwnProperty.call(ticket[field], '_id')) {
-          result[field] = {
-            _id: ticket[field]._id
-          }
-        } else {
-          result[field] = ticket[field]
-        }
-      }
-      return result
-    },
     update() {
-      this.$axios
-        .put(
-          `/ticket/${this.actualTicket._id}`,
-          this.transformPopulatedToIds(this.actualTicket)
-        )
-        .then(() => {
+      this.$apollo
+        .mutate({
+          mutation: ggl(ticketEdit),
+          variables: {
+            _id: this.actualTicket._id,
+            ticket: {
+              resume: this.actualTicket.resume,
+              content: this.actualTicket.content,
+              status: this.actualTicket.status._id,
+              group: this.actualTicket.group._id,
+              category: this.actualTicket.category._id,
+              priority: this.actualTicket.priority._id,
+              affectedUser: this.actualTicket.affectedUser._id,
+              actualUser: this.actualTicket.actualUser._id
+            }
+          }
+        })
+        .then(response => {
           this.$toast.show('Atualizado', {
             duration: 1000,
             icon: 'done'

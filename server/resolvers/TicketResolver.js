@@ -62,13 +62,17 @@ const TicketResolver = {
       }
       return TicketService.create(newTicket)
     },
-    EditTicket: (_, { _id, ticket }, { req }) => {
+    EditTicket: (_, { _id, ticket }, { req, pubSub }) => {
       const userId = req.session.authUser._id
       LogService.createTicketLog(userId, {
         ...ticket,
         _id
       })
-      return TicketService.updateOne(_id, ticket)
+      const editedTicket = TicketService.updateOne(_id, ticket)
+      pubSub.publish(TicketEnum.TICKET_EDIT, {
+        EditTicket: editedTicket
+      })
+      return editedTicket
     },
     CopyTicket(_, { ticketId }, { req }) {
       const userId = req.session.authUser._id

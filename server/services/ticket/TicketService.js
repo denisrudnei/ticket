@@ -99,13 +99,14 @@ const TicketService = {
         },
         {
           $set: {
-            status: ticketBody.status._id,
-            group: ticketBody.group._id,
+            status: ticketBody.status,
+            group: ticketBody.group,
             resume: ticketBody.resume,
             content: ticketBody.content,
-            category: ticketBody.category._id,
-            actualUser: ticketBody.actualUser._id,
-            affectedUser: ticketBody.affectedUser._id
+            category: ticketBody.category,
+            actualUser: ticketBody.actualUser,
+            affectedUser: ticketBody.affectedUser,
+            priority: ticketBody.priority
           }
         }
       ).exec(async err => {

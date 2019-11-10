@@ -414,7 +414,7 @@
                 <comments />
               </v-tab-item>
               <v-tab>
-                {{$t('children')}}
+                {{ $t('children') }}
                 <v-icon>
                   account_tree
                 </v-icon>

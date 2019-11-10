@@ -76,5 +76,6 @@
   "many_tickets_per_number": "Vários tickets por número",
   "many_tickets_in_list": "Vários chamados em lista",
   "filters": "Filtros",
-  "copy_ticket": "Copiar ticket"
+  "copy_ticket": "Copiar ticket",
+  "children": "Filhos"
 }
