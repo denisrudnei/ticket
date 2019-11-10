@@ -69,6 +69,10 @@ const TicketResolver = {
         _id
       })
       return TicketService.updateOne(_id, ticket)
+    },
+    CopyTicket(_, { ticketId }, { req }) {
+      const userId = req.session.authUser._id
+      return TicketService.copyTicket(ticketId, userId)
     }
   },
   Subscription: {

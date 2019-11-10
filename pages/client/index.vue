@@ -68,11 +68,6 @@ export default {
       slas: []
     }
   },
-  watch: {
-    page(value) {
-      this.getTickets(value)
-    }
-  },
   computed: {
     ...mapGetters({
       user: 'auth/getUser'
@@ -81,6 +76,11 @@ export default {
       return this.ticketsData.filter(ticket => {
         return ticket.resume.toLowerCase().includes(this.search.toLowerCase())
       })
+    }
+  },
+  watch: {
+    page(value) {
+      this.getTickets(value)
     }
   },
   mounted() {

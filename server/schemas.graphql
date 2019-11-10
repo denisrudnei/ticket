@@ -57,6 +57,7 @@ type Mutation {
   UpdateManyPriorities(priorities: [PriorityInput!]!): [Boolean]
   CreateCategory(category: CategoryInput!): Category
   EditCategory(categoryId: ID!, category: CategoryInput!): Boolean
+  CopyTicket(ticketId: ID!): Ticket!
 }
 
 type Subscription {

@@ -20,6 +20,13 @@
         </v-icon>
       </v-btn>
     </template>
+    <template v-slot:item.copy="{ item }">
+      <v-btn class="primary white--text" icon :title="$t('copy_ticket')" @click="copyTicket(item)">
+        <v-icon>
+          file_copy
+        </v-icon>
+      </v-btn>
+    </template>
     <template v-slot:item.ticketNumber="{ item }">
       {{ item.ticketNumber }}
     </template>
@@ -102,6 +109,7 @@ import ggl from 'graphql-tag'
 import changeStatus from '@/graphql/mutation/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/mutation/ticket/transferToGroup.graphql'
 import ticketSearch from '@/graphql/query/search/ticket.graphql'
+import copyTicket from '@/graphql/mutation/ticket/copyTicket.graphql'
 export default {
   props: {
     url: {
@@ -143,6 +151,11 @@ export default {
           text: this.$t('see_ticket'),
           sortable: false,
           value: 'actions'
+        },
+        {
+          text: this.$t('copy_ticket'),
+          sortable: false,
+          value: 'copy'
         },
         {
           text: this.$t('number_of_ticket'),
@@ -330,6 +343,20 @@ export default {
           this.$toast.show('Status alterado', {
             duration: 5000
           })
+        })
+    },
+    copyTicket(ticket) {
+      this.$apollo
+        .mutate({
+          mutation: ggl(copyTicket),
+          variables: {
+            ticketId: ticket._id
+          }
+        })
+        .then(response => {
+          const ticket = response.data.ticket
+          this.$store.commit('ticket/setActualTicket', ticket)
+          this.$store.commit('ticket/setDialog', ticket._id)
         })
     },
     transferToGroup(ticket) {

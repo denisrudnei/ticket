@@ -28,6 +28,13 @@ describe('Ticket', function() {
     }
     TicketService.create(newTicket)
   })
+
+  it('Copy a ticket', async () => {
+    const user = await Analyst.findOne().exec()
+    const ticket = await Ticket.findOne().exec()
+    await TicketService.copyTicket(ticket._id, user._id)
+  })
+
   it('Get All tickets', async () => {
     const sort = {
       category: -1

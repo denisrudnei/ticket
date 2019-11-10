@@ -3,7 +3,7 @@
     <v-col>
       <v-tabs show-arrows>
         <v-tab to="/config/permissions">
-          {{$t('list')}}
+          {{ $t('list') }}
         </v-tab>
         <v-tab to="/config/permissions/analyst">
           Atribuir permissões

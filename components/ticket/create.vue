@@ -413,6 +413,15 @@
               <v-tab-item>
                 <comments />
               </v-tab-item>
+              <v-tab>
+                {{$t('children')}}
+                <v-icon>
+                  account_tree
+                </v-icon>
+              </v-tab>
+              <v-tab-item>
+                <children />
+              </v-tab-item>
             </v-tabs>
           </v-col>
         </v-row>
@@ -428,6 +437,7 @@ import Fields from '@/components/ticket/fields'
 import FileInclude from '@/components/files/include'
 import Logs from '@/components/ticket/logs'
 import Comments from '@/components/ticket/comments'
+import Children from '@/components/ticket/children'
 import compareObjectsWithId from '@/mixins/compareObjectsWithId'
 import showModal from '@/mixins/showModal'
 import create from '@/graphql/query/ticket/create.graphql'
@@ -436,7 +446,8 @@ export default {
     Fields,
     FileInclude,
     Logs,
-    Comments
+    Comments,
+    Children
   },
   filters: {
     date(value) {

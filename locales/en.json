@@ -75,5 +75,6 @@
   "profile": "Profile",
   "many_tickets_per_number": "Many tickets per number",
   "many_tickets_in_list": "Many tickets in list",
-  "filters": "Filters"
+  "filters": "Filters",
+  "copy_ticket": "Copy ticket"
 }

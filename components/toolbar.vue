@@ -63,9 +63,7 @@
         <v-card-text>
           <v-list>
             <v-list-item v-for="item in locales" :key="item.value" @click="updateLanguage(item.value)">
-              <v-list-item-text>
-                {{ item.text }}
-              </v-list-item-text>
+              {{ item.text }}
             </v-list-item>
           </v-list>
         </v-card-text>
@@ -104,6 +102,10 @@ export default {
       default: false
     }
   },
+  computed: mapGetters({
+    user: 'auth/getUser',
+    locales: 'locale/getLocales'
+  }),
   mounted() {
     const lang = localStorage.getItem('language')
     if (lang) {
@@ -111,10 +113,6 @@ export default {
       this.$i18n.locale = lang
     }
   },
-  computed: mapGetters({
-    user: 'auth/getUser',
-    locales: 'locale/getLocales'
-  }),
   methods: {
     updateLanguage(value) {
       localStorage.setItem('language', value)

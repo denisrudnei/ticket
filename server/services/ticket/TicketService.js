@@ -70,6 +70,27 @@ const TicketService = {
         })
     })
   },
+  copyTicket(ticketId, userId) {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne({
+        _id: ticketId
+      }).exec((err, ticket) => {
+        if (err) reject(err)
+        const newTicket = {
+          openedBy: userId,
+          actualUser: userId,
+          affectedUser: ticket.affectedUser,
+          resume: ticket.resume,
+          content: ticket.content,
+          status: ticket.status,
+          group: ticket.group,
+          category: ticket.category,
+          priority: ticket.priority
+        }
+        resolve(this.create(newTicket))
+      })
+    })
+  },
   updateOne(ticketId, ticketBody) {
     return new Promise((resolve, reject) => {
       Ticket.updateOne(

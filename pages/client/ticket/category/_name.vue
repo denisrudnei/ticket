@@ -4,9 +4,6 @@
       <v-col cols="12">
         <h3>Categoria selecionada: {{ category.fullName }}</h3>
       </v-col>
-    
-
-    
       <v-col cols="12" md="4">
         <v-autocomplete
           v-model="ticket.affectedUser"
@@ -86,14 +83,14 @@ export default {
   components: {
     file
   },
-  computed: mapGetters({
-    user: 'auth/getUser'
-  }),
   data() {
     return {
       ticket: {}
     }
   },
+  computed: mapGetters({
+    user: 'auth/getUser'
+  }),
   asyncData({ app, params }) {
     return app.$apollo
       .query({
