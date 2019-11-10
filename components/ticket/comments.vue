@@ -27,27 +27,27 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  data() {
-    return {
-      headers: [
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'user'
         },
         {
-          text: 'Data',
+          text: this.$t('date'),
           value: 'date'
         },
         {
-          text: 'Comentário',
+          text: this.$t('comment'),
           value: 'content'
         }
       ]
-    }
-  },
-  computed: mapGetters({
-    actualTicket: 'ticket/getActualTicket'
-  })
+    },
+    ...mapGetters({
+      actualTicket: 'ticket/getActualTicket'
+    })
+  }
 }
 </script>
 

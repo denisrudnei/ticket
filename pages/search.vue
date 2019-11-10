@@ -6,13 +6,13 @@
           Tickets
         </v-tab>
         <v-tab to="/search/manyTickets">
-          Vários chamados por número
+          {{ $t('many_tickets_per_number') }}
         </v-tab>
         <v-tab to="/search/analyst">
-          Analistas
+          {{ $t('analysts') }}
         </v-tab>
         <v-tab to="/search/category">
-          Categorias
+          {{ $t('categories') }}
         </v-tab>
       </v-tabs>
       <nuxt-child />

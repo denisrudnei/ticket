@@ -13,6 +13,7 @@
   "list": "Listar",
   "create": "Criar",
   "resume": "Resumo",
+  "date": "Data",
   "content": "Conteúdo",
   "see_ticket": "Vet ticket",
   "number_of_ticket": "Número do ticket",
@@ -21,6 +22,7 @@
   "category": "Categoria",
   "opened_by": "Aberto por",
   "analyst": "Analista",
+  "user": "Usuário",
   "actual_user": "Usuário atual",
   "affected_user": "Usuário afetado",
   "group": "Grupo",
@@ -50,6 +52,7 @@
   "save": "Salvar",
   "cancel_edit": "Cancelar edição",
   "add_comment": "Adicionar comentário",
+  "add_field": "Adicionar campo",
   "add_file": "Incluir arquivo",
   "transfer": "Transferir",
   "comment": "Comentário",
@@ -68,5 +71,9 @@
   "state": "Estado",
   "city": "Cidade",
   "street": "Rua",
-  "country": "País"
+  "country": "País",
+  "profile": "Perfil",
+  "many_tickets_per_number": "Vários tickets por número",
+  "many_tickets_in_list": "Vários chamados em lista",
+  "filters": "Filtros"
 }

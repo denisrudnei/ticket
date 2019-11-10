@@ -4,7 +4,7 @@
       cols="12"
       pa-3
     >
-      <h4>Filtros</h4>
+      <h4>{{ $t('filters') }}</h4>
       <v-row>
         <v-col
           cols="12"
@@ -15,7 +15,7 @@
             v-model="base.group"
             multiple
             filled
-            label="Grupos"
+            :label="$t('groups')"
             :items="groups.map(g => {return {text: g.name, value: g}})"
           />    
         </v-col>
@@ -28,7 +28,7 @@
             v-model="base.status"
             multiple
             filled
-            label="Status"
+            :label="$t('status')"
             :items="status.map(g => {return {text: g.name, value: g}})"
           />    
         </v-col>
@@ -41,7 +41,7 @@
             v-model="base.openedBy"
             multiple
             filled
-            label="Aberto por"
+            :label="$t('opened_by')"
             :items="analysts.map(g => {return {text: g.name, value: g}})"
           />    
         </v-col>

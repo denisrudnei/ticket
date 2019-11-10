@@ -4,7 +4,7 @@
       <v-textarea
         v-model="ticketsText"
         filled
-        label="Vários chamados em lista"
+        :label="$t('many_tickets_in_list')"
         append-icon="add"
         @click:append="addOneNumber(ticketsText)"
         @keyup="update"

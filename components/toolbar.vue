@@ -48,7 +48,7 @@
         settings_applications
       </v-icon>
     </v-btn>
-    <v-menu :close-on-content-click="false">
+    <v-menu :close-on-content-click="false" :nudge-width="250">
       <template v-slot:activator="{on}">
         <v-btn text class="primary white--text" :title="$t('language')" v-on="on">
           <v-icon>
@@ -61,7 +61,13 @@
           {{ $t('language') }}
         </v-card-title>
         <v-card-text>
-          <v-select v-model="$i18n.locale" :placeholder="$t('language')" filled :items="locales" @change="updateLanguage" />
+          <v-list>
+            <v-list-item v-for="item in locales" :key="item.value" @click="updateLanguage(item.value)">
+              <v-list-item-text>
+                {{ item.text }}
+              </v-list-item-text>
+            </v-list-item>
+          </v-list>
         </v-card-text>
       </v-card>
     </v-menu>
@@ -113,6 +119,7 @@ export default {
     updateLanguage(value) {
       localStorage.setItem('language', value)
       this.$store.commit('locale/setLocale', value)
+      this.$i18n.locale = value
     },
     logout() {
       this.$store.commit('logout/setLogout', true)

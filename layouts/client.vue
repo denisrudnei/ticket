@@ -15,14 +15,14 @@
             <v-icon>book</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            Abrir chamado
+            {{ $t('create_ticket') }}
           </v-list-item-content>
         </v-list-item>
         <v-list-item to="/client/profile">
           <v-list-item-action>
             <v-icon>person</v-icon>
           </v-list-item-action>
-          <v-list-item-content>Perfil</v-list-item-content>
+          <v-list-item-content>{{ $t('profile') }}</v-list-item-content>
         </v-list-item>
         <v-list-item @click="logout">
           <v-list-item-action>

@@ -13,6 +13,7 @@
   "list": "List",
   "create": "Create",
   "resume": "Resume",
+  "date": "Date",
   "content": "Content",
   "see_ticket": "See ticket",
   "number_of_ticket": "Number of ticket",
@@ -20,6 +21,7 @@
   "status": "Status",
   "category": "Category",
   "analyst": "Analyst",
+  "user": "User",
   "opened_by": "Opened by",
   "actual_user": "Actual user",
   "affected_user": "Affected user",
@@ -50,6 +52,7 @@
   "save": "Save",
   "cancel_edit": "Cancel edition",
   "add_comment": "Add comment",
+  "add_field": "Add field",
   "add_file": "Include file",
   "transfer": "Transfer",
   "comment": "Comment",
@@ -68,5 +71,9 @@
   "state": "State",
   "city": "City",
   "street": "Street",
-  "country": "Country"
+  "country": "Country",
+  "profile": "Profile",
+  "many_tickets_per_number": "Many tickets per number",
+  "many_tickets_in_list": "Many tickets in list",
+  "filters": "Filters"
 }

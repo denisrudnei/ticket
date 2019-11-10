@@ -14,7 +14,7 @@
         />
         <v-text-field
           v-model="category.name"
-          placeholder="Nome"
+          :placeholder="this.$t('name')"
           filled
         />
         <v-autocomplete
@@ -45,7 +45,7 @@
             class="primary white--text"
             @click="addField()"
           >
-            Acicionar campo
+            {{ $t('add_field') }}
           </v-btn>
         </v-col>
         <v-col
@@ -99,7 +99,7 @@
           class="primary white--text"
           @click="save()"
         >
-          Salvar
+          {{ $t('save') }}
         </v-btn>
       </v-form>
     </v-col>

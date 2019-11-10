@@ -45,31 +45,31 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  data() {
-    return {
-      headers: [
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Usuário',
+          text: this.$t('user'),
           value: 'user'
         },
         {
-          text: 'Data',
+          text: this.$t('date'),
           value: 'date'
         },
         {
-          text: 'Status',
+          text: this.$t('status'),
           value: 'status.name'
         },
         {
-          text: 'Grupo',
+          text: this.$t('group'),
           value: 'group.name'
         }
       ]
-    }
+    },
+    ...mapGetters({
+      ticket: 'ticket/getActualTicket'
+    })
   },
-  computed: mapGetters({
-    ticket: 'ticket/getActualTicket'
-  }),
   methods: {
     sameGroup(index, group) {
       if (index === 0) return true

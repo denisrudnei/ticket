@@ -22,19 +22,19 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  data() {
-    return {
-      headers: [
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         }
       ]
-    }
+    },
+    ...mapGetters({
+      analysts: 'analyst/getAnalysts'
+    })
   },
-  computed: mapGetters({
-    analysts: 'analyst/getAnalysts'
-  }),
   created() {}
 }
 </script>

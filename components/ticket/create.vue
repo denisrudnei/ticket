@@ -368,7 +368,7 @@
               class="primary white--text"
               @click="cancelEdit()"
             >
-              Cancelar edição
+              {{ $t('cancel_edit') }}
             </v-btn>
           </v-col>
           <v-col
