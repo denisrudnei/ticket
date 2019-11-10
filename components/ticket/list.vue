@@ -294,6 +294,7 @@ export default {
       await this.$apollo
         .query({
           query: ggl(ticketSearch),
+          fetchPolicy: 'network-only',
           variables: {
             sortBy: query.sortBy || 'created',
             page: query.page || 1,
@@ -351,7 +352,12 @@ export default {
           mutation: ggl(copyTicket),
           variables: {
             ticketId: ticket._id
-          }
+          },
+          refetchQueries: [
+            {
+              query: ggl(ticketSearch)
+            }
+          ]
         })
         .then(response => {
           const ticket = response.data.ticket
