@@ -77,5 +77,6 @@
   "many_tickets_in_list": "Many tickets in list",
   "filters": "Filters",
   "copy_ticket": "Copy ticket",
-  "children": "Children"
+  "children": "Children",
+  "confirm_copy": "Do you want to create a copy of this ticket?"
 }

@@ -104,6 +104,7 @@
           <ticket-modal />
           <logout />
           <hotkey-help />
+          <confirm-copy @update="copyTicket" />
         </template>
         <v-speed-dial
           v-if="logged && ticketsToEdit.length > 0"
@@ -164,9 +165,12 @@ import TicketTree from '@/components/ticket/tree'
 import Logout from '@/components/logout'
 import AnalystList from '@/components/chat/analyst-list'
 import TicketModal from '@/components/ticket/ticket-modal'
+import ConfirmCopy from '@/components/ticket/confirmCopy'
 import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
 import editTicket from '@/graphql/subscription/ticket/editTicket.graphql'
+import copyTicket from '@/graphql/mutation/ticket/copyTicket.graphql'
+import ticketSearch from '@/graphql/query/search/ticket.graphql'
 import hotkeyHelp from '@/components/hotkeyHelp'
 export default {
   middleware: ['adminMiddleware'],
@@ -178,6 +182,7 @@ export default {
     Logout,
     AnalystList,
     TicketModal,
+    ConfirmCopy,
     hotkeyHelp
   },
   mixins: [afterLogin],
@@ -277,23 +282,6 @@ export default {
       'ALT + N | Notificações',
       'ALT + O | Abrir novo chamado'
     ])
-    // this.$socket.on('updateTicket', ticket => {
-    //   // TODO
-    //   this.$store.dispatch('ticket/updateTree')
-    //   this.$store.commit('ticket/updateTicket', ticket)
-    // })
-    // this.$socket.on('notifyTicketUpdate', notification => {
-    //   if (this.user._id === notification.user) return
-    //   this.$store.dispatch('notification/ticketsToEdit/notify', notification)
-    // })
-    // this.$socket.on('addTicket', ticket => {
-    //   // TODO
-    //   this.$store.dispatch('ticket/updateTree')
-    //   this.$store.commit('ticket/insertTicket', ticket)
-    // })
-    // this.$socket.on('paths/updatePath', paths => {
-    //   this.$store.dispatch('ticket/updateTree')
-    // })
   },
   methods: {
     toggleMini() {
@@ -306,6 +294,26 @@ export default {
     setDialog(ticket) {
       this.$store.commit('ticket/setActualTicket', ticket)
       this.$store.commit('ticket/setDialog', ticket._id)
+    },
+    copyTicket(ticket) {
+      this.$apollo
+        .mutate({
+          mutation: ggl(copyTicket),
+          variables: {
+            ticketId: ticket._id
+          },
+          refetchQueries: [
+            {
+              query: ggl(ticketSearch)
+            }
+          ]
+        })
+        .then(response => {
+          const ticket = response.data.ticket
+          this.$store.commit('ticket/setActualTicket', ticket)
+          this.$store.commit('ticket/setDialog', ticket._id)
+          this.$store.commit('ticket/setConfirmCopy', false)
+        })
     }
   }
 }

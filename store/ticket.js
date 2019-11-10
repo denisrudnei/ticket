@@ -2,6 +2,8 @@ import actualTicket from '@/graphql/query/ticket/actualTicket.graphql'
 
 export const state = () => ({
   tickets: [],
+  confirmCopy: false,
+  ticketToCopy: {},
   modalTickets: [],
   search: [],
   dialog: '',
@@ -14,6 +16,12 @@ export const state = () => ({
 })
 
 export const getters = {
+  getConfirmCopy(state) {
+    return state.confirmCopy
+  },
+  getTicketToCopy(state) {
+    return state.ticketToCopy
+  },
   getTickets(state) {
     return state.tickets
   },
@@ -47,6 +55,12 @@ export const getters = {
 }
 
 export const mutations = {
+  setConfirmCopy(state, confirmCopy) {
+    state.confirmCopy = confirmCopy
+  },
+  setTicketToCopy(state, ticket) {
+    state.ticketToCopy = ticket
+  },
   setActualTicket(state, ticket) {
     state.actualTicket = ticket
   },
