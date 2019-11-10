@@ -63,7 +63,7 @@ type Mutation {
 type Subscription {
   TransferToGroup: Ticket!,
   ChangeStatus: Ticket!,
-  EditTicket: Ticket!
+  EditTicket(tickets: [ID!]!): Ticket!
   NewMessage(to: ID!): Message!
   NewPath(userId: ID!): PathTree!
   RemovePath(userId: ID!): ID!

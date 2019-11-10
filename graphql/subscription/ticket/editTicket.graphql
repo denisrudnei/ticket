@@ -1,6 +1,6 @@
 #import "@/graphql/fragments/ticketList.graphql"
-subscription {
-  ticket: EditTicket {
+subscription EditTicket($tickets: [ID!]!) {
+  ticket: EditTicket(tickets: $tickets) {
     ...ticketList
   }
 }

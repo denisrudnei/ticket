@@ -1,3 +1,4 @@
+const { withFilter } = require('graphql-yoga')
 const TicketService = require('../services/ticket/TicketService')
 const TicketEnum = require('../enums/TicketEnum')
 const LogService = require('../services/ticket/LogService')
@@ -91,9 +92,16 @@ const TicketResolver = {
       }
     },
     EditTicket: {
-      subscribe: (_, __, { pubSub }) => {
-        return pubSub.asyncIterator(TicketEnum.TICKET_EDIT)
-      }
+      subscribe: withFilter(
+        (_, __, { pubSub }) => {
+          return pubSub.asyncIterator(TicketEnum.TICKET_EDIT)
+        },
+        async (payload, { tickets }) => {
+          const { EditTicket } = await payload
+          const value = await EditTicket
+          return tickets.includes(value._id.toString())
+        }
+      )
     }
   }
 }

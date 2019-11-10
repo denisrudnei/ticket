@@ -243,6 +243,13 @@ export default {
       },
       editTicket: {
         query: ggl(editTicket),
+        variables() {
+          return {
+            tickets: this.tickets.map(t => {
+              return t._id
+            })
+          }
+        },
         result({ data }) {
           this.$store.commit('ticket/updateTicket', data.ticket)
         }
