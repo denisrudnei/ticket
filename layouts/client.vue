@@ -1,13 +1,20 @@
 <template>
   <v-app>
-    <v-navigation-drawer fixed permanent app>
+    <v-app-bar app fixed clipped-left class="primary">
+      <v-btn to="/client" class="primary white--text" text icon exact>
+        <v-icon>home</v-icon>
+      </v-btn>
+      <v-spacer />
+      <language />
+    </v-app-bar>
+    <v-navigation-drawer fixed permanent app clipped>
       <v-list>
         <v-list-item to="/client" exact>
           <v-list-item-action>
             <v-icon>home</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            Página inicial
+            {{ $t('home') }}
           </v-list-item-content>
         </v-list-item>
         <v-list-item to="/client/ticket/open">
@@ -28,7 +35,7 @@
           <v-list-item-action>
             <v-icon>exit_to_app</v-icon>
           </v-list-item-action>
-          <v-list-item-content>Deslogar</v-list-item-content>
+          <v-list-item-content>{{ $t('logout') }}</v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -40,16 +47,18 @@
           </v-col>
         </v-row>
       </v-container>
+      <logout v-if="logged" />
     </v-content>
-    <logout v-if="logged" />
   </v-app>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Language from '@/components/language'
 import logout from '@/components/logout'
 export default {
   components: {
+    Language,
     logout
   },
   computed: mapGetters({

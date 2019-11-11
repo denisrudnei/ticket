@@ -48,27 +48,7 @@
         settings_applications
       </v-icon>
     </v-btn>
-    <v-menu :close-on-content-click="false" :nudge-width="250">
-      <template v-slot:activator="{on}">
-        <v-btn text class="primary white--text" :title="$t('language')" v-on="on">
-          <v-icon>
-            language
-          </v-icon>
-        </v-btn>        
-      </template>
-      <v-card>
-        <v-card-title>
-          {{ $t('language') }}
-        </v-card-title>
-        <v-card-text>
-          <v-list>
-            <v-list-item v-for="item in locales" :key="item.value" @click="updateLanguage(item.value)">
-              {{ item.text }}
-            </v-list-item>
-          </v-list>
-        </v-card-text>
-      </v-card>
-    </v-menu>
+    <language />
     <v-btn
       v-if="logged"
       title="Fazer logoff"
@@ -87,10 +67,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import Notification from '@/components/notification'
-
+import Language from '@/components/language'
 export default {
   components: {
-    Notification
+    Notification,
+    Language
   },
   props: {
     app: {
@@ -103,8 +84,7 @@ export default {
     }
   },
   computed: mapGetters({
-    user: 'auth/getUser',
-    locales: 'locale/getLocales'
+    user: 'auth/getUser'
   }),
   mounted() {
     const lang = localStorage.getItem('language')
@@ -114,11 +94,6 @@ export default {
     }
   },
   methods: {
-    updateLanguage(value) {
-      localStorage.setItem('language', value)
-      this.$store.commit('locale/setLocale', value)
-      this.$i18n.locale = value
-    },
     logout() {
       this.$store.commit('logout/setLogout', true)
     }

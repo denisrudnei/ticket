@@ -1,5 +1,5 @@
 {
-  "home": "home",
+  "home": "Home",
   "language": "Language",
   "configurations": "Configuration",
   "login": "Login",
@@ -78,5 +78,6 @@
   "filters": "Filters",
   "copy_ticket": "Copy ticket",
   "children": "Children",
-  "confirm_copy": "Do you want to create a copy of this ticket?"
+  "confirm_copy": "Do you want to create a copy of this ticket?",
+  "logout": "Log out"
 }

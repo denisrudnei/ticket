@@ -1,5 +1,5 @@
 {
-  "home": "home",
+  "home": "Início",
   "language": "Linguagem",
   "configurations": "Configurações",
   "login": "Logar",
@@ -78,5 +78,6 @@
   "filters": "Filtros",
   "copy_ticket": "Copiar ticket",
   "children": "Filhos",
-  "confirm_copy": "Deseja criar uma cópia deste ticket?"
+  "confirm_copy": "Deseja criar uma cópia deste ticket?",
+  "logout": "Deslogar"
 }
