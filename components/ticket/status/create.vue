@@ -50,7 +50,7 @@
         class="primary white--text"
         @click="save()"  
       >
-        Salvar
+        {{ $t('save') }}
       </v-btn>
     </v-col>
   </v-row>

@@ -7,20 +7,20 @@
       <v-form>
         <v-text-field
           v-model="analyst.name"
-          placeholder="Nome"
+          :placeholder="$t('name')"
           filled
         />
         <v-text-field
           v-model="analyst.email"
-          placeholder="Email"
+          :placeholder="$t('name')"
           filled
         />
         <v-select
           v-model="analyst.group"
           :items="groups.map(g => { return { text: g.name, value: g } })"
-          placeholder="Grupo"
+          :placeholder="$t('group')"
           filled
-          label="Grupo"
+          :label="$t('group')"
         />
         <v-btn
           class="primary white--text"

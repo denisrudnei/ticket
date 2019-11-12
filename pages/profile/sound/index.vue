@@ -49,7 +49,7 @@
     </v-col>
     <v-col cols="12" pa-3>
       <v-btn class="primary" @click="save()">
-        Salvar
+        {{ $t('save') }}
         <v-icon right>
           save
         </v-icon>

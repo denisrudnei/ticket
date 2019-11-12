@@ -8,7 +8,7 @@
         v-model="role.name"
         label="Nome [não pode ser alterado]"
         filled
-        placeholder="Nome"
+        :placeholder="$t('name')"
         readonly
       />
     </v-col>
@@ -18,7 +18,7 @@
     >
       <v-text-field
         v-model="role.description"
-        label="Descrição"
+        :label="$t('description')"
         filled
         placeholder="Descrição"
       />
@@ -31,7 +31,7 @@
         class="primary white--text"
         @click="save()"
       >
-        Salvar
+        {{ $t('save') }}
         <v-icon
           right
         >

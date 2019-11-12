@@ -6,7 +6,7 @@
           <v-img :src="user.picture" alt="" />
         </v-col>
         <v-col cols="12" md="8">
-          <v-text-field filled label="Nome" :value="user.name" readonly />
+          <v-text-field filled :label="$t('name')" :value="user.name" readonly />
           <v-autocomplete filled label="Local" :value="user.address" :items="addresses.map(a => {return {text: a.name, value: a}})" />
           <v-file-input filled label="Trocar imagem" />
         </v-col>
@@ -17,7 +17,7 @@
         <v-icon left>
           save
         </v-icon>
-        Salvar
+        {{ $t('save') }}
       </v-btn>
     </v-col>
   </v-row>

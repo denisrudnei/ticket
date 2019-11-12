@@ -32,28 +32,28 @@ import remove from '@/graphql/mutation/profile/path/removePath.graphql'
 import list from '@/graphql/query/profile/path/list.graphql'
 import getTree from '@/graphql/query/profile/path/tree.graphql'
 export default {
-  data() {
-    return {
-      headers: [
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         },
         {
-          text: 'Campo',
+          text: this.$t('field'),
           value: 'property'
         },
         {
-          text: 'Ações',
+          text: this.$t('actions'),
           value: 'actions'
         }
       ]
-    }
+    },
+    ...mapGetters({
+      user: 'auth/getUser',
+      tree: 'ticket/getTree'
+    })
   },
-  computed: mapGetters({
-    user: 'auth/getUser',
-    tree: 'ticket/getTree'
-  }),
   asyncData({ app }) {
     return app.$apollo
       .query({

@@ -17,7 +17,7 @@
                   </nuxt-link>
                 </v-col>
                 <v-col>
-                  Número do chamado: {{ ticket.ticketNumber }}
+                  {{ $t('number_of_ticket') }}: {{ ticket.ticketNumber }}
                 </v-col>
                 <v-col cols="12">
                   <v-progress-linear striped height="15" :value="sla(ticket._id)" color="black">
@@ -25,14 +25,14 @@
                   </v-progress-linear>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field readonly label="Status" :value="ticket.status.name" filled />
-                  <v-text-field readonly label="Grupo atual" :value="ticket.group.name" filled />
-                  <v-text-field filled :value="ticket.created | date" label="Criado em" />
-                  <v-text-field filled :value="ticket.modified | date" label="Modificado em" />
+                  <v-text-field readonly :label="$t('status')" :value="ticket.status.name" filled />
+                  <v-text-field readonly :label="$t('actual_group')" :value="ticket.group.name" filled />
+                  <v-text-field filled :value="ticket.created | date" :label="$t('creation_date')" />
+                  <v-text-field filled :value="ticket.modified | date" :label="$t('modified_date')" />
                 </v-col>
                 <v-col cols="12">
                   <v-btn :to="`/client/ticket/view/${ticket._id}`" block tile>
-                    Ver detalhes
+                    {{ $t('see_details') }}
                     <v-icon right>
                       search
                     </v-icon>

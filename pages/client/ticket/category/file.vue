@@ -1,6 +1,6 @@
 <template>
   <div>
-    Incluir arquivo
+    {{ $t('add_file') }}}
   </div>
 </template>
 

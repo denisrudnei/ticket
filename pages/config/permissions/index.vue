@@ -40,19 +40,19 @@
 import ggl from 'graphql-tag'
 import RoleList from '@/graphql/query/role/list.graphql'
 export default {
-  data() {
-    return {
-      headers: [
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         },
         {
-          text: 'Descrição',
+          text: this.$t('description'),
           value: 'description'
         },
         {
-          text: 'Ações',
+          text: this.$t('actions'),
           value: 'actions'
         }
       ]

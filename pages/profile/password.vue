@@ -32,7 +32,7 @@
           class="primary white--text"
           @click="resetPassword()"
         >
-          Salvar
+          {{ $t('save') }}
           <v-icon
             right
           >

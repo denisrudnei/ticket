@@ -9,12 +9,11 @@
       app
     >
       <v-list>
-        <v-list-item>
+        <v-list-item @click.stop="toggleMini">
           <v-list-item-action>
             <v-btn
               v-if="logged"
               icon
-              @click.stop="toggleMini"
             >
               <v-icon>
                 {{ miniVariant ? 'chevron_right' : 'chevron_left' }}

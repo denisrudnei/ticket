@@ -27,7 +27,7 @@
       <v-icon left>
         save
       </v-icon>
-      Salvar
+      {{ $t('save') }}
     </v-btn>
   </v-row>
 </template>

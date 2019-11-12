@@ -142,10 +142,14 @@ import list from '@/graphql/query/config/group/list.graphql'
 export default {
   data() {
     return {
-      currentAnalyst: undefined,
-      headers: [
+      currentAnalyst: undefined
+    }
+  },
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         },
         {
@@ -153,20 +157,20 @@ export default {
           value: 'length'
         },
         {
-          text: 'Ações',
+          text: this.$t('actions'),
           value: 'actions'
         },
         {
-          text: 'Editar',
+          text: this.$t('edit'),
           value: 'edit'
         }
       ]
-    }
+    },
+    ...mapGetters({
+      groups: 'group/getGroups',
+      analysts: 'analyst/getAnalysts'
+    })
   },
-  computed: mapGetters({
-    groups: 'group/getGroups',
-    analysts: 'analyst/getAnalysts'
-  }),
   asyncData({ app, store }) {
     return app.$apollo
       .query({

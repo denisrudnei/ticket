@@ -79,5 +79,7 @@
   "copy_ticket": "Copiar ticket",
   "children": "Filhos",
   "confirm_copy": "Deseja criar uma cópia deste ticket?",
-  "logout": "Deslogar"
+  "logout": "Deslogar",
+  "see_details": "Ver detalhes",
+  "actual_group": "Grupo atual"
 }

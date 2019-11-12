@@ -21,7 +21,7 @@
     </v-col>
     <v-col>
       <v-btn class="primary white--text" @click="update">
-        Salvar
+        {{ $t('save') }}
         <v-icon>
           save
         </v-icon>

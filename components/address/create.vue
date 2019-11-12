@@ -9,7 +9,7 @@
         <v-col
           cols="12"
         >
-          <v-text-field v-model="address.name" label="Nome" filled />
+          <v-text-field v-model="address.name" :label="$t('name')" filled />
         </v-col>
         <v-col
           cols="12"
@@ -113,7 +113,7 @@
         >
           save
         </v-icon>
-        Salvar
+        {{ $t('save') }}
       </v-btn>
     </v-col>
   </v-row>

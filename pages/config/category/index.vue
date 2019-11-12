@@ -35,9 +35,14 @@
 export default {
   data() {
     return {
-      headers: [
+      items: []
+    }
+  },
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         },
         {
@@ -49,15 +54,14 @@ export default {
           value: 'children'
         },
         {
-          text: 'Grupo',
+          text: this.$t('group'),
           value: 'group'
         },
         {
-          text: 'Editar',
+          text: this.$t('edit'),
           value: 'edit'
         }
-      ],
-      items: []
+      ]
     }
   },
   created() {

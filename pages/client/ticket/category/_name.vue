@@ -62,7 +62,7 @@
           </v-col>
         </v-tab-item>
         <v-tab>
-          Incluir arquivo
+          {{ $t('add_file') }}}
         </v-tab>
         <v-tab-item>
           <file />

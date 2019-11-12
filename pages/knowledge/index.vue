@@ -12,23 +12,23 @@ export default {
   components: {
     KnowledgeList
   },
-  data() {
-    return {
-      headers: [
+  computed: {
+    headers() {
+      return [
         {
           text: 'Id',
           value: 'id'
         },
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         },
         {
-          text: 'Data de criação',
+          text: this.$t('creation_date'),
           value: 'created'
         },
         {
-          text: 'Status',
+          text: this.$t('status'),
           value: 'status'
         }
       ]

@@ -79,27 +79,31 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      selected: '',
-      headers: [
+      selected: ''
+    }
+  },
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         },
         {
-          text: 'Role',
+          text: this.$t('role'),
           value: 'role'
         },
         {
-          text: 'Ações',
+          text: this.$t('actions'),
           value: 'actions'
         }
       ]
-    }
+    },
+    ...mapGetters({
+      roles: 'role/getRoles',
+      user: 'auth/getUser'
+    })
   },
-  computed: mapGetters({
-    roles: 'role/getRoles',
-    user: 'auth/getUser'
-  }),
   asyncData({ $axios }) {
     return $axios.get('/config/analyst').then(response => {
       return {

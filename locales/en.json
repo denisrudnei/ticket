@@ -79,5 +79,7 @@
   "copy_ticket": "Copy ticket",
   "children": "Children",
   "confirm_copy": "Do you want to create a copy of this ticket?",
-  "logout": "Log out"
+  "logout": "Log out",
+  "see_details": "See details",
+  "actual_group": "Actual group"
 }

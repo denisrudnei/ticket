@@ -26,15 +26,15 @@
 
 <script>
 export default {
-  data() {
-    return {
-      headers: [
+  computed: {
+    headers() {
+      return [
         {
-          text: 'Nome',
+          text: this.$t('name'),
           value: 'name'
         },
         {
-          text: 'Editar',
+          text: this.$t('edit'),
           value: 'edit'
         }
       ]
