@@ -111,7 +111,7 @@
           >
             delete
           </v-icon>
-          Remover imagem
+          {{ $t('remove_image') }}
         </v-btn>
         <input ref="profileImage" type="file" style="display: none" accept="image/*" @change="updateImage()">
       </v-col>
@@ -128,7 +128,7 @@
       class="primary white--text"
       @click="save()"
     >
-      Salvar configurações
+      {{ $t('save_configurations') }}
     </v-btn>
   </v-form>
 </template>

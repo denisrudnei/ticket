@@ -39,7 +39,7 @@
           <v-icon left>
             lock
           </v-icon>
-          Senha
+          {{ $t('password') }}
         </v-tab>
       </v-tabs>
       <nuxt-child />

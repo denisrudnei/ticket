@@ -4,7 +4,7 @@
       <v-select
         v-model="selected"
         filled
-        :items="paths.map(v => ({text: v.objectName, value: v}))"
+        :items="paths.map(v => ({text: $t(v.objectName), value: v}))"
       />
     </v-col>
     <v-col cols="4" pa-3>
@@ -12,7 +12,7 @@
         v-model="selected.property"
         :disabled="selected.options <= 0"
         filled
-        :items="selected.options.map(v => ({text: v, value: v}))"
+        :items="selected.options.map(v => ({text: $t(v), value: v}))"
       />
     </v-col>
     <v-col cols="4" pa-3>

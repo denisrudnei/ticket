@@ -81,5 +81,8 @@
   "confirm_copy": "Do you want to create a copy of this ticket?",
   "logout": "Log out",
   "see_details": "See details",
-  "actual_group": "Actual group"
+  "actual_group": "Actual group",
+  "save_configurations": "Save configurations",
+  "save_configurations_locally":"Save configurations locally",
+  "save_new_password": "Save new password"
 }

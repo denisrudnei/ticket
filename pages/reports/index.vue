@@ -102,7 +102,7 @@
         class="primary"
         @click="save()"
       >
-        Salvar configurações localmente
+        {{ $t('save_configurations_locally') }}
         <v-icon
           right
         >

@@ -1,8 +1,8 @@
 <template>
   <v-form>
-    <v-text-field v-model="user.password" solo placeholder="Nova senha" type="password" />
+    <v-text-field v-model="user.password" solo :placeholder="$t('new_password')" type="password" />
     <v-btn class="primary white--text" @click="redefine()">
-      Salvar nova senha
+      {{ $t('save_new_password') }}
       <v-icon right>
         lock_open
       </v-icon>
