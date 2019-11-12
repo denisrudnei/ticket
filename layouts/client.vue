@@ -1,10 +1,9 @@
 <template>
   <v-app>
-    <v-app-bar app fixed clipped-left class="primary">
+    <v-app-bar app fixed clipped-left class="primary" flat>
       <v-btn to="/client" class="primary white--text" text icon exact>
         <v-icon>home</v-icon>
       </v-btn>
-      <v-text-field />
       <v-spacer />
       <language />
     </v-app-bar>
