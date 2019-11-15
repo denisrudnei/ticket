@@ -7,7 +7,7 @@
       <v-card-text>
         <v-list>
           <v-list-item v-for="(hotkey, index) in hotkeys" :key="index">
-            {{ hotkey }}
+            {{ $t(hotkey) }}
           </v-list-item>
         </v-list>
       </v-card-text>

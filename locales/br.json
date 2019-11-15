@@ -84,5 +84,8 @@
   "actual_group": "Grupo atual",
   "save_configurations": "Salvar configurações",
   "save_configurations_locally":"Salvar configurações localmente",
-  "save_new_password": "Salvar nova senha"
+  "save_new_password": "Salvar nova senha",
+  "hotkey": {
+    "profile": "ALT + P | Perfil"
+  }
 }

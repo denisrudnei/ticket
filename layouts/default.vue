@@ -275,7 +275,7 @@ export default {
   },
   created() {
     this.$store.commit('hotkeys/setHotkeys', [
-      'ALT + P | Perfil',
+      'hotkey.profile',
       'ALT + B | Base de conhecimento',
       'ALT + C | Configurações',
       'ALT + N | Notificações',
