@@ -1,6 +1,6 @@
-const GroupService = require('../../server/services/ticket/GroupService')
-const Analyst = require('../../server/models/Analyst')
-const Group = require('../../server/models/ticket/Group')
+import GroupService from '../../server/services/ticket/GroupService'
+import Analyst from '../../server/models/Analyst'
+import Group from '../../server/models/ticket/Group'
 
 describe('Groups', () => {
   it('Get all groups', async () => {
@@ -8,9 +8,9 @@ describe('Groups', () => {
   })
 
   it('Create new Group', async () => {
-    const group = {
+    const group = new Group({
       name: 'Test group'
-    }
+    })
     await GroupService.create(group)
   })
 

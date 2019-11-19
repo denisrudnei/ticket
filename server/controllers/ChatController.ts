@@ -1,43 +1,40 @@
-const ChatService = require('../services/ChatService')
+import ChatService from '../services/ChatService'
+import express from 'express'
+import { IAnalyst } from '../models/Analyst'
 
-module.exports = {
-  createMessage: (req, res) => {
+export default {
+  createMessage: (req: express.Request, res: express.Response) => {
     const toId = req.body.to._id
-    const fromId = req.session.authUser._id
+    const fromId = req.session!.authUser._id
     const content = req.body.content
     ChatService.addMessage(fromId, toId, content)
       .then(messageToSend => {
-        // io.emit(`message/${req.body.to._id}`, req.body)
         return res.status(200).json(messageToSend)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  changeStatus: (req, res) => {
-    const userId = req.session.authUser._id
+  changeStatus: (req: express.Request, res: express.Response) => {
+    const userId = req.session!.authUser._id
     ChatService.changeStatus(userId, req.body.status)
       .then(() => {
-        /* io.emit('chat/status/update', {
-          id: userId,
-          status: req.body.status
-        }) */
         return res.sendStatus(201)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  getMessage: (req, res) => {
-    const fromId = req.session.authUser._id
-    const toId = req.params.user
+  getMessage: (req: express.Request, res: express.Response) => {
+    const fromId = req.session!.authUser._id
+    const toId = req.params.user as IAnalyst['_id']
     ChatService.get(fromId, toId)
       .then(messages => {
         return res.status(200).json(messages)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   }

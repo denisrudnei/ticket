@@ -1,20 +1,20 @@
-const Role = require('../models/Role')
-const CheckACL = require('../models/CheckACL')
-const Analyst = require('../models/Analyst')
+import Role, { IRole } from '../models/Role'
+import CheckACL from '../models/CheckACL'
+import Analyst, { IAnalyst } from '../models/Analyst'
 
-const RoleService = {
-  getRoles() {
+class RoleService {
+  getRoles(): Promise<IRole[]> {
     return new Promise((resolve, reject) => {
-      CheckACL.checkDb(err => {
+      CheckACL.checkDb((err: Error) => {
         if (err) return reject(err)
       })
-      Role.find({}).exec((err, roles) => {
+      Role.find({}).exec((err: Error, roles: IRole[]) => {
         if (err) return reject(err)
         return resolve(roles)
       })
     })
-  },
-  updateRole(roleId, role) {
+  }
+  updateRole(roleId: IRole['_id'], role: IRole): Promise<void> {
     return new Promise((resolve, reject) => {
       Role.updateOne(
         {
@@ -25,13 +25,13 @@ const RoleService = {
             description: role.description
           }
         }
-      ).exec(err => {
+      ).exec((err: Error) => {
         if (err) return reject(err)
         return resolve()
       })
     })
-  },
-  setAnalystRole(analystId, roleName) {
+  }
+  setAnalystRole(analystId: IAnalyst['_id'], roleName: string): Promise<void> {
     return new Promise((resolve, reject) => {
       Analyst.updateOne(
         {
@@ -42,7 +42,7 @@ const RoleService = {
             role: roleName
           }
         }
-      ).exec(err => {
+      ).exec((err: Error) => {
         if (err) return reject(err)
         return resolve()
       })
@@ -50,4 +50,4 @@ const RoleService = {
   }
 }
 
-module.exports = RoleService
+export default new RoleService()

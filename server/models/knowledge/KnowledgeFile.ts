@@ -1,6 +1,11 @@
-const { Schema, model, models } = require('mongoose')
+import { Schema, model, models, Document } from 'mongoose'
 
-const KnowledgeFileSchema = new Schema({
+export interface IKnowledgeFile extends Document {
+  name: string;
+  url: string;
+}
+
+const KnowledgeFileSchema: Schema<IKnowledgeFile> = new Schema({
   name: {
     type: String,
     required: true
@@ -20,5 +25,5 @@ KnowledgeFileSchema.set('toJSON', {
   getters: true
 })
 
-module.exports =
+export default
   models.KnowledgeFile || model('KnowledgeFile', KnowledgeFileSchema)

@@ -1,4 +1,19 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
+import { ICategory } from '../ticket/Category'
+import { IGroup } from '../ticket/Group'
+import { IStatus } from '../ticket/Status'
+import { IKnowledgeFile } from './KnowledgeFile'
+
+export interface IKnowledge extends Document {
+  name: string;
+  created: Date;
+  category: ICategory['_id'];
+  group: IGroup['_id'];
+  status: IStatus['_id'];
+  preview: string;
+  files: [IKnowledgeFile['_id']]
+}
+
 const KnowledgeSchema = new Schema({
   _id: Schema.Types.ObjectId,
   name: {
@@ -51,4 +66,4 @@ KnowledgeSchema.set('toObject', {
   getters: true
 })
 
-module.exports = models.Knowledge || model('Knowledge', KnowledgeSchema)
+export default models.Knowledge || model('Knowledge', KnowledgeSchema)

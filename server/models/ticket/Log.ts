@@ -1,5 +1,17 @@
-const { models, model, Schema } = require('mongoose')
-const LogSchema = new Schema({
+import { models, model, Schema, Document } from 'mongoose'
+import { IAnalyst } from '../Analyst'
+import { IStatus } from './Status'
+import { IGroup } from './Group'
+
+export interface ILog extends Document {
+  user: IAnalyst['_id'];
+  date: Date;
+  oldStatus: IStatus['_id'];
+  group: IGroup['_id'];
+  newStatus: IStatus['_id'];
+}
+
+const LogSchema: Schema<ILog> = new Schema({
   _id: Schema.Types.ObjectId,
   user: {
     type: Schema.Types.ObjectId,
@@ -37,4 +49,4 @@ LogSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = models.Log || model('Log', LogSchema)
+export default models.Log || model('Log', LogSchema)

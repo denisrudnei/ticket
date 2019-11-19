@@ -1,25 +1,27 @@
-const AddressService = require('../services/AddressService')
+import AddressService from '../services/AddressService'
 
-module.exports = {
-  create: async (req, res) => {
+import express from 'express'
+
+export default {
+  create: async (req: express.Request, res: express.Response) => {
     AddressService.create(req.body).then(() => {
       return res.sendStatus(200)
     })
   },
 
-  getAll: (req, res) => {
+  getAll: (req: express.Request, res: express.Response) => {
     AddressService.getAll().then(addresses => {
       return res.status(200).json(addresses)
     })
   },
 
-  getOne: (req, res) => {
+  getOne: (req: express.Request, res: express.Response) => {
     AddressService.getOne(req.params.id).then(address => {
       return res.status(200).json(address)
     })
   },
 
-  edit: (req, res) => {
+  edit: (req: express.Request, res: express.Response) => {
     AddressService.edit(req.params.id, req.body).then(() => {
       res.sendStatus(202)
     })

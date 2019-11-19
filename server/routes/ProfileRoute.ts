@@ -1,4 +1,4 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
 const ProfileController = require('../controllers/ProfileController')
 
@@ -9,4 +9,4 @@ router.post('/info/path', ProfileController.createPath)
 router.get('/profile/address', ProfileController.getAddress)
 router.delete('/info/path/:id', ProfileController.remove)
 
-module.exports = router
+export default router

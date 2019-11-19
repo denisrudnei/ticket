@@ -1,4 +1,4 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
 const KnowledgeController = require('../../controllers/knowledge/KnowledgeController')
 
@@ -17,4 +17,4 @@ router.post('/knowledge/tempFile', KnowledgeController.addTempFile)
 router.post('/knowledge/:id/file', KnowledgeController.addFile)
 router.delete('/knowledge/:id', KnowledgeController.remove)
 
-module.exports = router
+export default router

@@ -1,13 +1,24 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 const AclRules = require('../../nacl.json')
-const Role = require('./Role')
+import Role from './Role'
+
+interface IPermission {
+  resource: string;
+  methods: string;
+  action: string;
+}
+
+interface IRule {
+  group: string;
+  permissions: [IPermission]
+}
 
 const CheckACL = {
-  checkDb: next => {
-    AclRules.forEach(rule => {
+  checkDb: (next: Function) => {
+    AclRules.forEach((rule: IRule) => {
       Role.findOne({
         name: rule.group
-      }).exec((err, result) => {
+      }).exec((err: Error, result) => {
         if (err) return next(err)
         if (result === null) {
           Role.create({
@@ -23,4 +34,4 @@ const CheckACL = {
   }
 }
 
-module.exports = CheckACL
+export default CheckACL

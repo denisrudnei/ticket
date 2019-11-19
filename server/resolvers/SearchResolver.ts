@@ -1,9 +1,9 @@
-const SearchService = require('../services/ticket/SearchService')
+import SearchService from '../services/ticket/SearchService'
 
 const SearchResolver = {
   Query: {
-    SearchTicket: (_, { page, limit, descending, sortBy, attributes }) => {
-      const newAttributes = {}
+    SearchTicket: (_: any, { page, limit, descending, sortBy, attributes }: any) => {
+      const newAttributes: any = {}
       for (const property in attributes) {
         const attribute = attributes[property]
         if (Array.isArray(attribute)) {
@@ -27,4 +27,4 @@ const SearchResolver = {
   Mutation: {}
 }
 
-module.exports = SearchResolver
+export default SearchResolver

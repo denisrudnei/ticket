@@ -1,6 +1,11 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
 
-const KnowledgeStatusSchema = new Schema({
+export interface IKnowledgeStatus extends Document {
+  name: string;
+  description: string;
+}
+
+const KnowledgeStatusSchema: Schema<IKnowledgeStatus> = new Schema({
   _id: Schema.Types.ObjectId,
   name: {
     type: String,
@@ -21,5 +26,4 @@ KnowledgeStatusSchema.set('toJSON', {
   getters: true
 })
 
-module.exports =
-  models.KnowledgeStatus || model('KnowledgeStatus', KnowledgeStatusSchema)
+export default models.KnowledgeStatus || model('KnowledgeStatus', KnowledgeStatusSchema)

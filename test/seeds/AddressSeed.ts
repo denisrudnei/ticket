@@ -1,8 +1,8 @@
-const mongoose = require('mongoose')
-const faker = require('faker')
-const generate = require('./Generate')
+import mongoose from 'mongoose'
+import faker from 'faker'
+import generate from './Generate'
 
-const seed = number => {
+const seed = (number: number) => {
   const template = () => ({
     _id: new mongoose.Types.ObjectId(),
     name: 'Test address',
@@ -15,4 +15,4 @@ const seed = number => {
   return generate(template, number)
 }
 
-module.exports = { seed }
+export default seed

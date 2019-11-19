@@ -1,4 +1,4 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
 const NotificationController = require('../controllers/NotificationController')
 
@@ -7,4 +7,4 @@ router.post('/notification/', NotificationController.getAll)
 router.post('/notification/:id/read', NotificationController.read)
 router.post('/notification/readall', NotificationController.readAll)
 
-module.exports = router
+export default router

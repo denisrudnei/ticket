@@ -1,4 +1,4 @@
-const PathService = require('../services/PathService')
+import PathService from '../services/PathService'
 
 const RefResolver = {
   Query: {
@@ -8,4 +8,4 @@ const RefResolver = {
   }
 }
 
-module.exports = RefResolver
+export default RefResolver

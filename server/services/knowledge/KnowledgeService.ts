@@ -1,53 +1,56 @@
-const mongoose = require('mongoose')
-const Knowledge = require('../../models/knowledge/Knowledge')
-const KnowledgeFile = require('../../models/knowledge/KnowledgeFile')
-const Group = require('../../models/ticket/Group')
-const S3 = require('../../../plugins/S3')
-const KnowledgeService = {
+import mongoose, {Types} from 'mongoose'
+import Knowledge, {IKnowledge} from '../../models/knowledge/Knowledge'
+import KnowledgeFile, { IKnowledgeFile } from '../../models/knowledge/KnowledgeFile'
+import Group from '../../models/ticket/Group'
+import S3 from '../../../plugins/S3'
+import AWS from 'aws-sdk'
+import fileUpload from 'express-fileupload'
+
+class KnowledgeService {
   getAll() {
     return new Promise((resolve, reject) => {
-      Knowledge.find().exec((err, result) => {
+      Knowledge.find().exec((err: Error, result) => {
         if (err) return reject(err)
         return resolve(result)
       })
     })
-  },
-  getOne(id) {
+  }
+  getOne(id: Types.ObjectId): Promise<IKnowledge> {
     return new Promise((resolve, reject) => {
       Knowledge.findOne({
         _id: id
-      }).exec((err, result) => {
+      }).exec((err: Error, result) => {
         if (err) return reject(err)
         return resolve(result)
       })
     })
-  },
-  getUnCategorized() {
+  }
+  getUnCategorized(): Promise<[IKnowledge]> {
     return new Promise((resolve, reject) => {
       Knowledge.find({
         group: null
-      }).exec((err, result) => {
+      }).exec((err: Error, result: [IKnowledge]) => {
         if (err) return reject(err)
         return resolve(result)
       })
     })
-  },
-  getByKnowledgeGroup(groupName) {
+  }
+  getByKnowledgeGroup(groupName: string) {
     return new Promise((resolve, reject) => {
       Group.findOne({
         name: groupName
-      }).exec((err, result) => {
+      }).exec((err: Error, result) => {
         if (err) return reject(err)
         Knowledge.find({
           group: result._id
-        }).exec((err, result) => {
+        }).exec((err: Error, result) => {
           if (err) return reject(err)
           return resolve(result)
         })
       })
     })
-  },
-  create(knowledge) {
+  }
+  create(knowledge: IKnowledge) {
     return new Promise((resolve, reject) => {
       const { name, group, preview, category } = knowledge
       Knowledge.create(
@@ -58,14 +61,14 @@ const KnowledgeService = {
           category: category,
           preview: preview
         },
-        (err, knowledge) => {
+        (err: Error, knowledge: IKnowledge) => {
           if (err) return reject(err)
-          return resolve(err, knowledge)
+          return resolve(knowledge)
         }
       )
     })
-  },
-  updateKnowledge(knowledgeId, knowledge) {
+  }
+  updateKnowledge(knowledgeId: IKnowledge['_id'], knowledge: IKnowledge): Promise<IKnowledge> {
     return new Promise((resolve, reject) => {
       Knowledge.updateOne(
         {
@@ -79,23 +82,23 @@ const KnowledgeService = {
             preview: knowledge.preview
           }
         }
-      ).exec((err, result) => {
+      ).exec((err: Error, result) => {
         if (err) return reject(err)
         return resolve(result)
       })
     })
-  },
-  addFile(knowledgeId, file) {
+  }
+  addFile(knowledgeId: IKnowledge['_id'], file: fileUpload.UploadedFile) {
     return new Promise((resolve, reject) => {
       Knowledge.findOne({
         _id: knowledgeId
-      }).exec((err, knowledge) => {
+      }).exec((err: Error, knowledge) => {
         if (err) return reject(err)
         KnowledgeFile.create(
           {
             name: file.name
           },
-          (err, knowledgeFile) => {
+          (err: Error, knowledgeFile: IKnowledgeFile) => {
             if (err) reject(err)
             S3.createBucket(() => {
               const params = {
@@ -103,9 +106,9 @@ const KnowledgeService = {
                 Key: knowledgeFile._id.toString(),
                 Body: file.data
               }
-              S3.upload(params, (err, data) => {
+              S3.upload(params, (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
                 if (err) return reject(err)
-                knowledgeFile.url = data.Location
+                knowledgeFile.url = data.Location!
                 knowledge.files.push(knowledgeFile)
                 knowledge.save()
                 return resolve(data)
@@ -115,14 +118,14 @@ const KnowledgeService = {
         )
       })
     })
-  },
-  addTempFile(file) {
+  }
+  addTempFile(file: fileUpload.UploadedFile): Promise<string> {
     return new Promise((resolve, reject) => {
       KnowledgeFile.create(
         {
           name: file.name
         },
-        (err, knowledgeFile) => {
+        (err: Error, knowledgeFile: IKnowledgeFile) => {
           if (err) return reject(err)
           S3.createBucket(() => {
             const params = {
@@ -130,9 +133,9 @@ const KnowledgeService = {
               Key: knowledgeFile._id.toString(),
               Body: file.data
             }
-            S3.upload(params, (err, data) => {
+            S3.upload(params, (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
               if (err) return reject(err)
-              knowledgeFile.url = data.Location
+              knowledgeFile.url = data.Location!
               knowledgeFile.save()
               return resolve(data.Location)
             })
@@ -140,43 +143,43 @@ const KnowledgeService = {
         }
       )
     })
-  },
-  getAllFiles(knowledgeId) {
+  }
+  getAllFiles(knowledgeId: IKnowledge['_id']): Promise<[IKnowledgeFile]> {
     return new Promise((resolve, reject) => {
       Knowledge.findOne({
         _id: knowledgeId
-      }).exec((err, knowledge) => {
+      }).exec((err: Error, knowledge) => {
         if (err) return reject(err)
         resolve(knowledge.files)
       })
     })
-  },
-  getFile(id) {
+  }
+  getFile(id: IKnowledge['_id']) {
     return new Promise((resolve, reject) => {
       S3.getObject(
         {
           Bucket: process.env.BUCKET,
           Key: id.toString()
         },
-        (err, file) => {
+        (err: Error, file: AWS.S3.Types.GetObjectOutput) => {
           if (err) return reject(err)
           return resolve(file.Body)
         }
       )
     })
-  },
-  remove(id) {
+  }
+  remove(id: IKnowledge['_id']) {
     return new Promise((resolve, reject) => {
       Knowledge.deleteOne({
         _id: id
-      }).exec(err => {
+      }).exec((err: Error) => {
         if (err) return reject(err)
         S3.deleteObject(
           {
             Bucket: process.env.BUCKET,
             Key: id.toString()
           },
-          (err, obj) => {
+          (err: Error, obj: AWS.S3.Types.DeleteObjectOutput) => {
             if (err) return reject(err)
             return resolve(obj)
           }
@@ -186,4 +189,4 @@ const KnowledgeService = {
   }
 }
 
-module.exports = KnowledgeService
+export default new KnowledgeService()

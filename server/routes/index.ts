@@ -1,10 +1,10 @@
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 const router = require('express').Router()
 
 const folder = path.resolve(__dirname)
 
-fs.readdirSync(folder).forEach(file => {
+fs.readdirSync(folder).forEach((file: string) => {
   const m = require(path.join(folder, file))
   if (!file.includes('.js')) {
     Object.keys(m).forEach(innerModule => {
@@ -16,4 +16,4 @@ fs.readdirSync(folder).forEach(file => {
   if (file !== 'index.js' && file.includes('.js')) router.use(m)
 })
 
-module.exports = router
+export default router

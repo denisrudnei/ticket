@@ -1,7 +1,10 @@
-const TicketService = require('../../services/ticket/TicketService')
+import TicketService from '../../services/ticket/TicketService'
+import express from 'express'
+import {Types} from 'mongoose'
+import { UploadedFile } from 'express-fileupload'
 
-module.exports = {
-  getTickets: (req, res) => {
+export default {
+  getTickets: (req: express.Request, res: express.Response) => {
     let sortBy = req.query.sortBy || 'created'
     const descending = parseInt(req.query.descending) || -1
     sortBy = {
@@ -15,12 +18,12 @@ module.exports = {
       .then(result => {
         return res.status(200).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  getByProfile: (req, res) => {
+  getByProfile: (req: express.Request, res: express.Response) => {
     const type = req.params.type
     let sortBy = req.query.sortBy || 'created'
     const descending = parseInt(req.query.descending) || -1
@@ -30,7 +33,7 @@ module.exports = {
 
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 10
-    const actualUser = req.session.authUser._id
+    const actualUser = req.session!.authUser._id
 
     TicketService.getTickets(
       {
@@ -43,109 +46,108 @@ module.exports = {
       .then(result => {
         return res.status(200).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  create: (req, res) => {
+  create: (req: express.Request, res: express.Response) => {
     TicketService.create(req.body)
       .then(result => {
         // io.emit(`notification/${req.body.group._id}`, result.notification)
         // io.emit('addTicket', result.newTicket)
-        return res.status(200).json(result.newTicket)
+        return res.status(200).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  transfer: (req, res) => {
+  transfer: (req: express.Request, res: express.Response) => {
     TicketService.transferToGroup(
       req.params.id,
       req.body._id,
-      req.session.authUser
     )
       .then(result => {
         // io.emit('updateTicket', result.newTicket)
         // io.emit(`notification/${req.body._id}`, result.notification)
-        return res.status(200).json(result.newTicket)
+        return res.status(200).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  updateStatus: async (req, res) => {
+  updateStatus: async (req: express.Request, res: express.Response) => {
     await TicketService.changeStatus(req.params.id, req.body._id)
       .then(result => {
         // io.emit('updateTicket', result)
         return res.status(200).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  comment: (req, res) => {
-    const userId = req.session.authUser._id
+  comment: (req: express.Request, res: express.Response) => {
+    const userId = req.session!.authUser._id
     TicketService.commentOnTicket(req.params.id, userId, req.body.content)
       .then(result => {
         return res.status(201).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  getOne: (req, res) => {
+  getOne: (req: express.Request, res: express.Response) => {
     TicketService.getOne(req.params.id)
       .then(result => {
         return res.status(200).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  edit: (req, res) => {
+  edit: (req: express.Request, res: express.Response) => {
     TicketService.updateOne(req.params.id, req.body)
       .then(result => {
         // io.emit('updateTicket', result)
         res.sendStatus(202)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  getFile: (req, res) => {
-    TicketService.getFile(req.params.id)
+  getFile: (req: express.Request, res: express.Response) => {
+    TicketService.getFile(req.params!.id)
       .then(result => {
         return res.end(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  deleteFile: async (req, res) => {
+  deleteFile: async (req: express.Request, res: express.Response) => {
     await TicketService.removeFile(req.params.id, req.params.file)
       .then(() => {
         return res.sendStatus(201)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  sendFile: async (req, res) => {
-    const files = Object.values(req.files)
+  sendFile: async (req: express.Request, res: express.Response) => {
+    const files = Object.values(req.files!) as UploadedFile[]
     await TicketService.insertFile(req.params.id, files)
       .then(result => {
         return res.status(200).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   }

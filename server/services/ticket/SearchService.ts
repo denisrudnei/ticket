@@ -1,9 +1,11 @@
-const Ticket = require('../../models/ticket/Ticket')
+import Ticket from '../../models/ticket/Ticket'
 
 const SearchService = {
-  getTickets: (query = {}, sortBy, page = 1, limit = 10) => {
+  getTickets: (query: any = {}, sortBy: any, page = 1, limit = 10) => {
     return new Promise((resolve, reject) => {
-      const filterKeys = Object.keys(Ticket.schema.paths)
+
+      //TODO
+      const filterKeys = Object.keys(Ticket.schema.path)
       Object.keys(query).forEach(inQuery => {
         if (!filterKeys.includes(inQuery)) delete query[inQuery]
       })
@@ -15,7 +17,7 @@ const SearchService = {
           sort: sortBy,
           populate: ['status']
         },
-        (err, result) => {
+        (err: Error, result) => {
           if (err) return reject(err)
           return resolve(result)
         }
@@ -24,4 +26,4 @@ const SearchService = {
   }
 }
 
-module.exports = SearchService
+export default SearchService

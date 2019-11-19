@@ -1,28 +1,28 @@
-const mongoose = require('mongoose')
-const KnowledgeStatus = require('../../models/knowledge/KnowledgeStatus')
+import mongoose from 'mongoose'
+import KnowledgeStatus, { IKnowledgeStatus } from '../../models/knowledge/KnowledgeStatus'
 
-const KnowledgeStatusService = {
-  create(status) {
+class KnowledgeStatusService  {
+  create(status: IKnowledgeStatus): Promise<IKnowledgeStatus> {
     return new Promise((resolve, reject) => {
       KnowledgeStatus.create(
         {
           _id: new mongoose.Types.ObjectId(),
           ...status
         },
-        (err, result) => {
+        (err: Error, result: IKnowledgeStatus) => {
           if (err) return reject(err)
           return resolve(result)
         }
       )
     })
-  },
-  getAll() {
+  }
+  getAll(): Promise<[IKnowledgeStatus]> {
     return new Promise((resolve, reject) => {
-      KnowledgeStatus.find({}, (err, result) => {
+      KnowledgeStatus.find({}, (err: Error, result: [IKnowledgeStatus]) => {
         if (err) return reject(err)
         return resolve(result)
       })
     })
   }
 }
-module.exports = KnowledgeStatusService
+export default new KnowledgeStatusService()

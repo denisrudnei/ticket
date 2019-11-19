@@ -1,10 +1,10 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const AddressController = require('../controllers/AddressController')
+import AddressController  from '../controllers/AddressController'
 
 router.post('/address', AddressController.create)
 router.get('/address', AddressController.getAll)
 router.get('/address/:id', AddressController.getOne)
 router.put('/address/:id', AddressController.edit)
 
-module.exports = router
+export default router

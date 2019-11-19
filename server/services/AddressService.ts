@@ -1,8 +1,8 @@
-const mongoose = require('mongoose')
-const Address = require('../models/Address')
+import mongoose from 'mongoose'
+import Address, {IAddress} from '../models/Address'
 
-const AddressService = {
-  create(address) {
+class AddressService {
+  create(address: IAddress): Promise<void> {
     return new Promise((resolve, reject) => {
       const { name, country, cep, city, state, street } = address
 
@@ -16,32 +16,32 @@ const AddressService = {
           street,
           state
         },
-        err => {
+        (err: Error) => {
           if (err) return reject
           return resolve()
         }
       )
     })
-  },
+  }
   getAll() {
     return new Promise((resolve, reject) => {
-      Address.find().exec((err, addresses) => {
+      Address.find().exec((err: Error, addresses) => {
         if (err) return reject(err)
         return resolve(addresses)
       })
     })
-  },
-  getOne(addressId) {
+  }
+  getOne(addressId: IAddress['_id']): Promise<IAddress> {
     return new Promise((resolve, reject) => {
       Address.findOne({
         _id: addressId
-      }).exec((err, address) => {
+      }).exec((err: Error, address) => {
         if (err) return reject(err)
         return resolve(address)
       })
     })
-  },
-  edit(addressId, address) {
+  }
+  edit(addressId: IAddress['_id'], address: IAddress): Promise<void> {
     return new Promise((resolve, reject) => {
       const { name, country, cep, city, state, street } = address
       Address.updateOne(
@@ -58,7 +58,7 @@ const AddressService = {
             street
           }
         }
-      ).exec(err => {
+      ).exec((err: Error) => {
         if (err) return reject(err)
         return resolve()
       })
@@ -66,4 +66,4 @@ const AddressService = {
   }
 }
 
-module.exports = AddressService
+export default new AddressService()

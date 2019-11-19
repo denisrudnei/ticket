@@ -1,4 +1,4 @@
-const PriorityService = require('../services/PriorityService')
+import PriorityService from '../services/PriorityService'
 
 const PriorityResolver = {
   Query: {
@@ -7,16 +7,16 @@ const PriorityResolver = {
     }
   },
   Mutation: {
-    CreatePriority: (_, { priority }) => {
+    CreatePriority: (_: any, { priority }: any) => {
       return PriorityService.create(priority)
     },
-    UpdatePriority: (_, { priority }) => {
+    UpdatePriority: (_: any, { priority }: any) => {
       return PriorityService.edit(priority)
     },
-    UpdateManyPriorities: (_, { priorities }) => {
+    UpdateManyPriorities: (_: any, { priorities }: any) => {
       return PriorityService.editMany(priorities)
     }
   }
 }
 
-module.exports = PriorityResolver
+export default PriorityResolver

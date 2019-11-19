@@ -1,19 +1,21 @@
-const { withFilter } = require('graphql-yoga')
-const ChatService = require('../services/ChatService')
-const ChatEnum = require('../enums/ChatEnum')
+import { Context } from 'graphql-yoga/dist/types'
+import { withFilter } from 'graphql-yoga'
+import ChatService from '../services/ChatService'
+import ChatEnum from '../enums/ChatEnum'
+
 const ChatResolver = {
   Query: {
-    Chat: (_, __, { req }) => {
+    Chat: (_: any, __: any, { req }: Context) => {
       const from = req.session.authUser._id
       return ChatService.getChats(from)
     },
-    GetOneChat: (_, { to }, { req }) => {
+    GetOneChat: (_: any, { to }: any, { req }: Context) => {
       const from = req.session.authUser._id
       return ChatService.getOne(from, to)
     }
   },
   Mutation: {
-    SendMessage: (_, { to, message }, { pubSub, req }) => {
+    SendMessage: (_: any, { to, message }: any, { pubSub, req }: Context) => {
       const from = req.session.authUser._id
       const result = ChatService.addMessage(from, to, message)
 
@@ -39,4 +41,4 @@ const ChatResolver = {
   }
 }
 
-module.exports = ChatResolver
+export default ChatResolver

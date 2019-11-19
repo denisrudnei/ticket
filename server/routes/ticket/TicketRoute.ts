@@ -1,10 +1,10 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const { body, param, validationResult } = require('express-validator')
+import { body, param, validationResult } from 'express-validator'
 
-const TicketController = require('../../controllers/ticket/TicketController')
-const NotifiyTicketUpdate = require('../../middlewares/NotifyTicketUpdate')
-const CreateTicketLog = require('../../middlewares/CreateTicketLog')
+import TicketController from '../../controllers/ticket/TicketController'
+import NotifyTicketUpdate from '../../middlewares/NotifyTicketUpdate'
+import CreateTicketLog from '../../middlewares/CreateTicketLog'
 
 router.get('/ticket', TicketController.getTickets)
 router.get('/ticket/profile/:type', TicketController.getByProfile)
@@ -18,7 +18,7 @@ router.post(
     body('resume').exists(),
     body('content').exists()
   ],
-  (req, res) => {
+  (req: express.Request, res: express.Response) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) return res.status(400).json(errors.mapped())
   },
@@ -26,13 +26,13 @@ router.post(
 )
 router.post(
   '/ticket/transfer/:id',
-  NotifiyTicketUpdate,
+  NotifyTicketUpdate,
   CreateTicketLog,
   TicketController.transfer
 )
 router.post(
   '/ticket/updateStatus/:id',
-  NotifiyTicketUpdate,
+  NotifyTicketUpdate,
   CreateTicketLog,
   TicketController.updateStatus
 )
@@ -42,28 +42,28 @@ router.post(
     body('content', 'Preencha o comentário').exists(),
     param('id', 'Precisa de um id').exists()
   ],
-  NotifiyTicketUpdate,
+  NotifyTicketUpdate,
   TicketController.comment
 )
 router.get('/ticket/:id', TicketController.getOne)
 router.put(
   '/ticket/:id',
-  NotifiyTicketUpdate,
+  NotifyTicketUpdate,
   CreateTicketLog,
   TicketController.edit
 )
 router.get('/ticket/:id/file', TicketController.getFile)
 router.delete(
   '/ticket/:id/:file/file',
-  NotifiyTicketUpdate,
+  NotifyTicketUpdate,
   CreateTicketLog,
   TicketController.deleteFile
 )
 router.post(
   '/ticket/:id/file',
-  NotifiyTicketUpdate,
+  NotifyTicketUpdate,
   CreateTicketLog,
   TicketController.sendFile
 )
 
-module.exports = router
+export default router

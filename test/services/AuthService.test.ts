@@ -1,6 +1,7 @@
-const faker = require('faker')
-const AuthService = require('../../server/services/AuthService')
-const Analyst = require('../../server/models/Analyst')
+import faker from 'faker'
+import AuthService from '../../server/services/AuthService'
+import Analyst from '../../server/models/Analyst'
+import express from 'express'
 
 const password = faker.internet.password()
 const email = faker.internet.email()
@@ -8,25 +9,25 @@ const email = faker.internet.email()
 const req = {
   protocol: 'http',
   hostname: '0.0.0.0'
-}
+} as express.Request
 
 describe('Auth', function() {
   this.timeout(0)
   it('Register new user', async () => {
-    const newUser = {
+    const newUser = new Analyst({
       name: 'teste',
       email: email,
       password: password
-    }
+    })
     await AuthService.register(newUser)
   })
 
   it('Register a existing user', async () => {
-    const newUser = {
+    const newUser = new Analyst({
       name: 'teste',
       email: email,
       password: password
-    }
+    })
     await AuthService.register(newUser).catch(() => {})
   })
 

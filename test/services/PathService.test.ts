@@ -1,16 +1,16 @@
-const PathService = require('../../server/services/PathService')
-const Analyst = require('../../server/models/Analyst')
-const Path = require('../../server/models/Path')
+import PathService from '../../server/services/PathService'
+import Analyst from '../../server/models/Analyst'
+import Path from '../../server/models/Path'
 describe('PathService', function() {
   this.timeout(0)
 
   it('Create new path', async () => {
     const userId = await getUserId()
-    const path = {
+    const path = new Path({
       path: 'group',
       group: 'name',
       name: 'Por grupo'
-    }
+    })
     await PathService.create(path, userId)
   })
 
@@ -42,7 +42,7 @@ describe('PathService', function() {
   it('Delete path', async () => {
     const user = await Analyst.findOne({}).exec()
     const path = user.paths[0]
-    await PathService.remove(path)
+    await PathService.remove(user._id, path._id)
   })
 
   it('Get address', async () => {

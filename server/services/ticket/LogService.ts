@@ -1,9 +1,10 @@
-const { Types } = require('mongoose')
-const Log = require('../../models/ticket/Log')
-const Ticket = require('../../models/ticket/Ticket')
+import { Types } from 'mongoose'
+import Log, {ILog} from '../../models/ticket/Log'
+import Ticket, {ITicket} from '../../models/ticket/Ticket'
+import { IAnalyst } from '../../models/Analyst'
 
-const LogService = {
-  createTicketLog(actualUser, ticket) {
+class LogService {
+  createTicketLog(actualUser: IAnalyst['_id'], ticket: ITicket): Promise<void> {
     return new Promise((resolve, reject) => {
       Log.create(
         {
@@ -13,7 +14,7 @@ const LogService = {
           user: actualUser,
           group: ticket.group
         },
-        (err, log) => {
+        (err: Error, log: ILog) => {
           if (err) reject(err)
           Ticket.updateOne(
             {
@@ -24,7 +25,7 @@ const LogService = {
                 logs: [log]
               }
             }
-          ).exec(err => {
+          ).exec((err: Error) => {
             if (err) reject(err)
             resolve()
           })
@@ -34,4 +35,4 @@ const LogService = {
   }
 }
 
-module.exports = LogService
+export default new LogService()

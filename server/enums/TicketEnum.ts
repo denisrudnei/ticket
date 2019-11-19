@@ -1,7 +1,7 @@
-const TicketEnum = {
-  TICKET_TRANSFER_TO_GROUP: 'TICKET_TRANSFER_TO_GROUP',
-  TICKET_CHANGE_STATUS: 'TICKET_CHANGE_STATUS',
-  TICKET_EDIT: 'TICKET_EDIT'
+enum TicketEnum {
+  TICKET_TRANSFER_TO_GROUP,
+  TICKET_CHANGE_STATUS,
+  TICKET_EDIT
 }
 
-module.exports = TicketEnum
+export default TicketEnum

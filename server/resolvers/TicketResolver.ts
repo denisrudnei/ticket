@@ -1,14 +1,16 @@
-const { withFilter } = require('graphql-yoga')
-const TicketService = require('../services/ticket/TicketService')
-const TicketEnum = require('../enums/TicketEnum')
-const LogService = require('../services/ticket/LogService')
+import { withFilter } from 'graphql-yoga'
+import TicketService from '../services/ticket/TicketService'
+import TicketEnum from '../enums/TicketEnum'
+import LogService from '../services/ticket/LogService'
+import { Context } from 'graphql-yoga/dist/types'
+import Ticket from '../../server/models/ticket/Ticket'
 
 const TicketResolver = {
   Query: {
-    TicketById: (_, { _id }) => {
+    TicketById: (_: any, { _id }: any) => {
       return TicketService.getOne(_id)
     },
-    Tickets: (_, { sortBy, descending, page, limit }) => {
+    Tickets: (_: Context, { sortBy, descending, page, limit }: any) => {
       return TicketService.getTickets(
         {},
         {
@@ -20,18 +22,18 @@ const TicketResolver = {
     }
   },
   Mutation: {
-    ChangeStatus: async (_, { ticketId, statusId }, { pubSub, req }) => {
+    ChangeStatus: async (_: any, { ticketId, statusId }: any, { pubSub, req }: Context) => {
       const user = req.session.authUser
-      const ticket = TicketService.changeStatus(ticketId, statusId)
-      LogService.createTicketLog(user._id, ticket)
+      const ticket = await TicketService.changeStatus(ticketId, statusId)
+      LogService.createTicketLog(user._id, ticket!)
       pubSub.publish(TicketEnum.TICKET_CHANGE_STATUS, {
         ChangeStatus: ticket
       })
       return ticket
     },
-    TransferTicket: (_, { ticketId, groupId }, { req, pubSub }) => {
+    TransferTicket: async (_: any, { ticketId, groupId }: any, { req, pubSub }: Context) => {
       const user = req.session.authUser
-      const ticket = TicketService.transferToGroup(ticketId, groupId)
+      const ticket = await TicketService.transferToGroup(ticketId, groupId)
       // TODO
       LogService.createTicketLog(user._id, ticket)
       pubSub.publish(TicketEnum.TICKET_TRANSFER_TO_GROUP, {
@@ -39,7 +41,7 @@ const TicketResolver = {
       })
       return ticket
     },
-    CreateTicket: (_, { ticket }, { req }) => {
+    CreateTicket: (_: any, { ticket }: any, { req }: Context) => {
       const {
         group,
         status,
@@ -50,7 +52,7 @@ const TicketResolver = {
         content,
         priority
       } = ticket
-      const newTicket = {
+      const newTicket = new Ticket({
         group,
         status,
         category,
@@ -60,10 +62,10 @@ const TicketResolver = {
         resume,
         content,
         priority
-      }
+      })
       return TicketService.create(newTicket)
     },
-    EditTicket: (_, { _id, ticket }, { req, pubSub }) => {
+    EditTicket: (_: any, { _id, ticket }: any, { req, pubSub }: Context) => {
       const userId = req.session.authUser._id
       LogService.createTicketLog(userId, {
         ...ticket,
@@ -75,25 +77,25 @@ const TicketResolver = {
       })
       return editedTicket
     },
-    CopyTicket(_, { ticketId }, { req }) {
+    CopyTicket(_: any, { ticketId }: any, { req }: Context) {
       const userId = req.session.authUser._id
       return TicketService.copyTicket(ticketId, userId)
     }
   },
   Subscription: {
     TransferToGroup: {
-      subscribe: (_, __, { pubSub }) => {
+      subscribe: (_: any, __: any, { pubSub }: Context) => {
         return pubSub.asyncIterator(TicketEnum.TICKET_TRANSFER_TO_GROUP)
       }
     },
     ChangeStatus: {
-      subscribe: (_, __, { pubSub }) => {
+      subscribe: (_: any, __: any, { pubSub }: Context) => {
         return pubSub.asyncIterator(TicketEnum.TICKET_CHANGE_STATUS)
       }
     },
     EditTicket: {
       subscribe: withFilter(
-        (_, __, { pubSub }) => {
+        (_: any, __, { pubSub }) => {
           return pubSub.asyncIterator(TicketEnum.TICKET_EDIT)
         },
         async (payload, { tickets }) => {
@@ -106,4 +108,4 @@ const TicketResolver = {
   }
 }
 
-module.exports = TicketResolver
+export default TicketResolver

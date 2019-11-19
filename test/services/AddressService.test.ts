@@ -1,5 +1,5 @@
-const AddressService = require('../../server/services/AddressService')
-const Address = require('../../server/models/Address')
+import AddressService from '../../server/services/AddressService'
+import Address from '../../server/models/Address'
 
 describe('Address', function() {
   this.timeout(0)
@@ -9,13 +9,13 @@ describe('Address', function() {
   })
 
   it('Create new address', async () => {
-    const address = {
+    const address = new Address({
       name: 'test address',
       street: 'test street',
       city: 'test city',
       state: 'test state',
       country: 'test country'
-    }
+    })
 
     await AddressService.create(address)
   })

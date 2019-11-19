@@ -1,9 +1,10 @@
-const path = require('path')
-const consola = require('consola')
-const morgan = require('morgan')
+import * as path from 'path'
+import consola from 'consola'
+import morgan from 'morgan'
 const { Nuxt, Builder } = require('nuxt')
-const { GraphQLServer, PubSub } = require('graphql-yoga')
-const mongoose = require('mongoose')
+import { GraphQLServer, PubSub } from 'graphql-yoga'
+import mongoose from 'mongoose'
+import { Context } from 'graphql-yoga/dist/types'
 
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost/test',
@@ -21,7 +22,7 @@ config.dev = !(process.env.NODE_ENV === 'production')
 const server = new GraphQLServer({
   typeDefs: path.resolve(__dirname, 'schemas.graphql'),
   resolvers,
-  context: async req => ({
+  context: async (req: Context) => ({
     req: req.request,
     pubSub
   })
@@ -44,7 +45,7 @@ async function start() {
     await nuxt.ready()
   }
 
-  CheckACL.checkDb(err => {
+  CheckACL.checkDb((err: Error) => {
     if (err) consola.error(err)
   })
 

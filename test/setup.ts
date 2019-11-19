@@ -1,4 +1,4 @@
-const seed = require('./seed')
+import seed from './seed'
 
 before(async function() {
   this.timeout(0)

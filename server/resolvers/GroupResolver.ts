@@ -1,4 +1,4 @@
-const GroupService = require('../services/ticket/GroupService')
+import GroupService from '../services/ticket/GroupService'
 
 const GroupResolver = {
   Query: {
@@ -8,4 +8,4 @@ const GroupResolver = {
   }
 }
 
-module.exports = GroupResolver
+export default GroupResolver

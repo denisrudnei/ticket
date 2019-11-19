@@ -1,6 +1,12 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
 
-const StatusSchema = new Schema({
+export interface IStatus extends Document {
+  name: string;
+  allowedStatus: [IStatus['_id']];
+  slaRun: boolean;
+}
+
+const StatusSchema: Schema<IStatus> = new Schema({
   _id: Schema.Types.ObjectId,
   name: {
     type: String,
@@ -28,4 +34,4 @@ StatusSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = models.Status || model('Status', StatusSchema)
+export default models.Status || model('Status', StatusSchema)

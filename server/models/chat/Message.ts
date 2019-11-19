@@ -1,4 +1,13 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
+
+export interface IMessage extends Document {
+  to: Schema.Types.ObjectId;
+  from: Schema.Types.ObjectId;
+  content: string;
+  read: boolean;
+  date: Date;
+}
+
 const MessageSchema = new Schema({
   _id: Schema.Types.ObjectId,
   to: {
@@ -32,4 +41,4 @@ MessageSchema.pre('find', function() {
   this.populate(['to', 'from'])
 })
 
-module.exports = models.Message || model('Message', MessageSchema)
+export default models.Message || model('Message', MessageSchema)

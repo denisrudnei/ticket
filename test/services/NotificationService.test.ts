@@ -1,8 +1,8 @@
-const NotificationService = require('../../server/services/NotificationService')
-const Notification = require('../../server/models/Notification')
-const Analyst = require('../../server/models/Analyst')
-const Ticket = require('../../server/models/ticket/Ticket')
-const Group = require('../../server/models/ticket/Group')
+import NotificationService from '../../server/services/NotificationService'
+import Notification from '../../server/models/Notification'
+import Analyst from '../../server/models/Analyst'
+import Ticket from '../../server/models/ticket/Ticket'
+import Group from '../../server/models/ticket/Group'
 
 describe('NotificationService', function() {
   this.timeout(0)
@@ -13,9 +13,8 @@ describe('NotificationService', function() {
   })
 
   it('Get one notification', async () => {
-    const user = await Analyst.findOne().exec()
     const notification = await Notification.findOne().exec()
-    await NotificationService.getOne(user._id, notification._id)
+    await NotificationService.getOne(notification._id)
   })
 
   it('Toggle notification status', async () => {
@@ -43,7 +42,7 @@ describe('NotificationService', function() {
     console.log(group)
     const analyst = await Analyst.findOne({}).exec()
     await NotificationService.triggerForTicketTransfer(
-      ticket._id,
+      ticket!._id,
       group._id,
       analyst._id
     )
@@ -51,7 +50,6 @@ describe('NotificationService', function() {
 
   it('Read all notifications', async () => {
     const user = await Analyst.findOne().exec()
-    const notification = await Notification.findOne().exec()
-    await NotificationService.readall(user._id, notification._id)
+    await NotificationService.readall(user._id)
   })
 })

@@ -1,25 +1,25 @@
-const CategoryService = require('../services/ticket/CategoryService')
+import CategoryService from '../services/ticket/CategoryService'
 
 const CategoryResolver = {
   Query: {
     Category: () => {
       return CategoryService.getCategories()
     },
-    CategoryByName: (_, { name }) => {
+    CategoryByName: (_: any, { name }: any) => {
       return CategoryService.getOne(name)
     },
-    GetSubs: (_, { categoryId }) => {
+    GetSubs: (_: any, { categoryId }: any) => {
       return CategoryService.getSubsForCategory(categoryId)
     }
   },
   Mutation: {
-    CreateCategory: (_, { category }) => {
+    CreateCategory: (_: any, { category }: any) => {
       return CategoryService.create(category)
     },
-    EditCategory: (_, { categoryId, category }) => {
+    EditCategory: (_: any, { categoryId, category }: any) => {
       return CategoryService.edit(categoryId, category)
     }
   }
 }
 
-module.exports = CategoryResolver
+export default CategoryResolver

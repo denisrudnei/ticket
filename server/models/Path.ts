@@ -1,4 +1,10 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
+
+export interface IPath extends Document {
+  objectName: string;
+  property: string;
+  name: string;
+}
 
 const PathSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -20,8 +26,8 @@ PathSchema.set('toJSON', {
 })
 
 PathSchema.set('toObject', {
-  getter: true,
+  getters: true,
   virtuals: true
 })
 
-module.exports = models.Path || model('Path', PathSchema)
+export default models.Path || model('Path', PathSchema)

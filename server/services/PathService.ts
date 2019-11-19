@@ -1,10 +1,51 @@
-const _ = require('lodash')
-const mongoose = require('mongoose')
-const Path = require('../models/Path')
-const Analyst = require('../models/Analyst')
-const Ticket = require('../models/ticket/Ticket')
-const PathService = {
-  create(path, userId) {
+import _ from 'lodash'
+import mongoose, {Types} from 'mongoose'
+import Path, { IPath } from '../models/Path'
+import Analyst, { IAnalyst } from '../models/Analyst'
+import Ticket from '../models/ticket/Ticket'
+
+class Info {
+  name: string;
+  total: number
+
+  constructor(name: string, total: number) {
+    this.name = name
+    this.total = total
+  }
+}
+
+export class ProfileInfo {
+  opened: number | null;
+  total: number;
+  categories: Info[];
+  status: Info[];
+  inName: Info[];
+
+  constructor(opened: number, total: number, categories: Info[], status: Info[], inName: Info[]) {
+    this.opened = opened
+    this.total = total
+    this.categories = categories
+    this.status = status
+    this.inName = inName
+  }
+}
+
+class PathTree {
+  _id: Types.ObjectId;
+  id: string;
+  name: string;
+  children: any[];
+
+  constructor(_id: Types.ObjectId, id: string, name: string, children: any[]) {
+    this._id = _id
+    this.id = id
+    this.name = name
+    this.children = children
+  }
+}
+
+class PathService {
+  create(path: IPath, userId: IAnalyst['_id']): Promise<PathTree> {
     return new Promise((resolve, reject) => {
       Path.create(
         {
@@ -13,7 +54,7 @@ const PathService = {
           objectName: path.objectName,
           property: path.property
         },
-        (err, path) => {
+        (err: Error, path: IPath) => {
           if (err) return reject(err)
           Analyst.updateOne(
             {
@@ -24,68 +65,67 @@ const PathService = {
                 paths: path
               }
             }
-          ).exec(err => {
+          ).exec((err: Error) => {
             if (err) return reject(err)
             return resolve(this.getOnePathTree(path._id))
           })
         }
       )
     })
-  },
+  }
 
-  getProfileInfo(userId) {
+  getProfileInfo(userId: IAnalyst['_id']) {
     return new Promise((resolve, reject) => {
-      const result = {}
       Ticket.find({})
         .populate(['category', 'status', 'openedBy'])
-        .exec((err, tickets) => {
+        .exec((err: Error, tickets) => {
           if (err) return reject(err)
-          result.opened = tickets.filter(t => {
+          const opened = tickets.filter(t => {
             return t.openedBy._id.toString() === userId
           }).length
-          result.total = tickets.length
-          result.categories = _(tickets)
+          const total = tickets.length
+          const categories = _(tickets)
             .groupBy('category')
             .map(v => ({
               name: v[0].category.fullName,
               total: v.length
-            }))
-          result.status = _(tickets)
+            })).value()
+          const status = _(tickets)
             .groupBy('status')
             .map(v => ({
               name: v[0].status.name,
               total: v.length
-            }))
-          result.inName = _(tickets)
+            })).value()
+          const inName = _(tickets)
             .groupBy('actualUser')
             .map(v => ({
-              id: v[0].actualUser._id,
+              name: v[0].actualUser._id,
               total: v.length
-            }))
-            .find(v => {
-              return v.id === userId
+            })).value().filter((v: Info) => {
+              return v.name === userId
             })
-          return resolve(result)
+           
+          return resolve(new ProfileInfo(opened, total, categories, status, inName))
         })
     })
-  },
+  }
 
-  getAddress(userId) {
+  getAddress(userId: IAnalyst['_id']) {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
         _id: userId
       })
         .populate('address')
-        .exec((err, analyst) => {
+        .exec((err: Error, analyst) => {
           if (err) return reject(err)
           return resolve(analyst.address)
         })
     })
-  },
+  }
 
   getRefs() {
     return new Promise((resolve, reject) => {
-      const paths = Object.values(Ticket.schema.paths)
+      const paths = Object.values(Ticket.schema.path)
       const pathsWithObjects = paths.filter(v => {
         return v.options.ref !== undefined && v.options.ref !== null
       })
@@ -94,36 +134,36 @@ const PathService = {
       })
       const pathsWithRefs = onlyWithObjectId.map(v => ({
         objectName: v.path,
-        options: getOptions(v.options.ref)
+        options: this.getOptions(v.options.ref)
       }))
       return resolve(pathsWithRefs)
     })
-  },
+  }
 
-  getPaths(userId) {
+  getPaths(userId: IAnalyst['_id']) {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
         _id: userId
       })
         .select('+paths')
         .populate(['paths'])
-        .exec((err, result) => {
+        .exec((err: Error, result) => {
           if (err) reject(err)
           resolve(result.paths)
         })
     })
-  },
+  }
 
-  getOnePathTree(pathId) {
+  getOnePathTree(pathId: IPath['_id']): Promise<PathTree> {
     return new Promise((resolve, reject) => {
-      function getId(object, property) {
-        return object.map(value => {
+      function getId(object: any, property: string) {
+        return object.map((value: any) => {
           return value[property]._id
         })[0]
       }
       Path.findOne({
         _id: pathId
-      }).exec(async (err, path) => {
+      }).exec(async (err: Error, path) => {
         if (err) reject(err)
         const tickets = await Ticket.find({})
         const base = _(tickets)
@@ -144,26 +184,26 @@ const PathService = {
               children: []
             }
           })
-        const response = {
-          _id: path._id,
-          id: path.property,
-          name: path.name,
-          children: children
-        }
+        const response = new PathTree(
+          path._id,
+          path.property,
+          path.name,
+          children
+        )
         resolve(response)
       })
     })
-  },
-  getPathsTree(userId) {
+  }
+  getPathsTree(userId: IAnalyst['_id']): Promise<PathTree[]> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
         _id: userId
       })
         .select('+paths')
         .populate('paths')
-        .exec(async (err, user) => {
+        .exec(async (err: Error, user) => {
           if (err) return reject(err)
-          const response = user.paths.map(path => {
+          const response: PathTree[] = user.paths.map((path: IPath) => {
             return this.getOnePathTree(path._id)
           })
           Promise.all(response).then(results => {
@@ -174,13 +214,13 @@ const PathService = {
           })
         })
     })
-  },
+  }
 
-  remove(userId, pathId) {
+  remove(userId: IAnalyst['_id'], pathId: IPath['_id']): Promise<IAnalyst['_id']> {
     return new Promise((resolve, reject) => {
       Path.deleteOne({
         _id: pathId
-      }).exec(err => {
+      }).exec((err: Error) => {
         if (err) return reject(err)
         Analyst.updateMany(
           {},
@@ -191,51 +231,50 @@ const PathService = {
               }
             }
           }
-        ).exec(err => {
+        ).exec((err: Error) => {
           if (err) return reject(err)
           resolve(userId)
         })
       })
     })
   }
-}
-
-function getOptions(ref) {
-  const model = require(getModule(ref))
-  return Object.keys(model.schema.paths).filter(r => {
-    return filterSelected(model.schema.paths, r)
-  })
-}
-
-function hasInstanceField(object) {
-  return Object.prototype.hasOwnProperty.call(object, 'instance')
-}
-
-function instanceIsString(object) {
-  return object.instance === 'String'
-}
-
-function isSelected(object) {
-  if (Object.prototype.hasOwnProperty.call(object.options, 'select')) {
-    return object.options.select
+  getOptions(ref: string) {
+    const model = require(this.getModule(ref))
+    return Object.keys(model.schema.paths).filter(r => {
+      return this.filterSelected(model.schema.paths, r)
+    })
   }
-  return true
-}
 
-function filterSelected(paths, ref) {
-  return (
-    hasInstanceField(paths[ref]) &&
-    instanceIsString(paths[ref]) &&
-    isSelected(paths[ref])
-  )
-}
-
-function getModule(ref) {
-  try {
-    return require.resolve(`@models/ticket/${ref}`)
-  } catch {
-    return require.resolve(`@models/index/${ref}`)
+  hasInstanceField(object: any) {
+    return Object.prototype.hasOwnProperty.call(object, 'instance')
+  }
+  
+  instanceIsString(object: any) {
+    return object.instance === 'String'
+  }
+  
+  isSelected(object: any) {
+    if (Object.prototype.hasOwnProperty.call(object.options, 'select')) {
+      return object.options.select
+    }
+    return true
+  }
+  
+  filterSelected(paths: any, ref: string) {
+    return (
+      this.hasInstanceField(paths[ref]) &&
+      this.instanceIsString(paths[ref]) &&
+      this.isSelected(paths[ref])
+    )
+  }
+  
+  getModule(ref: string) {
+    try {
+      return require.resolve(`@models/ticket/${ref}`)
+    } catch {
+      return  require.resolve(`@models/index/${ref}`)
+    }
   }
 }
 
-module.exports = PathService
+export default new PathService()

@@ -1,8 +1,28 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document, Model } from 'mongoose'
 const bcrypt = require('bcrypt')
-const Group = require('./ticket/Group')
+import Group, {IGroup}  from './ticket/Group'
 
-const AnalystSchema = new Schema({
+export interface IAnalyst extends Document {
+  email: string;
+  status: string;
+  lastTimeActive: Date;
+  contactEmail: string;
+  name: string;
+  role: string;
+  password: string;
+  address: Schema.Types.ObjectId;
+  description: Schema.Types.ObjectId;
+  active: boolean;
+  picture: string;
+  mergePictureWithExternalAccount: boolean;
+  sounds: any;
+  chats: [Schema.Types.ObjectId];
+  paths: [Schema.Types.ObjectId];
+  getGroups: Function;
+  verifyPassword: Function;
+}
+
+const AnalystSchema: Schema<IAnalyst> = new Schema({
   _id: Schema.Types.ObjectId,
   email: {
     type: String,
@@ -91,38 +111,36 @@ const AnalystSchema = new Schema({
   ]
 })
 
-AnalystSchema.methods.getGroups = function(callback) {
+AnalystSchema.methods.getGroups = function(callback: Function) {
   Group.find(
     {
       analysts: {
         $in: [this._id]
       }
     },
-    (err, result) => {
+    (err: Error, result: [IGroup]) => {
       callback(err, result)
     }
   )
 }
 
-AnalystSchema.pre('save', function(next) {
+AnalystSchema.pre<IAnalyst>('save', function(next) {
   const user = this
   if (!user.isModified('password')) return next()
   const salt = bcrypt.genSaltSync(12)
-  bcrypt.hash(user.password, salt, function(err, hash) {
+  bcrypt.hash(user.password, salt, function(err: Error, hash: string) {
     if (err) return next(err)
     user.password = hash
     next()
   })
 })
 
-AnalystSchema.methods.verifyPassword = function(password, next) {
-  bcrypt.compare(password, this.password, (err, result) => {
+AnalystSchema.methods.verifyPassword = function(password: string, next: Function) {
+  bcrypt.compare(password, this.password, (err: Error, result: boolean) => {
     if (err) return next(err)
     if (!result)
       return next(
-        new Error({
-          message: 'Password incorrect'
-        })
+        new Error('Password incorrect')
       )
     return next(null, result)
   })
@@ -138,4 +156,4 @@ AnalystSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = models.Analyst || model('Analyst', AnalystSchema)
+export default models.Analyst || model<IAnalyst>('Analyst', AnalystSchema)

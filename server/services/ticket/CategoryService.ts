@@ -1,9 +1,9 @@
-const mongoose = require('mongoose')
-const Category = require('../../models/ticket/Category')
-const Field = require('../../models/ticket/Field')
+import mongoose, {Types}from 'mongoose'
+import Category, { ICategory } from '../../models/ticket/Category'
+import Field from '../../models/ticket/Field'
 
-const CategoryService = {
-  create(category) {
+class CategoryService {
+  create(category: ICategory): Promise<ICategory> {
     return new Promise(async (resolve, reject) => {
       const newCategory = {
         _id: new mongoose.Types.ObjectId(),
@@ -11,7 +11,7 @@ const CategoryService = {
         father: category.father,
         fields: category.fields || []
       }
-      let fatherFromDB = null
+      let fatherFromDB: ICategory | null = null
 
       if (newCategory.father) {
         fatherFromDB = await Category.findOne({
@@ -31,7 +31,7 @@ const CategoryService = {
         newCategory.fields[i] = await Field.create(newCategory.fields[i])
       }
 
-      Category.create(newCategory, (err, categorySaved) => {
+      Category.create(newCategory, (err: Error, categorySaved: ICategory) => {
         if (err) reject(err)
         if (fatherFromDB !== null) {
           fatherFromDB.subs.push(categorySaved)
@@ -40,7 +40,7 @@ const CategoryService = {
         resolve(categorySaved)
       })
     })
-  },
+  }
   getCategories() {
     return new Promise((resolve, reject) => {
       Category.find({})
@@ -83,13 +83,13 @@ const CategoryService = {
             }
           }
         ])
-        .exec((err, categories) => {
+        .exec((err: Error, categories) => {
           if (err) return reject(err)
           return resolve(categories)
         })
     })
-  },
-  getOne(name) {
+  }
+  getOne(name: string): Promise<ICategory> {
     return new Promise((resolve, reject) => {
       Category.findOne({ name: name })
         .populate([
@@ -116,13 +116,13 @@ const CategoryService = {
             }
           }
         ])
-        .exec((err, result) => {
+        .exec((err: Error, result) => {
           if (err) return reject(err)
           return resolve(result)
         })
     })
-  },
-  edit(categoryId, category) {
+  }
+  edit(categoryId: Types.ObjectId, category: ICategory): Promise<void> {
     return new Promise((resolve, reject) => {
       Category.updateOne(
         { _id: categoryId },
@@ -136,15 +136,15 @@ const CategoryService = {
             defaultPriority: category.defaultPriority
           }
         }
-      ).exec(err => {
+      ).exec((err: Error) => {
         if (err) return reject(err)
         return resolve()
       })
     })
-  },
-  getSubsForCategory(id) {
+  }
+  getSubsForCategory(id: Types.ObjectId): Promise<[ICategory]> {
     return new Promise((resolve, reject) => {
-      Category.findOne({ _id: id }).exec((err, result) => {
+      Category.findOne({ _id: id }).exec((err: Error, result) => {
         if (err) return reject(err)
         return resolve(result.subs)
       })
@@ -152,4 +152,4 @@ const CategoryService = {
   }
 }
 
-module.exports = CategoryService
+export default new CategoryService()

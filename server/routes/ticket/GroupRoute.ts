@@ -1,4 +1,4 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
 const GroupController = require('../../controllers/ticket/GroupController')
 
@@ -11,4 +11,4 @@ router.delete(
   '/config/group/analyst/:groupId/:analystId',
   GroupController.remove
 )
-module.exports = router
+export default router

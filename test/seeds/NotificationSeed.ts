@@ -1,9 +1,9 @@
-const mongoose = require('mongoose')
-const generate = require('./Generate')
-const AnalystSeed = require('./AnalystSeed')
+import mongoose from 'mongoose'
+import generate from './Generate'
+import AnalystSeed from './AnalystSeed'
 
-const seed = number => {
-  const analysts = AnalystSeed.seed(5)
+const seed = (number: number) => {
+  const analysts = AnalystSeed(5)
 
   const template = () => ({
     _id: new mongoose.Types.ObjectId(),
@@ -15,4 +15,4 @@ const seed = number => {
   return generate(template, number)
 }
 
-module.exports = { seed }
+export default seed

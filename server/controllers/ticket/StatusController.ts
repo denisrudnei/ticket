@@ -1,42 +1,43 @@
-const StatusService = require('../../services/ticket/StatusService')
+import StatusService from '../../services/ticket/StatusService'
+import express from 'express'
 
-module.exports = {
-  getStatus: (req, res) => {
+export default {
+  getStatus: (req: express.Request, res: express.Response) => {
     StatusService.getStatus()
       .then(status => {
         return res.status(200).json(status)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  getOne: (req, res) => {
+  getOne: (req: express.Request, res: express.Response) => {
     StatusService.getOne(req.params.id)
       .then(status => {
         return res.status(200).json(status)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  create: (req, res) => {
+  create: (req: express.Request, res: express.Response) => {
     StatusService.create(req.body)
       .then(() => {
         return res.sendStatus(200)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  edit: (req, res) => {
+  edit: (req: express.Request, res: express.Response) => {
     StatusService.edit(req.params.id, req.body)
       .then(() => {
         return res.sendStatus(202)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   }

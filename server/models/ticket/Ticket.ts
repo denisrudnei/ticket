@@ -1,10 +1,38 @@
-const { models, model, Schema, connection } = require('mongoose')
-const mongoosePaginate = require('mongoose-paginate')
-const mongooseAutoIncrement = require('mongoose-auto-increment')
+import { models, model, Schema, connection, Document } from 'mongoose'
+import { ICategory } from './Category'
+import { IGroup } from './Group'
+import { IAddress } from '../Address'
+import { IStatus } from './Status'
+import { IComment } from './Comment'
+import { IAnalyst } from '../Analyst'
+import { IPriority } from './Priority'
+import { ISla } from './Sla'
+import { ILog } from './Log'
+import mongoosePaginate from 'mongoose-paginate'
+import mongooseAutoIncrement from 'mongoose-auto-increment'
 
 mongooseAutoIncrement.initialize(connection)
 
-const TicketSchema = new Schema(
+export interface ITicket extends Document {
+  category: ICategory['_id'];
+  resume: string;
+  content: string;
+  group: IGroup['_id'];
+  address: IAddress['_id'];
+  status: IStatus['_id'];
+  comments: [IComment['_id']];
+  affectedUser: IAnalyst['_id'];
+  openedBy: IAnalyst['_id'];
+  actualUser: IAnalyst['_id'];
+  priority: IPriority['_id'];
+  sla: ISla['_id'];
+  father: ITicket['_id'];
+  children: [ITicket['_id']];
+  files: [any];
+  logs: [ILog['_id']]
+}
+
+const TicketSchema: Schema<ITicket> = new Schema(
   {
     _id: Schema.Types.ObjectId,
     category: {
@@ -121,4 +149,9 @@ TicketSchema.plugin(mongooseAutoIncrement.plugin, {
   field: 'ticketNumber'
 })
 
-module.exports = models.Ticket || model('Ticket', TicketSchema)
+// interface TicketModel<T extends Document> extends PaginateModel<T>{}
+
+// const ticketModel: TicketModel<ITicket> = model<ITicket>('Ticket', TicketSchema)
+
+export default  model<ITicket>('Ticket', TicketSchema)
+

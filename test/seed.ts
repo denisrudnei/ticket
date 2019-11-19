@@ -1,56 +1,61 @@
-const path = require('path')
-const mongoose = require('mongoose')
-const AnalystSeed = require('./seeds/AnalystSeed')
-const CategorySeed = require('./seeds/CategorySeed')
-const TicketSeed = require('./seeds/TicketSeed')
-const GroupSeed = require('./seeds/GroupSeed')
-const StatusSeed = require('./seeds/StatusSeed')
-const NotificationSeed = require('./seeds/NotificationSeed')
-const AddressSeed = require('./seeds/AddressSeed')
-const PathSeed = require('./seeds/PathSeed')
-const SlaSeed = require('./seeds/SlaSeed')
-const PrioritySeed = require('./seeds/PrioritySeed')
+import path from 'path'
+import mongoose from 'mongoose'
+import AnalystSeed from './seeds/AnalystSeed'
+import CategorySeed from './seeds/CategorySeed'
+import TicketSeed from './seeds/TicketSeed'
+import GroupSeed from './seeds/GroupSeed'
+import StatusSeed from './seeds/StatusSeed'
+import NotificationSeed from './seeds/NotificationSeed'
+import AddressSeed from './seeds/AddressSeed'
+import PathSeed from './seeds/PathSeed'
+import SlaSeed from './seeds/SlaSeed'
+import PrioritySeed from './seeds/PrioritySeed'
 
-const data = [
+interface IData {
+  model: string;
+  documents: any[]
+}
+
+const data: IData[] = [
   {
     model: 'Analyst',
-    documents: AnalystSeed.seed(5)
+    documents: AnalystSeed(5)
   },
   {
     model: 'Category',
-    documents: CategorySeed.seed(5)
+    documents: CategorySeed(5)
   },
   {
     model: 'Status',
-    documents: StatusSeed.seed(5)
+    documents: StatusSeed(5)
   },
   {
     model: 'Group',
-    documents: GroupSeed.seed(5)
+    documents: GroupSeed(5)
   },
   {
     model: 'Notification',
-    documents: NotificationSeed.seed(5)
+    documents: NotificationSeed(5)
   },
   {
     model: 'Address',
-    documents: AddressSeed.seed(5)
+    documents: AddressSeed(5)
   },
   {
     model: 'Path',
-    documents: PathSeed.seed(5)
+    documents: PathSeed(5)
   },
   {
     model: 'Priority',
-    documents: PrioritySeed.seed(5)
+    documents: PrioritySeed(5)
   },
   {
     model: 'Sla',
-    documents: SlaSeed.seed(5)
+    documents: SlaSeed(5)
   }
 ]
 
-const models = [
+const models: string[] = [
   './server/models/Analyst.js',
   './server/models/ticket/Group.js',
   './server/models/ticket/Status.js',
@@ -76,16 +81,16 @@ const seed = {
         },
         async function(err) {
           if (err) return reject(err)
-          await seed.loadModels(models)
-          await seed.clearModels(data.map(v => v.model))
-          await seed.populate(data)
-          await TicketSeed.seed()
+          await seed.loadModels(models as [string])
+          await seed.clearModels(data.map((v: IData) => v.model) as [string])
+          await seed.populate(data as [IData])
+          await TicketSeed()
           return resolve()
         }
       )
     })
   },
-  loadModels: paths => {
+  loadModels: (paths: [string]) => {
     return new Promise((resolve, reject) => {
       for (let i = 0; i < paths.length; i++) {
         const Model = require(path.resolve(paths[i]))
@@ -94,7 +99,7 @@ const seed = {
       resolve()
     })
   },
-  populate: data => {
+  populate: (data: [IData]) => {
     return new Promise(async (resolve, reject) => {
       for (let i = 0; i < data.length; i++) {
         const modelName = data[i].model
@@ -107,7 +112,7 @@ const seed = {
       resolve()
     })
   },
-  clearModels: models => {
+  clearModels: (models: [string]) => {
     return new Promise(async (resolve, reject) => {
       for (let i = 0; i < models.length; i++) {
         const Model = mongoose.model(models[i])
@@ -121,4 +126,4 @@ const seed = {
   }
 }
 
-module.exports = seed
+export default seed

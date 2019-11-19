@@ -1,4 +1,9 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
+
+export interface IChat extends Document {
+  participants: [Schema.Types.ObjectId];
+  messages: [Schema.Types.ObjectId];
+}
 
 const ChatSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -16,4 +21,4 @@ const ChatSchema = new Schema({
   ]
 })
 
-module.exports = models.Chat || model('Chat', ChatSchema)
+export default models.Chat || model('Chat', ChatSchema)

@@ -1,5 +1,5 @@
-const CategoryService = require('../../server/services/ticket/CategoryService')
-const Category = require('../../server/models/ticket/Category')
+import CategoryService from '../../server/services/ticket/CategoryService'
+import Category from '../../server/models/ticket/Category'
 
 describe('CategoryService', function() {
   this.timeout(0)
@@ -9,19 +9,19 @@ describe('CategoryService', function() {
   })
 
   it('Crete a new category', async () => {
-    const category = {
+    const category = new Category({
       name: 'Teste',
       father: null
-    }
+    })
     await CategoryService.create(category)
   })
 
   it('Crete a new category with father', async () => {
     const father = await Category.findOne().exec()
-    const category = {
+    const category = new Category({
       name: 'Teste',
       father: father
-    }
+    })
     await CategoryService.create(category)
   })
 
@@ -43,11 +43,11 @@ describe('CategoryService', function() {
         max: 5
       }
     }
-    const category = {
+    const category = new Category({
       name: 'teste',
       father: null,
       fields: [field1]
-    }
+    })
     await CategoryService.create(category)
   })
 

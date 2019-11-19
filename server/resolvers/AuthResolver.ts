@@ -1,11 +1,11 @@
-const AuthService = require('../services/AuthService')
+import AuthService from '../services/AuthService'
 
 const AuthResolver = {
   Mutation: {
-    Login: (_, { email, password }) => {
+    Login: (_: any, { email, password }: any) => {
       return AuthService.login(email, password)
     }
   }
 }
 
-module.exports = AuthResolver
+export default AuthResolver

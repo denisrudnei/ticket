@@ -1,4 +1,8 @@
-const { Schema, models, model } = require('mongoose')
+import { Schema, models, model, Document } from 'mongoose'
+
+export interface ISla extends Document {
+  limit: Date
+}
 
 const SlaSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -7,4 +11,4 @@ const SlaSchema = new Schema({
   }
 })
 
-module.exports = models.Sla || model('Sla', SlaSchema)
+export default models.Sla || model('Sla', SlaSchema)

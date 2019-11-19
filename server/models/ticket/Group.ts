@@ -1,4 +1,10 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
+import { IAnalyst } from '../Analyst'
+
+export interface IGroup extends Document {
+  name: string;
+  analysts: [IAnalyst['_id']]
+}
 
 const GroupSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -27,4 +33,4 @@ GroupSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = models.Group || model('Group', GroupSchema)
+export default models.Group || model('Group', GroupSchema)

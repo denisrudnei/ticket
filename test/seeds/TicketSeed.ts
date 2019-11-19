@@ -1,32 +1,32 @@
-const faker = require('faker')
-const mongoose = require('mongoose')
-const Ticket = require('../../server/models/ticket/Ticket')
-const Analyst = require('../../server/models/Analyst')
-const Status = require('../../server/models/ticket/Status')
-const Group = require('../../server/models/ticket/Group')
-const Category = require('../../server/models/ticket/Category')
-const CategorySeed = require('./CategorySeed')
-const AnalystSeed = require('./AnalystSeed')
-const GroupSeed = require('./GroupSeed')
-const StatusSeed = require('./StatusSeed')
+import faker from 'faker'
+import mongoose from 'mongoose'
+import Ticket from '../../server/models/ticket/Ticket'
+import Analyst from '../../server/models/Analyst'
+import Status from '../../server/models/ticket/Status'
+import Group from '../../server/models/ticket/Group'
+import Category from '../../server/models/ticket/Category'
+import CategorySeed from './CategorySeed'
+import AnalystSeed from './AnalystSeed'
+import GroupSeed from './GroupSeed'
+import StatusSeed from './StatusSeed'
 
 const analyst = async function() {
-  await Analyst.create(AnalystSeed.seed(1)[0])
+  await Analyst.create(AnalystSeed(1)[0])
   const result = await Analyst.findOne().exec()
   return result
 }
 const group = async function() {
-  await Group.create(GroupSeed.seed(1)[0])
+  await Group.create(GroupSeed(1)[0])
   const result = await Group.findOne().exec()
   return result
 }
 const status = async function() {
-  await Status.create(StatusSeed.seed(1)[0])
+  await Status.create(StatusSeed(1)[0])
   const result = await Status.findOne().exec()
   return result
 }
 const category = async function() {
-  await Category.create(CategorySeed.seed(1)[0])
+  await Category.create(CategorySeed(1)[0])
   const result = await Category.findOne().exec()
   return result
 }
@@ -66,4 +66,4 @@ const seed = () => {
   })
 }
 
-module.exports = { seed }
+export default seed

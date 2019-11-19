@@ -1,14 +1,14 @@
-const StatusService = require('../services/ticket/StatusService')
+import StatusService from '../services/ticket/StatusService'
 
 const StatusResolver = {
   Query: {
     Status: () => {
       return StatusService.getStatus()
     },
-    FindStatus: (_, { _id }) => {
+    FindStatus: (_: any, { _id }: any) => {
       return StatusService.getOne(_id)
     }
   }
 }
 
-module.exports = StatusResolver
+export default StatusResolver

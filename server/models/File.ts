@@ -1,6 +1,10 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
 
-const FileSchema = new Schema({
+export interface IFile extends Document {
+  name: string;
+}
+
+const FileSchema: Schema<IFile> = new Schema({
   _id: Schema.Types.ObjectId,
   name: {
     type: String,
@@ -18,4 +22,4 @@ FileSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = models.File || model('File', FileSchema)
+export default models.File || model('File', FileSchema)

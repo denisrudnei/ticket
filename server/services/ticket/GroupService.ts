@@ -1,47 +1,48 @@
-const mongoose = require('mongoose')
-const Group = require('../../models/ticket/Group')
+import mongoose from 'mongoose'
+import Group, {IGroup} from '../../models/ticket/Group'
+import { IAnalyst } from '../../models/Analyst'
 
-const GroupService = {
-  getAll() {
+class GroupService{
+  getAll(): Promise<[IGroup]> {
     return new Promise((resolve, reject) => {
-      Group.find({}, (err, groups) => {
+      Group.find({}, (err: Error, groups: [IGroup]) => {
         if (err) return reject(err)
         if (groups === null) return reject(new Error('No group found'))
         return resolve(groups)
       })
     })
-  },
-  getOne(groupId) {
+  }
+  getOne(groupId: IGroup['_id']): Promise<IGroup> {
     return new Promise((resolve, reject) => {
       Group.findOne({
         _id: groupId
       })
         .populate(['analysts'])
-        .exec((err, group) => {
+        .exec((err: Error, group) => {
           if (err) return reject(err)
           if (group === null) return reject(new Error('No group found'))
           return resolve(group)
         })
     })
-  },
-  create(group) {
+  }
+  create(group: IGroup): Promise<void> {
     return new Promise((resolve, reject) => {
-      const newGroup = {
+      const newGroup = new Group({
         _id: new mongoose.Types.ObjectId(),
         ...group
-      }
+      })
 
-      Group.create(newGroup, err => {
+      Group.create(newGroup, (err: Error) => {
         if (err) return reject(err)
         return resolve()
       })
     })
-  },
-  edit(grouId, group) {
+  }
+  edit(groupId: IGroup['_id'], group: IGroup): Promise<void> {
     return new Promise((resolve, reject) => {
       Group.updateOne(
         {
-          _id: grouId
+          _id: groupId
         },
         {
           $set: {
@@ -49,13 +50,13 @@ const GroupService = {
             analysts: group.analysts
           }
         }
-      ).exec(err => {
+      ).exec((err: Error) => {
         if (err) return reject(err)
         return resolve()
       })
     })
-  },
-  insertAnalyst(groupId, analystId) {
+  }
+  insertAnalyst(groupId: IGroup['_id'], analystId: IAnalyst['_id']): Promise<void> {
     return new Promise((resolve, reject) => {
       Group.updateOne(
         { _id: groupId },
@@ -70,8 +71,8 @@ const GroupService = {
         }
       )
     })
-  },
-  removeAnalyst(groupId, analystId) {
+  }
+  removeAnalyst(groupId: IGroup['_id'], analystId: IAnalyst['_id']): Promise<void> {
     return new Promise((resolve, reject) => {
       Group.updateOne(
         { _id: groupId },
@@ -91,4 +92,4 @@ const GroupService = {
   }
 }
 
-module.exports = GroupService
+export default new GroupService()

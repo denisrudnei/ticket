@@ -1,13 +1,16 @@
-const Notification = require('../models/Notification')
+import Notification, { INotification } from '../models/Notification'
 const fields = ['to', 'from']
-const TicketService = require('../services/ticket/TicketService')
-const GroupService = require('../services/ticket/GroupService')
-const AnalystService = require('../services/AnalystService')
-const Log = require('../models/ticket/Log')
-const mongoose = require('mongoose')
+import TicketService from '../services/ticket/TicketService'
+import GroupService from '../services/ticket/GroupService'
+import AnalystService from '../services/AnalystService'
+import Log from '../models/ticket/Log'
+import mongoose from 'mongoose'
+import { IAnalyst } from '../models/Analyst'
+import { ITicket } from '../models/ticket/Ticket'
+import { IGroup } from '../models/ticket/Group'
 
-const NotificationService = {
-  getAll(userId) {
+class NotificationService {
+  getAll(userId: IAnalyst['_id']) {
     return new Promise((resolve, reject) => {
       Notification.find({
         to: {
@@ -15,23 +18,23 @@ const NotificationService = {
         }
       })
         .populate(fields)
-        .exec((err, notifications) => {
+        .exec((err: Error, notifications) => {
           if (err) return reject(err)
           return resolve(notifications)
         })
     })
-  },
-  getOne(id) {
+  }
+  getOne(id: INotification['_id']): Promise<INotification> {
     return new Promise((resolve, reject) => {
       Notification.findOne({ _id: id })
         .populate(fields)
-        .exec((err, notification) => {
+        .exec((err: Error, notification) => {
           if (err) return reject(err)
           return resolve(notification)
         })
     })
-  },
-  read(userId, notificationId) {
+  }
+  read(userId: IAnalyst['_id'], notificationId: INotification['_id']): Promise<INotification> {
     return new Promise((resolve, reject) => {
       Notification.updateOne(
         {
@@ -42,13 +45,13 @@ const NotificationService = {
             read: [userId]
           }
         }
-      ).exec(err => {
+      ).exec((err: Error) => {
         if (err) return reject(err)
         return resolve(this.getOne(notificationId))
       })
     })
-  },
-  unRead(userId, notificationId) {
+  }
+  unRead(userId: IAnalyst['_id'], notificationId: INotification['_id']): Promise<INotification> {
     return new Promise((resolve, reject) => {
       Notification.updateOne(
         {
@@ -61,13 +64,13 @@ const NotificationService = {
             }
           }
         }
-      ).exec(err => {
+      ).exec((err: Error) => {
         if (err) return reject(err)
         return resolve(this.getOne(notificationId))
       })
     })
-  },
-  toggleRead(userId, notificationId) {
+  }
+  toggleRead(userId: IAnalyst['_id'], notificationId: INotification['_id']) {
     return new Promise((resolve, reject) => {
       return this.getOne(notificationId).then(notification => {
         const read = notification.read.includes(userId)
@@ -75,8 +78,8 @@ const NotificationService = {
         return resolve(this.read(userId, notificationId))
       })
     })
-  },
-  readall(userId) {
+  }
+  readall(userId: IAnalyst['_id']) {
     return new Promise((resolve, reject) => {
       Notification.updateMany(
         {
@@ -89,13 +92,13 @@ const NotificationService = {
             read: [userId]
           }
         }
-      ).exec(err => {
+      ).exec((err: Error) => {
         if (err) return reject(err)
         return resolve(this.getAll(userId))
       })
     })
-  },
-  triggerForTicketTransfer(ticketId, groupId, analystId) {
+  }
+  triggerForTicketTransfer(ticketId: ITicket['_id'], groupId: IGroup['_id'], analystId: IAnalyst['_id']) {
     return new Promise(async (resolve, reject) => {
       const ticket = await TicketService.getOne(ticketId)
       const group = await GroupService.getOne(groupId)
@@ -112,7 +115,7 @@ const NotificationService = {
           },
           content: `${analyst.name} transferiu um chamado para seu grupo`
         },
-        (err, notification) => {
+        (err: Error, notification: INotification) => {
           if (err) reject(err)
           resolve(notification)
         }
@@ -121,4 +124,4 @@ const NotificationService = {
   }
 }
 
-module.exports = NotificationService
+export default new NotificationService()

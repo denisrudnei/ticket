@@ -1,12 +1,14 @@
-const express = require('express')
-const session = require('express-session')
-const bodyParser = require('body-parser')
-const acl = require('express-acl')
-const fileUploader = require('express-fileupload')
-const compression = require('compression')
-const routes = require('./routes/index')
+import express from 'express'
+import session from 'express-session'
+import consola from 'consola'
+import bodyParser from 'body-parser'
+import acl from 'express-acl'
+import fileUploader from 'express-fileupload'
+import compression from 'compression'
+import routes from './routes/index'
 
 class AppController {
+  express: express.Application
   constructor() {
     this.express = express()
     this.middlewares()
@@ -16,13 +18,14 @@ class AppController {
   middlewares() {
     this.express.use(
       session({
-        secret: process.env.SESSION_KEY,
+        secret: process.env.SESSION_KEY as string,
         resave: false,
         saveUninitialized: false
       })
     )
 
     acl.config({
+      baseUrl: '',
       filename: 'nacl.json',
       roleSearchPath: 'session.authUser.role'
     })
@@ -42,11 +45,11 @@ class AppController {
 
   routes() {
     this.express.use('/api', routes)
-    this.express.use((err, req, res, next) => {
+    this.express.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
       consola.error(err)
       res.status(500).json(err.message)
     })
   }
 }
 
-module.exports = new AppController().express
+export default new AppController().express

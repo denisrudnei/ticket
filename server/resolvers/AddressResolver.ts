@@ -1,4 +1,4 @@
-const AddressService = require('../services/AddressService')
+import AddressService from '../services/AddressService'
 
 const AddressResolver = {
   Query: {
@@ -8,4 +8,4 @@ const AddressResolver = {
   }
 }
 
-module.exports = AddressResolver
+export default AddressResolver

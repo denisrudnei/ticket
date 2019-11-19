@@ -1,21 +1,22 @@
-const { withFilter } = require('graphql-yoga')
-const PathService = require('../services/PathService')
-const PathEnum = require('../enums/PathEnum')
-const Analyst = require('../models/Analyst')
+import { Context } from 'graphql-yoga/dist/types'
+import { withFilter } from 'graphql-yoga'
+import PathService from '../services/PathService'
+import PathEnum from '../enums/PathEnum'
+import Analyst from '../models/Analyst'
 
 const PathResolver = {
   Query: {
-    Path: (_, __, { req }) => {
+    Path: (_: any, __: any, { req }: Context) => {
       const userId = req.session.authUser._id
       return PathService.getPaths(userId)
     },
-    PathTree: (_, __, { req }) => {
+    PathTree: (_: any, __: any, { req }: Context) => {
       const userId = req.session.authUser._id
       return PathService.getPathsTree(userId)
     }
   },
   Mutation: {
-    AddPath: (_, { path }, { req, pubSub }) => {
+    AddPath: (_: any, { path }: any, { req, pubSub }: Context) => {
       const userId = req.session.authUser._id
       const result = PathService.create(path, userId)
       pubSub.publish(PathEnum.NEW_PATH_ADDED, {
@@ -23,7 +24,7 @@ const PathResolver = {
       })
       return result
     },
-    RemovePath: (_, { path, userId }, { pubSub }) => {
+    RemovePath: (_: any, { path, userId }: any, { pubSub }: Context) => {
       const result = PathService.remove(userId, path)
       pubSub.publish(PathEnum.PATH_REMOVED, {
         RemovePath: result
@@ -65,4 +66,4 @@ const PathResolver = {
   }
 }
 
-module.exports = PathResolver
+export default PathResolver

@@ -1,6 +1,11 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
 
-const PrioritySchema = new Schema({
+export interface IPriority extends Document {
+  weight: number;
+  name: string;
+}
+
+const PrioritySchema: Schema<IPriority> = new Schema({
   weight: {
     type: Number,
     required: [true, 'Necessário um valor']
@@ -12,4 +17,4 @@ const PrioritySchema = new Schema({
   }
 })
 
-module.exports = models.Priority || model('Priority', PrioritySchema)
+export default models.Priority || model('Priority', PrioritySchema)

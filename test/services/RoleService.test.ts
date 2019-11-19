@@ -1,6 +1,6 @@
-const RoleService = require('../../server/services/RoleService')
-const Role = require('../../server/models/Role')
-const Analyst = require('../../server/models/Analyst')
+import RoleService from '../../server/services/RoleService'
+import Role from '../../server/models/Role'
+import Analyst from '../../server/models/Analyst'
 
 describe('Role', () => {
   it('Get roles', async () => {

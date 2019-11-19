@@ -1,7 +1,7 @@
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
-const resolvers = {
+const resolvers: any = {
   Query: {},
   Mutation: {},
   Subscription: {}
@@ -16,4 +16,4 @@ fs.readdirSync(folder).forEach(file => {
   })
 })
 
-module.exports = resolvers
+export default resolvers

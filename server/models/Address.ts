@@ -1,6 +1,15 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
 
-const AddressSchema = new Schema({
+export interface IAddress extends Document {
+  name: string;
+  country: string;
+  street: string;
+  cep: string;
+  city: string;
+  state: string;
+}
+
+const AddressSchema: Schema<IAddress> = new Schema({
   _id: Schema.Types.ObjectId,
   name: {
     type: String
@@ -32,4 +41,4 @@ AddressSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = models.Address || model('Address', AddressSchema)
+export default models.Address || model('Address', AddressSchema)

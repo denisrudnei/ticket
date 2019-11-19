@@ -1,6 +1,23 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
+import {IGroup} from './Group'
+import {IStatus} from './Status'
+import {IPriority} from './Priority'
+import {IField} from './Field'
+import {ISla} from './Sla'
 
-const CategorySchema = new Schema({
+export interface ICategory extends Document {
+  name: string;
+  father: ICategory['_id'];
+  description: string;
+  subs: [ICategory['_id']];
+  defaultGroup: IGroup['_id'];
+  defaultStatus: IStatus['_id'];
+  defaultPriority: IPriority['_id'];
+  fields: [IField['_id']];
+  sla: ISla['_id']
+}
+
+const CategorySchema: Schema<ICategory> = new Schema({
   _id: Schema.Types.ObjectId,
   name: {
     type: String
@@ -42,7 +59,7 @@ const CategorySchema = new Schema({
   }
 })
 
-CategorySchema.virtual('fullName').get(function() {
+CategorySchema.virtual('fullName').get(function(this: ICategory) {
   if (this.father === null || this.father === undefined) return this.name
   return `${this.father.fullName}.${this.name}`
 })
@@ -67,4 +84,4 @@ CategorySchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = models.Category || model('Category', CategorySchema)
+export default models.Category || model('Category', CategorySchema)

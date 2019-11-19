@@ -1,59 +1,62 @@
-const AnalystService = require('../services/AnalystService')
+import AnalystService from '../services/AnalystService'
+import express from 'express'
+import { UploadedFile } from 'express-fileupload'
+import Analyst from '../../server/models/Analyst'
 
-module.exports = {
-  getAll: (req, res) => {
+export default {
+  getAll: (req: express.Request, res: express.Response) => {
     AnalystService.getAnalysts()
       .then(analysts => {
         return res.status(200).json(analysts)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  getOne: (req, res) => {
+  getOne: (req: express.Request, res: express.Response) => {
     AnalystService.getOne(req.params.id)
       .then(analyst => {
         return res.status(200).json(analyst)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  getConfigAnalysts: (_, res) => {
+  getConfigAnalysts: (_: express.Request, res: express.Response) => {
     AnalystService.getConfigAnalysts()
       .then(analysts => {
         return res.status(200).json(analysts)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  create: (req, res) => {
+  create: (req: express.Request, res: express.Response) => {
     AnalystService.create(req.body)
       .then(() => {
         return res.sendStatus(201)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  getGroups: (req, res) => {
+  getGroups: (req: express.Request, res: express.Response) => {
     const userId = req.params.id
     AnalystService.getGroups(userId)
       .then(groups => {
         return res.status(200).json(groups)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  editSound: (req, res, next) => {
-    const userId = req.session.authUser._id
+  editSound: (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const userId = req.session!.authUser._id
     const soundConfig = {
       chat: {
         muted: req.body.chat.muted,
@@ -71,54 +74,54 @@ module.exports = {
       .catch(next)
   },
 
-  edit: (req, res) => {
-    const userId = req.session.authUser._id
-    const analyst = {
+  edit: (req: express.Request, res: express.Response) => {
+    const userId = req.session!.authUser._id
+    const analyst = new Analyst({
       name: req.body.name,
       contactEmail: req.body.contactEmail,
       color: req.body.color,
       address: req.body.address,
       mergePictureWithExternalAccount: req.body.mergePictureWithExternalAccount
-    }
+    })
     AnalystService.updateAnalyst(userId, analyst)
       .then(() => {
         return res.sendStatus(202)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  updateImge: (req, res) => {
-    const userId = req.session.authUser._id
-    const file = req.files.image
+  updateImage: (req: express.Request, res: express.Response) => {
+    const userId = req.session!.authUser._id
+    const file = req.files!.image as UploadedFile
     AnalystService.updateImage(userId, file)
       .then(() => {
         return res.sendStatus(202)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  removeImage: (req, res) => {
-    const userId = req.session.authUser._id
+  removeImage: (req: express.Request, res: express.Response) => {
+    const userId = req.session!.authUser._id
     AnalystService.removeImage(userId)
       .then(() => {
         return res.sendStatus(202)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  remove: (req, res) => {
+  remove: (req: express.Request, res: express.Response) => {
     const userId = req.params.id
     AnalystService.remove(userId)
       .then(() => {
         return res.sendStatus(200)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   }

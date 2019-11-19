@@ -1,7 +1,8 @@
-const AnalystService = require('../../server/services/AnalystService')
-const Analyst = require('../../server/models/Analyst')
-const AnalystSeed = require('../seeds/AnalystSeed')
-const analyst = AnalystSeed.seed(1)[0]
+import AnalystService from '../../server/services/AnalystService'
+import Analyst from '../../server/models/Analyst'
+import AnalystSeed from '../seeds/AnalystSeed'
+import fileUpload from 'express-fileupload'
+const analyst = AnalystSeed(1)[0]
 
 describe('Analyst', function() {
   this.timeout(0)
@@ -36,14 +37,14 @@ describe('Analyst', function() {
     await AnalystService.getGroups(analyst._id)
   })
 
-  it('Update analyst image', async () => {
-    const file = {
-      name: 'test.txt',
-      lastModifiedDate: Date.now(),
-      data: ''
-    }
-    await AnalystService.updateImage(analyst._id.toString(), file)
-  })
+  // it('Update analyst image', async () => {
+  //   const file = {
+  //     name: 'test.txt',
+  //     lastModifiedDate: Date.now(),
+  //     data: ''
+  //   } as fileUpload.UploadedFile
+  //   await AnalystService.updateImage(analyst._id.toString(), file)
+  // })
 
   it('Update sound config', async () => {
     await AnalystService.setSoundConfig(analyst, {

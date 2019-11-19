@@ -1,4 +1,4 @@
-const RoleService = require('../services/RoleService')
+import RoleService from '../services/RoleService'
 
 const RoleResolver = {
   Query: {
@@ -10,4 +10,4 @@ const RoleResolver = {
   Subscription: {}
 }
 
-module.exports = RoleResolver
+export default RoleResolver

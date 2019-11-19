@@ -1,4 +1,4 @@
-const express = require('express')
+import express from 'express'
 const AuthController = require('../controllers/AuthController')
 const router = express.Router()
 
@@ -11,4 +11,4 @@ router.post('/auth/redefine', AuthController.redefinePassword)
 router.post('/auth/password/reset', AuthController.reset)
 router.post('/auth/redefine-password/:token', AuthController.resetWithToken)
 
-module.exports = router
+export default router

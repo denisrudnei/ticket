@@ -1,31 +1,33 @@
-const mongoose = require('mongoose')
-const Priority = require('../models/ticket/Priority')
+import {Types} from 'mongoose'
+import Priority, {IPriority} from '../models/ticket/Priority'
 
-const PriorityService = {
-  create(priority) {
+class PriorityService {
+  create(priority: IPriority): Promise<void> {
     return new Promise((resolve, reject) => {
       Priority.create(
         {
-          _id: new mongoose.Types.ObjectId(),
+          _id: new Types.ObjectId(),
           name: priority.name,
           weight: priority.weight
         },
-        err => {
+        (err: Error) => {
           if (err) reject(err)
           resolve()
         }
       )
     })
-  },
+  }
+
   getAll() {
     return new Promise((resolve, reject) => {
-      Priority.find().exec((err, result) => {
+      Priority.find().exec((err: Error, result) => {
         if (err) reject(err)
         resolve(result)
       })
     })
-  },
-  edit(priority) {
+  }
+
+  edit(priority: IPriority): Promise<void> {
     return new Promise((resolve, reject) => {
       Priority.updateOne(
         {
@@ -43,12 +45,13 @@ const PriorityService = {
         }
       )
     })
-  },
-  editMany(priorities) {
+  }
+  editMany(priorities: [IPriority]) {
     const all = priorities.map(priority => this.edit(priority))
     return Promise.all(all)
-  },
-  remove(priorityId) {
+  }
+
+  remove(priorityId: Types.ObjectId): Promise<void> {
     return new Promise((resolve, reject) => {
       Priority.deleteOne(
         {
@@ -63,4 +66,4 @@ const PriorityService = {
   }
 }
 
-module.exports = PriorityService
+export default new PriorityService()

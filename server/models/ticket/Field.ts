@@ -1,4 +1,17 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
+
+export interface IField extends Document {
+  required: boolean;
+  text: string;
+  limits: ILimits;
+  value: string;
+}
+
+export interface ILimits {
+  min: number;
+  max: number;
+}
+
 const FieldSchema = new Schema({
   _id: Schema.Types.ObjectId,
   required: {
@@ -32,4 +45,4 @@ FieldSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = models.Field || model('Field', FieldSchema)
+export default models.Field || model('Field', FieldSchema)

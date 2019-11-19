@@ -1,14 +1,14 @@
-const KnowledgeService = require('../services/knowledge/KnowledgeService')
+import KnowledgeService from '../services/knowledge/KnowledgeService'
 
 const KnowledgeResolver = {
   Query: {
     Knowledge: () => {
       return KnowledgeService.getAll()
     },
-    KnowledgeByGroup: (_, {groupName}) => {
+    KnowledgeByGroup: (_: any, {groupName}: any) => {
       return KnowledgeService.getByKnowledgeGroup(groupName)
     },
-    KnowledgeById: (_, { _id }) => {
+    KnowledgeById: (_: any, { _id }: any) => {
       return KnowledgeService.getOne(_id)
     }
   },
@@ -16,4 +16,4 @@ const KnowledgeResolver = {
   Subscription: {}
 }
 
-module.exports = KnowledgeResolver
+export default KnowledgeResolver

@@ -1,6 +1,19 @@
-const { models, model, Schema } = require('mongoose')
-const TicketEnums = require('../enums/TicketEnum')
-const NotificationSchema = new Schema({
+import { models, model, Schema, Document } from 'mongoose'
+import TicketEnums from  '../enums/TicketEnum'
+import { IAnalyst } from './Analyst'
+
+export interface INotification extends Document {
+  from: IAnalyst['_id'];
+  to: [IAnalyst['_id']];
+  date: Date;
+  name: string;
+  read: [IAnalyst['_id']];
+  content: string;
+  type: string;
+  meta: any;
+}
+
+const NotificationSchema: Schema<INotification> = new Schema({
   _id: Schema.Types.ObjectId,
   from: {
     type: Schema.Types.ObjectId,
@@ -22,7 +35,7 @@ const NotificationSchema = new Schema({
     type: String,
     enum: [
       TicketEnums.TICKET_CHANGE_STATUS,
-      TicketEnums.TICKET_TRANSFER_TO_GROUPs,
+      TicketEnums.TICKET_TRANSFER_TO_GROUP,
       TicketEnums.TICKET_EDIT
     ]
   },
@@ -51,5 +64,4 @@ NotificationSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports =
-  models.Notification || model('Notification', NotificationSchema)
+export default models.Notification || model('Notification', NotificationSchema)

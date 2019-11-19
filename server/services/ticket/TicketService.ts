@@ -1,10 +1,15 @@
-const mongoose = require('mongoose')
-const Ticket = require('../../models/ticket/Ticket')
-const Comment = require('../../models/ticket/Comment')
-const Group = require('../../models/ticket/Group')
-const Notification = require('../../models/Notification')
-const Status = require('../../models/ticket/Status')
-const S3 = require('../../../plugins/S3')
+import mongoose, {Types} from 'mongoose'
+import Ticket, { ITicket } from '../../models/ticket/Ticket'
+import Comment, { IComment } from '../../models/ticket/Comment'
+import Group, { IGroup } from '../../models/ticket/Group'
+import Notification from '../../models/Notification'
+import Status, { IStatus } from '../../models/ticket/Status'
+import {IFile} from '../../models/File'
+import S3 from '../../../plugins/S3'
+import AWS from 'aws-sdk'
+import {} from 'mongoose-paginate'
+import { IAnalyst } from '../../models/Analyst'
+import { UploadedFile } from 'express-fileupload'
 
 const populateArray = [
   {
@@ -39,8 +44,8 @@ const populateArray = [
   'category'
 ]
 
-const TicketService = {
-  getTickets(filter, sortBy, page, limit) {
+class TicketService {
+  getTickets(filter: any, sortBy: any, page: number, limit: number) {
     // TODO sorting not works with doc ref
     return new Promise((resolve, reject) => {
       Ticket.paginate(
@@ -51,32 +56,32 @@ const TicketService = {
           sort: sortBy,
           populate: 'logs comments status'
         },
-        (err, result) => {
+        (err: Error, result) => {
           if (err) return reject(err)
           return resolve(result)
         }
       )
     })
-  },
-  getOne(ticketId) {
+  }
+  getOne(ticketId: ITicket['_id']): Promise<ITicket> {
     return new Promise((resolve, reject) => {
       Ticket.findOne({
         _id: ticketId
       })
         .populate(populateArray)
-        .exec((err, ticket) => {
+        .exec((err: Error, ticket: ITicket) => {
           if (err) return reject(err)
           return resolve(ticket)
         })
     })
-  },
-  copyTicket(ticketId, userId) {
+  }
+  copyTicket(ticketId: ITicket['_id'], userId: IAnalyst['_id']) {
     return new Promise((resolve, reject) => {
       Ticket.findOne({
         _id: ticketId
-      }).exec((err, ticket) => {
+      }).exec((err: Error, ticket: ITicket) => {
         if (err) reject(err)
-        const newTicket = {
+        const newTicket = new Ticket({
           openedBy: userId,
           actualUser: userId,
           affectedUser: ticket.affectedUser,
@@ -86,12 +91,12 @@ const TicketService = {
           group: ticket.group,
           category: ticket.category,
           priority: ticket.priority
-        }
+        })
         resolve(this.create(newTicket))
       })
     })
-  },
-  updateOne(ticketId, ticketBody) {
+  }
+  updateOne(ticketId: ITicket['_id'], ticketBody: ITicket) {
     return new Promise((resolve, reject) => {
       Ticket.updateOne(
         {
@@ -119,15 +124,15 @@ const TicketService = {
         return resolve(result)
       })
     })
-  },
-  create(ticketBody) {
+  }
+  create(ticketBody: ITicket): Promise<ITicket> {
     return new Promise((resolve, reject) => {
       const ticket = {
         _id: new mongoose.Types.ObjectId(),
         ...ticketBody
       }
 
-      Ticket.create(ticket, async (err, result) => {
+      Ticket.create(ticket, async (err: Error, result: ITicket) => {
         if (err) return reject(err)
         const newTicket = await Ticket.findOne({ _id: result._id })
           .populate(populateArray)
@@ -136,16 +141,16 @@ const TicketService = {
         const notification = await Notification.create({
           _id: new mongoose.Types.ObjectId(),
           name: 'TicketCreate',
-          from: newTicket.openedBy._id,
-          to: newTicket.group.analysts.map(a => a._id),
-          content: `${newTicket.openedBy.name} abriu um novo chamado`
+          from: newTicket!.openedBy._id,
+          to: newTicket!.group.analysts.map((a: IAnalyst) => a._id),
+          content: `${newTicket!.openedBy.name} abriu um novo chamado`
         })
 
-        return resolve(newTicket)
+        return resolve(newTicket!)
       })
     })
-  },
-  changeStatus(ticketId, statusId) {
+  }
+  changeStatus(ticketId: ITicket['_id'], statusId: IStatus['_id']): Promise<ITicket> {
     return new Promise((resolve, reject) => {
       Ticket.findOne({ _id: ticketId })
         .populate(populateArray)
@@ -155,21 +160,23 @@ const TicketService = {
             _id: statusId
           })
 
-          ticket.status = status._id
+          ticket!.status = status._id
 
-          const newTicket = {
-            ...ticket._doc,
+          // FIXME
+
+          const newTicket = new Ticket({
+            ...ticket,
             status: status
-          }
+          })
 
-          ticket.save(err => {
+          ticket!.save((err: Error) => {
             if (err) return reject(err)
             return resolve(newTicket)
           })
         })
     })
-  },
-  transferToGroup(ticketId, groupId) {
+  }
+  transferToGroup(ticketId: ITicket['_id'], groupId: IGroup['_id']): Promise<ITicket> {
     return new Promise(async (resolve, reject) => {
       const ticket = await Ticket.findOne({ _id: ticketId })
         .populate(populateArray)
@@ -177,20 +184,22 @@ const TicketService = {
 
       const group = await Group.findOne({ _id: groupId }).populate(['analysts'])
 
-      ticket.group = group._id
+      ticket!.group = group._id
 
-      const newTicket = {
-        ...ticket._doc,
+      // FIXME
+
+      const newTicket = new Ticket({
+        ...ticket,
         group: group
-      }
+      })
 
-      ticket.save(err => {
+      ticket!.save((err: Error) => {
         if (err) return reject(err)
         return resolve(newTicket)
       })
     })
-  },
-  commentOnTicket(ticketId, userId, content) {
+  }
+  commentOnTicket(ticketId: ITicket['_id'], userId: IAnalyst['_id'], content: string) {
     return new Promise((resolve, reject) => {
       Comment.create(
         {
@@ -198,7 +207,7 @@ const TicketService = {
           user: userId,
           content: content
         },
-        (err, comment) => {
+        (err: Error, comment: IComment) => {
           if (err) reject(err)
           Ticket.updateOne(
             {
@@ -209,13 +218,13 @@ const TicketService = {
                 comments: [comment]
               }
             }
-          ).exec(err => {
+          ).exec((err: Error) => {
             if (err) return reject(err)
             Comment.findOne({
               _id: comment._id
             })
               .populate(['user'])
-              .exec((err, toReturn) => {
+              .exec((err: Error, toReturn) => {
                 if (err) return reject(err)
                 return resolve(toReturn)
               })
@@ -223,14 +232,14 @@ const TicketService = {
         }
       )
     })
-  },
-  insertFile(ticketId, files) {
+  }
+  insertFile(ticketId: ITicket['_id'], files: UploadedFile[]) {
     return new Promise(async (resolve, reject) => {
       const ticket = await Ticket.findOne({
         _id: ticketId
       }).exec()
       for (let i = 0; i < files.length; i++) {
-        const f = files[i]
+        const f: UploadedFile = files[i]
 
         const name = `${ticketId} - ${f.name} - ${i}`
         const params = {
@@ -240,50 +249,50 @@ const TicketService = {
         }
         await S3.upload(params).promise()
 
-        ticket.files.push({
+        ticket!.files.push({
           name: name,
           type: f.mimetype
         })
-        await ticket.save()
+        await ticket!.save()
       }
-      return resolve(ticket.files)
+      return resolve(ticket!.files)
     })
-  },
-  getFile(fileId) {
+  }
+  getFile(fileId: string): Promise<any> {
     return new Promise((resolve, reject) => {
       S3.getObject(
         {
           Bucket: process.env.BUCKET,
           Key: fileId
         },
-        (err, file) => {
+        (err: Error, file: AWS.S3.Types.GetObjectOutput) => {
           if (err) return reject(err)
           return resolve(file.Body)
         }
       )
     })
-  },
-  removeFile(ticketId, fileId) {
+  }
+  removeFile(ticketId: ITicket['_id'], fileId: IFile['_id']): Promise<ITicket> {
     return new Promise(async (resolve, reject) => {
       const ticket = await Ticket.findOne({
         _id: ticketId
-      })
+      }).exec()
       S3.deleteObject(
         {
           Bucket: process.env.BUCKET,
           Key: fileId
         },
-        err => {
+        (err: Error) => {
           if (err) return reject(err)
-          ticket.files = ticket.files.filter(f => {
-            return f.name !== fileId
-          })
-          ticket.save()
-          return resolve(ticket)
+          // ticket.files = ticket!.files.filter((f: any) => {
+          //   return f.name !== fileId
+          // })
+          ticket!.save()
+          return resolve(ticket!)
         }
       )
     })
   }
 }
 
-module.exports = TicketService
+export default new TicketService()

@@ -1,6 +1,13 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
+import { IAnalyst } from '../Analyst'
 
-const CommentSchema = new Schema({
+export interface IComment extends Document {
+  user: IAnalyst['_id'];
+  content: string;
+  date: Date;
+}
+
+const CommentSchema: Schema<IComment> = new Schema({
   _id: Schema.Types.ObjectId,
   user: {
     type: Schema.Types.ObjectId,
@@ -30,4 +37,4 @@ CommentSchema.set('toJSON', {
   virtuals: true
 })
 
-module.exports = models.Comment || model('Comment', CommentSchema)
+export default models.Comment || model('Comment', CommentSchema)

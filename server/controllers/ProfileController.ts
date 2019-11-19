@@ -1,69 +1,70 @@
-const PathService = require('../services/PathService')
+import PathService from '../services/PathService'
+import express from 'express'
+import Path from '../models/Path'
 
-module.exports = {
-  getProfileInfo: (req, res) => {
-    const userId = req.session.authUser._id
+export default {
+  getProfileInfo: (req: express.Request, res: express.Response) => {
+    const userId = req.session!.authUser._id
     PathService.getProfileInfo(userId)
       .then(result => {
         return res.status(200).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         res.status(500).json(e)
       })
   },
 
-  getRefs: (_, res) => {
+  getRefs: (_: express.Request, res: express.Response) => {
     PathService.getRefs().then(result => {
       return res.status(200).json(result)
     })
   },
 
-  createPath: (req, res) => {
-    const path = {
+  createPath: (req: express.Request, res: express.Response) => {
+    const path = new Path({
       name: req.body.name,
       objectName: req.body.objectName,
       property: req.body.property
-    }
-    const userId = req.session.authUser._id
+    })
+    const userId = req.session!.authUser._id
     PathService.create(path, userId)
       .then(() => {
-        // io.emit('paths/updatePath')
         return res.sendStatus(201)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  getPaths: (req, res) => {
-    const userId = req.session.authUser._id
+  getPaths: (req: express.Request, res: express.Response) => {
+    const userId = req.session!.authUser._id
     PathService.getPathsTree(userId)
       .then(result => {
         return res.status(200).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  getAddress: (req, res) => {
-    const userId = req.session.authUser._id
+  getAddress: (req: express.Request, res: express.Response) => {
+    const userId = req.session!.authUser._id
     PathService.getAddress(userId)
       .then(result => {
         return res.status(200).json(result)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   },
 
-  remove: (req, res) => {
-    PathService.remove(req.params.id)
+  remove: (req: express.Request, res: express.Response) => {
+    PathService.remove(req.session!.authUser._id, req.params.id)
       .then(() => {
         // io.emit('paths/updatePath')
         return res.sendStatus(202)
       })
-      .catch(e => {
+      .catch((e: Error) => {
         return res.status(500).json(e)
       })
   }

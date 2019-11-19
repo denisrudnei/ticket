@@ -1,4 +1,10 @@
-const { models, model, Schema } = require('mongoose')
+import { models, model, Schema, Document } from 'mongoose'
+
+export interface IRole extends Document {
+  _id: Schema.Types.ObjectId;
+  name: string;
+  description: string;
+}
 
 const RoleSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -20,4 +26,4 @@ RoleSchema.set('toObject', {
   virtuals: true
 })
 
-module.exports = models.Role || model('Role', RoleSchema)
+export default models.Role || model('Role', RoleSchema)
