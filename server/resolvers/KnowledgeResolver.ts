@@ -5,7 +5,7 @@ const KnowledgeResolver = {
     Knowledge: () => {
       return KnowledgeService.getAll()
     },
-    KnowledgeByGroup: (_: any, {groupName}: any) => {
+    KnowledgeByGroup: (_: any, { groupName }: any) => {
       return KnowledgeService.getByKnowledgeGroup(groupName)
     },
     KnowledgeById: (_: any, { _id }: any) => {

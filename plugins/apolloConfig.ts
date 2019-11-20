@@ -12,13 +12,11 @@ import ws from 'ws'
 import {Context} from '@nuxt/types'
 
 
-export default ({ app, req }: Context, inject: any) => {
-  console.log(req)
-  console.log(process.client)
+export default ({ app, req }: any, inject: any) => {
   const url = {
     protocol: process.client
       ? window.location.protocol.replace(':', '')
-      : /* req.protocol */ 'http',
+      : req.protocol,
     host: process.client ? window.location.host : req.headers.host
   }
   const httpLink = createHttpLink({
@@ -65,6 +63,6 @@ export default ({ app, req }: Context, inject: any) => {
 
   Vue.use(VueApollo)
 
-  // Vue.prototype.$apolloProvider = apolloProvider
-  // app.$apollo = apolloProvider.defaultClient
+  Vue.prototype.$apolloProvider = apolloProvider
+  app.$apollo = apolloProvider.defaultClient
 }

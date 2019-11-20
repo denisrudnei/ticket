@@ -2,7 +2,10 @@ import SearchService from '../services/ticket/SearchService'
 
 const SearchResolver = {
   Query: {
-    SearchTicket: (_: any, { page, limit, descending, sortBy, attributes }: any) => {
+    SearchTicket: (
+      _: any,
+      { page, limit, descending, sortBy, attributes }: any
+    ) => {
       const newAttributes: any = {}
       for (const property in attributes) {
         const attribute = attributes[property]

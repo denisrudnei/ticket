@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-const NotificationController = require('../controllers/NotificationController')
+import NotificationController from '../controllers/NotificationController'
 
 router.get('/notification/:id', NotificationController.getOne)
 router.post('/notification/', NotificationController.getAll)

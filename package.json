@@ -5,7 +5,7 @@
   "author": "Denis Rudnei de Souza",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nuxt-ts",
+    "dev": "cross-env NODE_ENV=development nodemon --watch server/ --exec  \"ts-node server/index.ts\" -e ts",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/index.js",
     "heroku-postbuild": "npm run build",

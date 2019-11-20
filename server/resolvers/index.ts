@@ -9,10 +9,12 @@ const resolvers: any = {
 
 const folder = path.resolve(__dirname)
 
-fs.readdirSync(folder).forEach(file => {
+fs.readdirSync(folder).forEach(async file => {
   const toMerge = require(path.join(folder, file))
   Object.keys(resolvers).forEach(key => {
-    resolvers[key] = Object.assign(resolvers[key], toMerge[key])
+    if (Object.prototype.hasOwnProperty.call(toMerge.default, key)) {
+      resolvers[key] = Object.assign(resolvers[key], toMerge.default[key])
+    }
   })
 })
 

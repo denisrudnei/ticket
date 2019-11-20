@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-const KnowledgeController = require('../../controllers/knowledge/KnowledgeController')
+import KnowledgeController from '../../controllers/knowledge/KnowledgeController'
 
 router.get('/knowledge', KnowledgeController.getUnCategorized)
 router.get('/knowledge/all', KnowledgeController.getAll)

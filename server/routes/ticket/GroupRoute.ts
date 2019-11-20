@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-const GroupController = require('../../controllers/ticket/GroupController')
+import GroupController from '../../controllers/ticket/GroupController'
 
 router.get('/group', GroupController.getAll)
 router.get('/group/:id', GroupController.getOne)

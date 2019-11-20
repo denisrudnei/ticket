@@ -14,9 +14,9 @@ mongoose.connect(
 const pubSub = new PubSub()
 
 const config = require('../nuxt.config.js')
-const app = require('./app')
-const resolvers = require('./resolvers/index')
-const CheckACL = require('./models/CheckACL')
+import app from './app'
+import resolvers from './resolvers/index'
+import CheckACL from './models/CheckACL'
 config.dev = !(process.env.NODE_ENV === 'production')
 
 const server = new GraphQLServer({

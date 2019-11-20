@@ -1,4 +1,4 @@
-import mongoose, {Types} from 'mongoose'
+import mongoose, {Types, PaginateResult} from 'mongoose'
 import Ticket, { ITicket } from '../../models/ticket/Ticket'
 import Comment, { IComment } from '../../models/ticket/Comment'
 import Group, { IGroup } from '../../models/ticket/Group'
@@ -45,7 +45,7 @@ const populateArray = [
 ]
 
 class TicketService {
-  getTickets(filter: any, sortBy: any, page: number, limit: number) {
+  getTickets(filter: any, sortBy: any, page: number, limit: number): Promise<PaginateResult<ITicket>> {
     // TODO sorting not works with doc ref
     return new Promise((resolve, reject) => {
       Ticket.paginate(
@@ -56,7 +56,7 @@ class TicketService {
           sort: sortBy,
           populate: 'logs comments status'
         },
-        (err: Error, result) => {
+        (err: Error, result: PaginateResult<ITicket>) => {
           if (err) return reject(err)
           return resolve(result)
         }

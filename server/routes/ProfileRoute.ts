@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-const ProfileController = require('../controllers/ProfileController')
+import ProfileController from '../controllers/ProfileController'
 
 router.get('/profile', ProfileController.getProfileInfo)
 router.get('/info/path', ProfileController.getPaths)
