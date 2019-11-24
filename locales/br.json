@@ -84,5 +84,15 @@
   "actual_group": "Grupo atual",
   "save_configurations": "Salvar configurações",
   "save_configurations_locally":"Salvar configurações localmente",
-  "save_new_password": "Salvar nova senha"
+  "save_new_password": "Salvar nova senha",
+  "receive_email_notification": "Receber notificação por email?",
+  "all_notifications": "Todas notificações",
+  "read": "Lida",
+  "unread": "Não lida",
+  "see_all_notifications": "Ver todas notificações",
+  "remove_image": "Remover imagem",
+  "select_profile_image": "Selecinar imagem do perfil",
+  "test": "Testar",
+  "mute": "Mutar",
+  "notifications": "Notificações"
 }

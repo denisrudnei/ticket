@@ -99,7 +99,7 @@
           >
             image
           </v-icon>
-          Selecionar imagem do perfil
+          {{ $t('select_profile_image') }}
         </v-btn>
         <v-btn
           tile
@@ -119,7 +119,7 @@
         <v-switch :input-value="user.mergePictureWithExternalAccount" label="Atualizar imagem com conta externa automaticamente" @change="updatePictureMerge" />
         <v-switch
           color="primary"
-          label="Receber notificações via email?"
+          :label="$t('receive_email_notification')"
         />
       </v-col>
     </v-row>

@@ -84,5 +84,15 @@
   "actual_group": "Actual group",
   "save_configurations": "Save configurations",
   "save_configurations_locally":"Save configurations locally",
-  "save_new_password": "Save new password"
+  "save_new_password": "Save new password",
+  "receive_email_notification": "Receive email notification?",
+  "all_notifications": "All notifications",
+  "read": "Read",
+  "unread": "Not read",
+  "see_all_notifications": "See all notifications",
+  "remove_image": "Remove image",
+  "select_profile_image": "Select profile image",
+  "test": "Test",
+  "mute": "Mute",
+  "notifications": "Notifications"
 }

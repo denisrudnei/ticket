@@ -14,9 +14,9 @@
         prepend-icon="volume_down"
       />
       <v-col cols="12" pa-3>
-        <v-checkbox v-model="sound.chat.muted" label="Mutar" />
+        <v-checkbox v-model="sound.chat.muted" :label="$t('mute')" />
         <v-btn class="primary white--text" @click="playChat()">
-          Testar
+          {{ $t('test') }}
           <v-icon>
             play_arrow
           </v-icon>
@@ -38,9 +38,9 @@
         prepend-icon="volume_down"
       />
       <v-col cols="12" pa-3>
-        <v-checkbox v-model="sound.notification.muted" label="Mutar" />
+        <v-checkbox v-model="sound.notification.muted" :label="$t('mute')" />
         <v-btn class="primary white--text" @click="playNotification()">
-          Testar
+          {{ $t('test') }}
           <v-icon>
             play_arrow
           </v-icon>

@@ -11,7 +11,7 @@
           <v-icon left>
             person
           </v-icon>
-          Perfil
+          {{ $t('profile') }}
         </v-tab>
         <v-tab to="/profile/sound">
           <v-icon left>
@@ -31,7 +31,7 @@
           <v-icon left>
             notification_important
           </v-icon>
-          Notificações
+          {{ $t('notifications') }}
         </v-tab>
         <v-tab
           to="/profile/password"

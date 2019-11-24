@@ -127,7 +127,7 @@
         block
         to="/profile/notification/all"
       >
-        Ver todas notificações
+        {{ $t('see_all_notifications') }}
         <v-icon
           right
           class="primary--text"
