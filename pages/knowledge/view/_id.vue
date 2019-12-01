@@ -117,10 +117,17 @@ export default {
     },
     download() {
       const pdf = new this.JsPDF()
-      pdf.fromHTML(this.$refs.preview, 10, 10, {
-        width: '190'
-      })
-      pdf.save(`${this.knowledge.name}.pdf`)
+      pdf.fromHTML(
+        this.$refs.preview,
+        10,
+        10,
+        {
+          width: '190'
+        },
+        () => {
+          pdf.save(`${this.knowledge.name}.pdf`)
+        }
+      )
     },
     close() {
       this.dialog = false
