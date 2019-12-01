@@ -19,7 +19,6 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-     
         <v-card-text>
           <v-row>
             <v-col cols="12" pa-3>
@@ -48,7 +47,7 @@
               />
             </v-col>
             <v-col cols="12" pa-4>
-              <div ref="preview" v-html="knowledge.preview" />
+              <div ref="preview" v-html="knowledge.preview" id="preview"/>
             </v-col>
           </v-row>
         </v-card-text>
@@ -117,6 +116,15 @@ export default {
     },
     download() {
       const pdf = new this.JsPDF()
+      const images = document.querySelector('#preview > img')
+      images.forEach(image => {
+          const canvas = document.createElement('canvas')
+          const body = document.querySelector('body')
+          body.appendChild(canvas)
+          const context = canvas.getContext('2d')
+          context.drawImage(image, 10, 10)
+          image.src = context.toDataURL()
+      })
       pdf.fromHTML(
         this.$refs.preview,
         10,
