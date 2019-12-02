@@ -80,7 +80,7 @@ const AnalystService = {
         const name = userId
         const params = {
           Bucket: process.env.BUCKET,
-          Key: name,
+          Key: `analyst/picture/${name}`,
           Body: file.data
         }
         await S3.upload(params, (err, data) => {
