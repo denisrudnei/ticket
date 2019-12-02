@@ -232,7 +232,7 @@ const TicketService = {
       for (let i = 0; i < files.length; i++) {
         const f = files[i]
 
-        const name = `tickets/${ticketId}/${f.name} - ${i}`
+        const name = `ticket/${ticketId}/${f.name} - ${i}`
         const params = {
           Bucket: process.env.BUCKET,
           Key: name,
