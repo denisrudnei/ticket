@@ -3,6 +3,7 @@ const Knowledge = require('../../server/models/knowledge/Knowledge')
 const Category = require('../../server/models/ticket/Category')
 const Group = require('../../server/models/ticket/Group')
 const KnowledgeStatus = require('../../server/models/knowledge/KnowledgeStatus')
+const faker = require('faker')
 
 describe('Knowledge', function() {
   this.timeout(0)
@@ -19,11 +20,31 @@ describe('Knowledge', function() {
     const category = await Category.findOne().exec()
     const knowledge = {
       name: 'test',
-      preview: 'test',
+      preview: `<span>${faker.lorem.paragraphs()}</span`,
       group: group._id,
       category: category
     }
     await KnowledgeService.create(knowledge)
+  })
+
+  it('Get all files', async () => {
+    const knowledge = await Knowledge.findOne().exec()
+    await KnowledgeService.getAllFiles(knowledge._id)
+  })
+
+  it('Generate PDF', async () => {
+    const knowledge = await Knowledge.findOne().exec()
+    await KnowledgeService.generatePDF(knowledge._id)
+  })
+
+  it('Upload generated PDF', async () => {
+    const knowledge = await Knowledge.findOne().exec()
+    await KnowledgeService.uploadPDF(knowledge.name, knowledge.preview)
+  })
+
+  it('Generate and upload PDF', async () => {
+    const knowledge = await Knowledge.findOne().exec()
+    await KnowledgeService.setPreviewInPDF(knowledge._id, 'test name')
   })
 
   it('Update knowledge', async () => {
@@ -67,11 +88,6 @@ describe('Knowledge', function() {
     knowledge.files.forEach(async f => {
       await KnowledgeService.getFile(f._id)
     })
-  })
-
-  it('Get all files', async () => {
-    const knowledge = await Knowledge.findOne().exec()
-    await KnowledgeService.getAllFiles(knowledge._id)
   })
 
   it('Remove knowledge', async () => {

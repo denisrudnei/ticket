@@ -25,6 +25,10 @@ const KnowledgeSchema = new Schema({
   preview: {
     type: String
   },
+  url: {
+    type: String,
+    default: ''
+  },
   files: [
     {
       type: Schema.Types.ObjectId,

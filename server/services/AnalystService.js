@@ -167,7 +167,7 @@ const AnalystService = {
 
   remove(userId) {
     return new Promise((resolve, reject) => {
-      Analyst.findOneAndDelete(
+      Analyst.deleteOne(
         {
           _id: userId
         },
