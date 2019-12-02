@@ -152,7 +152,7 @@ const KnowledgeService = {
           S3.createBucket(() => {
             const params = {
               Bucket: process.env.BUCKET,
-              Key: `knowledge/${knowledgeId}/${knowledgeFile._id.toString()}`,
+              Key: `knowledge/temp/${knowledgeFile._id.toString()}`,
               Body: file.data
             }
             S3.upload(params, (err, data) => {
