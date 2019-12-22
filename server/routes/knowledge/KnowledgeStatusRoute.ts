@@ -1,6 +1,6 @@
-import express from 'express'
-const router = express.Router()
-const KnowledgeStatusController = require('../../controllers/knowledge/KnowledgeStatusController')
+import {Router} from 'express'
+const router = Router()
+import KnowledgeStatusController  from '../../controllers/knowledge/KnowledgeStatusController'
 
 router.get('/knowledge/status/', KnowledgeStatusController.getAll)
 

@@ -1,6 +1,7 @@
 import PriorityService from '../services/PriorityService'
+import {IResolvers} from 'graphql-tools'
 
-const PriorityResolver = {
+const PriorityResolver: IResolvers = {
   Query: {
     Priority: () => {
       return PriorityService.getAll()

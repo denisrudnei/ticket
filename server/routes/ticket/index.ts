@@ -1,8 +1,16 @@
-import fs from 'fs'
-import path from 'path'
+import { Router } from 'express'
+import CategoryRoute from './CategoryRoute'
+import GroupRoute from './GroupRoute'
+import SearchRoute from './SearchRoute'
+import StatusRoute from './StatusRoute'
+import TicketRoute from './TicketRoute'
 
-const folder = path.resolve(__dirname)
+const router = Router()
 
-fs.readdirSync(folder).forEach(file => {
-  module.exports[file] = require(path.join(folder, file))
-})
+router.use(CategoryRoute)
+router.use(GroupRoute)
+router.use(SearchRoute)
+router.use(StatusRoute)
+router.use(TicketRoute)
+
+export default router

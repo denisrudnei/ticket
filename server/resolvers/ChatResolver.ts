@@ -2,8 +2,9 @@ import { Context } from 'graphql-yoga/dist/types'
 import { withFilter } from 'graphql-yoga'
 import ChatService from '../services/ChatService'
 import ChatEnum from '../enums/ChatEnum'
+import {IResolvers} from 'graphql-tools'
 
-const ChatResolver = {
+const ChatResolver: IResolvers = {
   Query: {
     Chat: (_: any, __: any, { req }: Context) => {
       const from = req.session.authUser._id
@@ -18,7 +19,7 @@ const ChatResolver = {
     SendMessage: (_: any, { to, message }: any, { pubSub, req }: Context) => {
       const from = req.session.authUser._id
       const result = ChatService.addMessage(from, to, message)
-
+  
       pubSub.publish(ChatEnum.NEW_CHAT_MESSAGE, {
         NewMessage: result
       })
@@ -40,5 +41,4 @@ const ChatResolver = {
     }
   }
 }
-
 export default ChatResolver

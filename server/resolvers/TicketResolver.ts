@@ -4,8 +4,9 @@ import TicketEnum from '../enums/TicketEnum'
 import LogService from '../services/ticket/LogService'
 import { Context } from 'graphql-yoga/dist/types'
 import Ticket from '../../server/models/ticket/Ticket'
+import {IResolvers} from 'graphql-tools'
 
-const TicketResolver = {
+const TicketResolver: IResolvers = {
   Query: {
     TicketById: (_: any, { _id }: any) => {
       return TicketService.getOne(_id)
@@ -21,7 +22,7 @@ const TicketResolver = {
       )
     }
   },
-  Mutation: {
+  Mutation:  {
     ChangeStatus: async (_: any, { ticketId, statusId }: any, { pubSub, req }: Context) => {
       const user = req.session.authUser
       const ticket = await TicketService.changeStatus(ticketId, statusId)

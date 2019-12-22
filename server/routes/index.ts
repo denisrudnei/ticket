@@ -1,21 +1,24 @@
-import fs from 'fs'
-import path from 'path'
-const router = require('express').Router()
+import {Router} from 'express'
+import AddressRoute from './AddressRoute'
+import AnalystRoute from './AnalystRoute'
+import AuthRoute from './AuthRoute'
+import ChatRoute from './ChatRoute'
+import NotificationRoute from './NotificationRoute'
+import ProfileRoute from './ProfileRoute'
+import RoleRoute from './RoleRoute'
+import Knowledge from './knowledge'
+import Ticket from './ticket'
 
-const folder = path.resolve(__dirname)
+const router = Router()
 
-fs.readdirSync(folder).forEach((file: string) => {
-  import(path.join(folder, file)).then(m => {
-    console.log(m)
-    if (!file.includes('.js')) {
-      Object.keys(m).forEach(innerModule => {
-        if (innerModule !== 'index.js') {
-          router.use(m[innerModule])
-        }
-      })
-    }
-    if (file !== 'index.js' && file.includes('.js')) router.use(m) 
-  })
-})
+router.use(AnalystRoute)
+router.use(AddressRoute)
+router.use(AuthRoute)
+router.use(ChatRoute)
+router.use(NotificationRoute)
+router.use(ProfileRoute)
+router.use(RoleRoute)
+router.use(Knowledge)
+router.use(Ticket)
 
 export default router

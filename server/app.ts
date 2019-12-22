@@ -44,7 +44,7 @@ class AppController {
   }
 
   routes() {
-    // this.express.use('/api', routes)
+    this.express.use('/api', routes)
     this.express.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
       consola.error(err)
       res.status(500).json(err.message)

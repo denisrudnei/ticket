@@ -1,13 +1,12 @@
 import RoleService from '../services/RoleService'
+import {IResolvers} from 'graphql-tools'
 
-const RoleResolver = {
+const RoleResolver: IResolvers = {
   Query: {
     Role: () => {
       return RoleService.getRoles()
     }
-  },
-  Mutation: {},
-  Subscription: {}
+  }
 }
 
 export default RoleResolver

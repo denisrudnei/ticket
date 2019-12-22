@@ -1,5 +1,5 @@
-import express from 'express'
-const router = express.Router()
+import {Router} from 'express'
+const router = Router()
 import KnowledgeController from '../../controllers/knowledge/KnowledgeController'
 
 router.get('/knowledge', KnowledgeController.getUnCategorized)

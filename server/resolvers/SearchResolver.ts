@@ -1,6 +1,6 @@
 import SearchService from '../services/ticket/SearchService'
-
-const SearchResolver = {
+import {IResolvers} from 'graphql-tools'
+const SearchResolver: IResolvers = {
   Query: {
     SearchTicket: (
       _: any,
@@ -26,8 +26,7 @@ const SearchResolver = {
         limit
       )
     }
-  },
-  Mutation: {}
+  }
 }
 
 export default SearchResolver

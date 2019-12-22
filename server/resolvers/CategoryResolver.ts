@@ -1,6 +1,7 @@
 import CategoryService from '../services/ticket/CategoryService'
+import {IResolvers} from 'graphql-tools'
 
-const CategoryResolver = {
+const CategoryResolver: IResolvers = {
   Query: {
     Category: () => {
       return CategoryService.getCategories()
@@ -21,5 +22,6 @@ const CategoryResolver = {
     }
   }
 }
+
 
 export default CategoryResolver

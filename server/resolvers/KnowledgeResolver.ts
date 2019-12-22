@@ -1,6 +1,7 @@
 import KnowledgeService from '../services/knowledge/KnowledgeService'
+import {IResolvers} from 'graphql-tools'
 
-const KnowledgeResolver = {
+const KnowledgeResolver: IResolvers = {
   Query: {
     Knowledge: () => {
       return KnowledgeService.getAll()
@@ -11,9 +12,7 @@ const KnowledgeResolver = {
     KnowledgeById: (_: any, { _id }: any) => {
       return KnowledgeService.getOne(_id)
     }
-  },
-  Mutation: {},
-  Subscription: {}
+  }
 }
 
 export default KnowledgeResolver

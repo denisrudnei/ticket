@@ -1,8 +1,10 @@
-import fs from 'fs'
-import path from 'path'
+import {Router} from 'express'
+import KnowledgeRoute from './KnowledgeRoute'
+import KnowledgeStatusRoute from './KnowledgeStatusRoute'
 
-const folder = path.resolve(__dirname)
+const router = Router()
 
-fs.readdirSync(folder).forEach(file => {
-  module.exports[file] = require(path.join(folder, file))
-})
+router.use(KnowledgeRoute)
+router.use(KnowledgeStatusRoute)
+
+export default router

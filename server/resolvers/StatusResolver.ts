@@ -1,6 +1,7 @@
 import StatusService from '../services/ticket/StatusService'
+import {IResolvers} from 'graphql-tools'
 
-const StatusResolver = {
+const StatusResolver: IResolvers = {
   Query: {
     Status: () => {
       return StatusService.getStatus()
