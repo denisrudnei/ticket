@@ -1,6 +1,6 @@
 import express from 'express'
-const router = express.Router()
 import ChatController from '../controllers/ChatController'
+const router = express.Router()
 
 router.post('/chat/message', ChatController.createMessage)
 router.put('/chat/status', ChatController.changeStatus)

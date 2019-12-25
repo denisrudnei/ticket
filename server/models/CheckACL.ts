@@ -1,15 +1,15 @@
 import mongoose from 'mongoose'
-const AclRules = require('../../nacl.json')
 import Role from './Role'
+const AclRules = require('../../nacl.json')
 
 interface IPermission {
-  resource: string;
-  methods: string;
-  action: string;
+  resource: string
+  methods: string
+  action: string
 }
 
 interface IRule {
-  group: string;
+  group: string
   permissions: [IPermission]
 }
 

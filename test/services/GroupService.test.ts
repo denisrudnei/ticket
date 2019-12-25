@@ -1,8 +1,11 @@
 import GroupService from '../../server/services/ticket/GroupService'
 import Analyst from '../../server/models/Analyst'
 import Group from '../../server/models/ticket/Group'
+import 'mocha'
 
-describe('Groups', () => {
+describe('Groups', function() {
+  this.timeout(0)
+
   it('Get all groups', async () => {
     await GroupService.getAll()
   })

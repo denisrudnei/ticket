@@ -3,8 +3,7 @@ import Ticket from '../../models/ticket/Ticket'
 const SearchService = {
   getTickets: (query: any = {}, sortBy: any, page = 1, limit = 10) => {
     return new Promise((resolve, reject) => {
-
-      //TODO
+      // TODO
       const filterKeys = Object.keys(Ticket.schema.path)
       Object.keys(query).forEach(inQuery => {
         if (!filterKeys.includes(inQuery)) delete query[inQuery]

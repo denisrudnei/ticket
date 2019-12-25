@@ -1,5 +1,5 @@
+import { IResolvers } from 'graphql-tools'
 import SearchService from '../services/ticket/SearchService'
-import {IResolvers} from 'graphql-tools'
 const SearchResolver: IResolvers = {
   Query: {
     SearchTicket: (

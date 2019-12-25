@@ -1,6 +1,8 @@
 import PathService from '../../server/services/PathService'
 import Analyst from '../../server/models/Analyst'
 import Path from '../../server/models/Path'
+import 'mocha'
+
 describe('PathService', function() {
   this.timeout(0)
 

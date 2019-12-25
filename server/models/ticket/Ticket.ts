@@ -1,34 +1,34 @@
 import { models, model, Schema, connection, Document } from 'mongoose'
+import mongoosePaginate from 'mongoose-paginate'
+import mongooseAutoIncrement from 'mongoose-auto-increment'
+import { IAddress } from '../Address'
+import { IAnalyst } from '../Analyst'
 import { ICategory } from './Category'
 import { IGroup } from './Group'
-import { IAddress } from '../Address'
 import { IStatus } from './Status'
 import { IComment } from './Comment'
-import { IAnalyst } from '../Analyst'
 import { IPriority } from './Priority'
 import { ISla } from './Sla'
 import { ILog } from './Log'
-import mongoosePaginate from 'mongoose-paginate'
-import mongooseAutoIncrement from 'mongoose-auto-increment'
 
 mongooseAutoIncrement.initialize(connection)
 
 export interface ITicket extends Document {
-  category: ICategory['_id'];
-  resume: string;
-  content: string;
-  group: IGroup['_id'];
-  address: IAddress['_id'];
-  status: IStatus['_id'];
-  comments: [IComment['_id']];
-  affectedUser: IAnalyst['_id'];
-  openedBy: IAnalyst['_id'];
-  actualUser: IAnalyst['_id'];
-  priority: IPriority['_id'];
-  sla: ISla['_id'];
-  father: ITicket['_id'];
-  children: [ITicket['_id']];
-  files: [any];
+  category: ICategory['_id']
+  resume: string
+  content: string
+  group: IGroup['_id']
+  address: IAddress['_id']
+  status: IStatus['_id']
+  comments: [IComment['_id']]
+  affectedUser: IAnalyst['_id']
+  openedBy: IAnalyst['_id']
+  actualUser: IAnalyst['_id']
+  priority: IPriority['_id']
+  sla: ISla['_id']
+  father: ITicket['_id']
+  children: [ITicket['_id']]
+  files: [any]
   logs: [ILog['_id']]
 }
 
@@ -153,5 +153,4 @@ TicketSchema.plugin(mongooseAutoIncrement.plugin, {
 
 // const ticketModel: TicketModel<ITicket> = model<ITicket>('Ticket', TicketSchema)
 
-export default  model<ITicket>('Ticket', TicketSchema)
-
+export default model<ITicket>('Ticket', TicketSchema)

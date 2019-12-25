@@ -1,11 +1,12 @@
 import _ from 'lodash'
-import mongoose, {Types} from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 import Path, { IPath } from '../models/Path'
 import Analyst, { IAnalyst } from '../models/Analyst'
 import Ticket from '../models/ticket/Ticket'
 
 class Info {
-  name: string;
+  name: string
+
   total: number
 
   constructor(name: string, total: number) {
@@ -15,13 +16,23 @@ class Info {
 }
 
 export class ProfileInfo {
-  opened: number | null;
-  total: number;
-  categories: Info[];
-  status: Info[];
-  inName: Info[];
+  opened: number | null
 
-  constructor(opened: number, total: number, categories: Info[], status: Info[], inName: Info[]) {
+  total: number
+
+  categories: Info[]
+
+  status: Info[]
+
+  inName: Info[]
+
+  constructor(
+    opened: number,
+    total: number,
+    categories: Info[],
+    status: Info[],
+    inName: Info[]
+  ) {
     this.opened = opened
     this.total = total
     this.categories = categories
@@ -31,10 +42,13 @@ export class ProfileInfo {
 }
 
 class PathTree {
-  _id: Types.ObjectId;
-  id: string;
-  name: string;
-  children: any[];
+  _id: Types.ObjectId
+
+  id: string
+
+  name: string
+
+  children: any[]
 
   constructor(_id: Types.ObjectId, id: string, name: string, children: any[]) {
     this._id = _id
@@ -89,23 +103,29 @@ class PathService {
             .map(v => ({
               name: v[0].category.fullName,
               total: v.length
-            })).value()
+            }))
+            .value()
           const status = _(tickets)
             .groupBy('status')
             .map(v => ({
               name: v[0].status.name,
               total: v.length
-            })).value()
+            }))
+            .value()
           const inName = _(tickets)
             .groupBy('actualUser')
             .map(v => ({
               name: v[0].actualUser._id,
               total: v.length
-            })).value().filter((v: Info) => {
+            }))
+            .value()
+            .filter((v: Info) => {
               return v.name === userId
             })
-           
-          return resolve(new ProfileInfo(opened, total, categories, status, inName))
+
+          return resolve(
+            new ProfileInfo(opened, total, categories, status, inName)
+          )
         })
     })
   }
@@ -194,6 +214,7 @@ class PathService {
       })
     })
   }
+
   getPathsTree(userId: IAnalyst['_id']): Promise<PathTree[]> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
@@ -216,7 +237,10 @@ class PathService {
     })
   }
 
-  remove(userId: IAnalyst['_id'], pathId: IPath['_id']): Promise<IAnalyst['_id']> {
+  remove(
+    userId: IAnalyst['_id'],
+    pathId: IPath['_id']
+  ): Promise<IAnalyst['_id']> {
     return new Promise((resolve, reject) => {
       Path.deleteOne({
         _id: pathId
@@ -238,6 +262,7 @@ class PathService {
       })
     })
   }
+
   getOptions(ref: string) {
     const model = require(this.getModule(ref))
     return Object.keys(model.schema.paths).filter(r => {
@@ -248,18 +273,18 @@ class PathService {
   hasInstanceField(object: any) {
     return Object.prototype.hasOwnProperty.call(object, 'instance')
   }
-  
+
   instanceIsString(object: any) {
     return object.instance === 'String'
   }
-  
+
   isSelected(object: any) {
     if (Object.prototype.hasOwnProperty.call(object.options, 'select')) {
       return object.options.select
     }
     return true
   }
-  
+
   filterSelected(paths: any, ref: string) {
     return (
       this.hasInstanceField(paths[ref]) &&
@@ -267,12 +292,12 @@ class PathService {
       this.isSelected(paths[ref])
     )
   }
-  
+
   getModule(ref: string) {
     try {
       return require.resolve(`@models/ticket/${ref}`)
     } catch {
-      return  require.resolve(`@models/index/${ref}`)
+      return require.resolve(`@models/index/${ref}`)
     }
   }
 }

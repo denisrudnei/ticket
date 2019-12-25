@@ -1,10 +1,10 @@
 import express from 'express'
-const router = express.Router()
 import { body, param, validationResult } from 'express-validator'
 
 import TicketController from '../../controllers/ticket/TicketController'
 import NotifyTicketUpdate from '../../middlewares/NotifyTicketUpdate'
 import CreateTicketLog from '../../middlewares/CreateTicketLog'
+const router = express.Router()
 
 router.get('/ticket', TicketController.getTickets)
 router.get('/ticket/profile/:type', TicketController.getByProfile)

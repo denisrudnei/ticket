@@ -1,5 +1,5 @@
+import { IResolvers } from 'graphql-tools'
 import PathService from '../services/PathService'
-import {IResolvers} from 'graphql-tools'
 
 const RefResolver: IResolvers = {
   Query: {

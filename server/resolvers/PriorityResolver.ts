@@ -1,5 +1,5 @@
+import { IResolvers } from 'graphql-tools'
 import PriorityService from '../services/PriorityService'
-import {IResolvers} from 'graphql-tools'
 
 const PriorityResolver: IResolvers = {
   Query: {

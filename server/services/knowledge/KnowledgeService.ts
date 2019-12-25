@@ -1,10 +1,13 @@
-import mongoose, {Types} from 'mongoose'
-import Knowledge, {IKnowledge} from '../../models/knowledge/Knowledge'
-import KnowledgeFile, { IKnowledgeFile } from '../../models/knowledge/KnowledgeFile'
-import Group from '../../models/ticket/Group'
-import S3 from '../../../plugins/S3'
+import mongoose, { Types } from 'mongoose'
 import AWS from 'aws-sdk'
 import fileUpload from 'express-fileupload'
+import Knowledge, { IKnowledge } from '../../models/knowledge/Knowledge'
+import KnowledgeFile, {
+  IKnowledgeFile
+} from '../../models/knowledge/KnowledgeFile'
+import Group from '../../models/ticket/Group'
+import S3 from '../../../plugins/S3'
+import KnowledgeStatus from '../../models/knowledge/KnowledgeStatus'
 
 class KnowledgeService {
   getAll() {
@@ -15,6 +18,7 @@ class KnowledgeService {
       })
     })
   }
+
   getOne(id: Types.ObjectId): Promise<IKnowledge> {
     return new Promise((resolve, reject) => {
       Knowledge.findOne({
@@ -25,6 +29,7 @@ class KnowledgeService {
       })
     })
   }
+
   getUnCategorized(): Promise<[IKnowledge]> {
     return new Promise((resolve, reject) => {
       Knowledge.find({
@@ -35,6 +40,7 @@ class KnowledgeService {
       })
     })
   }
+
   getByKnowledgeGroup(groupName: string) {
     return new Promise((resolve, reject) => {
       Group.findOne({
@@ -50,6 +56,7 @@ class KnowledgeService {
       })
     })
   }
+
   create(knowledge: IKnowledge) {
     return new Promise((resolve, reject) => {
       const { name, group, preview, category } = knowledge
@@ -68,7 +75,11 @@ class KnowledgeService {
       )
     })
   }
-  updateKnowledge(knowledgeId: IKnowledge['_id'], knowledge: IKnowledge): Promise<IKnowledge> {
+
+  updateKnowledge(
+    knowledgeId: IKnowledge['_id'],
+    knowledge: IKnowledge
+  ): Promise<IKnowledge> {
     return new Promise((resolve, reject) => {
       Knowledge.updateOne(
         {
@@ -88,6 +99,7 @@ class KnowledgeService {
       })
     })
   }
+
   addFile(knowledgeId: IKnowledge['_id'], file: fileUpload.UploadedFile) {
     return new Promise((resolve, reject) => {
       Knowledge.findOne({
@@ -106,19 +118,26 @@ class KnowledgeService {
                 Key: knowledgeFile._id.toString(),
                 Body: file.data
               }
-              S3.upload(params, (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
-                if (err) return reject(err)
-                knowledgeFile.url = data.Location!
-                knowledge.files.push(knowledgeFile)
-                knowledge.save()
-                return resolve(data)
-              })
+              S3.upload(
+                params,
+                (
+                  err: Error,
+                  data: AWS.S3.Types.CompleteMultipartUploadOutput
+                ) => {
+                  if (err) return reject(err)
+                  knowledgeFile.url = data.Location!
+                  knowledge.files.push(knowledgeFile)
+                  knowledge.save()
+                  return resolve(data)
+                }
+              )
             })
           }
         )
       })
     })
   }
+
   addTempFile(file: fileUpload.UploadedFile): Promise<string> {
     return new Promise((resolve, reject) => {
       KnowledgeFile.create(
@@ -133,17 +152,24 @@ class KnowledgeService {
               Key: knowledgeFile._id.toString(),
               Body: file.data
             }
-            S3.upload(params, (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
-              if (err) return reject(err)
-              knowledgeFile.url = data.Location!
-              knowledgeFile.save()
-              return resolve(data.Location)
-            })
+            S3.upload(
+              params,
+              (
+                err: Error,
+                data: AWS.S3.Types.CompleteMultipartUploadOutput
+              ) => {
+                if (err) return reject(err)
+                knowledgeFile.url = data.Location!
+                knowledgeFile.save()
+                return resolve(data.Location)
+              }
+            )
           })
         }
       )
     })
   }
+
   getAllFiles(knowledgeId: IKnowledge['_id']): Promise<[IKnowledgeFile]> {
     return new Promise((resolve, reject) => {
       Knowledge.findOne({
@@ -154,6 +180,7 @@ class KnowledgeService {
       })
     })
   }
+
   getFile(id: IKnowledge['_id']) {
     return new Promise((resolve, reject) => {
       S3.getObject(
@@ -168,6 +195,7 @@ class KnowledgeService {
       )
     })
   }
+
   remove(id: IKnowledge['_id']) {
     return new Promise((resolve, reject) => {
       Knowledge.deleteOne({

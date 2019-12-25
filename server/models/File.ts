@@ -1,7 +1,7 @@
 import { models, model, Schema, Document } from 'mongoose'
 
 export interface IFile extends Document {
-  name: string;
+  name: string
 }
 
 const FileSchema: Schema<IFile> = new Schema({

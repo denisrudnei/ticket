@@ -2,8 +2,9 @@ import KnowledgeService from '../../server/services/knowledge/KnowledgeService'
 import Knowledge from '../../server/models/knowledge/Knowledge'
 import Category from '../../server/models/ticket/Category'
 import Group from '../../server/models/ticket/Group'
-import {IKnowledgeFile} from '../../server/models/knowledge/KnowledgeFile'
+import { IKnowledgeFile } from '../../server/models/knowledge/KnowledgeFile'
 import KnowledgeStatus from '../../server/models/knowledge/KnowledgeStatus'
+import 'mocha'
 
 describe('Knowledge', function() {
   this.timeout(0)
@@ -46,22 +47,22 @@ describe('Knowledge', function() {
     await KnowledgeService.getOne(knowledge._id)
   })
 
-  // it('Add file', async () => {
-  //   const file = {
-  //     data: 'test file',
-  //     name: 'test name'
-  //   }
-  //   const knowledge = await Knowledge.findOne().exec()
-  //   await KnowledgeService.addFile(knowledge._id, file)
-  // })
+  it('Add file', async () => {
+    const file = {
+      data: 'test file',
+      name: 'test name'
+    } as any
+    const knowledge = await Knowledge.findOne().exec()
+    await KnowledgeService.addFile(knowledge._id, file)
+  })
 
-  // it('Add temporary file', async () => {
-  //   const file = {
-  //     data: 'test file',
-  //     name: 'test name'
-  //   }
-  //   await KnowledgeService.addTempFile(file)
-  // })
+  it('Add temporary file', async () => {
+    const file = {
+      data: 'test file',
+      name: 'test name'
+    } as any
+    await KnowledgeService.addTempFile(file)
+  })
 
   it('Get file', async () => {
     const knowledge = await Knowledge.findOne().exec()

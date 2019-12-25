@@ -1,6 +1,6 @@
-import AnalystService from '../services/AnalystService'
 import express from 'express'
 import { UploadedFile } from 'express-fileupload'
+import AnalystService from '../services/AnalystService'
 import Analyst from '../../server/models/Analyst'
 
 export default {
@@ -55,7 +55,11 @@ export default {
       })
   },
 
-  editSound: (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  editSound: (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     const userId = req.session!.authUser._id
     const soundConfig = {
       chat: {

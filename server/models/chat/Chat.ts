@@ -1,8 +1,8 @@
 import { models, model, Schema, Document } from 'mongoose'
 
 export interface IChat extends Document {
-  participants: [Schema.Types.ObjectId];
-  messages: [Schema.Types.ObjectId];
+  participants: [Schema.Types.ObjectId]
+  messages: [Schema.Types.ObjectId]
 }
 
 const ChatSchema = new Schema({

@@ -1,6 +1,6 @@
-import jsonwebtoken  from 'jsonwebtoken'
-import AuthService  from '../services/AuthService'
+import jsonwebtoken from 'jsonwebtoken'
 import express from 'express'
+import AuthService from '../services/AuthService'
 import Analyst from '../models/Analyst'
 
 export default {
@@ -8,10 +8,8 @@ export default {
     AuthService.login(req.body.email, req.body.password)
       .then(result => {
         req.session!.authUser = result
-        const response = jsonwebtoken.sign(
-          JSON.stringify(result),
-          process.env.JWT_TOKEN as string
-        )
+        const response = jsonwebtoken.sign(JSON.stringify(result), process.env
+          .JWT_TOKEN as string)
         return res.json({
           user: response
         })
@@ -32,7 +30,11 @@ export default {
     res.sendStatus(200)
   },
 
-  register: (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  register: (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     const user = new Analyst({
       name: req.body.name,
       email: req.body.email,
@@ -45,7 +47,11 @@ export default {
       .catch(next)
   },
 
-  mergeUser: (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  mergeUser: (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     AuthService.mergeUser(req.body.email, req.body)
       .then(result => {
         req.session!.authUser = result

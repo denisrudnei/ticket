@@ -1,7 +1,7 @@
-import mongoose, {Types, ModelPopulateOptions} from 'mongoose'
-import Message, {IMessage} from '../models/chat/Message'
+import mongoose, { Types, ModelPopulateOptions } from 'mongoose'
+import Message, { IMessage } from '../models/chat/Message'
 import Analyst from '../models/Analyst'
-import Chat, {IChat} from '../models/chat/Chat'
+import Chat, { IChat } from '../models/chat/Chat'
 
 class ChatService {
   getChats(fromId: mongoose.Types.ObjectId): Promise<[IChat]> {
@@ -18,6 +18,7 @@ class ChatService {
         })
     })
   }
+
   getOne(fromId: Types.ObjectId, toId: Types.ObjectId): Promise<IChat> {
     return new Promise((resolve, reject) => {
       Chat.findOne({
@@ -36,10 +37,14 @@ class ChatService {
               },
               (err: Error, result: IChat) => {
                 if (err) reject(err)
-                Chat.populate<IChat>(result, [{path: 'participants'}], (err: Error, chat: IChat) => {
-                  if (err) reject(err)
-                  resolve(chat)
-                })
+                Chat.populate<IChat>(
+                  result,
+                  [{ path: 'participants' }],
+                  (err: Error, chat: IChat) => {
+                    if (err) reject(err)
+                    resolve(chat)
+                  }
+                )
               }
             )
           } else {
@@ -48,6 +53,7 @@ class ChatService {
         })
     })
   }
+
   addMessage(fromId: Types.ObjectId, toId: Types.ObjectId, content: string) {
     return new Promise(async (resolve, reject) => {
       const to = await Analyst.findOne({ _id: toId })
@@ -81,15 +87,20 @@ class ChatService {
             }
           ).exec((err: Error) => {
             if (err) reject(err)
-            Message.populate<IMessage>(message, [{path: 'to'}, {path: 'from'}], (err: Error, result: IMessage) => {
-              if (err) reject(err)
-              resolve(result)
-            })
+            Message.populate<IMessage>(
+              message,
+              [{ path: 'to' }, { path: 'from' }],
+              (err: Error, result: IMessage) => {
+                if (err) reject(err)
+                resolve(result)
+              }
+            )
           })
         }
       )
     })
   }
+
   get(fromId: Types.ObjectId, toId: Types.ObjectId) {
     return new Promise((resolve, reject) => {
       Message.find({
@@ -124,6 +135,7 @@ class ChatService {
         })
     })
   }
+
   changeStatus(userId: Types.ObjectId, status: string) {
     return new Promise((resolve, reject) => {
       Analyst.updateOne(
@@ -141,6 +153,7 @@ class ChatService {
       })
     })
   }
+
   updateLastActive(userId: Types.ObjectId) {
     return new Promise((resolve, reject) => {
       Analyst.updateOne(

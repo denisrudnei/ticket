@@ -1,13 +1,13 @@
+import mongoose from 'mongoose'
 import Notification, { INotification } from '../models/Notification'
-const fields = ['to', 'from']
 import TicketService from '../services/ticket/TicketService'
 import GroupService from '../services/ticket/GroupService'
 import AnalystService from '../services/AnalystService'
 import Log from '../models/ticket/Log'
-import mongoose from 'mongoose'
 import { IAnalyst } from '../models/Analyst'
 import { ITicket } from '../models/ticket/Ticket'
 import { IGroup } from '../models/ticket/Group'
+const fields = ['to', 'from']
 
 class NotificationService {
   getAll(userId: IAnalyst['_id']) {
@@ -24,6 +24,7 @@ class NotificationService {
         })
     })
   }
+
   getOne(id: INotification['_id']): Promise<INotification> {
     return new Promise((resolve, reject) => {
       Notification.findOne({ _id: id })
@@ -34,7 +35,11 @@ class NotificationService {
         })
     })
   }
-  read(userId: IAnalyst['_id'], notificationId: INotification['_id']): Promise<INotification> {
+
+  read(
+    userId: IAnalyst['_id'],
+    notificationId: INotification['_id']
+  ): Promise<INotification> {
     return new Promise((resolve, reject) => {
       Notification.updateOne(
         {
@@ -51,7 +56,11 @@ class NotificationService {
       })
     })
   }
-  unRead(userId: IAnalyst['_id'], notificationId: INotification['_id']): Promise<INotification> {
+
+  unRead(
+    userId: IAnalyst['_id'],
+    notificationId: INotification['_id']
+  ): Promise<INotification> {
     return new Promise((resolve, reject) => {
       Notification.updateOne(
         {
@@ -70,6 +79,7 @@ class NotificationService {
       })
     })
   }
+
   toggleRead(userId: IAnalyst['_id'], notificationId: INotification['_id']) {
     return new Promise((resolve, reject) => {
       return this.getOne(notificationId).then(notification => {
@@ -79,6 +89,7 @@ class NotificationService {
       })
     })
   }
+
   readall(userId: IAnalyst['_id']) {
     return new Promise((resolve, reject) => {
       Notification.updateMany(
@@ -98,7 +109,12 @@ class NotificationService {
       })
     })
   }
-  triggerForTicketTransfer(ticketId: ITicket['_id'], groupId: IGroup['_id'], analystId: IAnalyst['_id']) {
+
+  triggerForTicketTransfer(
+    ticketId: ITicket['_id'],
+    groupId: IGroup['_id'],
+    analystId: IAnalyst['_id']
+  ) {
     return new Promise(async (resolve, reject) => {
       const ticket = await TicketService.getOne(ticketId)
       const group = await GroupService.getOne(groupId)

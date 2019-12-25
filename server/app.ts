@@ -9,6 +9,7 @@ import routes from './routes/index'
 
 class AppController {
   express: express.Application
+
   constructor() {
     this.express = express()
     this.middlewares()
@@ -45,10 +46,17 @@ class AppController {
 
   routes() {
     this.express.use('/api', routes)
-    this.express.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-      consola.error(err)
-      res.status(500).json(err.message)
-    })
+    this.express.use(
+      (
+        err: Error,
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction
+      ) => {
+        consola.error(err)
+        res.status(500).json(err.message)
+      }
+    )
   }
 }
 

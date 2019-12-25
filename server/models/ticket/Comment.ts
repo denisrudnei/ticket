@@ -2,9 +2,9 @@ import { models, model, Schema, Document } from 'mongoose'
 import { IAnalyst } from '../Analyst'
 
 export interface IComment extends Document {
-  user: IAnalyst['_id'];
-  content: string;
-  date: Date;
+  user: IAnalyst['_id']
+  content: string
+  date: Date
 }
 
 const CommentSchema: Schema<IComment> = new Schema({

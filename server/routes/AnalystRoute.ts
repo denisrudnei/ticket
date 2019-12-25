@@ -1,6 +1,6 @@
 import express from 'express'
-const router = express.Router()
 import AnalystController from '../controllers/AnalystController'
+const router = express.Router()
 
 router.get('/analyst', AnalystController.getAll)
 router.get('/analyst/:id', AnalystController.getOne)

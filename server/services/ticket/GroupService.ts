@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
-import Group, {IGroup} from '../../models/ticket/Group'
+import Group, { IGroup } from '../../models/ticket/Group'
 import { IAnalyst } from '../../models/Analyst'
 
-class GroupService{
+class GroupService {
   getAll(): Promise<[IGroup]> {
     return new Promise((resolve, reject) => {
       Group.find({}, (err: Error, groups: [IGroup]) => {
@@ -12,6 +12,7 @@ class GroupService{
       })
     })
   }
+
   getOne(groupId: IGroup['_id']): Promise<IGroup> {
     return new Promise((resolve, reject) => {
       Group.findOne({
@@ -25,6 +26,7 @@ class GroupService{
         })
     })
   }
+
   create(group: IGroup): Promise<void> {
     return new Promise((resolve, reject) => {
       const newGroup = new Group({
@@ -38,6 +40,7 @@ class GroupService{
       })
     })
   }
+
   edit(groupId: IGroup['_id'], group: IGroup): Promise<void> {
     return new Promise((resolve, reject) => {
       Group.updateOne(
@@ -56,7 +59,11 @@ class GroupService{
       })
     })
   }
-  insertAnalyst(groupId: IGroup['_id'], analystId: IAnalyst['_id']): Promise<void> {
+
+  insertAnalyst(
+    groupId: IGroup['_id'],
+    analystId: IAnalyst['_id']
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
       Group.updateOne(
         { _id: groupId },
@@ -72,7 +79,11 @@ class GroupService{
       )
     })
   }
-  removeAnalyst(groupId: IGroup['_id'], analystId: IAnalyst['_id']): Promise<void> {
+
+  removeAnalyst(
+    groupId: IGroup['_id'],
+    analystId: IAnalyst['_id']
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
       Group.updateOne(
         { _id: groupId },

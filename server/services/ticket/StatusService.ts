@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
-import Status, {IStatus} from '../../models/ticket/Status'
+import Status, { IStatus } from '../../models/ticket/Status'
 
-class StatusService  {
+class StatusService {
   getStatus(): Promise<IStatus> {
     return new Promise((resolve, reject) => {
       Status.find({})
@@ -12,6 +12,7 @@ class StatusService  {
         })
     })
   }
+
   getOne(statusId: IStatus['_id']): Promise<IStatus> {
     return new Promise((resolve, reject) => {
       Status.findOne({
@@ -24,19 +25,20 @@ class StatusService  {
         })
     })
   }
+
   create(status: IStatus): Promise<void> {
     return new Promise((resolve, reject) => {
-      const newStatus = {
+      const newStatus = new Status({
         _id: new mongoose.Types.ObjectId(),
-        ...status
-      }
-
+        name: status.name
+      })
       Status.create(newStatus, (err: Error) => {
         if (err) return reject(err)
         return resolve()
       })
     })
   }
+
   edit(statusId: IStatus['_id'], status: IStatus): Promise<void> {
     return new Promise((resolve, reject) => {
       const allowedStatus = status.allowedStatus.filter(s => {

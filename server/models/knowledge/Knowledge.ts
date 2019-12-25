@@ -5,12 +5,12 @@ import { IStatus } from '../ticket/Status'
 import { IKnowledgeFile } from './KnowledgeFile'
 
 export interface IKnowledge extends Document {
-  name: string;
-  created: Date;
-  category: ICategory['_id'];
-  group: IGroup['_id'];
-  status: IStatus['_id'];
-  preview: string;
+  name: string
+  created: Date
+  category: ICategory['_id']
+  group: IGroup['_id']
+  status: IStatus['_id']
+  preview: string
   files: [IKnowledgeFile['_id']]
 }
 

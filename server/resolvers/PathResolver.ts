@@ -1,12 +1,12 @@
 import { Context } from 'graphql-yoga/dist/types'
 import { withFilter } from 'graphql-yoga'
+import { IResolvers } from 'graphql-tools'
 import PathService from '../services/PathService'
 import PathEnum from '../enums/PathEnum'
 import Analyst from '../models/Analyst'
-import {IResolvers} from 'graphql-tools'
 
 const PathResolver: IResolvers = {
-  Query : {
+  Query: {
     Path: (_: any, __: any, { req }: Context) => {
       const userId = req.session.authUser._id
       return PathService.getPaths(userId)
@@ -16,7 +16,7 @@ const PathResolver: IResolvers = {
       return PathService.getPathsTree(userId)
     }
   },
-  Mutation : {
+  Mutation: {
     AddPath: (_: any, { path }: any, { req, pubSub }: Context) => {
       const userId = req.session.authUser._id
       const result = PathService.create(path, userId)
@@ -33,7 +33,7 @@ const PathResolver: IResolvers = {
       return userId
     }
   },
-  Subscription : {
+  Subscription: {
     NewPath: {
       subscribe: withFilter(
         (_, __, { pubSub }) => {

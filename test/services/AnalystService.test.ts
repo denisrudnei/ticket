@@ -1,11 +1,13 @@
+import fileUpload from 'express-fileupload'
 import AnalystService from '../../server/services/AnalystService'
 import Analyst from '../../server/models/Analyst'
 import AnalystSeed from '../seeds/AnalystSeed'
-import fileUpload from 'express-fileupload'
+import 'mocha'
 const analyst = AnalystSeed(1)[0]
 
 describe('Analyst', function() {
   this.timeout(0)
+
   it('Get analysts', async () => {
     await AnalystService.getAnalysts()
   })
@@ -37,14 +39,14 @@ describe('Analyst', function() {
     await AnalystService.getGroups(analyst._id)
   })
 
-  // it('Update analyst image', async () => {
-  //   const file = {
-  //     name: 'test.txt',
-  //     lastModifiedDate: Date.now(),
-  //     data: ''
-  //   } as fileUpload.UploadedFile
-  //   await AnalystService.updateImage(analyst._id.toString(), file)
-  // })
+  it('Update analyst image', async () => {
+    const file = {
+      name: 'test.txt',
+      lastModifiedDate: Date.now(),
+      data: ''
+    } as any
+    await AnalystService.updateImage(analyst._id.toString(), file)
+  })
 
   it('Update sound config', async () => {
     await AnalystService.setSoundConfig(analyst, {

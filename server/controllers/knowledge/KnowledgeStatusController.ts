@@ -1,5 +1,5 @@
-import knowledgeStatusService from '../../services/knowledge/KnowledgeStatusService'
 import express from 'express'
+import knowledgeStatusService from '../../services/knowledge/KnowledgeStatusService'
 
 export default {
   getAll: (_: express.Request, res: express.Response) => {

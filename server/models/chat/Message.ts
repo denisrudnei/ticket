@@ -1,11 +1,11 @@
 import { models, model, Schema, Document } from 'mongoose'
 
 export interface IMessage extends Document {
-  to: Schema.Types.ObjectId;
-  from: Schema.Types.ObjectId;
-  content: string;
-  read: boolean;
-  date: Date;
+  to: Schema.Types.ObjectId
+  from: Schema.Types.ObjectId
+  content: string
+  read: boolean
+  date: Date
 }
 
 const MessageSchema = new Schema({

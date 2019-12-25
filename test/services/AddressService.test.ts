@@ -1,11 +1,13 @@
 import AddressService from '../../server/services/AddressService'
 import Address from '../../server/models/Address'
+import 'mocha'
+import seed from '../seed'
 
 describe('Address', function() {
   this.timeout(0)
 
-  it('Get all addresses', async () => {
-    await AddressService.getAll()
+  it('Get all addresses', function() {
+    return AddressService.getAll()
   })
 
   it('Create new address', async () => {

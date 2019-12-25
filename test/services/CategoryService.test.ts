@@ -1,5 +1,6 @@
 import CategoryService from '../../server/services/ticket/CategoryService'
 import Category from '../../server/models/ticket/Category'
+import 'mocha'
 
 describe('CategoryService', function() {
   this.timeout(0)

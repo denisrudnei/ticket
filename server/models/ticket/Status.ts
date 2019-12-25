@@ -1,9 +1,9 @@
 import { models, model, Schema, Document } from 'mongoose'
 
 export interface IStatus extends Document {
-  name: string;
-  allowedStatus: [IStatus['_id']];
-  slaRun: boolean;
+  name: string
+  allowedStatus: [IStatus['_id']]
+  slaRun: boolean
 }
 
 const StatusSchema: Schema<IStatus> = new Schema({

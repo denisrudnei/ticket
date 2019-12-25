@@ -1,5 +1,5 @@
-import StatusService from '../../services/ticket/StatusService'
 import express from 'express'
+import StatusService from '../../services/ticket/StatusService'
 
 export default {
   getStatus: (req: express.Request, res: express.Response) => {

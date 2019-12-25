@@ -1,5 +1,5 @@
+import { IResolvers } from 'graphql-tools'
 import RoleService from '../services/RoleService'
-import {IResolvers} from 'graphql-tools'
 
 const RoleResolver: IResolvers = {
   Query: {

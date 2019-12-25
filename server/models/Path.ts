@@ -1,9 +1,9 @@
 import { models, model, Schema, Document } from 'mongoose'
 
 export interface IPath extends Document {
-  objectName: string;
-  property: string;
-  name: string;
+  objectName: string
+  property: string
+  name: string
 }
 
 const PathSchema = new Schema({

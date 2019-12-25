@@ -1,19 +1,19 @@
 import { models, model, Schema, Document } from 'mongoose'
-import {IGroup} from './Group'
-import {IStatus} from './Status'
-import {IPriority} from './Priority'
-import {IField} from './Field'
-import {ISla} from './Sla'
+import { IGroup } from './Group'
+import { IStatus } from './Status'
+import { IPriority } from './Priority'
+import { IField } from './Field'
+import { ISla } from './Sla'
 
 export interface ICategory extends Document {
-  name: string;
-  father: ICategory['_id'];
-  description: string;
-  subs: [ICategory['_id']];
-  defaultGroup: IGroup['_id'];
-  defaultStatus: IStatus['_id'];
-  defaultPriority: IPriority['_id'];
-  fields: [IField['_id']];
+  name: string
+  father: ICategory['_id']
+  description: string
+  subs: [ICategory['_id']]
+  defaultGroup: IGroup['_id']
+  defaultStatus: IStatus['_id']
+  defaultPriority: IPriority['_id']
+  fields: [IField['_id']]
   sla: ISla['_id']
 }
 

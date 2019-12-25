@@ -1,8 +1,8 @@
 import { Schema, model, models, Document } from 'mongoose'
 
 export interface IKnowledgeFile extends Document {
-  name: string;
-  url: string;
+  name: string
+  url: string
 }
 
 const KnowledgeFileSchema: Schema<IKnowledgeFile> = new Schema({
@@ -25,5 +25,5 @@ KnowledgeFileSchema.set('toJSON', {
   getters: true
 })
 
-export default
-  models.KnowledgeFile || model('KnowledgeFile', KnowledgeFileSchema)
+export default models.KnowledgeFile ||
+  model('KnowledgeFile', KnowledgeFileSchema)

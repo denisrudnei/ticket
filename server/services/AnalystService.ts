@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
-import Analyst, { IAnalyst } from '../../server/models/Analyst'
-import { IGroup } from '../models/ticket/Group'
 import fileUpload from 'express-fileupload'
 import AWS from 'aws-sdk'
+import Analyst, { IAnalyst } from '../../server/models/Analyst'
+import { IGroup } from '../models/ticket/Group'
 const S3 = require('../../plugins/S3')
 
 class AnalystService {
@@ -31,8 +31,8 @@ class AnalystService {
   }
 
   getOne(analystId: IAnalyst['_id']): Promise<IAnalyst> {
-    return new Promise((resolve, reject) => {+
-      Analyst.findOne({
+    return new Promise((resolve, reject) => {
+      ;+Analyst.findOne({
         _id: analystId
       }).exec((err: Error, analyst) => {
         if (err) return reject(err)
@@ -75,7 +75,10 @@ class AnalystService {
     ])
   }
 
-  updateImage(userId: IAnalyst['_id'], file: fileUpload.UploadedFile): Promise<void> {
+  updateImage(
+    userId: IAnalyst['_id'],
+    file: fileUpload.UploadedFile
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
       S3.createBucket(async () => {
         const name = userId
@@ -84,22 +87,25 @@ class AnalystService {
           Key: name,
           Body: file.data
         }
-        await S3.upload(params, (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
-          if (err) return reject(err)
-          Analyst.updateOne(
-            {
-              _id: userId
-            },
-            {
-              $set: {
-                picture: data.Location
-              }
-            }
-          ).exec((err: Error) => {
+        await S3.upload(
+          params,
+          (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
             if (err) return reject(err)
-            return resolve()
-          })
-        })
+            Analyst.updateOne(
+              {
+                _id: userId
+              },
+              {
+                $set: {
+                  picture: data.Location
+                }
+              }
+            ).exec((err: Error) => {
+              if (err) return reject(err)
+              return resolve()
+            })
+          }
+        )
       })
     })
   }

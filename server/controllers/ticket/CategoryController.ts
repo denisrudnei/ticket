@@ -1,6 +1,6 @@
-import CategoryService from '../../services/ticket/CategoryService'
-import Category, {ICategory} from '../../models/ticket/Category'
 import express from 'express'
+import CategoryService from '../../services/ticket/CategoryService'
+import Category, { ICategory } from '../../models/ticket/Category'
 export default {
   getCategories: (_: express.Request, res: express.Response) => {
     CategoryService.getCategories()
@@ -33,9 +33,11 @@ export default {
   },
 
   edit: (req: express.Request, res: express.Response) => {
-    CategoryService.edit(req.params!.id as ICategory['_id'], req.body).then(() => {
-      return res.sendStatus(202)
-    })
+    CategoryService.edit(req.params!.id as ICategory['_id'], req.body).then(
+      () => {
+        return res.sendStatus(202)
+      }
+    )
   },
 
   create: (req: express.Request, res: express.Response) => {

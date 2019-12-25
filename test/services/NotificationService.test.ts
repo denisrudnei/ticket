@@ -3,6 +3,7 @@ import Notification from '../../server/models/Notification'
 import Analyst from '../../server/models/Analyst'
 import Ticket from '../../server/models/ticket/Ticket'
 import Group from '../../server/models/ticket/Group'
+import 'mocha'
 
 describe('NotificationService', function() {
   this.timeout(0)

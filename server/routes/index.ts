@@ -1,4 +1,4 @@
-import {Router} from 'express'
+import { Router } from 'express'
 import AddressRoute from './AddressRoute'
 import AnalystRoute from './AnalystRoute'
 import AuthRoute from './AuthRoute'

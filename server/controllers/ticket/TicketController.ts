@@ -1,7 +1,7 @@
-import TicketService from '../../services/ticket/TicketService'
 import express from 'express'
-import {Types} from 'mongoose'
+import { Types } from 'mongoose'
 import { UploadedFile } from 'express-fileupload'
+import TicketService from '../../services/ticket/TicketService'
 
 export default {
   getTickets: (req: express.Request, res: express.Response) => {
@@ -64,10 +64,7 @@ export default {
   },
 
   transfer: (req: express.Request, res: express.Response) => {
-    TicketService.transferToGroup(
-      req.params.id,
-      req.body._id,
-    )
+    TicketService.transferToGroup(req.params.id, req.body._id)
       .then(result => {
         // io.emit('updateTicket', result.newTicket)
         // io.emit(`notification/${req.body._id}`, result.notification)

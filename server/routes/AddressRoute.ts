@@ -1,6 +1,6 @@
 import express from 'express'
+import AddressController from '../controllers/AddressController'
 const router = express.Router()
-import AddressController  from '../controllers/AddressController'
 
 router.post('/address', AddressController.create)
 router.get('/address', AddressController.getAll)

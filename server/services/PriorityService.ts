@@ -1,5 +1,5 @@
-import {Types} from 'mongoose'
-import Priority, {IPriority} from '../models/ticket/Priority'
+import { Types } from 'mongoose'
+import Priority, { IPriority } from '../models/ticket/Priority'
 
 class PriorityService {
   create(priority: IPriority): Promise<void> {
@@ -46,6 +46,7 @@ class PriorityService {
       )
     })
   }
+
   editMany(priorities: [IPriority]) {
     const all = priorities.map(priority => this.edit(priority))
     return Promise.all(all)

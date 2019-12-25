@@ -1,5 +1,5 @@
-import PathService from '../services/PathService'
 import express from 'express'
+import PathService from '../services/PathService'
 import Path from '../models/Path'
 
 export default {

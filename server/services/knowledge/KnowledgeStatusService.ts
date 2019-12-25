@@ -1,7 +1,9 @@
 import mongoose from 'mongoose'
-import KnowledgeStatus, { IKnowledgeStatus } from '../../models/knowledge/KnowledgeStatus'
+import KnowledgeStatus, {
+  IKnowledgeStatus
+} from '../../models/knowledge/KnowledgeStatus'
 
-class KnowledgeStatusService  {
+class KnowledgeStatusService {
   create(status: IKnowledgeStatus): Promise<IKnowledgeStatus> {
     return new Promise((resolve, reject) => {
       KnowledgeStatus.create(
@@ -16,6 +18,7 @@ class KnowledgeStatusService  {
       )
     })
   }
+
   getAll(): Promise<[IKnowledgeStatus]> {
     return new Promise((resolve, reject) => {
       KnowledgeStatus.find({}, (err: Error, result: [IKnowledgeStatus]) => {

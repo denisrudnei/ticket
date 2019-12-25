@@ -1,16 +1,16 @@
 import { models, model, Schema, Document } from 'mongoose'
-import TicketEnums from  '../enums/TicketEnum'
+import TicketEnums from '../enums/TicketEnum'
 import { IAnalyst } from './Analyst'
 
 export interface INotification extends Document {
-  from: IAnalyst['_id'];
-  to: [IAnalyst['_id']];
-  date: Date;
-  name: string;
-  read: [IAnalyst['_id']];
-  content: string;
-  type: string;
-  meta: any;
+  from: IAnalyst['_id']
+  to: [IAnalyst['_id']]
+  date: Date
+  name: string
+  read: [IAnalyst['_id']]
+  content: string
+  type: string
+  meta: any
 }
 
 const NotificationSchema: Schema<INotification> = new Schema({

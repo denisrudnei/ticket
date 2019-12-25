@@ -1,10 +1,12 @@
 import seed from './seed'
+import 'mocha'
 
-before(async function() {
+before(function() {
   this.timeout(0)
-  await seed.execute()
+  return seed.execute()
 })
 
-after(async function() {
-  await seed.disconnect()
+after(function() {
+  this.timeout(0)
+  return seed.disconnect()
 })

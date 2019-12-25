@@ -1,4 +1,4 @@
-import mongoose, {Types}from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 import Category, { ICategory } from '../../models/ticket/Category'
 import Field from '../../models/ticket/Field'
 
@@ -41,6 +41,7 @@ class CategoryService {
       })
     })
   }
+
   getCategories() {
     return new Promise((resolve, reject) => {
       Category.find({})
@@ -89,6 +90,7 @@ class CategoryService {
         })
     })
   }
+
   getOne(name: string): Promise<ICategory> {
     return new Promise((resolve, reject) => {
       Category.findOne({ name: name })
@@ -122,6 +124,7 @@ class CategoryService {
         })
     })
   }
+
   edit(categoryId: Types.ObjectId, category: ICategory): Promise<void> {
     return new Promise((resolve, reject) => {
       Category.updateOne(
@@ -142,6 +145,7 @@ class CategoryService {
       })
     })
   }
+
   getSubsForCategory(id: Types.ObjectId): Promise<[ICategory]> {
     return new Promise((resolve, reject) => {
       Category.findOne({ _id: id }).exec((err: Error, result) => {

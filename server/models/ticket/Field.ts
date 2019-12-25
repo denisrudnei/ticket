@@ -1,15 +1,15 @@
 import { models, model, Schema, Document } from 'mongoose'
 
 export interface IField extends Document {
-  required: boolean;
-  text: string;
-  limits: ILimits;
-  value: string;
+  required: boolean
+  text: string
+  limits: ILimits
+  value: string
 }
 
 export interface ILimits {
-  min: number;
-  max: number;
+  min: number
+  max: number
 }
 
 const FieldSchema = new Schema({

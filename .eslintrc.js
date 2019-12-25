@@ -5,7 +5,7 @@ module.exports = {
     node: true
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@typescript-eslint/parser'
   },
   extends: [
     '@nuxtjs',
@@ -13,10 +13,12 @@ module.exports = {
   ],
   plugins: [
     'prettier',
-    'vuetify'
+    'vuetify',
+    '@typescript-eslint'
   ],
   // add your custom rules here
   rules: {
-    'vuetify/no-deprecated-classes': 'error'
+    'vuetify/no-deprecated-classes': 'error',
+    '@typescript-eslint/rule-name': 'error'
   }
 }

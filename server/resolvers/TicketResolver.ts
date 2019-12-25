@@ -1,10 +1,10 @@
 import { withFilter } from 'graphql-yoga'
+import { Context } from 'graphql-yoga/dist/types'
+import { IResolvers } from 'graphql-tools'
 import TicketService from '../services/ticket/TicketService'
 import TicketEnum from '../enums/TicketEnum'
 import LogService from '../services/ticket/LogService'
-import { Context } from 'graphql-yoga/dist/types'
 import Ticket from '../../server/models/ticket/Ticket'
-import {IResolvers} from 'graphql-tools'
 
 const TicketResolver: IResolvers = {
   Query: {
@@ -22,8 +22,12 @@ const TicketResolver: IResolvers = {
       )
     }
   },
-  Mutation:  {
-    ChangeStatus: async (_: any, { ticketId, statusId }: any, { pubSub, req }: Context) => {
+  Mutation: {
+    ChangeStatus: async (
+      _: any,
+      { ticketId, statusId }: any,
+      { pubSub, req }: Context
+    ) => {
       const user = req.session.authUser
       const ticket = await TicketService.changeStatus(ticketId, statusId)
       LogService.createTicketLog(user._id, ticket!)
@@ -32,7 +36,11 @@ const TicketResolver: IResolvers = {
       })
       return ticket
     },
-    TransferTicket: async (_: any, { ticketId, groupId }: any, { req, pubSub }: Context) => {
+    TransferTicket: async (
+      _: any,
+      { ticketId, groupId }: any,
+      { req, pubSub }: Context
+    ) => {
       const user = req.session.authUser
       const ticket = await TicketService.transferToGroup(ticketId, groupId)
       // TODO

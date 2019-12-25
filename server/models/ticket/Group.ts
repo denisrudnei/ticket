@@ -2,7 +2,7 @@ import { models, model, Schema, Document } from 'mongoose'
 import { IAnalyst } from '../Analyst'
 
 export interface IGroup extends Document {
-  name: string;
+  name: string
   analysts: [IAnalyst['_id']]
 }
 

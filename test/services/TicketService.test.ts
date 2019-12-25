@@ -1,12 +1,13 @@
 import faker from 'faker'
 import mongoose from 'mongoose'
+import { UploadedFile } from 'express-fileupload'
 import Ticket from '../../server/models/ticket/Ticket'
 import TicketService from '../../server/services/ticket/TicketService'
 import Group from '../../server/models/ticket/Group'
 import Status from '../../server/models/ticket/Status'
 import Analyst from '../../server/models/Analyst'
 import Category from '../../server/models/ticket/Category'
-import fileUpload, {UploadedFile} from 'express-fileupload'
+import 'mocha'
 
 describe('Ticket', function() {
   this.timeout(0)
@@ -73,16 +74,18 @@ describe('Ticket', function() {
     await TicketService.commentOnTicket(ticket!._id, analyst._id, content)
   })
 
-  //it('Add file', async () => {
-    //const ticket = await Ticket.findOne().exec()
-    // const files: [UploadedFile] = [{
-    //   name: 'testFile.txt',
-    //   data: Buffer.from(''),
-    //   mimetype: 'text/*',
-    // }]
+  it('Add file', async () => {
+    const ticket = await Ticket.findOne().exec()
+    const files: [UploadedFile] = [
+      {
+        name: 'testFile.txt',
+        data: Buffer.from(''),
+        mimetype: 'text/*'
+      } as any
+    ]
 
-    //await TicketService.insertFile(ticket!._id, files)
-  //})
+    await TicketService.insertFile(ticket!._id, files)
+  })
 
   it('Get file', async () => {
     const ticket = await Ticket.findOne().exec()

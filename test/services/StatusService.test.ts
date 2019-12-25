@@ -1,7 +1,10 @@
 import StatusService from '../../server/services/ticket/StatusService'
 import Status from '../../server/models/ticket/Status'
+import 'mocha'
 
-describe('Status', () => {
+describe('Status', function() {
+  this.timeout(0)
+
   it('Get status', async () => {
     await StatusService.getStatus()
   })

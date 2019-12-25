@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
-import Log, {ILog} from '../../models/ticket/Log'
-import Ticket, {ITicket} from '../../models/ticket/Ticket'
+import Log, { ILog } from '../../models/ticket/Log'
+import Ticket, { ITicket } from '../../models/ticket/Ticket'
 import { IAnalyst } from '../../models/Analyst'
 
 class LogService {

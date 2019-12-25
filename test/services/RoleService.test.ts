@@ -1,8 +1,11 @@
 import RoleService from '../../server/services/RoleService'
 import Role from '../../server/models/Role'
 import Analyst from '../../server/models/Analyst'
+import 'mocha'
 
-describe('Role', () => {
+describe('Role', function() {
+  this.timeout(0)
+
   it('Get roles', async () => {
     await RoleService.getRoles()
   })

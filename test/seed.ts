@@ -12,7 +12,7 @@ import SlaSeed from './seeds/SlaSeed'
 import PrioritySeed from './seeds/PrioritySeed'
 
 interface IData {
-  model: string;
+  model: string
   documents: any[]
 }
 
@@ -56,15 +56,19 @@ const data: IData[] = [
 ]
 
 const models: string[] = [
-  './server/models/Analyst.js',
-  './server/models/ticket/Group.js',
-  './server/models/ticket/Status.js',
-  './server/models/ticket/Category.js',
-  './server/models/Path.js',
-  './server/models/ticket/Ticket.js',
-  './server/models/Address.js',
-  './server/models/Notification.js',
-  './server/models/Path.js',
+  './server/models/Analyst.ts',
+  './server/models/ticket/Log.ts',
+  './server/models/ticket/Group.ts',
+  './server/models/ticket/Status.ts',
+  './server/models/ticket/Category.ts',
+  './server/models/Path.ts',
+  './server/models/knowledge/KnowledgeStatus.ts',
+  './server/models/knowledge/Knowledge.ts',
+  './server/models/ticket/Field.ts',
+  './server/models/ticket/Ticket.ts',
+  './server/models/Address.ts',
+  './server/models/Notification.ts',
+  './server/models/Path.ts',
   './server/models/ticket/Priority',
   './server/models/ticket/Sla'
 ]
@@ -93,7 +97,7 @@ const seed = {
   loadModels: (paths: [string]) => {
     return new Promise((resolve, reject) => {
       for (let i = 0; i < paths.length; i++) {
-        const Model = require(path.resolve(paths[i]))
+        const Model = require(path.resolve(paths[i])).default
         Model()
       }
       resolve()
@@ -121,9 +125,7 @@ const seed = {
       resolve()
     })
   },
-  disconnect: async () => {
-    await mongoose.disconnect
-  }
+  disconnect: mongoose.disconnect
 }
 
 export default seed

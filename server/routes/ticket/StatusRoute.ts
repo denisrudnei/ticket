@@ -1,6 +1,6 @@
 import express from 'express'
-const router = express.Router()
 import StatusController from '../../controllers/ticket/StatusController'
+const router = express.Router()
 
 router.get('/status', StatusController.getStatus)
 router.get('/status/:id', StatusController.getOne)

@@ -1,5 +1,5 @@
-import RoleService from '../services/RoleService'
 import express from 'express'
+import RoleService from '../services/RoleService'
 
 export default {
   getAll: (req: express.Request, res: express.Response) => {

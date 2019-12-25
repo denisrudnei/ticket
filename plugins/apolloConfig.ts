@@ -7,10 +7,7 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { getMainDefinition } from 'apollo-utilities'
 import 'cross-fetch/polyfill'
-// import fetch from 'node-fetch'
 import ws from 'ws'
-import {Context} from '@nuxt/types'
-
 
 export default ({ app, req }: any, inject: any) => {
   const url = {
@@ -25,7 +22,6 @@ export default ({ app, req }: any, inject: any) => {
     credentials: 'include',
     ...(process.server ? { headers: req.headers } : undefined)
   })
-  console.log(url)
   const wsOrWss = url.protocol.includes('https') ? 'wss://' : 'ws://'
 
   const wsLink = new WebSocketLink({

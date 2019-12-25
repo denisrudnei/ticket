@@ -1,12 +1,12 @@
 import { models, model, Schema, Document } from 'mongoose'
 
 export interface IAddress extends Document {
-  name: string;
-  country: string;
-  street: string;
-  cep: string;
-  city: string;
-  state: string;
+  name: string
+  country: string
+  street: string
+  cep: string
+  city: string
+  state: string
 }
 
 const AddressSchema: Schema<IAddress> = new Schema({

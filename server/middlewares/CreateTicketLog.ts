@@ -1,8 +1,12 @@
-import LogService  from '../services/ticket/LogService'
-import TicketService  from '../services/ticket/TicketService'
 import express from 'express'
+import LogService from '../services/ticket/LogService'
+import TicketService from '../services/ticket/TicketService'
 
-async function createTicketLog(req: express.Request, res: express.Response, next: express.NextFunction) {
+async function createTicketLog(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
   const ticket = await TicketService.getOne(req.params.id)
   const user = req.session!.authUser._id
   await LogService.createTicketLog(user, ticket)

@@ -1,6 +1,6 @@
 import express from 'express'
-const router = express.Router()
 import SearchController from '../../controllers/ticket/SearchController'
+const router = express.Router()
 
 router.get('/search', SearchController.searchTicket)
 

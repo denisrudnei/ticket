@@ -1,3 +1,5 @@
 module.exports = {
-  recursive: true
+  recursive: true,
+  extension: ['ts'],
+  require: 'ts-node/register'
 }

@@ -1,5 +1,5 @@
-import SearchService from '../../services/ticket/SearchService'
 import express from 'express'
+import SearchService from '../../services/ticket/SearchService'
 
 export default {
   searchTicket: (req: express.Request, res: express.Response) => {

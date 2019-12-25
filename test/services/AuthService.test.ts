@@ -1,7 +1,8 @@
 import faker from 'faker'
+import express from 'express'
 import AuthService from '../../server/services/AuthService'
 import Analyst from '../../server/models/Analyst'
-import express from 'express'
+import 'mocha'
 
 const password = faker.internet.password()
 const email = faker.internet.email()

@@ -1,5 +1,5 @@
-import GroupService from '../../services/ticket/GroupService'
 import express from 'express'
+import GroupService from '../../services/ticket/GroupService'
 
 export default {
   getAll: (req: express.Request, res: express.Response) => {

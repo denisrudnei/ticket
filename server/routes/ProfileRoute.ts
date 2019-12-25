@@ -1,6 +1,6 @@
 import express from 'express'
-const router = express.Router()
 import ProfileController from '../controllers/ProfileController'
+const router = express.Router()
 
 router.get('/profile', ProfileController.getProfileInfo)
 router.get('/info/path', ProfileController.getPaths)

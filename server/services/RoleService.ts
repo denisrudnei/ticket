@@ -14,6 +14,7 @@ class RoleService {
       })
     })
   }
+
   updateRole(roleId: IRole['_id'], role: IRole): Promise<void> {
     return new Promise((resolve, reject) => {
       Role.updateOne(
@@ -31,6 +32,7 @@ class RoleService {
       })
     })
   }
+
   setAnalystRole(analystId: IAnalyst['_id'], roleName: string): Promise<void> {
     return new Promise((resolve, reject) => {
       Analyst.updateOne(

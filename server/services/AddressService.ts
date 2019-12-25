@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import Address, {IAddress} from '../models/Address'
+import Address, { IAddress } from '../models/Address'
 
 class AddressService {
   create(address: IAddress): Promise<void> {
@@ -23,6 +23,7 @@ class AddressService {
       )
     })
   }
+
   getAll() {
     return new Promise((resolve, reject) => {
       Address.find().exec((err: Error, addresses) => {
@@ -31,6 +32,7 @@ class AddressService {
       })
     })
   }
+
   getOne(addressId: IAddress['_id']): Promise<IAddress> {
     return new Promise((resolve, reject) => {
       Address.findOne({
@@ -41,6 +43,7 @@ class AddressService {
       })
     })
   }
+
   edit(addressId: IAddress['_id'], address: IAddress): Promise<void> {
     return new Promise((resolve, reject) => {
       const { name, country, cep, city, state, street } = address

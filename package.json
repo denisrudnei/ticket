@@ -8,15 +8,28 @@
     "dev": "cross-env NODE_ENV=development nodemon --watch server/ --exec  \"ts-node server/index.ts\" -e ts",
     "backend": "cross-env NODE_ENV=development nodemon --watch server/ --exec  \"ts-node server/onlyServer.ts\" -e ts",
     "build": "nuxt build",
-    "start": "cross-env NODE_ENV=production node server/index.js",
+    "start": "cross-env NODE_ENV=production ts-node server/index.ts",
     "heroku-postbuild": "npm run build",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint",
-    "test": "nyc --reporter=html --reporter=text mocha -r ts-node/register test/**/*test.ts --exit",
+    "test": "nyc --reporter=html --reporter=text mocha test/** --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "reporter": [
+      "html",
+      "text"
+    ]
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^12.4.0",
@@ -81,6 +94,7 @@
     "@nuxt/typescript-runtime": "^0.1.7",
     "@nuxtjs/eslint-config": "^0.0.1",
     "@nuxtjs/vuetify": "^1.9.0",
+    "@types/chai": "^4.2.7",
     "@types/email-templates": "^6.0.1",
     "@types/express": "^4.17.2",
     "@types/express-fileupload": "^1.1.0",
@@ -95,6 +109,8 @@
     "@types/morgan": "^1.7.37",
     "@types/node-fetch": "^2.5.3",
     "@types/ws": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^2.13.0",
+    "@typescript-eslint/parser": "^2.13.0",
     "@vue/test-utils": "^1.0.0-beta.27",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^8.2.1",
@@ -123,7 +139,9 @@
     "sass-loader": "^7.3.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "ts-mocha": "^6.0.0",
+    "ts-node": "^8.5.4"
   },
   "snyk": true
 }

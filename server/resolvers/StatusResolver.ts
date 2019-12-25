@@ -1,5 +1,5 @@
+import { IResolvers } from 'graphql-tools'
 import StatusService from '../services/ticket/StatusService'
-import {IResolvers} from 'graphql-tools'
 
 const StatusResolver: IResolvers = {
   Query: {

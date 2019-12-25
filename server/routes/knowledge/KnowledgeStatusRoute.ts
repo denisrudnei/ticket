@@ -1,6 +1,6 @@
-import {Router} from 'express'
+import { Router } from 'express'
+import KnowledgeStatusController from '../../controllers/knowledge/KnowledgeStatusController'
 const router = Router()
-import KnowledgeStatusController  from '../../controllers/knowledge/KnowledgeStatusController'
 
 router.get('/knowledge/status/', KnowledgeStatusController.getAll)
 

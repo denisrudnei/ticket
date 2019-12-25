@@ -1,25 +1,25 @@
 import { models, model, Schema, Document, Model } from 'mongoose'
+import Group, { IGroup } from './ticket/Group'
 const bcrypt = require('bcrypt')
-import Group, {IGroup}  from './ticket/Group'
 
 export interface IAnalyst extends Document {
-  email: string;
-  status: string;
-  lastTimeActive: Date;
-  contactEmail: string;
-  name: string;
-  role: string;
-  password: string;
-  address: Schema.Types.ObjectId;
-  description: Schema.Types.ObjectId;
-  active: boolean;
-  picture: string;
-  mergePictureWithExternalAccount: boolean;
-  sounds: any;
-  chats: [Schema.Types.ObjectId];
-  paths: [Schema.Types.ObjectId];
-  getGroups: Function;
-  verifyPassword: Function;
+  email: string
+  status: string
+  lastTimeActive: Date
+  contactEmail: string
+  name: string
+  role: string
+  password: string
+  address: Schema.Types.ObjectId
+  description: Schema.Types.ObjectId
+  active: boolean
+  picture: string
+  mergePictureWithExternalAccount: boolean
+  sounds: any
+  chats: [Schema.Types.ObjectId]
+  paths: [Schema.Types.ObjectId]
+  getGroups: Function
+  verifyPassword: Function
 }
 
 const AnalystSchema: Schema<IAnalyst> = new Schema({
@@ -135,13 +135,13 @@ AnalystSchema.pre<IAnalyst>('save', function(next) {
   })
 })
 
-AnalystSchema.methods.verifyPassword = function(password: string, next: Function) {
+AnalystSchema.methods.verifyPassword = function(
+  password: string,
+  next: Function
+) {
   bcrypt.compare(password, this.password, (err: Error, result: boolean) => {
     if (err) return next(err)
-    if (!result)
-      return next(
-        new Error('Password incorrect')
-      )
+    if (!result) return next(new Error('Password incorrect'))
     return next(null, result)
   })
 }

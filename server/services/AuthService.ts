@@ -1,8 +1,8 @@
-import mongoose, {Types} from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 import jwt from 'jsonwebtoken'
-import Analyst, {IAnalyst} from '../models/Analyst'
-import MailService from './MailService'
 import express from 'express'
+import Analyst, { IAnalyst } from '../models/Analyst'
+import MailService from './MailService'
 
 class AuthService {
   login(email: string, password: string): Promise<IAnalyst> {
@@ -24,6 +24,7 @@ class AuthService {
         })
     })
   }
+
   register(user: IAnalyst): Promise<void> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
@@ -53,6 +54,7 @@ class AuthService {
         })
     })
   }
+
   mergeUser(email: string, userBody: IAnalyst): Promise<IAnalyst> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
@@ -84,6 +86,7 @@ class AuthService {
         })
     })
   }
+
   generateEmailToReset(email: string, req: express.Request): Promise<string> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
@@ -92,10 +95,7 @@ class AuthService {
         .select('+email')
         .exec((err: Error, analyst) => {
           if (err) return reject(err)
-          if (analyst === null)
-            return reject(
-              new Error('Not found')
-            )
+          if (analyst === null) return reject(new Error('Not found'))
           const token = jwt.sign(
             {
               _id: analyst._id,
@@ -115,9 +115,11 @@ class AuthService {
         })
     })
   }
+
   resetPasswordWithToken(token: string, newPassword: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const info = jwt.verify(token, process.env.JWT_TOKEN as string) as IAnalyst
+      const info = jwt.verify(token, process.env
+        .JWT_TOKEN as string) as IAnalyst
       Analyst.findOne({
         _id: info._id
       }).exec((err: Error, analyst) => {
@@ -130,7 +132,12 @@ class AuthService {
       })
     })
   }
-  resetPassword(userId: Types.ObjectId, oldPassword: string, newPassword: string): Promise<void> {
+
+  resetPassword(
+    userId: Types.ObjectId,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
         _id: userId
@@ -140,9 +147,7 @@ class AuthService {
           if (err) return reject(err)
           user.verifyPassword(oldPassword, (err: Error, result: boolean) => {
             if (err || !result) {
-              return reject(
-                new Error('Senha antiga errada')
-              )
+              return reject(new Error('Senha antiga errada'))
             }
             user.password = newPassword
             user.save((err: Error) => {

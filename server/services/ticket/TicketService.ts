@@ -1,15 +1,15 @@
-import mongoose, {Types, PaginateResult} from 'mongoose'
+import mongoose, { Types, PaginateResult } from 'mongoose'
+import AWS from 'aws-sdk'
+import { UploadedFile } from 'express-fileupload'
 import Ticket, { ITicket } from '../../models/ticket/Ticket'
 import Comment, { IComment } from '../../models/ticket/Comment'
 import Group, { IGroup } from '../../models/ticket/Group'
 import Notification from '../../models/Notification'
 import Status, { IStatus } from '../../models/ticket/Status'
-import {IFile} from '../../models/File'
+import { IFile } from '../../models/File'
 import S3 from '../../../plugins/S3'
-import AWS from 'aws-sdk'
 import {} from 'mongoose-paginate'
 import { IAnalyst } from '../../models/Analyst'
-import { UploadedFile } from 'express-fileupload'
 
 const populateArray = [
   {
@@ -45,7 +45,12 @@ const populateArray = [
 ]
 
 class TicketService {
-  getTickets(filter: any, sortBy: any, page: number, limit: number): Promise<PaginateResult<ITicket>> {
+  getTickets(
+    filter: any,
+    sortBy: any,
+    page: number,
+    limit: number
+  ): Promise<PaginateResult<ITicket>> {
     // TODO sorting not works with doc ref
     return new Promise((resolve, reject) => {
       Ticket.paginate(
@@ -63,6 +68,7 @@ class TicketService {
       )
     })
   }
+
   getOne(ticketId: ITicket['_id']): Promise<ITicket> {
     return new Promise((resolve, reject) => {
       Ticket.findOne({
@@ -75,6 +81,7 @@ class TicketService {
         })
     })
   }
+
   copyTicket(ticketId: ITicket['_id'], userId: IAnalyst['_id']) {
     return new Promise((resolve, reject) => {
       Ticket.findOne({
@@ -96,6 +103,7 @@ class TicketService {
       })
     })
   }
+
   updateOne(ticketId: ITicket['_id'], ticketBody: ITicket) {
     return new Promise((resolve, reject) => {
       Ticket.updateOne(
@@ -125,12 +133,28 @@ class TicketService {
       })
     })
   }
+
   create(ticketBody: ITicket): Promise<ITicket> {
     return new Promise((resolve, reject) => {
-      const ticket = {
+      const ticket = new Ticket({
         _id: new mongoose.Types.ObjectId(),
-        ...ticketBody
-      }
+        category: ticketBody.category,
+        content: ticketBody.content,
+        resume: ticketBody.resume,
+        group: ticketBody.group,
+        address: ticketBody.address,
+        status: ticketBody.status,
+        comments: ticketBody.comments,
+        affectedUser: ticketBody.affectedUser,
+        openedBy: ticketBody.openedBy,
+        actualUser: ticketBody.actualUser,
+        priortiy: ticketBody.priority,
+        sla: ticketBody.sla,
+        father: ticketBody.father,
+        children: ticketBody.children,
+        files: ticketBody.files,
+        logs: ticketBody.logs
+      })
 
       Ticket.create(ticket, async (err: Error, result: ITicket) => {
         if (err) return reject(err)
@@ -150,7 +174,11 @@ class TicketService {
       })
     })
   }
-  changeStatus(ticketId: ITicket['_id'], statusId: IStatus['_id']): Promise<ITicket> {
+
+  changeStatus(
+    ticketId: ITicket['_id'],
+    statusId: IStatus['_id']
+  ): Promise<ITicket> {
     return new Promise((resolve, reject) => {
       Ticket.findOne({ _id: ticketId })
         .populate(populateArray)
@@ -176,7 +204,11 @@ class TicketService {
         })
     })
   }
-  transferToGroup(ticketId: ITicket['_id'], groupId: IGroup['_id']): Promise<ITicket> {
+
+  transferToGroup(
+    ticketId: ITicket['_id'],
+    groupId: IGroup['_id']
+  ): Promise<ITicket> {
     return new Promise(async (resolve, reject) => {
       const ticket = await Ticket.findOne({ _id: ticketId })
         .populate(populateArray)
@@ -199,7 +231,12 @@ class TicketService {
       })
     })
   }
-  commentOnTicket(ticketId: ITicket['_id'], userId: IAnalyst['_id'], content: string) {
+
+  commentOnTicket(
+    ticketId: ITicket['_id'],
+    userId: IAnalyst['_id'],
+    content: string
+  ) {
     return new Promise((resolve, reject) => {
       Comment.create(
         {
@@ -233,6 +270,7 @@ class TicketService {
       )
     })
   }
+
   insertFile(ticketId: ITicket['_id'], files: UploadedFile[]) {
     return new Promise(async (resolve, reject) => {
       const ticket = await Ticket.findOne({
@@ -258,6 +296,7 @@ class TicketService {
       return resolve(ticket!.files)
     })
   }
+
   getFile(fileId: string): Promise<any> {
     return new Promise((resolve, reject) => {
       S3.getObject(
@@ -272,6 +311,7 @@ class TicketService {
       )
     })
   }
+
   removeFile(ticketId: ITicket['_id'], fileId: IFile['_id']): Promise<ITicket> {
     return new Promise(async (resolve, reject) => {
       const ticket = await Ticket.findOne({

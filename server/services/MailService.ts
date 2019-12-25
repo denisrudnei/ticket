@@ -1,19 +1,21 @@
-import path from  'path'
-import Email from  'email-templates'
+import path from 'path'
+import Email from 'email-templates'
 import nodeMailer from 'nodemailer'
 import { IAnalyst } from '../models/Analyst'
 import express from 'express'
 import {} from 'jsonwebtoken'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
-const transport = nodeMailer.createTransport(new SMTPTransport({
-  host: process.env.MAIL_HOST as string,
-  port: parseInt(process.env.MAIL_PORT as string),
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASSWORD
-  }
-}))
+const transport = nodeMailer.createTransport(
+  new SMTPTransport({
+    host: process.env.MAIL_HOST as string,
+    port: parseInt(process.env.MAIL_PORT as string),
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASSWORD
+    }
+  })
+)
 
 const email = new Email({
   juice: true,
@@ -30,7 +32,11 @@ const email = new Email({
 })
 
 class MailService {
-  sendConfirmationEmail(user: IAnalyst, req: express.Request, token: string): Promise<void> {
+  sendConfirmationEmail(
+    user: IAnalyst,
+    req: express.Request,
+    token: string
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
       email
         .send({

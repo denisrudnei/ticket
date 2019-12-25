@@ -1,11 +1,17 @@
 import PriorityService from '../../server/services/PriorityService'
-import Priority, {IPriority} from '../../server/models/ticket/Priority'
-describe('Priority', () => {
+import Priority, { IPriority } from '../../server/models/ticket/Priority'
+import 'mocha'
+
+describe('Priority', function() {
+  this.timeout(0)
+
   it('Create new priority', async () => {
-    await PriorityService.create(new Priority({
-      name: 'test',
-      weight: 0
-    }))
+    await PriorityService.create(
+      new Priority({
+        name: 'test',
+        weight: 0
+      })
+    )
   })
   it('Get all priorities', async () => {
     await PriorityService.getAll()

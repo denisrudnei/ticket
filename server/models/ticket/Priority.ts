@@ -1,8 +1,8 @@
 import { models, model, Schema, Document } from 'mongoose'
 
 export interface IPriority extends Document {
-  weight: number;
-  name: string;
+  weight: number
+  name: string
 }
 
 const PrioritySchema: Schema<IPriority> = new Schema({

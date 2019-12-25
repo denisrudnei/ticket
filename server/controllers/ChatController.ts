@@ -1,5 +1,5 @@
-import ChatService from '../services/ChatService'
 import express from 'express'
+import ChatService from '../services/ChatService'
 import { IAnalyst } from '../models/Analyst'
 
 export default {
