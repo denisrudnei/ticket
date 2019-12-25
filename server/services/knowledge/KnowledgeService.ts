@@ -8,6 +8,7 @@ import KnowledgeFile, {
 import Group from '../../models/ticket/Group'
 import S3 from '../../../plugins/S3'
 import KnowledgeStatus from '../../models/knowledge/KnowledgeStatus'
+import pdf from 'html-pdf'
 
 class KnowledgeService {
   getAll() {
@@ -57,12 +58,13 @@ class KnowledgeService {
     })
   }
 
-  create(knowledge: IKnowledge) {
+  create(knowledge: IKnowledge): Promise<IKnowledge> {
     return new Promise((resolve, reject) => {
       const { name, group, preview, category } = knowledge
+      const id = new mongoose.Types.ObjectId()
       Knowledge.create(
         {
-          _id: new mongoose.Types.ObjectId(),
+          _id: id,
           name: name,
           group: group,
           category: category,
@@ -70,16 +72,35 @@ class KnowledgeService {
         },
         (err: Error, knowledge: IKnowledge) => {
           if (err) return reject(err)
+          this.setPreviewInPDF(id, name)
           return resolve(knowledge)
         }
       )
     })
   }
 
-  updateKnowledge(
-    knowledgeId: IKnowledge['_id'],
-    knowledge: IKnowledge
-  ): Promise<IKnowledge> {
+  setPreviewInPDF(knowledgeId: IKnowledge['_id'], name: string) {
+    return new Promise((resolve, reject) => {
+      this.generatePDF(knowledgeId).then(response => {
+        this.uploadPDF(name, response).then(link => {
+          Knowledge.updateOne(
+            {
+              _id: knowledgeId
+            },
+            {
+              $set: {
+                url: link
+              }
+            }
+          ).exec(err => {
+            if (err) return reject(err)
+            return resolve()
+          })
+        })
+      })
+    })
+  }
+  updateKnowledge(knowledgeId: IKnowledge['_id'], knowledge: IKnowledge) {
     return new Promise((resolve, reject) => {
       Knowledge.updateOne(
         {
@@ -95,6 +116,7 @@ class KnowledgeService {
         }
       ).exec((err: Error, result) => {
         if (err) return reject(err)
+        this.setPreviewInPDF(knowledgeId, knowledge.name)
         return resolve(result)
       })
     })
@@ -115,7 +137,7 @@ class KnowledgeService {
             S3.createBucket(() => {
               const params = {
                 Bucket: process.env.BUCKET,
-                Key: knowledgeFile._id.toString(),
+                Key: `knowledge/${knowledgeId}/${knowledgeFile._id.toString()}`,
                 Body: file.data
               }
               S3.upload(
@@ -149,7 +171,7 @@ class KnowledgeService {
           S3.createBucket(() => {
             const params = {
               Bucket: process.env.BUCKET,
-              Key: knowledgeFile._id.toString(),
+              Key: `knowledge/temp/${knowledgeFile._id.toString()}`,
               Body: file.data
             }
             S3.upload(
@@ -161,7 +183,7 @@ class KnowledgeService {
                 if (err) return reject(err)
                 knowledgeFile.url = data.Location!
                 knowledgeFile.save()
-                return resolve(data.Location)
+                return resolve(`/api/knowledge/${knowledgeFile._id}/file`)
               }
             )
           })
@@ -212,6 +234,35 @@ class KnowledgeService {
             return resolve(obj)
           }
         )
+      })
+    })
+  }
+  uploadPDF(name: string, body: any) {
+    return new Promise((resolve, reject) => {
+      S3.createBucket(() => {
+        const params = {
+          Bucket: process.env.BUCKET,
+          Key: `knowledge/pdf/${name}.pdf`,
+          Body: body
+        }
+        S3.upload(params, (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
+          if (err) return reject(err)
+          return resolve(data.Location)
+        })
+      })
+    })
+  }
+  generatePDF(knowledgeId: IKnowledge['_id']): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      this.getOne(knowledgeId).then(knowledge => {
+        pdf
+          .create(knowledge.preview, {
+            format: 'A4'
+          })
+          .toBuffer((err: Error, result) => {
+            if (err) return reject(err)
+            return resolve(result)
+          })
       })
     })
   }

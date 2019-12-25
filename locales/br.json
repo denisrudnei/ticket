@@ -87,5 +87,15 @@
   "save_new_password": "Salvar nova senha",
   "hotkey": {
     "profile": "ALT + P | Perfil"
-  }
+  },
+  "receive_email_notification": "Receber notificação por email?",
+  "all_notifications": "Todas notificações",
+  "read": "Lida",
+  "unread": "Não lida",
+  "see_all_notifications": "Ver todas notificações",
+  "remove_image": "Remover imagem",
+  "select_profile_image": "Selecinar imagem do perfil",
+  "test": "Testar",
+  "mute": "Mutar",
+  "notifications": "Notificações"
 }

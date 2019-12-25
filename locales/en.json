@@ -87,5 +87,15 @@
   "save_new_password": "Save new password",
   "hotkey": {
     "profile": "ALT + P | Profile"
-  }
+  },
+  "receive_email_notification": "Receive email notification?",
+  "all_notifications": "All notifications",
+  "read": "Read",
+  "unread": "Not read",
+  "see_all_notifications": "See all notifications",
+  "remove_image": "Remove image",
+  "select_profile_image": "Select profile image",
+  "test": "Test",
+  "mute": "Mute",
+  "notifications": "Notifications"
 }

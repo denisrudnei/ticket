@@ -16,38 +16,30 @@
       </v-icon>
     </v-btn>
     <v-spacer />
-    <v-btn
-      v-if="logged"
-      text
-      icon
-      class="primary white--text"
-      to="/profile"
-    >
-      <v-icon>
-        person
-      </v-icon>
-    </v-btn>
+    <v-menu v-if="logged" :close-on-content-click="false" class=".d-flex .d-sm-none" :nudge-width="250">
+      <template v-slot:activator="{ on }">
+        <v-btn text class="primary white--text" v-on="on">
+          <v-icon>
+            view_module
+          </v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item v-for="option in options" :key="option.text" :to="option.to" exact>
+          <v-list-item-action>
+            <v-icon>
+              {{ option.icon }}
+            </v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            {{ $t(option.text) }}
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     <Notification
       v-if="logged"
     />
-    <v-btn v-if="logged && user.role === 'admin'" title="API" icon to="/config/playground" class="white--text">
-      <v-icon>format_shapes</v-icon>
-    </v-btn>
-    <v-btn
-      v-if="logged && user.role === 'admin'"
-      text
-      title="Configurações"
-      to="/config"
-      class="white--text"
-    >
-      {{ $t('configurations') }}
-      <v-icon
-        right
-        class="white--text"
-      >
-        settings_applications
-      </v-icon>
-    </v-btn>
     <language />
     <v-btn
       v-if="logged"
@@ -81,6 +73,30 @@ export default {
     logged: {
       type: Boolean,
       default: false
+    }
+  },
+  data() {
+    return {
+      options: [
+        {
+          title: 'profile',
+          text: 'profile',
+          icon: 'person',
+          to: '/profile'
+        },
+        {
+          title: 'API',
+          text: 'API',
+          icon: 'format_shapes',
+          to: '/config/playground'
+        },
+        {
+          title: 'configurations',
+          text: 'configurations',
+          icon: 'settings_applications',
+          to: '/config'
+        }
+      ]
     }
   },
   computed: mapGetters({

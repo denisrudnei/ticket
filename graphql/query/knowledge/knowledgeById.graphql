@@ -12,5 +12,6 @@ query KnowledgeById($_id: ID!){
       name
     }
     preview
+    url
   }
 }

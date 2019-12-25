@@ -4,7 +4,9 @@ import Category from '../../server/models/ticket/Category'
 import Group from '../../server/models/ticket/Group'
 import { IKnowledgeFile } from '../../server/models/knowledge/KnowledgeFile'
 import KnowledgeStatus from '../../server/models/knowledge/KnowledgeStatus'
+import faker from 'faker'
 import 'mocha'
+
 
 describe('Knowledge', function() {
   this.timeout(0)
@@ -21,11 +23,31 @@ describe('Knowledge', function() {
     const category = await Category.findOne().exec()
     const knowledge = new Knowledge({
       name: 'test',
-      preview: 'test',
+      preview: `<span>${faker.lorem.paragraphs()}</span`,
       group: group._id,
       category: category
     })
     await KnowledgeService.create(knowledge)
+  })
+
+  it('Get all files', async () => {
+    const knowledge = await Knowledge.findOne().exec()
+    await KnowledgeService.getAllFiles(knowledge._id)
+  })
+
+  it('Generate PDF', async () => {
+    const knowledge = await Knowledge.findOne().exec()
+    await KnowledgeService.generatePDF(knowledge._id)
+  })
+
+  it('Upload generated PDF', async () => {
+    const knowledge = await Knowledge.findOne().exec()
+    await KnowledgeService.uploadPDF(knowledge.name, knowledge.preview)
+  })
+
+  it('Generate and upload PDF', async () => {
+    const knowledge = await Knowledge.findOne().exec()
+    await KnowledgeService.setPreviewInPDF(knowledge._id, 'test name')
   })
 
   it('Update knowledge', async () => {
@@ -69,11 +91,6 @@ describe('Knowledge', function() {
     knowledge.files.forEach(async (f: IKnowledgeFile) => {
       await KnowledgeService.getFile(f._id)
     })
-  })
-
-  it('Get all files', async () => {
-    const knowledge = await Knowledge.findOne().exec()
-    await KnowledgeService.getAllFiles(knowledge._id)
   })
 
   it('Remove knowledge', async () => {

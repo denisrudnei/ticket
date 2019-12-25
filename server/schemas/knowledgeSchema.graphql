@@ -6,6 +6,7 @@ type Knowledge {
   group: Group!
   status: KnowledgeStatus
   preview: String!
+  url: String!
   files: [KnowledgeFile]
 }
 

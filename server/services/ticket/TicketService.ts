@@ -148,7 +148,7 @@ class TicketService {
         affectedUser: ticketBody.affectedUser,
         openedBy: ticketBody.openedBy,
         actualUser: ticketBody.actualUser,
-        priortiy: ticketBody.priority,
+        priority: ticketBody.priority,
         sla: ticketBody.sla,
         father: ticketBody.father,
         children: ticketBody.children,
@@ -279,7 +279,7 @@ class TicketService {
       for (let i = 0; i < files.length; i++) {
         const f: UploadedFile = files[i]
 
-        const name = `${ticketId} - ${f.name} - ${i}`
+        const name = `ticket/${ticketId}/${f.name} - ${i}`
         const params = {
           Bucket: process.env.BUCKET,
           Key: name,

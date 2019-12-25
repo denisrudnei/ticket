@@ -38,7 +38,7 @@
                 <v-switch
                   :input-value="notification.read"
                   :value="user._id"
-                  label="Lida?"
+                  :label="$t('read')"
                   @change="readNotification(notification)"
                 />
               </v-col>

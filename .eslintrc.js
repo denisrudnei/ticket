@@ -19,6 +19,6 @@ module.exports = {
   // add your custom rules here
   rules: {
     'vuetify/no-deprecated-classes': 'error',
-    '@typescript-eslint/rule-name': 'error'
+    // '@typescript-eslint/rule-name': 'error'
   }
 }

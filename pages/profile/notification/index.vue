@@ -7,17 +7,17 @@
         <v-tab
           to="/profile/notification/all"
         >
-          Todas notificações
+          {{ $t('all_notifications') }}
         </v-tab>
         <v-tab
           to="/profile/notification/read"
         >
-          Lidas
+          {{ $t('read') }}
         </v-tab>
         <v-tab
           to="/profile/notification/unread"
         >
-          Não lidas
+          {{ $t('unread') }}
         </v-tab>
       </v-tabs>
     </v-col>

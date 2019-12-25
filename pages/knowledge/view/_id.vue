@@ -19,7 +19,6 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-     
         <v-card-text>
           <v-row>
             <v-col cols="12" pa-3>
@@ -48,14 +47,15 @@
               />
             </v-col>
             <v-col cols="12" pa-4>
-              <div ref="preview" v-html="knowledge.preview" />
+              <div id="preview" ref="preview" v-html="knowledge.preview" />
             </v-col>
           </v-row>
         </v-card-text>
         <v-divider />
         <v-card-actions>
+          <a :href="knowledge.url" ref="download" download style="display: none;"></a>
           <v-btn tile class="primary white--text" @click="download()">
-            Baixar it
+            Baixar IT
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -70,8 +70,7 @@ export default {
   data() {
     return {
       showModal: false,
-      dialog: true,
-      JsPDF: null
+      dialog: true
     }
   },
   asyncData({ params, app }) {
@@ -89,7 +88,6 @@ export default {
       })
   },
   mounted() {
-    this.JsPDF = require('jspdf')
     const id = this.$route.params.id
     this.$apollo
       .query({
@@ -116,11 +114,7 @@ export default {
       }
     },
     download() {
-      const pdf = new this.JsPDF()
-      pdf.fromHTML(this.$refs.preview, 10, 10, {
-        width: '190'
-      })
-      pdf.save(`${this.knowledge.name}.pdf`)
+      this.$refs.download.click()
     },
     close() {
       this.dialog = false

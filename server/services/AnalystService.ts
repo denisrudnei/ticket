@@ -84,7 +84,7 @@ class AnalystService {
         const name = userId
         const params = {
           Bucket: process.env.BUCKET,
-          Key: name,
+          Key: `analyst/picture/${name}`,
           Body: file.data
         }
         await S3.upload(
@@ -171,11 +171,11 @@ class AnalystService {
 
   remove(userId: IAnalyst['_id']): Promise<void> {
     return new Promise((resolve, reject) => {
-      Analyst.findOneAndDelete(
+      Analyst.deleteOne(
         {
           _id: userId
         },
-        (err: Error, _) => {
+        (err: Error) => {
           if (err) reject(err)
           return resolve()
         }
