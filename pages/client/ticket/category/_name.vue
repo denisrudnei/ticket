@@ -51,7 +51,7 @@
           </v-icon>
         </v-btn>
       </v-col>
-    
+
       <v-tabs show-arrows>
         <v-tab>
           Campos
@@ -62,7 +62,7 @@
           </v-col>
         </v-tab-item>
         <v-tab>
-          {{ $t('add_file') }}}
+          {{ $t('add_file') }}
         </v-tab>
         <v-tab-item>
           <file />
