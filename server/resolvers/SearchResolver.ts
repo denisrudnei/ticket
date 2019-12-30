@@ -18,7 +18,7 @@ const SearchResolver: IResolvers = {
         }
       }
       return SearchService.getTickets(
-        attributes,
+        newAttributes,
         {
           [sortBy]: descending
         },

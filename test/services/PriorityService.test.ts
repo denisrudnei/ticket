@@ -13,9 +13,16 @@ describe('Priority', function() {
       })
     )
   })
+
   it('Get all priorities', async () => {
     await PriorityService.getAll()
   })
+
+  it('Get one priority', async () => {
+    const priority = await Priority.findOne().exec()
+    await PriorityService.getOne(priority._id)
+  })
+
   it('Edit priority', async () => {
     const priority = await Priority.findOne().exec()
     const newPriority = new Priority({

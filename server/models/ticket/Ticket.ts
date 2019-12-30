@@ -1,4 +1,4 @@
-import { models, model, Schema, connection, Document } from 'mongoose'
+import { model, Schema, connection, Document } from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate'
 import mongooseAutoIncrement from 'mongoose-auto-increment'
 import { IAddress } from '../Address'

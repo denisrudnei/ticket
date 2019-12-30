@@ -4,7 +4,8 @@ const SearchService = {
   getTickets: (query: any = {}, sortBy: any, page = 1, limit = 10) => {
     return new Promise((resolve, reject) => {
       // TODO
-      const filterKeys = Object.keys(Ticket.schema.path)
+      const filterKeys = Object.keys(Ticket.schema.obj)
+      filterKeys.push('ticketNumber')
       Object.keys(query).forEach(inQuery => {
         if (!filterKeys.includes(inQuery)) delete query[inQuery]
       })
