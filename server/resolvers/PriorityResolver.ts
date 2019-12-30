@@ -5,6 +5,9 @@ const PriorityResolver: IResolvers = {
   Query: {
     Priority: () => {
       return PriorityService.getAll()
+    },
+    PriorityById: (_, {_id}) => {
+      return PriorityService.getOne(_id)
     }
   },
   Mutation: {

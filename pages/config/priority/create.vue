@@ -1,27 +1,16 @@
 <template>
-  <v-row>
-    <v-col cols="6">
-      <v-text-field v-model="priority.name" label="Texto" filled />
-    </v-col>
-    <v-col cols="6">      
-      <v-text-field v-model="priority.weight" label="Peso" type="number" filled />
-    </v-col>
-    <v-col>
-      <v-btn class="primary white--text" @click="save">
-        {{ $t('save') }}
-        <v-icon>
-          save
-        </v-icon>
-      </v-btn>
-    </v-col>
-  </v-row>
+  <create v-model="priority" @input="save" />
 </template>
 
 <script>
 import ggl from 'graphql-tag'
 import createPriority from '@/graphql/mutation/config/priority/createPriority.graphql'
 import listPriority from '@/graphql/query/config/priority/priorityList.graphql'
+import create from '@/components/ticket/priority/create'
 export default {
+  components: {
+    create
+  },
   data() {
     return {
       priority: {
@@ -31,7 +20,7 @@ export default {
     }
   },
   methods: {
-    save() {
+    save(priority) {
       this.$apollo
         .mutate({
           mutation: ggl(createPriority),

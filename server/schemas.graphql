@@ -41,6 +41,7 @@ type Query {
   Ref: [Ref!]!
   Sla: [Sla!]!
   Priority: [Priority!]!
+  PriorityById(_id: ID!): Priority!
 }
 
 type Mutation {
@@ -51,7 +52,7 @@ type Mutation {
   ChangeStatus(ticketId: ID!, statusId: ID!): Ticket
   SendMessage(to: ID!, message: String!): Message!
   AddPath(path: PathInput!): PathTree!
-  RemovePath(userId: ID!, path: ID!): ID!,
+  RemovePath(userId: ID!, path: ID!): ID!
   CreatePriority(priority: PriorityInput!): Boolean
   UpdatePriority(priority: PriorityInput!): Boolean
   UpdateManyPriorities(priorities: [PriorityInput!]!): [Boolean]

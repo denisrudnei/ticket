@@ -15,6 +15,13 @@
             <v-list-item-content>
               {{ item.name }}
             </v-list-item-content>
+            <v-list-item-action>
+              <v-btn icon class="primary white--text" :to="`/config/priority/edit/${item._id}`">
+                <v-icon>
+                  edit
+                </v-icon>
+              </v-btn>
+            </v-list-item-action>
           </v-list-item>
         </draggable>
       </v-list>

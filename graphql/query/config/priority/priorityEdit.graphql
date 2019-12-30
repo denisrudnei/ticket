@@ -1,0 +1,7 @@
+query PriorityById($_id: ID!){
+  priority: PriorityById(_id: $_id) {
+    _id
+    name
+    weight
+  }
+}

@@ -18,13 +18,17 @@ class PriorityService {
     })
   }
 
-  getAll() {
+  getAll(): Promise<IPriority[]> {
     return new Promise((resolve, reject) => {
       Priority.find().exec((err: Error, result) => {
         if (err) reject(err)
         resolve(result)
       })
     })
+  }
+
+  getOne(_id: IPriority['_id']): Promise<IPriority> {
+    return Priority.findOne({_id: _id}).exec()
   }
 
   edit(priority: IPriority): Promise<void> {
