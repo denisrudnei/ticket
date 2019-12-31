@@ -53,7 +53,7 @@
         </v-card-text>
         <v-divider />
         <v-card-actions>
-          <a :href="knowledge.url" ref="download" download style="display: none;"></a>
+          <a ref="download" :href="knowledge.url" download style="display: none;" />
           <v-btn tile class="primary white--text" @click="download()">
             Baixar IT
           </v-btn>
@@ -71,6 +71,11 @@ export default {
     return {
       showModal: false,
       dialog: true
+    }
+  },
+  head() {
+    return {
+      title: this.knowledge.name
     }
   },
   asyncData({ params, app }) {

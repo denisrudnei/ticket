@@ -455,6 +455,13 @@ export default {
       return newDate.toLocaleDateString()
     }
   },
+  head() {
+    return {
+      title: `[${this.ticketComputed.ticketNumber}] - [${
+        this.ticketsToEdit.length
+      }] ${this.ticketComputed.resume}`
+    }
+  },
   mixins: [compareObjectsWithId, showModal],
   props: {
     search: Boolean,
@@ -509,7 +516,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'auth/getUser'
+      user: 'auth/getUser',
+      ticketsToEdit: 'ticket/getTicketsToEdit'
     }),
     ticketComputed() {
       return Object.assign(this.ticketData, this.value)

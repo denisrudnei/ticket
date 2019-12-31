@@ -143,6 +143,11 @@ export default {
       }
     }
   },
+  head() {
+    return {
+      title: `Page ${this.options.page}, total ${this.totalItems}`
+    }
+  },
   computed: {
     headers() {
       return [
