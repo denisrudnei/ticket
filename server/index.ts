@@ -1,14 +1,15 @@
+import consola from 'consola';
+import { GraphQLServer, PubSub } from 'graphql-yoga';
+import { Context } from 'graphql-yoga/dist/types';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
 import * as path from 'path'
-import consola from 'consola'
-import morgan from 'morgan'
-import { GraphQLServer, PubSub } from 'graphql-yoga'
-import mongoose from 'mongoose'
-import { Context } from 'graphql-yoga/dist/types'
-import app from './app'
-import resolvers from './resolvers/index'
-import CheckACL from './models/CheckACL'
+import app from '~/server/app'
+import CheckACL from '~/server/models/CheckACL'
+import resolvers from '~/server/resolvers'
+
 const { Nuxt, Builder } = require('nuxt')
-const config = require('../nuxt.config.js')
+const config = require('~/nuxt.config.js')
 
 mongoose
   .connect(

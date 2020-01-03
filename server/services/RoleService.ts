@@ -1,6 +1,6 @@
-import Role, { IRole } from '../models/Role'
-import CheckACL from '../models/CheckACL'
-import Analyst, { IAnalyst } from '../models/Analyst'
+import Analyst, { IAnalyst } from '~/server/models/Analyst'
+import CheckACL from '~/server/models/CheckACL'
+import Role, { IRole } from '~/server/models/Role'
 
 class RoleService {
   getRoles(): Promise<IRole[]> {

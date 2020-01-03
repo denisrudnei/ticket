@@ -5,15 +5,16 @@
   "author": "Denis Rudnei de Souza",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon --watch server/ --exec  \"ts-node server/index.ts\" -e ts",
+    "dev": "cross-env NODE_ENV=development nodemon --watch server/ --exec  \"ts-node -r tsconfig-paths/register server/index.ts\" -e ts",
     "backend": "cross-env NODE_ENV=development nodemon --watch server/ --exec  \"ts-node server/onlyServer.ts\" -e ts",
     "build": "nuxt build && tsc server/index.ts --esModuleInterop",
+    "tsc": "tsc server/index.ts --esModuleInterop --outDir dist/",
     "start": "cross-env NODE_ENV=production node server/index.js",
     "heroku-postbuild": "npm run build",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
     "precommit": "npm run lint",
-    "test": "nyc --reporter=html --reporter=text mocha test/** --exit",
+    "test": "nyc --reporter=html --reporter=text mocha -r tsconfig-paths/register test/** --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "snyk-protect": "snyk protect",
     "prepare": "npm run snyk-protect"
@@ -142,7 +143,8 @@
     "stylus-loader": "^3.0.2",
     "supertest": "^4.0.2",
     "ts-mocha": "^6.0.0",
-    "ts-node": "^8.5.4"
+    "ts-node": "^8.5.4",
+    "tsconfig-paths": "^3.9.0"
   },
   "snyk": true
 }

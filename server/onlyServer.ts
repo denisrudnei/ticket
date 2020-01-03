@@ -1,11 +1,11 @@
-import * as path from 'path'
 import consola from 'consola'
 import { GraphQLServer, PubSub } from 'graphql-yoga'
-import mongoose from 'mongoose'
 import { Context } from 'graphql-yoga/dist/types'
-import app from './app'
-import resolvers from './resolvers/index'
-import CheckACL from './models/CheckACL'
+import mongoose from 'mongoose'
+import * as path from 'path'
+import app from '~/server/app'
+import CheckACL from '~/server/models/CheckACL'
+import resolvers from '~/server/resolvers'
 
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost/test',
