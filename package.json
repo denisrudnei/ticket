@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --watch server/ --exec  \"ts-node -r tsconfig-paths/register server/index.ts\" -e ts",
     "backend": "cross-env NODE_ENV=development nodemon --watch server/ --exec  \"ts-node -r tsconfig-paths/register server/onlyServer.ts\" -e ts",
-    "build": "nuxt build && tsc",
+    "build": "nuxt build && tsc -p tsconfig-build.json",
     "tsc": "tsc -p tsconfig-build.json",
     "start": "cross-env NODE_ENV=production node -r tsconfig-paths/register dist/server/index.js",
     "heroku-postbuild": "npm run build",
