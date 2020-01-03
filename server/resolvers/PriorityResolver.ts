@@ -6,7 +6,7 @@ const PriorityResolver: IResolvers = {
     Priority: () => {
       return PriorityService.getAll()
     },
-    PriorityById: (_, {_id}) => {
+    PriorityById: (_: any, {_id}: any) => {
       return PriorityService.getOne(_id)
     }
   },

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import Role from './Role'
-const AclRules = require('../../nacl.json')
+const AclRules = require('~/nacl.json')
 
 interface IPermission {
   resource: string

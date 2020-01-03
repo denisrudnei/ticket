@@ -1,6 +1,6 @@
 import express from 'express'
 import { UploadedFile } from 'express-fileupload'
-import KnowledgeService from '../../services/knowledge/KnowledgeService'
+import KnowledgeService from '~/server/services/knowledge/KnowledgeService'
 
 export default {
   getUnCategorized: (req: express.Request, res: express.Response) => {

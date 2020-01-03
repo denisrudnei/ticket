@@ -1,26 +1,22 @@
 {
   "compilerOptions": {
-    "target": "esnext",
     "moduleResolution": "node",
-    "lib": [
-      "esnext",
-      "esnext.asynciterable",
-      "dom"
-    ],
+    "target": "esnext",
     "esModuleInterop": true,
     "allowJs": true,
     "sourceMap": true,
     "strict": true,
     "outDir": "dist/",
-    "noEmit": true,
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
       "~/*": [
-        "./*"
+        "./*",
+        "./dist/*"
       ],
       "@/*": [
-        "./*"
+        "./*",
+        "./dist/*"
       ]
     },
     "types": [
@@ -30,6 +26,7 @@
     ]
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }

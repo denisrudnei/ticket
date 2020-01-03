@@ -1,15 +1,15 @@
 import mongoose, { Types, PaginateResult } from 'mongoose'
 import AWS from 'aws-sdk'
 import { UploadedFile } from 'express-fileupload'
-import Ticket, { ITicket } from '../../models/ticket/Ticket'
-import Comment, { IComment } from '../../models/ticket/Comment'
-import Group, { IGroup } from '../../models/ticket/Group'
-import Notification from '../../models/Notification'
-import Status, { IStatus } from '../../models/ticket/Status'
-import { IFile } from '../../models/File'
-import S3 from '../../../plugins/S3'
+import Ticket, { ITicket } from '~/server/models/ticket/Ticket'
+import Comment, { IComment } from '~/server/models/ticket/Comment'
+import Group, { IGroup } from '~/server/models/ticket/Group'
+import Notification from '~/server/models/Notification'
+import Status, { IStatus } from '~/server/models/ticket/Status'
+import { IFile } from '~/server/models/File'
+import S3 from '~/plugins/S3'
 import {} from 'mongoose-paginate'
-import { IAnalyst } from '../../models/Analyst'
+import { IAnalyst } from '~/server/models/Analyst'
 
 const populateArray = [
   {

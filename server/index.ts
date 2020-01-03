@@ -1,8 +1,8 @@
-import consola from 'consola';
-import { GraphQLServer, PubSub } from 'graphql-yoga';
-import { Context } from 'graphql-yoga/dist/types';
-import mongoose from 'mongoose';
-import morgan from 'morgan';
+import consola from 'consola'
+import { GraphQLServer, PubSub } from 'graphql-yoga'
+import { Context } from 'graphql-yoga/dist/types'
+import mongoose from 'mongoose'
+import morgan from 'morgan'
 import * as path from 'path'
 import app from '~/server/app'
 import CheckACL from '~/server/models/CheckACL'
@@ -28,7 +28,7 @@ const pubSub = new PubSub()
 config.dev = !(process.env.NODE_ENV === 'production')
 
 const server = new GraphQLServer({
-  typeDefs: path.resolve(__dirname, 'schemas.graphql'),
+  typeDefs: path.resolve('server/schemas.graphql'),
   resolvers,
   context: async (req: Context) => ({
     req: req.request,

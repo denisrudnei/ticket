@@ -3,7 +3,7 @@ import fileUpload from 'express-fileupload'
 import AWS from 'aws-sdk'
 import Analyst, { IAnalyst } from '../../server/models/Analyst'
 import { IGroup } from '../models/ticket/Group'
-const S3 = require('../../plugins/S3')
+const S3 = require('~/plugins/S3')
 
 class AnalystService {
   create(analyst: IAnalyst): Promise<IAnalyst> {

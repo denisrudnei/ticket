@@ -1,7 +1,7 @@
 import jsonwebtoken from 'jsonwebtoken'
 import express from 'express'
-import AuthService from '../services/AuthService'
-import Analyst from '../models/Analyst'
+import AuthService from '~/server/services/AuthService'
+import Analyst from '~/server/models/Analyst'
 
 export default {
   login: (req: express.Request, res: express.Response) => {

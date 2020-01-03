@@ -5,7 +5,7 @@ import bodyParser from 'body-parser'
 import acl from 'express-acl'
 import fileUploader from 'express-fileupload'
 import compression from 'compression'
-import routes from './routes/index'
+import routes from '~/server/routes/index'
 
 class AppController {
   express: express.Application

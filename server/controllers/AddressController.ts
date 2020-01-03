@@ -1,5 +1,5 @@
 import express from 'express'
-import AddressService from '../services/AddressService'
+import AddressService from '~/server/services/AddressService'
 
 export default {
   create: async (req: express.Request, res: express.Response) => {

@@ -1,13 +1,13 @@
 import mongoose, { Types } from 'mongoose'
 import AWS from 'aws-sdk'
 import fileUpload from 'express-fileupload'
-import Knowledge, { IKnowledge } from '../../models/knowledge/Knowledge'
+import Knowledge, { IKnowledge } from '~/server/models/knowledge/Knowledge'
 import KnowledgeFile, {
   IKnowledgeFile
-} from '../../models/knowledge/KnowledgeFile'
+} from '~/server/models/knowledge/KnowledgeFile'
 import Group from '../../models/ticket/Group'
-import S3 from '../../../plugins/S3'
-import KnowledgeStatus from '../../models/knowledge/KnowledgeStatus'
+import S3 from '~/plugins/S3'
+import KnowledgeStatus from '~/server/models/knowledge/KnowledgeStatus'
 import pdf from 'html-pdf'
 
 class KnowledgeService {

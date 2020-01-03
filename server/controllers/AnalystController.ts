@@ -1,7 +1,7 @@
 import express from 'express'
 import { UploadedFile } from 'express-fileupload'
-import AnalystService from '../services/AnalystService'
-import Analyst from '../../server/models/Analyst'
+import AnalystService from '~/server/services/AnalystService'
+import Analyst from '~/server/models/Analyst'
 
 export default {
   getAll: (req: express.Request, res: express.Response) => {
