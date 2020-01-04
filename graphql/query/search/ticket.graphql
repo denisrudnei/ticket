@@ -3,25 +3,4 @@ query Tickets ($page: Int, $limit: Int, $descending: Int, $sortBy: String, $attr
   Tickets: SearchTicket (page: $page, limit: $limit, descending: $descending, sortBy: $sortBy, attributes: $attributes) {
     ...ticketPagination
   }
-  Status {
-    _id
-    name
-    allowedStatus {
-      _id
-      name
-    }
-  }
-  Group {
-    _id
-    name
-  }
-  Category {
-    _id
-    name
-  }
-  Analyst {
-    _id
-    name
-    picture
-  }
 }

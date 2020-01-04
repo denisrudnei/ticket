@@ -109,6 +109,7 @@ import ggl from 'graphql-tag'
 import changeStatus from '@/graphql/mutation/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/mutation/ticket/transferToGroup.graphql'
 import ticketSearch from '@/graphql/query/search/ticket.graphql'
+import ticketAttributes from '@/graphql/query/search/ticketAttributes.graphql'
 export default {
   props: {
     url: {
@@ -238,9 +239,9 @@ export default {
       })
       this.$store.commit('ticket/setQuery', query)
     },
-    $route: async function(newValue) {
+    $route: function(newValue) {
       this.$store.commit('ticket/setQuery', newValue.query)
-      await this.update()
+      this.update()
     },
     options: {
       deep: true,
@@ -266,17 +267,30 @@ export default {
       }
     }
   },
-  async created() {
+  created() {
     const query = this.$route.query
     if (query.ticket !== undefined && query.ticket !== null) {
-      await this.$store.dispatch('ticket/findTicket', query.ticket)
+      this.$store.dispatch('ticket/findTicket', query.ticket)
 
-      await this.addTicketsToEdit(this.actualTicket)
+      this.addTicketsToEdit(this.actualTicket)
     }
-    await this.update()
+    this.getTicketAttributes()
+    this.update()
   },
   methods: {
-    async update() {
+    getTicketAttributes() {
+      this.$apollo
+        .query({
+          query: ggl(ticketAttributes)
+        })
+        .then(response => {
+          this.$store.commit('status/setStatus', response.data.Status)
+          this.$store.commit('category/setCategories', response.data.Category)
+          this.$store.commit('group/setGroups', response.data.Group)
+          this.$store.commit('analyst/setAnalysts', response.data.Analyst)
+        })
+    },
+    update() {
       const query = this.query
       const fields = [
         'category',
@@ -295,7 +309,7 @@ export default {
           attributes[key] = query[key]
         }
       })
-      await this.$apollo
+      this.$apollo
         .query({
           query: ggl(ticketSearch),
           fetchPolicy: 'network-only',
@@ -309,30 +323,25 @@ export default {
         })
         .then(response => {
           const { docs, total, limit, page } = response.data.Tickets
-          this.$store.commit('status/setStatus', response.data.Status)
-          this.$store.commit('category/setCategories', response.data.Category)
-          this.$store.commit('group/setGroups', response.data.Group)
-          this.$store.commit('analyst/setAnalysts', response.data.Analyst)
           if (this.modal) {
             this.$store.commit('ticket/setModalTickets', docs)
           } else {
             this.$store.commit('ticket/setTickets', docs)
             this.$store.commit('ticket/setSearch', docs)
           }
-
           this.totalItems = parseInt(total)
           this.options.page = parseInt(page)
           this.options.itemsPerPage = parseInt(limit)
           this.loading = false
         })
     },
-    async setQuery(query) {
+    setQuery(query) {
       if (this.modal) {
         this.$store.commit('ticket/setModalQuery', query)
       } else {
         this.$store.commit('ticket/setQuery', query)
       }
-      await this.update()
+      this.update()
     },
     modifyStatus(ticket) {
       this.$apollo
@@ -376,15 +385,15 @@ export default {
           )
         })
     },
-    async setDialog(id) {
-      await this.$store.dispatch('ticket/findTicket', id)
-      await this.$store.commit('ticket/setDialog', id)
+    setDialog(id) {
+      this.$store.dispatch('ticket/findTicket', id)
+      this.$store.commit('ticket/setDialog', id)
     },
-    async addTicketsToEdit(ticket) {
-      await this.$store.commit('ticket/setActualTicket', ticket)
-      await this.$store.commit('ticket/setDialog', ticket._id)
-      await this.$store.commit('ticket/addTicketsToEdit', ticket)
-      await this.$store.dispatch('ticket/findTicket', ticket._id)
+    addTicketsToEdit(ticket) {
+      this.$store.commit('ticket/setActualTicket', ticket)
+      this.$store.commit('ticket/setDialog', ticket._id)
+      this.$store.commit('ticket/addTicketsToEdit', ticket)
+      this.$store.dispatch('ticket/findTicket', ticket._id)
     }
   }
 }
