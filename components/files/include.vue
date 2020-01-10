@@ -13,32 +13,10 @@
           <template
             v-slot:item.preview="{ item }"
           >
-            <v-menu
-              v-if="item.type.includes('image')"
-              :close-on-content-click="true"
-              :open-on-hover="true"
-              :nudge-width="350"
-              offset-x
-            >
-              <template
-                v-slot:activator="{ on }"
-              >
-                <v-img
-                  :src="item.data || `/api/ticket/${item.name}/file`"
-                  v-on="on"
-                />
-              </template>
-              <v-card>
-                <nuxt-link
-                  target="_blank"
-                  :to="`/api/ticket/${item.name}/file`"
-                >
-                  <v-img
-                    :src="item.data || `/api/ticket/${item.name}/file`"
-                  />
-                </nuxt-link>
-              </v-card>
-            </v-menu>
+            <v-img
+              :src="item.data || `/api/ticket/${item.name}/file`"
+              @click="setActivePreview(item.data || `/api/ticket/${item.name}/file`)"
+            />
             <audio
               v-if="item.type.includes('audio')"
               :src="item.data || `/api/ticket/${item.name}/file`"
@@ -99,6 +77,31 @@
         </v-btn>
       </v-col>
     </v-row>
+    <v-dialog v-model="active" scrollable>
+      <v-card>
+        <v-toolbar color="primary white--text" dark>
+          <v-toolbar-items>
+            <v-btn icon @click="setActivePreview('')">
+              <v-icon>
+                close
+              </v-icon>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-card-title>
+          <nuxt-link
+            target="_blank"
+            :to="`/api/ticket/${activeName}/file`"
+          >
+            <img
+              :src="activeName"
+              width="100%"
+              style="max-height: 100%"
+            >
+          </nuxt-link>
+        </v-card-title>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -107,7 +110,9 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      selectFiles: null
+      selectFiles: null,
+      active: false,
+      activeName: ''
     }
   },
   computed: {
@@ -154,6 +159,10 @@ export default {
     this.updateFiles()
   },
   methods: {
+    setActivePreview(name) {
+      this.active = name !== ''
+      this.activeName = name
+    },
     updateFiles() {
       if (this.ticket.files === undefined) return
       this.$store.commit(
