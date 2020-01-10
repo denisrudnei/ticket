@@ -1,4 +1,4 @@
-import mongoose, { Types, PaginateResult } from 'mongoose'
+import { Types, PaginateResult } from 'mongoose'
 import AWS from 'aws-sdk'
 import { UploadedFile } from 'express-fileupload'
 import Ticket, { ITicket } from '~/server/models/ticket/Ticket'
@@ -8,7 +8,6 @@ import Notification from '~/server/models/Notification'
 import Status, { IStatus } from '~/server/models/ticket/Status'
 import { IFile } from '~/server/models/File'
 import S3 from '~/plugins/S3'
-import {} from 'mongoose-paginate'
 import { IAnalyst } from '~/server/models/Analyst'
 
 const populateArray = [
@@ -137,7 +136,7 @@ class TicketService {
   create(ticketBody: ITicket): Promise<ITicket> {
     return new Promise((resolve, reject) => {
       const ticket = new Ticket({
-        _id: new mongoose.Types.ObjectId(),
+        _id: new Types.ObjectId(),
         category: ticketBody.category,
         content: ticketBody.content,
         resume: ticketBody.resume,
@@ -163,7 +162,7 @@ class TicketService {
           .exec()
 
         const notification = await Notification.create({
-          _id: new mongoose.Types.ObjectId(),
+          _id: new Types.ObjectId(),
           name: 'TicketCreate',
           from: newTicket!.openedBy._id,
           to: newTicket!.group.analysts.map((a: IAnalyst) => a._id),
@@ -180,28 +179,22 @@ class TicketService {
     statusId: IStatus['_id']
   ): Promise<ITicket> {
     return new Promise((resolve, reject) => {
-      Ticket.findOne({ _id: ticketId })
-        .populate(populateArray)
-        .exec()
-        .then(async ticket => {
-          const status = await Status.findOne({
-            _id: statusId
-          })
-
-          ticket!.status = status._id
-
-          // FIXME
-
-          const newTicket = new Ticket({
-            ...ticket,
-            status: status
-          })
-
-          ticket!.save((err: Error) => {
-            if (err) return reject(err)
-            return resolve(newTicket)
-          })
+      Ticket.updateOne(
+        { _id: ticketId },
+        {
+          $set: {
+            status: statusId
+          }
+        }
+      ).exec(async error => {
+        if (error) return reject(error)
+        const ticket = await Ticket.findOne({
+          _id: ticketId
         })
+          .populate(populateArray)
+          .exec()
+        return resolve(ticket!)
+      })
     })
   }
 
@@ -210,24 +203,19 @@ class TicketService {
     groupId: IGroup['_id']
   ): Promise<ITicket> {
     return new Promise(async (resolve, reject) => {
-      const ticket = await Ticket.findOne({ _id: ticketId })
-        .populate(populateArray)
-        .exec()
-
-      const group = await Group.findOne({ _id: groupId }).populate(['analysts'])
-
-      ticket!.group = group._id
-
-      // FIXME
-
-      const newTicket = new Ticket({
-        ...ticket,
-        group: group
-      })
-
-      ticket!.save((err: Error) => {
-        if (err) return reject(err)
-        return resolve(newTicket)
+      Ticket.updateOne(
+        { _id: ticketId },
+        {
+          $set: {
+            group: groupId
+          }
+        }
+      ).exec(async error => {
+        if (error) return reject(error)
+        const ticket = await Ticket.findOne({ _id: ticketId })
+          .populate(populateArray)
+          .exec()
+        return resolve(ticket!)
       })
     })
   }
@@ -240,7 +228,7 @@ class TicketService {
     return new Promise((resolve, reject) => {
       Comment.create(
         {
-          _id: new mongoose.Types.ObjectId(),
+          _id: new Types.ObjectId(),
           user: userId,
           content: content
         },
