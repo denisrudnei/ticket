@@ -16,7 +16,7 @@
       </v-icon>
     </v-btn>
     <v-spacer />
-    <v-menu v-if="logged" :close-on-content-click="false" class=".d-flex .d-sm-none" :nudge-width="250">
+    <v-menu v-if="logged && isMobile" :close-on-content-click="false" class=".d-flex .d-sm-none" :nudge-width="250">
       <template v-slot:activator="{ on }">
         <v-btn text class="primary white--text" v-on="on">
           <v-icon>
@@ -37,6 +37,19 @@
         </v-list-item>
       </v-list>
     </v-menu>
+    
+    <template v-if="logged && !isMobile">
+      <v-btn
+        v-for="option in options"
+        :key="option.text"
+        icon
+        class="primary white--text"
+        :title="option.name"
+        :to="option.to"
+      >
+        <v-icon>{{ option.icon }}</v-icon>
+      </v-btn>
+    </template>
     <Notification
       v-if="logged"
     />
@@ -77,6 +90,7 @@ export default {
   },
   data() {
     return {
+      isMobile: false,
       options: [
         {
           title: 'profile',
@@ -108,10 +122,20 @@ export default {
       this.$store.commit('locale/setLocale', lang)
       this.$i18n.locale = lang
     }
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', this.onResize, { passive: true })
+    }
+  },
+  beforeDestroy() {
+    this.onResize()
+    window.removeEventListener('resize', this.onResize, { passive: true })
   },
   methods: {
     logout() {
       this.$store.commit('logout/setLogout', true)
+    },
+    onResize() {
+      this.isMobile = window.innerWidth < 600
     }
   }
 }
