@@ -41,7 +41,7 @@
       class="primary white--text"
       @click="register()"
     >
-      Registrar
+      {{ $t('register') }}
       <v-icon right>
         save
       </v-icon>

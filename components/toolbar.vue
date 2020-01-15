@@ -37,14 +37,13 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    
     <template v-if="logged && !isMobile">
       <v-btn
         v-for="option in options"
         :key="option.text"
         icon
         class="primary white--text"
-        :title="option.name"
+        :title="$t(option.text)"
         :to="option.to"
       >
         <v-icon>{{ option.icon }}</v-icon>
