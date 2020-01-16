@@ -89,6 +89,24 @@ const TicketResolver: IResolvers = {
     CopyTicket(_: any, { ticketId }: any, { req }: Context) {
       const userId = req.session.authUser._id
       return TicketService.copyTicket(ticketId, userId)
+    },
+    AddChildren: (_: any, { ticketId, children }: any, { pubSub }: Context) => {
+      const addChildren = TicketService.addChildren(ticketId, children)
+      pubSub.publish(TicketEnum.ADD_CHILDREN, {
+        AddChildren: addChildren
+      })
+      return addChildren
+    },
+    RemoveChildren: (
+      _: any,
+      { ticketId, childrenId }: any,
+      { pubSub }: Context
+    ) => {
+      const removeChildren = TicketService.removeChildren(ticketId, childrenId)
+      pubSub.publish(TicketEnum.REMOVE_CHILDREN, {
+        RemoveChildren: removeChildren
+      })
+      return removeChildren
     }
   },
   Subscription: {

@@ -97,5 +97,10 @@
   "select_profile_image": "Selecinar imagem do perfil",
   "test": "Testar",
   "mute": "Mutar",
-  "notifications": "Notificações"
+  "notifications": "Notificações",
+  "add_children": "Adicionar filhos",
+  "search_ticket": "Pesquisar ticket",
+  "select_ticket": "Selecionar ticket",
+  "children_removed": "Filho removido",
+  "children_added": "Filho adicionado"
 }

@@ -25,7 +25,7 @@ describe('Auth', function() {
 
   it('Register a existing user', async () => {
     const newUser = new Analyst({
-      name: 'teste',
+      name: 'test',
       email: email,
       password: password
     })

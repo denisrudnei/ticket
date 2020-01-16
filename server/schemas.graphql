@@ -19,7 +19,7 @@
 # import Priority from "./schemas/prioritySchema.graphql"
 
 type Query {
-  TicketById(_id: ID): Ticket,
+  TicketById(_id: ID!): Ticket!,
   Tickets(descending: Int = -1, sortBy: String = "created", page: Int = 1, limit: Int = 10): TicketPagination,
   Status: [Status],
   FindStatus(_id: ID!): Status!
@@ -59,6 +59,8 @@ type Mutation {
   CreateCategory(category: CategoryInput!): Category
   EditCategory(categoryId: ID!, category: CategoryInput!): Boolean
   CopyTicket(ticketId: ID!): Ticket!
+  AddChildren(ticketId: ID!, children: [ID!]!): Ticket!
+  RemoveChildren(ticketId: ID!, childrenId: ID!): Ticket!
 }
 
 type Subscription {

@@ -40,7 +40,8 @@ const populateArray = [
   'status',
   'group',
   'priority',
-  'category'
+  'category',
+  'children'
 ]
 
 class TicketService {
@@ -168,7 +169,6 @@ class TicketService {
           to: newTicket!.group.analysts.map((a: IAnalyst) => a._id),
           content: `${newTicket!.openedBy.name} abriu um novo chamado`
         })
-
         return resolve(newTicket!)
       })
     })
@@ -259,6 +259,50 @@ class TicketService {
     })
   }
 
+  removeChildren(
+    ticketId: ITicket['_id'],
+    childrenId: ITicket['_id']
+  ): Promise<ITicket> {
+    return new Promise((resolve, reject) => {
+      Ticket.updateOne(
+        {
+          _id: ticketId
+        },
+        {
+          $pull: {
+            children: childrenId
+          }
+        }
+      ).exec(error => {
+        if (error) return reject(error)
+        return resolve(this.getOne(ticketId))
+      })
+    })
+  }
+
+  addChildren(
+    ticketId: ITicket['_id'],
+    children: ITicket['_id'][]
+  ): Promise<ITicket> {
+    return new Promise((resolve, reject) => {
+      if (children.includes(ticketId))
+        return reject(new Error('Circular reference detected'))
+      Ticket.updateOne(
+        {
+          _id: ticketId
+        },
+        {
+          $addToSet: {
+            children: children
+          }
+        }
+      ).exec(error => {
+        if (error) return reject(error)
+        return resolve(this.getOne(ticketId))
+      })
+    })
+  }
+
   insertFile(ticketId: ITicket['_id'], files: UploadedFile[]) {
     return new Promise(async (resolve, reject) => {
       const ticket = await Ticket.findOne({
@@ -312,9 +356,9 @@ class TicketService {
         },
         (err: Error) => {
           if (err) return reject(err)
-          // ticket.files = ticket!.files.filter((f: any) => {
-          //   return f.name !== fileId
-          // })
+          ticket!.files = ticket!.files.filter((f: any) => {
+            return f.name !== fileId
+          })
           ticket!.save()
           return resolve(ticket!)
         }

@@ -1,5 +1,5 @@
 #import "@/graphql/fragments/ticketList.graphql"
-query GetTicket($id: ID) {
+query GetTicket($id: ID!) {
   TicketById(_id: $id) {
     ...ticketList
     content
@@ -47,6 +47,9 @@ query GetTicket($id: ID) {
       _id
       name
       weight
+    }
+    children {
+      ...ticketList
     }
   }
 }

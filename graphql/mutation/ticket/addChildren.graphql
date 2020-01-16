@@ -1,0 +1,6 @@
+mutation AddChildren($ticketId: ID!, $children: [ID!]!) {
+  AddChildren(ticketId: $ticketId, children: $children) {
+    _id
+    resume
+  }
+}

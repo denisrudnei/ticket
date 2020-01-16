@@ -1,8 +1,8 @@
 import { model, Schema, connection, Document } from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate'
 import mongooseAutoIncrement from 'mongoose-auto-increment'
-import { IAddress } from '../Address'
 import { IAnalyst } from '../Analyst'
+import { IAddress } from '../Address'
 import { ICategory } from './Category'
 import { IGroup } from './Group'
 import { IStatus } from './Status'
@@ -28,7 +28,7 @@ export interface ITicket extends Document {
   sla: ISla['_id']
   father: ITicket['_id']
   children: [ITicket['_id']]
-  files: [any]
+  files: any[]
   logs: [ILog['_id']]
 }
 

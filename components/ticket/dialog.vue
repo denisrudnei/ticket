@@ -49,6 +49,7 @@ import ggl from 'graphql-tag'
 import CreateTicket from '@/components/ticket/create'
 import ticketEdit from '@/graphql/mutation/ticket/editTicket.graphql'
 export default {
+  name: 'TicketDialog',
   components: {
     CreateTicket
   },

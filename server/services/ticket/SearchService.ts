@@ -15,7 +15,7 @@ const SearchService = {
           page,
           limit,
           sort: sortBy,
-          populate: ['status']
+          populate: ['status', 'children']
         },
         (err: Error, result) => {
           if (err) return reject(err)

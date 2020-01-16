@@ -437,11 +437,12 @@ import Fields from '@/components/ticket/fields'
 import FileInclude from '@/components/files/include'
 import Logs from '@/components/ticket/logs'
 import Comments from '@/components/ticket/comments'
-import Children from '@/components/ticket/children'
+import Children from '@/components/ticket/children/index'
 import compareObjectsWithId from '@/mixins/compareObjectsWithId'
 import showModal from '@/mixins/showModal'
 import create from '@/graphql/query/ticket/create.graphql'
 export default {
+  name: 'TicketCreate',
   components: {
     Fields,
     FileInclude,

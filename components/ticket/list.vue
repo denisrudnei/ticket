@@ -267,7 +267,7 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
     const query = this.$route.query
     if (query.ticket !== undefined && query.ticket !== null) {
       this.$store.dispatch('ticket/findTicket', query.ticket)
@@ -275,7 +275,7 @@ export default {
       this.addTicketsToEdit(this.actualTicket)
     }
     this.getTicketAttributes()
-    this.update()
+    await this.update()
   },
   methods: {
     getTicketAttributes() {
@@ -290,7 +290,7 @@ export default {
           this.$store.commit('analyst/setAnalysts', response.data.Analyst)
         })
     },
-    update() {
+    async update() {
       const query = this.query
       const fields = [
         'category',
@@ -309,7 +309,7 @@ export default {
           attributes[key] = query[key]
         }
       })
-      this.$apollo
+      await this.$apollo
         .query({
           query: ggl(ticketSearch),
           fetchPolicy: 'network-only',

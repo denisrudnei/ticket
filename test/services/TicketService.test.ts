@@ -96,4 +96,29 @@ describe('Ticket', function() {
     const ticket = await Ticket.findOne().exec()
     await TicketService.removeFile(ticket!._id, ticket!.files[0].name)
   })
+
+  it('Add children', async () => {
+    const tickets = await Ticket.find().exec()
+    const first = tickets[0]
+    const second = tickets[1]
+
+    await TicketService.addChildren(first, [second])
+  })
+
+  it('Circular reference', async () => {
+    const tickets = await Ticket.find().exec()
+    const first = tickets[0]
+
+    try {
+      await TicketService.addChildren(first, [first])
+    } catch {}
+  })
+
+  it('Remove children', async () => {
+    const tickets = await Ticket.find().exec()
+    const first = tickets[0]
+    const second = tickets[1]
+
+    await TicketService.removeChildren(first, second)
+  })
 })

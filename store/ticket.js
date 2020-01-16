@@ -148,6 +148,17 @@ export const mutations = {
   },
   setModalList(state, modalList) {
     state.modalList = modalList
+  },
+  setChildren(state, children) {
+    state.actualTicket.children = children
+  },
+  addChildren(state, children) {
+    state.actualTicket.children = state.actualTicket.children.concat(children)
+  },
+  removeChildren(state, children) {
+    state.actualTicket.children = state.actualTicket.children.filter(c => {
+      return c._id !== children._id
+    })
   }
 }
 
