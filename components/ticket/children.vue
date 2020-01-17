@@ -5,7 +5,7 @@
         <v-icon>add</v-icon>
         {{ $t('add_children') }}
       </v-btn>
-      <v-dialog v-model="dialog" fullscreen scrollable>
+      <v-dialog v-model="dialog" scrollable>
         <v-card>
           <v-toolbar color="primary white--text">
             <v-toolbar-items>
@@ -30,7 +30,7 @@
                     </v-stepper-step>
                   </v-stepper-header>
                   <v-stepper-content step="1">
-                    <create search @input="search" />
+                    <create name="TicketCreate" search @input="search" />
                   </v-stepper-content>
                   <v-stepper-content step="2">
                     <list v-model="tickets" @input="addChildren" />
@@ -88,16 +88,16 @@
 <script>
 import { mapGetters } from 'vuex'
 import ggl from 'graphql-tag'
-import list from '@/components/ticket/children/search/list'
-import create from '@/components/ticket/create'
+import create from './create'
+import list from '@/components/ticket/childrenSearch/list'
 import search from '@/graphql/query/search/ticket.graphql'
 import addChildren from '@/graphql/mutation/ticket/addChildren.graphql'
 import removeChildren from '@/graphql/mutation/ticket/removeChildren.graphql'
 export default {
   name: 'Children',
   components: {
-    create,
-    list
+    list,
+    create
   },
   data() {
     return {
@@ -143,7 +143,7 @@ export default {
         },
         {
           text: this.$t('creation_date'),
-          value: 'created'
+          value: 'CreateTicketd'
         },
         {
           text: this.$t('modified_date'),
@@ -154,6 +154,9 @@ export default {
     ...mapGetters({
       actualTicket: 'ticket/getActualTicket'
     })
+  },
+  created() {
+    this.$options.components.create = create
   },
   methods: {
     search(ticket) {
@@ -166,7 +169,7 @@ export default {
           newTicket[k] = ticket[k]._id
         }
       })
-      const fieldsToExclude = ['created', 'modified', 'resume', 'content']
+      const fieldsToExclude = ['CreateTicketd', 'modified', 'resume', 'content']
       fieldsToExclude.forEach(f => {
         delete newTicket[f]
       })
