@@ -102,7 +102,7 @@ describe('Ticket', function() {
     const first = tickets[0]
     const second = tickets[1]
 
-    await TicketService.addChildren(first, [second])
+    await TicketService.addChildren(first._id, [second._id])
   })
 
   it('Circular reference', async () => {
@@ -110,7 +110,7 @@ describe('Ticket', function() {
     const first = tickets[0]
 
     try {
-      await TicketService.addChildren(first, [first])
+      await TicketService.addChildren(first._id, [first._id])
     } catch {}
   })
 
@@ -119,6 +119,6 @@ describe('Ticket', function() {
     const first = tickets[0]
     const second = tickets[1]
 
-    await TicketService.removeChildren(first, second)
+    await TicketService.removeChildren(first._id, second._id)
   })
 })

@@ -202,7 +202,7 @@ class TicketService {
     ticketId: ITicket['_id'],
     groupId: IGroup['_id']
   ): Promise<ITicket> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       Ticket.updateOne(
         { _id: ticketId },
         {
