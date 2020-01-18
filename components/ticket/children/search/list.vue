@@ -48,7 +48,7 @@
           {{ item.modified | date }}
         </template>
       </v-data-table>
-      <v-btn class="primary white--text" @click="addChildren">
+      <v-btn class="primary white--text" :disabled="selected.length === 0" @click="addChildren">
         <v-icon>add</v-icon>
         {{ $t('add_children') }}
       </v-btn>

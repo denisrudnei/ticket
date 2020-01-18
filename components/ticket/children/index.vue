@@ -110,7 +110,7 @@ export default {
     headers() {
       return [
         {
-          text: this.$t('delete'),
+          text: this.$t('actions'),
           value: 'actions'
         },
         {
@@ -143,7 +143,7 @@ export default {
         },
         {
           text: this.$t('creation_date'),
-          value: 'CreateTicketd'
+          value: 'created'
         },
         {
           text: this.$t('modified_date'),
