@@ -119,6 +119,8 @@ export default {
   methods: {
     addChildren() {
       this.$emit('input', this.selected)
+
+      this.selected = []
     }
   }
 }

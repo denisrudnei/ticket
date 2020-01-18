@@ -197,6 +197,7 @@ export default {
           }
         })
         .then(() => {
+          this.step = 1
           this.$toast.show(this.$t('children_added'), {
             duration: 1000,
             icon: 'done'
