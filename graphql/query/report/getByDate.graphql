@@ -1,0 +1,6 @@
+query ReportByDate($field: String!, $start: Datetime, $end: Datetime) {
+  ReportByDate(field: $field, start: $start, end: $end) {
+    _id
+    total
+  }
+}

@@ -39,6 +39,19 @@ class StatusService {
     })
   }
 
+  getAllowedStatus(_id: IStatus['_id']): Promise<[IStatus]> {
+    return new Promise((resolve, reject) => {
+      Status.findOne({
+        _id
+      })
+        .populate(['allowedStatus'])
+        .exec((err: Error, result: IStatus) => {
+          if (err) return reject(err)
+          return resolve(result.allowedStatus)
+        })
+    })
+  }
+
   edit(statusId: IStatus['_id'], status: IStatus): Promise<void> {
     return new Promise((resolve, reject) => {
       const allowedStatus = status.allowedStatus.filter(s => {

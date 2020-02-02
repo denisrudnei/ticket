@@ -1,0 +1,8 @@
+query TicketReport($attributes: ReportAttributes, $field: String!, $ref: String!) {
+  TicketReport(attributes: $attributes, field: $field, ref: $ref) {
+    total
+    value {
+      name
+    }
+  }
+}

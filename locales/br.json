@@ -102,5 +102,7 @@
   "search_ticket": "Pesquisar ticket",
   "select_ticket": "Selecionar ticket",
   "children_removed": "Filho removido",
-  "children_added": "Filho adicionado"
+  "children_added": "Filho adicionado",
+  "add_chart": "Adicionar grágico",
+  "saved_successfully": "Salvo com sucesso"
 }

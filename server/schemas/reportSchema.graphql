@@ -1,0 +1,26 @@
+type Report {
+  _id: ID!
+  total: Int
+  value: [WithName]
+}
+
+type ReportByDate {
+  _id: Datetime!,
+  total: Int
+}
+
+type WithName {
+  name: String
+}
+
+type ComposedDate {
+  year: Int,
+  month: Int,
+  dayOfMonth: Int
+}
+
+input ReportAttributes {
+  group: [ID!]
+  status: [ID!]
+  openedBy: [ID!]
+}

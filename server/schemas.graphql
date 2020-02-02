@@ -17,6 +17,7 @@
 # import Ref from "./schemas/refSchema.graphql"
 # import Sla from "./schemas/slaSchema.graphql"
 # import Priority from "./schemas/prioritySchema.graphql"
+# import Report from "./schemas/reportSchema.graphql"
 
 type Query {
   TicketById(_id: ID!): Ticket!,
@@ -41,7 +42,9 @@ type Query {
   Ref: [Ref!]!
   Sla: [Sla!]!
   Priority: [Priority!]!
-  PriorityById(_id: ID!): Priority!
+  PriorityById(_id: ID!): Priority!,
+  TicketReport(attributes: ReportAttributes, field: String!, ref: String!, start: Datetime, end: Datetime): [Report!]!
+  ReportByDate(field: String!, start: Datetime, end: Datetime): [ReportByDate!]!
 }
 
 type Mutation {

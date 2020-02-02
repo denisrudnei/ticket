@@ -1,4 +1,3 @@
-import { IResolvers } from 'graphql-tools'
 import AddressResolver from './AddressResolver'
 import AnalystResolver from './AnalystResolver'
 import AuthResolver from './AuthResolver'
@@ -10,17 +9,14 @@ import PathResolver from './PathResolver'
 import PriorityResolver from './PriorityResolver'
 import RefResolver from './RefResolver'
 import RoleResolver from './RoleResolver'
-import SeachResolver from './SearchResolver'
+import SearchResolver from './SearchResolver'
 import StatusResolver from './StatusResolver'
 import TicketResolver from './TicketResolver'
+import ReportResolver from './ReportResolver'
 
-const base: IResolvers = {
-  Query: {},
-  Mutation: {},
-  Subscription: {}
-}
+const base: any = {}
 
-const resolversToMerge = [
+const resolversToMerge: any[] = [
   AddressResolver,
   AnalystResolver,
   AuthResolver,
@@ -32,14 +28,21 @@ const resolversToMerge = [
   PriorityResolver,
   RefResolver,
   RoleResolver,
-  SeachResolver,
+  SearchResolver,
   StatusResolver,
-  TicketResolver
+  TicketResolver,
+  ReportResolver
 ]
-resolversToMerge.forEach(resolver => {
-  Object.assign(base.Query, resolver.Query)
-  Object.assign(base.Mutation, resolver.Mutation)
-  Object.assign(base.Subscription, resolver.Subscription)
+
+resolversToMerge.forEach((resolver: any) => {
+  if (resolver) {
+    Object.keys(resolver).forEach(key => {
+      if (!base[key]) {
+        base[key] = resolver[key]
+      }
+      Object.assign(base[key], resolver[key])
+    })
+  }
 })
 
 export default base
