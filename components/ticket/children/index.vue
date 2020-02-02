@@ -88,11 +88,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import ggl from 'graphql-tag'
-import create from '../create'
 import list from '@/components/ticket/children/search/list'
 import search from '@/graphql/query/search/ticket.graphql'
 import addChildren from '@/graphql/mutation/ticket/addChildren.graphql'
 import removeChildren from '@/graphql/mutation/ticket/removeChildren.graphql'
+import create from '../create'
 export default {
   name: 'Children',
   components: {

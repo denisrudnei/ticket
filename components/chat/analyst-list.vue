@@ -82,8 +82,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import ggl from 'graphql-tag'
-import AnalystStatus from './status'
 import analystList from '@/graphql/query/chat/analyst-list.graphql'
+import AnalystStatus from './status'
 export default {
   components: {
     AnalystStatus

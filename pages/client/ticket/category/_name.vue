@@ -75,9 +75,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import ggl from 'graphql-tag'
-import file from './file'
 import createTicket from '@/graphql/mutation/client/ticket/createTicket.graphql'
 import category from '@/graphql/query/client/ticket/category.graphql'
+import file from './file'
 export default {
   layout: 'client',
   components: {

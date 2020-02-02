@@ -242,6 +242,8 @@ export default {
       changeStatus: {
         query: ggl(changeStatus),
         result({ data }) {
+          /* eslint-disable */
+          console.log(data)
           this.$store.commit('ticket/updateTicket', data.ChangeStatus)
         }
       },
