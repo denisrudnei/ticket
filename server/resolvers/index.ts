@@ -13,6 +13,7 @@ import SearchResolver from './SearchResolver'
 import StatusResolver from './StatusResolver'
 import TicketResolver from './TicketResolver'
 import ReportResolver from './ReportResolver'
+import SlaResolver from './SlaResolver'
 
 const base: any = {}
 
@@ -31,7 +32,8 @@ const resolversToMerge: any[] = [
   SearchResolver,
   StatusResolver,
   TicketResolver,
-  ReportResolver
+  ReportResolver,
+  SlaResolver
 ]
 
 resolversToMerge.forEach((resolver: any) => {

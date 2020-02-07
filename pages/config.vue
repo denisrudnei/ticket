@@ -17,6 +17,9 @@
         <v-tab to="/config/category">
           {{ $t('categories') }}
         </v-tab>
+        <v-tab to="/config/sla">
+          {{ $t('sla') }}
+        </v-tab>
         <v-tab to="/config/group">
           {{ $t('groups') }}
         </v-tab>

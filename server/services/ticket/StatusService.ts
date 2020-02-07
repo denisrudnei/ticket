@@ -30,7 +30,8 @@ class StatusService {
     return new Promise((resolve, reject) => {
       const newStatus = new Status({
         _id: new mongoose.Types.ObjectId(),
-        name: status.name
+        name: status.name,
+        slaRun: status.slaRun
       })
       Status.create(newStatus, (err: Error) => {
         if (err) return reject(err)
@@ -64,7 +65,8 @@ class StatusService {
         {
           $set: {
             name: status.name,
-            allowedStatus: allowedStatus
+            allowedStatus: allowedStatus,
+            slaRun: status.slaRun
           }
         }
       ).exec((err: Error) => {

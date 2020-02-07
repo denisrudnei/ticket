@@ -4,7 +4,7 @@ import { IResolvers } from 'graphql-tools'
 import TicketService from '../services/ticket/TicketService'
 import TicketEnum from '../enums/TicketEnum'
 import LogService from '../services/ticket/LogService'
-import Ticket from '../../server/models/ticket/Ticket'
+import Ticket, { ITicket } from '../../server/models/ticket/Ticket'
 
 const TicketResolver: IResolvers = {
   Query: {
@@ -131,6 +131,28 @@ const TicketResolver: IResolvers = {
           return tickets.includes(value._id.toString())
         }
       )
+    },
+    SlaUpdate: {
+      subscribe: withFilter(
+        (_: any, __: any, { pubSub }: Context) => {
+          return pubSub.asyncIterator(TicketEnum.SLA_UPDATE)
+        },
+        async (payload, { tickets }) => {
+          const { SlaUpdate } = await payload
+
+          const value = await SlaUpdate
+
+          return tickets.includes(value._id.toString())
+        }
+      )
+    }
+  },
+  Ticket: {
+    overtakeSla: ({ _id }: ITicket) => {
+      return TicketService.overtakeSla(_id)
+    },
+    slaPercentage: ({ _id }: ITicket) => {
+      return TicketService.slaPercentage(_id)
     }
   }
 }

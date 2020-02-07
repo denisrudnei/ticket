@@ -1,0 +1,8 @@
+#import "@/graphql/fragments/ticketList.graphql"
+
+subscription SlaUpdate($tickets: [ID!]!) {
+  ticket: SlaUpdate(tickets: $tickets) {
+    ...ticketList
+    slaCount
+  }
+}

@@ -1,0 +1,6 @@
+mutation CreateSla($sla: SlaAttributes!) {
+  CreateSla(sla: $sla) {
+    name
+    limit
+  }
+}

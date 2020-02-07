@@ -1,0 +1,22 @@
+fragment categoryList on Category {
+  _id
+  name
+  fullName
+  description
+  defaultGroup {
+    _id
+    name
+  }
+  subs {
+    _id
+  }
+  fields {
+    required
+    limits {
+      min
+      max
+    }
+    value
+    text
+  }
+}

@@ -1,0 +1,7 @@
+#import "@/graphql/fragments/ticketList.graphql"
+query TicketById($id: ID!) {
+  ticket: TicketById(_id: $id) {
+    ...ticketList
+    slaPercentage
+  }
+}

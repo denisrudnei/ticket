@@ -19,6 +19,9 @@ type Ticket {
   ticketNumber: Int
   father: Ticket
   children: [Ticket]
+  slaCount: Datetime
+  overtakeSla: Boolean
+  slaPercentage: Float
 }
 
 type TicketPagination {

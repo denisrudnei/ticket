@@ -20,7 +20,7 @@ const StatusSchema: Schema<IStatus> = new Schema({
   ],
   slaRun: {
     type: Boolean,
-    default: true
+    default: false
   }
 })
 

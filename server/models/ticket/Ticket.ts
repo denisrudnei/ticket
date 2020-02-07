@@ -1,9 +1,10 @@
+import { differenceInMinutes, format } from 'date-fns'
 import { model, Schema, connection, Document } from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate'
 import mongooseAutoIncrement from 'mongoose-auto-increment'
 import { IAnalyst } from '../Analyst'
 import { IAddress } from '../Address'
-import { ICategory } from './Category'
+import Category, { ICategory } from './Category'
 import { IGroup } from './Group'
 import { IStatus } from './Status'
 import { IComment } from './Comment'
@@ -30,6 +31,11 @@ export interface ITicket extends Document {
   children: [ITicket['_id']]
   files: any[]
   logs: [ILog['_id']]
+  slaCount: Date
+  created: Date
+  modified: Date
+  overtakeSla(): Promise<Boolean>
+  slaPercentage(): Promise<Number>
 }
 
 const TicketSchema: Schema<ITicket> = new Schema(
@@ -110,7 +116,11 @@ const TicketSchema: Schema<ITicket> = new Schema(
         type: Schema.Types.ObjectId,
         ref: 'Log'
       }
-    ]
+    ],
+    slaCount: {
+      type: Date,
+      default: Date.now
+    }
   },
   {
     timestamps: {
@@ -119,6 +129,47 @@ const TicketSchema: Schema<ITicket> = new Schema(
     }
   }
 )
+
+TicketSchema.methods.overtakeSla = async function() {
+  const category = await Category.findOne({
+    _id: this.category
+  })
+    .populate(['sla'])
+    .exec()
+  if (category.sla === undefined) return false
+
+  const slaBase = new Date('1970/01/01 00:00:00')
+  const slaLimit = new Date(
+    `1970/01/01 ${format(category.sla.limit, 'HH:mm:ss')}`
+  )
+  return (
+    Math.abs(
+      differenceInMinutes(new Date(this.created), new Date(this.slaCount))
+    ) > Math.abs(differenceInMinutes(slaBase, slaLimit))
+  )
+}
+
+TicketSchema.methods.slaPercentage = async function() {
+  const category = await Category.findOne({
+    _id: this.category
+  })
+    .populate(['sla'])
+    .exec()
+  if (!category.sla) return 0
+  const slaBase = new Date('1970/01/01 00:00:00')
+  const slaLimit = new Date(
+    `1970/01/01 ${format(new Date(category.sla.limit), 'HH:mm:ss')}`
+  )
+
+  const base = Math.abs(differenceInMinutes(slaBase, slaLimit)) / 100
+
+  const elapsed = Math.abs(
+    differenceInMinutes(new Date(this.created), new Date(this.slaCount))
+  )
+  if (base === 0 || elapsed === 0) return 0
+
+  return elapsed / base
+}
 
 TicketSchema.pre('find', function() {
   this.populate([

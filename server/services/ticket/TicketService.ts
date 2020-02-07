@@ -1,6 +1,10 @@
+import consola from 'consola'
 import { Types, PaginateResult } from 'mongoose'
 import AWS from 'aws-sdk'
 import { UploadedFile } from 'express-fileupload'
+import Agenda from 'agenda'
+import { PubSubEngine } from 'graphql-subscriptions'
+import TicketEnum from '~/server/enums/TicketEnum'
 import Ticket, { ITicket } from '~/server/models/ticket/Ticket'
 import Comment, { IComment } from '~/server/models/ticket/Comment'
 import Group, { IGroup } from '~/server/models/ticket/Group'
@@ -45,6 +49,49 @@ const populateArray = [
 ]
 
 class TicketService {
+  async startAgenda(pubSub: PubSubEngine): Promise<void> {
+    const agenda = new Agenda({
+      db: {
+        address: process.env.MONGODB_URI
+      }
+    })
+    await agenda.start()
+    agenda.define('check sla', async () => {
+      const statusWithSlaAbleToRun = await Status.find({
+        slaRun: true
+      })
+      Ticket.updateMany(
+        {
+          status: {
+            $in: statusWithSlaAbleToRun
+          }
+        },
+        {
+          $set: {
+            slaCount: new Date()
+          }
+        }
+      ).exec((err: Error, result: any) => {
+        if (err) consola.error(err)
+        Ticket.find({
+          status: {
+            $in: statusWithSlaAbleToRun
+          }
+        }).exec((err: Error, tickets: [ITicket]) => {
+          if (err) consola.error(err)
+          tickets.forEach(ticket => {
+            pubSub.publish(TicketEnum.SLA_UPDATE, {
+              SlaUpdate: Promise.resolve(ticket)
+            })
+          })
+        })
+
+        consola.log(result)
+      })
+    })
+    agenda.every('30 seconds', 'check sla')
+  }
+
   getTickets(
     filter: any,
     sortBy: any,
@@ -67,6 +114,10 @@ class TicketService {
         }
       )
     })
+  }
+
+  startSla(): boolean {
+    return false
   }
 
   getOne(ticketId: ITicket['_id']): Promise<ITicket> {
@@ -363,6 +414,28 @@ class TicketService {
           return resolve(ticket!)
         }
       )
+    })
+  }
+
+  overtakeSla(ticketId: ITicket['_id']): Promise<Boolean> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne({
+        _id: ticketId
+      }).exec((err: Error, ticket: ITicket) => {
+        if (err) return reject(err)
+        resolve(ticket.overtakeSla())
+      })
+    })
+  }
+
+  slaPercentage(ticketId: ITicket['_id']): Promise<Number> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne({
+        _id: ticketId
+      }).exec((err: Error, ticket: ITicket) => {
+        if (err) return reject(err)
+        resolve(ticket.slaPercentage())
+      })
     })
   }
 }

@@ -51,5 +51,7 @@ query GetTicket($id: ID!) {
     children {
       ...ticketList
     }
+    slaCount
+    slaPercentage
   }
 }

@@ -240,6 +240,9 @@
               @click:append="show('priority', ticketComputed.priority)"
             />
           </v-col>
+          <v-col cols="12" class="pa-2">
+            <h3>{{ $t('sla_update') }}: {{ ticketComputed.slaCount | datetime }} | {{ ticketComputed.slaPercentage | percentage }}</h3>
+          </v-col>
           <v-col
             cols="12"
             pa-3
@@ -279,7 +282,7 @@
                 pa-3
               >
                 <h3 v-if="!search">
-                  {{ $t('modified_date') }}: {{ ticketComputed.modified | date }}
+                  {{ $t('modified_date') }}: {{ ticketComputed.modified | datetime }}
                 </h3>
                 <v-menu
                   v-if="search"
@@ -454,6 +457,9 @@ export default {
     date(value) {
       const newDate = new Date(value)
       return newDate.toLocaleDateString()
+    },
+    percentage(value) {
+      return `${Math.round(value)} %`
     }
   },
   head() {

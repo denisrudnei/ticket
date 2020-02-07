@@ -6,6 +6,7 @@ import mongoose from 'mongoose'
 import app from '~/server/app'
 import CheckACL from '~/server/models/CheckACL'
 import resolvers from '~/server/resolvers'
+import TicketService from '~/server/services/ticket/TicketService'
 
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost/test',
@@ -41,6 +42,8 @@ function start() {
       path: `/api/subscriptions`
     }
   })
+
+  TicketService.startAgenda(pubSub)
 
   consola.ready({
     message: `Server listening on http://${host}:${port}`,

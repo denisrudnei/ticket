@@ -6,7 +6,7 @@
     <v-col cols="12">
       <v-row>
         <v-col v-for="ticket in tickets" :key="ticket._id" cols="12" md="4">
-          <v-card tile :color="color(ticket._id)" class="white--text" dark>
+          <v-card tile :color="color(ticket)" class="white--text" dark>
             <v-card-text>
               <v-row>
                 <v-col cols="12">
@@ -20,8 +20,8 @@
                   {{ $t('number_of_ticket') }}: {{ ticket.ticketNumber }}
                 </v-col>
                 <v-col cols="12">
-                  <v-progress-linear striped height="15" :value="sla(ticket._id)" color="black">
-                    {{ sla(ticket._id) }} %
+                  <v-progress-linear striped height="15" :value="ticket.slaPencentage" color="black">
+                    {{ Math.round(ticket.slaPercentage) }} %
                   </v-progress-linear>
                 </v-col>
                 <v-col cols="12">
@@ -64,8 +64,7 @@ export default {
       search: '',
       ticketsData: [],
       page: 1,
-      pages: 0,
-      slas: []
+      pages: 0
     }
   },
   computed: {
@@ -87,33 +86,10 @@ export default {
     this.getTickets()
   },
   methods: {
-    color(id) {
-      const sla = this.slas.find(s => {
-        return s.id === id
-      })
-      if (!sla) {
-        this.sla(id)
-        return 'black'
-      }
-      if (sla.number <= 90) return 'green'
-      if (sla.number >= 100) return 'red'
+    color(ticket) {
+      if (ticket.slaPercentage <= 90) return 'green'
+      if (ticket.slaPercentage >= 100) return 'red'
       return 'orange'
-    },
-    sla(id) {
-      const number = Math.round(Math.random() * 100)
-      const findSla = this.slas.findIndex(sla => {
-        return sla.id === id
-      })
-      const sla = {
-        id,
-        number
-      }
-      if (findSla !== -1) {
-        return this.slas[findSla].number
-      } else {
-        this.slas.push(sla)
-      }
-      return sla.number
     },
     getTickets(page) {
       this.$apollo

@@ -11,8 +11,8 @@
     </v-col>
     <v-col cols="12">
       <span>Prazo de atendimento</span>
-      <v-progress-linear :value="40" color="green" striped height="15">
-        40 %
+      <v-progress-linear :value="ticket.slaPercentage" color="green" striped height="15">
+        {{ ticket.slaPercentage | percentage }}
       </v-progress-linear>
     </v-col>
     <v-col cols="12">
@@ -33,14 +33,30 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
+import ticketById from '@/graphql/query/client/ticket/ticketById.graphql'
 export default {
   layout: 'client',
-  asyncData({ $axios, params }) {
-    return $axios.get(`/ticket/${params.id}`).then(response => {
-      return {
-        ticket: response.data
-      }
-    })
+  filters: {
+    percentage(value) {
+      return `${Math.round(value)} %`
+    }
+  },
+  computed: mapGetters({
+    ticket: 'ticket/getActualTicket'
+  }),
+  created() {
+    this.$apollo
+      .query({
+        query: ggl(ticketById),
+        variables: {
+          id: this.$route.params.id
+        }
+      })
+      .then(response => {
+        this.$store.commit('ticket/setActualTicket', response.data.ticket)
+      })
   }
 }
 </script>

@@ -168,6 +168,7 @@ import ConfirmCopy from '@/components/ticket/confirmCopy'
 import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
 import editTicket from '@/graphql/subscription/ticket/editTicket.graphql'
+import slaUpdate from '@/graphql/subscription/ticket/slaUpdate.graphql'
 import copyTicket from '@/graphql/mutation/ticket/copyTicket.graphql'
 import ticketSearch from '@/graphql/query/search/ticket.graphql'
 import hotkeyHelp from '@/components/hotkeyHelp'
@@ -242,8 +243,6 @@ export default {
       changeStatus: {
         query: ggl(changeStatus),
         result({ data }) {
-          /* eslint-disable */
-          console.log(data)
           this.$store.commit('ticket/updateTicket', data.ChangeStatus)
         }
       },
@@ -262,8 +261,28 @@ export default {
       },
       transferToGroup: {
         query: ggl(transferToGroup),
+        variables() {
+          return {
+            tickets: this.tickets.map(t => {
+              return t._id
+            })
+          }
+        },
         result({ data }) {
           this.$store.commit('ticket/updateTicket', data.TransferToGroup)
+        }
+      },
+      slaUpdate: {
+        query: ggl(slaUpdate),
+        variables() {
+          return {
+            tickets: this.tickets.map(t => {
+              return t._id
+            })
+          }
+        },
+        result({ data }) {
+          this.$store.commit('ticket/updateTicket', data.ticket)
         }
       }
     }

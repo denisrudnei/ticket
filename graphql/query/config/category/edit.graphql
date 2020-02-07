@@ -1,21 +1,7 @@
-query edit($name: String!) {
+#import "@/graphql/fragments/categoryList.graphql"
+query CategoryByName($name: String!) {
   category: CategoryByName(name: $name) {
-    _id
-    name
-    description
-    defaultGroup {
-      _id
-      name
-    }
-    fields {
-      required
-      limits {
-        min
-        max
-      }
-      value
-      text
-    }
+    ...categoryList
   }
   groups: Group {
     _id

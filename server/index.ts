@@ -7,6 +7,7 @@ import morgan from 'morgan'
 import app from '~/server/app'
 import CheckACL from '~/server/models/CheckACL'
 import resolvers from '~/server/resolvers'
+import TicketService from '~/server/services/ticket/TicketService'
 
 const { Nuxt, Builder } = require('nuxt')
 const config = require('~/nuxt.config.js')
@@ -69,6 +70,8 @@ async function start() {
   })
 
   server.express.use(nuxt.render)
+
+  TicketService.startAgenda(pubSub)
 
   consola.ready({
     message: `Server listening on http://${host}:${port}`,

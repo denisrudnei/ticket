@@ -1,4 +1,10 @@
 type Sla {
   _id: ID!
+  name: String
   limit: Datetime
+}
+
+input SlaAttributes {
+  limit: Datetime!
+  name: String!
 }

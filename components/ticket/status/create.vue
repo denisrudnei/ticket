@@ -1,14 +1,17 @@
 <template>
   <v-row>
     <v-col
-      cols="12"
       pa-3
+      cols="12"
     >
       <v-text-field
         v-model="actual.name"
         placeholder="Nome"
         filled
       />
+    </v-col>
+    <v-col cols="12">
+      <v-switch v-model="actual.slaRun" :label="$t('sla_able_to_run')" />
     </v-col>
     <v-col cols="6">
       <v-card>
@@ -78,7 +81,8 @@ export default {
       status: [],
       actualData: {
         name: '',
-        allowedStatus: []
+        allowedStatus: [],
+        slaRun: false
       }
     }
   },

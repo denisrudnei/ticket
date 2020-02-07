@@ -65,12 +65,12 @@ CategorySchema.virtual('fullName').get(function(this: ICategory) {
 })
 
 CategorySchema.pre('find', function(next) {
-  this.populate(['father', 'fields'])
+  this.populate(['father', 'fields', 'sla'])
   next()
 })
 
 CategorySchema.pre('findOne', function(next) {
-  this.populate(['father', 'fields', 'subs'])
+  this.populate(['father', 'fields', 'subs', 'sla'])
   next()
 })
 

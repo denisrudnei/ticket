@@ -1,5 +1,6 @@
 type Status {
   _id: ID
   name: String
-  allowedStatus: [Status]
+  allowedStatus: [Status],
+  slaRun: Boolean
 }

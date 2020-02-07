@@ -64,6 +64,7 @@ type Mutation {
   CopyTicket(ticketId: ID!): Ticket!
   AddChildren(ticketId: ID!, children: [ID!]!): Ticket!
   RemoveChildren(ticketId: ID!, childrenId: ID!): Ticket!
+  CreateSla(sla: SlaAttributes!): Sla!
 }
 
 type Subscription {
@@ -73,6 +74,7 @@ type Subscription {
   NewMessage(to: ID!): Message!
   NewPath(userId: ID!): PathTree!
   RemovePath(userId: ID!): ID!
+  SlaUpdate(tickets: [ID!]!): Ticket!
 }
 
 scalar Datetime

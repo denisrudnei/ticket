@@ -32,12 +32,9 @@
 </template>
 
 <script>
+import ggl from 'graphql-tag'
+import categoryList from '@/graphql/query/config/category/categoryList.graphql'
 export default {
-  data() {
-    return {
-      items: []
-    }
-  },
   computed: {
     headers() {
       return [
@@ -64,10 +61,19 @@ export default {
       ]
     }
   },
-  created() {
-    this.$axios.get('/category').then(response => {
-      this.items = response.data
-    })
+  asyncData({ params, app }) {
+    return app.$apollo
+      .query({
+        query: ggl(categoryList),
+        variables: {
+          name: params.name
+        }
+      })
+      .then(response => {
+        return {
+          items: response.data.category
+        }
+      })
   }
 }
 </script>
