@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ $t('add_file') }}}
+    {{ $t('add_file') }}
   </div>
 </template>
 

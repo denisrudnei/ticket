@@ -60,7 +60,7 @@ type Mutation {
   UpdatePriority(priority: PriorityInput!): Boolean
   UpdateManyPriorities(priorities: [PriorityInput!]!): [Boolean]
   CreateCategory(category: CategoryInput!): Category
-  EditCategory(categoryId: ID!, category: CategoryInput!): Boolean
+  EditCategory(categoryId: ID!, category: CategoryInput!): Category
   CopyTicket(ticketId: ID!): Ticket!
   AddChildren(ticketId: ID!, children: [ID!]!): Ticket!
   RemoveChildren(ticketId: ID!, childrenId: ID!): Ticket!

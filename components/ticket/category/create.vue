@@ -9,6 +9,7 @@
           v-if="!editing"
           v-model="category.father"
           :items="categoriesComputed"
+          :value-comparator="compare"
           filled
           placeholder="Categoria pai"
         />
@@ -20,13 +21,22 @@
         <v-autocomplete
           v-model="category.defaultGroup"
           placeholder="Grupo principal"
+          :value-comparator="compare"
           :items="groups.map(g => ({text: g.name, value: g}))"
           filled
         />
         <v-autocomplete
           v-model="category.defaultStatus"
           placeholder="Status padrão"
+          :value-comparator="compare"
           :items="status.map(s => ({text: s.name, value: s}))"
+          filled
+        />
+        <v-autocomplete
+          v-model="category.sla"
+          placeholder="SLA"
+          :items="sla.map(s => ({text: s.name, value: s}))"
+          :value-comparator="compare"
           filled
         />
         <v-autocomplete
@@ -34,6 +44,7 @@
           filled
           label="Prioridade padrão"
           :items="priority.map(p => ({text: p.name, value: p}))"
+          :value-comparator="compare"
         />
         <v-col cols="12">
           <v-textarea v-model="category.description" filled placeholder="Descrição" />
@@ -109,7 +120,9 @@
 <script>
 import ggl from 'graphql-tag'
 import create from '@/graphql/query/config/category/create.graphql'
+import compareObjectsWithId from '@/mixins/compareObjectsWithId'
 export default {
+  mixins: [compareObjectsWithId],
   props: {
     value: {
       type: Object,
@@ -128,6 +141,7 @@ export default {
       groups: [],
       status: [],
       priority: [],
+      sla: [],
       categoryData: {
         name: '',
         father: null,
@@ -154,6 +168,7 @@ export default {
         this.groups = response.data.group
         this.priority = response.data.priority
         this.status = response.data.status
+        this.sla = response.data.sla
       })
   },
   methods: {

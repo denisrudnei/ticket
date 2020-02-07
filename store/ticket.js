@@ -87,6 +87,12 @@ export const mutations = {
   setModalQuery(state, modalQuery) {
     state.modalQuery = modalQuery
   },
+  updateSla(state, ticket) {
+    const index = state.tickets.findIndex(t => {
+      return t._id === ticket._id
+    })
+    state.tickets[index].slaCount = ticket.slaCount
+  },
   updateTicket(state, ticket) {
     if (Object.prototype.hasOwnProperty.call(state.actualTicket, '_id')) {
       if (state.actualTicket._id === ticket._id) {

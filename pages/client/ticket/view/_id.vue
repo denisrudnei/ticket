@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import ggl from 'graphql-tag'
 import ticketById from '@/graphql/query/client/ticket/ticketById.graphql'
 export default {
@@ -43,19 +42,18 @@ export default {
       return `${Math.round(value)} %`
     }
   },
-  computed: mapGetters({
-    ticket: 'ticket/getActualTicket'
-  }),
-  created() {
-    this.$apollo
+  asyncData({ params, app }) {
+    return app.$apollo
       .query({
         query: ggl(ticketById),
         variables: {
-          id: this.$route.params.id
+          id: params.id
         }
       })
       .then(response => {
-        this.$store.commit('ticket/setActualTicket', response.data.ticket)
+        return {
+          ticket: response.data.ticket
+        }
       })
   }
 }

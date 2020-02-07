@@ -2,6 +2,31 @@ import mongoose, { Types } from 'mongoose'
 import Category, { ICategory } from '../../models/ticket/Category'
 import Field from '../../models/ticket/Field'
 
+const categoryPopulate = [
+  {
+    path: 'defaultGroup',
+    select: {
+      name: 1,
+      fullName: 1,
+      description: 1,
+      analysts: 0
+    }
+  },
+  {
+    path: 'defaultStatus',
+    select: {
+      name: 1
+    }
+  },
+  {
+    path: 'defaultPriority',
+    select: {
+      name: 1,
+      weight: 1
+    }
+  }
+]
+
 class CategoryService {
   create(category: ICategory): Promise<ICategory> {
     return new Promise(async (resolve, reject) => {
@@ -45,45 +70,7 @@ class CategoryService {
   getCategories() {
     return new Promise((resolve, reject) => {
       Category.find({})
-        .populate([
-          {
-            path: 'father',
-            select: {
-              fullName: 1,
-              name: 1,
-              description: 1,
-              subs: 0
-            }
-          },
-          {
-            path: 'subs',
-            select: {
-              name: 1,
-              fullName: 1,
-              father: 0
-            }
-          },
-          {
-            path: 'defaultGroup',
-            select: {
-              name: 1,
-              analysts: 0
-            }
-          },
-          {
-            path: 'defaultStatus',
-            select: {
-              name: 1
-            }
-          },
-          {
-            path: 'defaultPriority',
-            select: {
-              name: 1,
-              weight: 1
-            }
-          }
-        ])
+        .populate(categoryPopulate)
         .exec((err: Error, categories) => {
           if (err) return reject(err)
           return resolve(categories)
@@ -125,7 +112,18 @@ class CategoryService {
     })
   }
 
-  edit(categoryId: Types.ObjectId, category: ICategory): Promise<void> {
+  getOneById(categoryId: ICategory['_id']): Promise<ICategory> {
+    return new Promise((resolve, reject) => {
+      Category.findOne({ _id: categoryId })
+        .populate(categoryPopulate)
+        .exec((err: Error, result: ICategory) => {
+          if (err) return reject(err)
+          return resolve(result)
+        })
+    })
+  }
+
+  edit(categoryId: ICategory['_id'], category: ICategory): Promise<ICategory> {
     return new Promise((resolve, reject) => {
       Category.updateOne(
         { _id: categoryId },
@@ -141,7 +139,7 @@ class CategoryService {
         }
       ).exec((err: Error) => {
         if (err) return reject(err)
-        return resolve()
+        resolve(this.getOneById(categoryId))
       })
     })
   }

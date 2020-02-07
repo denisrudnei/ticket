@@ -32,7 +32,7 @@
       <input ref="file" type="file" style="display: none">
       <v-btn class="primary white--text" @click="addFile()">
         <v-icon>attach_file</v-icon>
-        {{ $t('add_file') }}}
+        {{ $t('add_file') }}
       </v-btn>
       <v-btn
         tile

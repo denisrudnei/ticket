@@ -29,4 +29,9 @@ query {
     name
     weight
   }
+  sla: Sla {
+    _id
+    name
+    limit
+  }
 }

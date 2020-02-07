@@ -5,7 +5,6 @@ class SlaService {
   getAll(): Promise<[ISla]> {
     return new Promise((resolve, reject) => {
       Sla.find().exec((err: Error, results: [ISla]) => {
-        console.log(results)
         if (err) return reject(err)
         resolve(results)
       })

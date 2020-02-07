@@ -282,7 +282,7 @@ export default {
           }
         },
         result({ data }) {
-          this.$store.commit('ticket/updateTicket', data.ticket)
+          this.$store.commit('ticket/updateSla', data.ticket)
         }
       }
     }

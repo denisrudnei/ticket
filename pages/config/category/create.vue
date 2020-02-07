@@ -6,7 +6,7 @@
 import CategoryCreate from '@/components/ticket/category/create'
 import ggl from 'graphql-tag'
 import updateCategory from '@/graphql/mutation/config/category/editCategory.graphql'
-import categoryEdit from '@/graphql/query/config/category/edit.graphql'
+import categoryList from '@/graphql/query/config/category/categoryList.graphql'
 export default {
   components: {
     CategoryCreate
@@ -20,7 +20,7 @@ export default {
             categoryId: category._id,
             category: category
           },
-          refetchQueries: [{ query: ggl(categoryEdit) }]
+          refetchQueries: [{ query: ggl(categoryList) }]
         })
         .then(() => {
           this.$toast.show('Categoria criada', {
