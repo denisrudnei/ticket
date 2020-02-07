@@ -240,7 +240,7 @@
               @click:append="show('priority', ticketComputed.priority)"
             />
           </v-col>
-          <v-col cols="12" class="pa-2">
+          <v-col v-if="!search" cols="12" class="pa-2">
             <h3>{{ $t('sla_update') }}: {{ ticketComputed.slaCount | datetime }} | {{ ticketComputed.slaPercentage | percentage }}</h3>
           </v-col>
           <v-col

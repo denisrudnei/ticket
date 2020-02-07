@@ -271,7 +271,6 @@ export default {
     const query = this.$route.query
     if (query.ticket !== undefined && query.ticket !== null) {
       this.$store.dispatch('ticket/findTicket', query.ticket)
-
       this.addTicketsToEdit(this.actualTicket)
     }
     this.getTicketAttributes()
