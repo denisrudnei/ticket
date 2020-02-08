@@ -123,7 +123,7 @@
               :label="$t('opened_by')"
               append-icon="search"
               @click:append="show('openedBy', ticket.openedBy)"
-              @change="setFieldInActualField($event, 'openedBy')"
+              @change="setFieldInActualTicket($event, 'openedBy')"
             />
           </v-col>
           <v-col
@@ -142,7 +142,7 @@
               :clearable="search || editing || !readonly"
               :value-comparator="compare"
               append-icon="search"
-              @change="setFieldInActualField($event, 'affectedUser')"
+              @change="setFieldInActualTicket($event, 'affectedUser')"
               @click:append="show('affectedUser', ticket.affectedUser)"
             />
           </v-col>
@@ -163,7 +163,7 @@
               :value-comparator="compare"
               append-icon="search"
               @click:append="show('actualUser', ticket.actualUser)"
-              @change="setFieldInActualField($event, 'actualUser')"
+              @change="setFieldInActualTicket($event, 'actualUser')"
             />
           </v-col>
           <v-col
@@ -202,7 +202,7 @@
               :value-comparator="compare"
               :label="$t('group')"
               append-icon="search"
-              @change="setFieldInActualField($event, 'group')"
+              @change="setFieldInActualTicket($event, 'group')"
               @click:append="show('group', ticket.group)"
             />
           </v-col>
@@ -223,7 +223,7 @@
               :label="$t('status')"
               append-icon="search"
               @click:append="show('status', ticket.status)"
-              @change="setFieldInActualField($event, 'status')"
+              @change="setFieldInActualTicket($event, 'status')"
             />
           </v-col>
           <v-col
@@ -243,7 +243,7 @@
               :label="$t('priority')"
               append-icon="search"
               @click:append="show('priority', ticket.priority)"
-              @change="setFieldInActualField($event, 'priority')"
+              @change="setFieldInActualTicket($event, 'priority')"
             />
           </v-col>
           <v-col v-if="!search && ticket.slaCount" cols="12" class="pa-2">
@@ -326,7 +326,7 @@
               :readonly="readOnlyData"
               filled
               :label="$t('resume')"
-              @change="setFieldInActualField($event, 'resume')"
+              @change="setFieldInActualTicket($event, 'resume')"
             />
           </v-col>
           <v-col
@@ -341,7 +341,7 @@
               :readonly="readOnlyData"
               filled
               :label="$t('content')"
-              @change="setFieldInActualField($event, 'content')"
+              @change="setFieldInActualTicket($event, 'content')"
             />
           </v-col>
           <v-col
@@ -609,7 +609,7 @@ export default {
       })
     },
     changeCategory(category) {
-      this.setFieldInActualField(category, 'category')
+      this.setFieldInActualTicket(category, 'category')
       if (this.search) return
       if (!this.ticket.category) return
       this.checkFields()
@@ -627,7 +627,7 @@ export default {
         (Object.prototype.hasOwnProperty.call(this.ticket, type) &&
           !Object.prototype.hasOwnProperty.call(this.ticket[type], '_id'))
       ) {
-        this.setFieldInActualField(this[search][index], type)
+        this.setFieldInActualTicket(this[search][index], type)
       }
     },
     checkFields() {
