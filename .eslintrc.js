@@ -16,7 +16,14 @@ module.exports = {
     'vuetify',
     '@typescript-eslint'
   ],
-  // add your custom rules here
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    }
+  ],
   rules: {
     'vuetify/no-deprecated-classes': 'error',
     // '@typescript-eslint/rule-name': 'error'

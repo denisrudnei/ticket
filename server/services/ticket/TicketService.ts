@@ -89,7 +89,7 @@ class TicketService {
         consola.log(result)
       })
     })
-    agenda.every('30 seconds', 'check sla')
+    agenda.every('5 seconds', 'check sla')
   }
 
   getTickets(

@@ -4,7 +4,6 @@
       cols="12"
     >
       <ticket-create
-        v-model="ticket"
         search
         @input="search(ticket)"  
       />
@@ -34,7 +33,6 @@ export default {
     return {
       data: null,
       list: [],
-      ticket: {},
       headers: [
         {
           text: 'Analista',
@@ -51,7 +49,8 @@ export default {
     status: 'status/getStatus',
     group: 'group/getGroups',
     category: 'category/getCategories',
-    openedBy: 'analyst/getAnalysts'
+    openedBy: 'analyst/getAnalysts',
+    ticket: 'ticket/getActualTicket'
   }),
   watch: {
     $route(to, from) {
@@ -69,6 +68,9 @@ export default {
         $store.commit('group/setGroups', response.data.group)
         $store.commit('analyst/setAnalysts', response.data.analyst)
       })
+  },
+  created() {
+    this.$store.commit('ticket/resetActualTicket')
   },
   mounted() {
     this.data = this.$router.currentRoute.query

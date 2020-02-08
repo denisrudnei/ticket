@@ -17,6 +17,9 @@ export default {
       ticket: {}
     }
   },
+  created() {
+    this.$store.commit('ticket/resetActualTicket')
+  },
   methods: {
     create() {
       this.$axios

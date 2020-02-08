@@ -64,6 +64,23 @@ export const mutations = {
   setActualTicket(state, ticket) {
     state.actualTicket = ticket
   },
+  resetActualTicket(state) {
+    state.actualTicket = {
+      group: {},
+      category: {},
+      priority: {},
+      status: {},
+      openedBy: {},
+      actualUser: {},
+      slaCount: undefined,
+      created: undefined,
+      modified: undefined
+    }
+  },
+  setFieldInActualTicket(state, props) {
+    const { field, value } = props
+    state.actualTicket[field] = value
+  },
   insertTicket(state, ticket) {
     state.tickets.push(ticket)
   },
@@ -86,17 +103,6 @@ export const mutations = {
   },
   setModalQuery(state, modalQuery) {
     state.modalQuery = modalQuery
-  },
-  updateSla(state, ticket) {
-    if (Object.prototype.hasOwnProperty.call(state.actualTicket, '_id')) {
-      if (state.actualTicket._id === ticket._id) {
-        state.actualTicket.slaCount = ticket.slaCount
-      }
-    }
-    const index = state.tickets.findIndex(t => {
-      return t._id === ticket._id
-    })
-    state.tickets[index].slaCount = ticket.slaCount
   },
   updateTicket(state, ticket) {
     if (Object.prototype.hasOwnProperty.call(state.actualTicket, '_id')) {
@@ -176,6 +182,16 @@ export const mutations = {
 export const actions = {
   insertTicket({ commit }, ticket) {
     commit('insertTicket', ticket)
+  },
+  updateSla({ commit, state }, ticket) {
+    if (Object.prototype.hasOwnProperty.call(state.actualTicket, '_id')) {
+      if (state.actualTicket._id === ticket._id) {
+        commit('setFieldInActualTicket', {
+          field: 'slaCount',
+          value: ticket.slaCount
+        })
+      }
+    }
   },
   findTicket: async function({ commit }, id) {
     await this.$axios

@@ -112,7 +112,7 @@
             pa-1
           >
             <v-autocomplete
-              v-model="ticketComputed.openedBy"
+              :value="ticket.openedBy"
               :rules="!search ? [v => !!v || 'Necessário preencher'] : undefined"
               :items="analysts.map(a => { return {text: a.name, value: a} })"
               required
@@ -122,7 +122,8 @@
               :clearable="search"
               :label="$t('opened_by')"
               append-icon="search"
-              @click:append="show('openedBy', ticketComputed.openedBy)"
+              @click:append="show('openedBy', ticket.openedBy)"
+              @change="setFieldInActualField($event, 'openedBy')"
             />
           </v-col>
           <v-col
@@ -131,7 +132,7 @@
             pa-1
           >
             <v-autocomplete
-              v-model="ticketComputed.affectedUser"
+              :value="ticket.affectedUser"
               :rules="!search ? [v => !!v || 'Necessário preencher']: undefined"
               :items="analysts.map(u => { return {text: u.name, value: u} })"
               required
@@ -141,7 +142,8 @@
               :clearable="search || editing || !readonly"
               :value-comparator="compare"
               append-icon="search"
-              @click:append="show('affectedUser', ticketComputed.affectedUser)"
+              @change="setFieldInActualField($event, 'affectedUser')"
+              @click:append="show('affectedUser', ticket.affectedUser)"
             />
           </v-col>
           <v-col
@@ -150,7 +152,7 @@
             pa-1
           >
             <v-autocomplete
-              v-model="ticketComputed.actualUser"
+              :value="ticket.actualUser"
               :rules="!search ? [v => !!v || 'Necessário preencher']: undefined"
               :items="analysts.map(u => { return {text: u.name, value: u} })"
               required
@@ -160,7 +162,8 @@
               :clearable="search || editing || !readonly"
               :value-comparator="compare"
               append-icon="search"
-              @click:append="show('actualUser', ticketComputed.actualUser)"
+              @click:append="show('actualUser', ticket.actualUser)"
+              @change="setFieldInActualField($event, 'actualUser')"
             />
           </v-col>
           <v-col
@@ -169,7 +172,7 @@
             pa-1
           >
             <v-autocomplete
-              v-model="ticketComputed.category"
+              :value="ticket.category"
               :items="categories.filter(c => { return c.subs.length === 0 }).map(c => { return { text: c.fullName, value: c } })"
               :rules="!search ? [v => !!v || 'Necessário preencher uma categoria'] : undefined"
               required
@@ -179,8 +182,8 @@
               :value-comparator="compare"
               :label="$t('category')"
               append-icon="search"
-              @change="changeCategory"
-              @click:append="show('category', ticketComputed.category)"
+              @change="changeCategory($event)"
+              @click:append="show('category', ticket.category)"
             />
           </v-col>
           <v-col
@@ -189,7 +192,7 @@
             pa-1
           >
             <v-autocomplete
-              v-model="ticketComputed.group"
+              :value="ticket.group"
               :items="groups.map(g => { return { text: g.name, value: g } })"
               :rules="!search ? [v => !!v || 'Necessário preeencher o grupo'] : undefined"
               required
@@ -199,7 +202,8 @@
               :value-comparator="compare"
               :label="$t('group')"
               append-icon="search"
-              @click:append="show('group', ticketComputed.group)"
+              @change="setFieldInActualField($event, 'group')"
+              @click:append="show('group', ticket.group)"
             />
           </v-col>
           <v-col
@@ -208,7 +212,7 @@
             pa-1
           >
             <v-autocomplete
-              v-model="ticketComputed.status"
+              :value="ticket.status"
               :items="allowedStatus.map(s => { return { text: s.name, value: s } })"
               :rules="!search ? [v => !!v || 'Necessário preencher status'] : undefined"
               required
@@ -218,7 +222,8 @@
               :value-comparator="compare"
               :label="$t('status')"
               append-icon="search"
-              @click:append="show('status', ticketComputed.status)"
+              @click:append="show('status', ticket.status)"
+              @change="setFieldInActualField($event, 'status')"
             />
           </v-col>
           <v-col
@@ -227,7 +232,7 @@
             pa-1
           >
             <v-select
-              v-model="ticketComputed.priority"
+              :value="ticket.priority"
               :items="priorities.map(p => { return { text: `${p.weight} - ${p.name}`, value: p } })"
               :rules="!search ? [v => !!v || 'Prioridade requirida'] : undefined"
               required
@@ -237,11 +242,12 @@
               :value-comparator="compare"
               :label="$t('priority')"
               append-icon="search"
-              @click:append="show('priority', ticketComputed.priority)"
+              @click:append="show('priority', ticket.priority)"
+              @change="setFieldInActualField($event, 'priority')"
             />
           </v-col>
-          <v-col v-if="!search" cols="12" class="pa-2">
-            <h3>{{ $t('sla_update') }}: {{ ticketComputed.slaCount | datetime }} | {{ ticketComputed.slaPercentage | percentage }}</h3>
+          <v-col v-if="!search && ticket.slaCount" cols="12" class="pa-2">
+            <h3>{{ $t('sla_update') }}: {{ ticket.slaCount | datetime }} | {{ ticket.slaPercentage | percentage }}</h3>
           </v-col>
           <v-col
             cols="12"
@@ -252,8 +258,8 @@
                 cols="6"
                 pa-3
               >
-                <h3 v-if="!search">
-                  {{ $t('creation_date') }}: {{ ticketComputed.created | date }}
+                <h3 v-if="!search && ticket.created">
+                  {{ $t('creation_date') }}: {{ ticket.created | date }}
                 </h3>
                 <v-menu
                   v-if="search"
@@ -281,8 +287,8 @@
                 cols="6"
                 pa-3
               >
-                <h3 v-if="!search">
-                  {{ $t('modified_date') }}: {{ ticketComputed.modified | datetime }}
+                <h3 v-if="!search && ticket.modified">
+                  {{ $t('modified_date') }}: {{ ticket.modified | datetime }}
                 </h3>
                 <v-menu
                   v-if="search"
@@ -314,12 +320,13 @@
             pa-1
           >
             <v-text-field
-              v-model="ticketComputed.resume"
+              :value="ticket.resume"
               :rules="[v => !!v || 'Necessário preencher o resumo']"
               required
               :readonly="readOnlyData"
               filled
               :label="$t('resume')"
+              @change="setFieldInActualField($event, 'resume')"
             />
           </v-col>
           <v-col
@@ -328,12 +335,13 @@
             pa-1
           >
             <v-textarea
-              v-model="ticketComputed.content"
+              :value="ticket.content"
               :rules="[v => !!v || 'Necessário preeencher o corpo deo chamado']"
               required
               :readonly="readOnlyData"
               filled
               :label="$t('content')"
+              @change="setFieldInActualField($event, 'content')"
             />
           </v-col>
           <v-col
@@ -387,7 +395,7 @@
                 <v-icon>build</v-icon>
               </v-tab>
               <v-tab-item>
-                <Fields v-model="ticketComputed" :edit="!readOnlyData" />
+                <Fields v-model="ticket" :edit="!readOnlyData" />
               </v-tab-item>
               <v-tab>
                 {{ $t('logs') }}
@@ -464,9 +472,9 @@ export default {
   },
   head() {
     return {
-      title: `[${this.ticketComputed.ticketNumber}] - [${
-        this.ticketsToEdit.length
-      }] ${this.ticketComputed.resume}`
+      title: `[${this.ticket.ticketNumber}] - [${this.ticketsToEdit.length}] ${
+        this.ticket.resume
+      }`
     }
   },
   mixins: [compareObjectsWithId, showModal],
@@ -524,20 +532,18 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/getUser',
-      ticketsToEdit: 'ticket/getTicketsToEdit'
+      ticketsToEdit: 'ticket/getTicketsToEdit',
+      ticket: 'ticket/getActualTicket'
     }),
-    ticketComputed() {
-      return Object.assign(this.ticketData, this.value)
-    },
     allowedStatus() {
       if (this.search) return this.status
-      if (!this.ticketComputed.status) return this.status
+      if (!this.ticket.status) return this.status
       if (!this.editing) return this.status
       const statusIndex = this.status.findIndex(s => {
-        return s._id === this.ticketComputed.status._id
+        return s._id === this.ticket.status._id
       })
 
-      const result = [this.ticketComputed.status]
+      const result = [this.ticket.status]
       if (statusIndex !== -1) {
         result.push(...this.status[statusIndex].allowedStatus)
       }
@@ -556,7 +562,10 @@ export default {
           const openedBy = this.analysts.filter(a => {
             return a._id === this.user._id
           })[0]
-          this.ticketComputed.openedBy = openedBy
+          this.$store.commit('ticket/setFieldInActualTicket', {
+            value: openedBy,
+            field: 'openedBy'
+          })
         }
         this.groups = response.data.Group
         this.status = response.data.Status
@@ -565,12 +574,15 @@ export default {
       })
   },
   methods: {
+    setFieldInActualTicket(value, field) {
+      this.$store.commit('ticket/setFieldInActualTicket', { field, value })
+    },
     addComment() {
       const comment = {
         content: this.comment
       }
       this.$axios
-        .post(`/ticket/comment/${this.ticketComputed._id}`, comment)
+        .post(`/ticket/comment/${this.ticket._id}`, comment)
         .then(response => {
           this.comment = ''
           this.$store.commit('ticket/addComment', response.data)
@@ -578,11 +590,11 @@ export default {
     },
     save() {
       if (!this.search && this.$refs.form.validate()) {
-        this.$emit('input', this.ticketComputed)
+        this.$emit('input', this.ticket)
         this.readOnlyData = true
         this.editing = false
       } else {
-        this.$emit('input', this.ticketComputed)
+        this.$emit('input', this.ticket)
       }
     },
     edit() {
@@ -596,45 +608,35 @@ export default {
         this.ticketData = response.data
       })
     },
-    changeCategory() {
+    changeCategory(category) {
+      this.setFieldInActualField(category, 'category')
       if (this.search) return
-      if (!this.ticketComputed.category) return
+      if (!this.ticket.category) return
       this.checkFields()
       this.changeValue('groups', 'group', 'defaultGroup')
       this.changeValue('status', 'status', 'defaultStatus')
       this.changeValue('priorities', 'priority', 'defaultPriority')
     },
     changeValue(search, type, defaultAttr) {
-      if (!this.ticketComputed.category[defaultAttr]) return
+      if (!this.ticket.category[defaultAttr]) return
       const index = this[search].findIndex(s => {
-        return s._id === this.ticketComputed.category[defaultAttr]._id
+        return s._id === this.ticket.category[defaultAttr]._id
       })
       if (
-        this.ticketComputed[type] === undefined ||
-        (Object.prototype.hasOwnProperty.call(this.ticketComputed, type) &&
-          !Object.prototype.hasOwnProperty.call(
-            this.ticketComputed[type],
-            '_id'
-          ))
+        this.ticket[type] === undefined ||
+        (Object.prototype.hasOwnProperty.call(this.ticket, type) &&
+          !Object.prototype.hasOwnProperty.call(this.ticket[type], '_id'))
       ) {
-        this.ticketComputed[type] = this[search][index]
+        this.setFieldInActualField(this[search][index], type)
       }
     },
     checkFields() {
-      if (
-        !Object.prototype.hasOwnProperty.call(
-          this.ticketComputed.category,
-          'fields'
-        )
-      )
+      if (!Object.prototype.hasOwnProperty.call(this.ticket.category, 'fields'))
         return
-      this.ticketComputed.fields = this.ticketComputed.category.fields
+      this.ticket.fields = this.ticket.category.fields
     },
     clearFields() {
-      Object.keys(this.ticketData).forEach(key => {
-        this.ticketData[key] = undefined
-        delete this.ticketData[key]
-      })
+      this.$store.commit('ticket/resetActualTicket')
     }
   }
 }

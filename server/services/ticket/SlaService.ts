@@ -11,6 +11,17 @@ class SlaService {
     })
   }
 
+  getOne(slaId: ISla['_id']): Promise<ISla> {
+    return new Promise((resolve, reject) => {
+      Sla.findOne({
+        _id: slaId
+      }).exec((err: Error, result: ISla) => {
+        if (err) reject(err)
+        resolve(result)
+      })
+    })
+  }
+
   create(sla: ISla): Promise<ISla> {
     return new Promise((resolve, reject) => {
       const newSla = new Sla({
@@ -21,6 +32,25 @@ class SlaService {
       Sla.create(newSla, (err: Error) => {
         if (err) return reject(err)
         return resolve(newSla)
+      })
+    })
+  }
+
+  edit(slaId: ISla['_id'], sla: ISla): Promise<ISla> {
+    return new Promise((resolve, reject) => {
+      Sla.updateOne(
+        {
+          _id: slaId
+        },
+        {
+          $set: {
+            name: sla.name,
+            limit: sla.limit
+          }
+        }
+      ).exec((err: Error) => {
+        if (err) reject(err)
+        resolve(this.getOne(slaId))
       })
     })
   }
