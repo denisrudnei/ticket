@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <v-btn v-if="selected.length > 0" class="primary white--text" @click="showUpdateMany = true">
-        {{ $t('updateMany') }}
+        {{ $t('update_many') }}
       </v-btn>
     </v-col>
     <v-col cols="12">

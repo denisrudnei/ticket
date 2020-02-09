@@ -104,5 +104,6 @@
   "children_removed": "Children removed",
   "children_added": "Children added",
   "add_chart": "Add chart",
-  "saved_successfully": "Saved successfully"
+  "saved_successfully": "Saved successfully",
+  "update_many": "Update many"
 }
