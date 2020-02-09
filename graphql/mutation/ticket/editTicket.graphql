@@ -1,6 +1,6 @@
 #import "@/graphql/fragments/ticketList.graphql"
 mutation EditTicket($_id: ID!, $ticket: TicketCreateInput!) {
   ticket: EditTicket(_id: $_id, ticket: $ticket) {
-    ...ticketList
+    _id
   }
 }

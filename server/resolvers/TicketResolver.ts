@@ -1,4 +1,4 @@
-import { withFilter } from 'graphql-yoga'
+import { withFilter, PubSub } from 'graphql-yoga'
 import { Context } from 'graphql-yoga/dist/types'
 import { IResolvers } from 'graphql-tools'
 import TicketService from '../services/ticket/TicketService'
@@ -35,6 +35,27 @@ const TicketResolver: IResolvers = {
         ChangeStatus: ticket
       })
       return ticket
+    },
+    TransferTickets: (_: any, { tickets, groupId }, { pubSub }: Context) => {
+      const ticketsTransferred = TicketService.transferTickets(tickets, groupId)
+      pubSub.publish(TicketEnum.TICKETS_TRANSFER_TO_GROUP, {
+        TransferManyTickets: tickets
+      })
+      return ticketsTransferred
+    },
+    ChangeStatusOfTickets: (
+      _: any,
+      { tickets, statusId },
+      { pubSub }: Context
+    ) => {
+      const statusChanged = TicketService.changeStatusOfTickets(
+        tickets,
+        statusId
+      )
+      pubSub.publish(TicketEnum.TICKETS_CHANGE_STATUS, {
+        ChangeStatusOfTickets: tickets
+      })
+      return statusChanged
     },
     TransferTicket: async (
       _: any,

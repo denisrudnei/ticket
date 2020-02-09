@@ -249,6 +249,26 @@ class TicketService {
     })
   }
 
+  changeStatusOfTickets(
+    tickets: [ITicket['_id']],
+    statusId: IStatus['_id']
+  ): Promise<ITicket[]> {
+    const promises = tickets.map(ticketId => {
+      return this.changeStatus(ticketId, statusId)
+    })
+    return Promise.all(promises)
+  }
+
+  transferTickets(
+    tickets: [ITicket['_id']],
+    groupId: IGroup['_id']
+  ): Promise<ITicket[]> {
+    const promises = tickets.map(ticketId => {
+      return this.transferToGroup(ticketId, groupId)
+    })
+    return Promise.all(promises)
+  }
+
   transferToGroup(
     ticketId: ITicket['_id'],
     groupId: IGroup['_id']

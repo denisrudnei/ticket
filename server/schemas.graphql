@@ -50,9 +50,11 @@ type Query {
 type Mutation {
   Login(email: String!, password: String!): Analyst
   CreateTicket(ticket: TicketCreateInput!): Ticket!
-  EditTicket(_id: ID!, ticket: TicketCreateInput!): Ticket
-  TransferTicket(ticketId: ID!, groupId: ID!): Ticket
+  EditTicket(_id: ID!, ticket: TicketCreateInput!): Ticket!
+  TransferTicket(ticketId: ID!, groupId: ID!): Ticket!
+  TransferTickets(tickets: [ID!]!, groupId: ID!): [Ticket!]!
   ChangeStatus(ticketId: ID!, statusId: ID!): Ticket
+  ChangeStatusOfTickets(tickets: [ID!]!, statusId: ID!): [Ticket!]!
   SendMessage(to: ID!, message: String!): Message!
   AddPath(path: PathInput!): PathTree!
   RemovePath(userId: ID!, path: ID!): ID!
