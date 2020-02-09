@@ -530,10 +530,18 @@ export default {
     }
   },
   computed: {
+    ticket: {
+      get() {
+        if (!this.search) return this.$store.getters['ticket/getActualTicket']
+        return this.value
+      },
+      set(value) {
+        this.$store.commit('ticket/setActualTicket', value)
+      }
+    },
     ...mapGetters({
       user: 'auth/getUser',
-      ticketsToEdit: 'ticket/getTicketsToEdit',
-      ticket: 'ticket/getActualTicket'
+      ticketsToEdit: 'ticket/getTicketsToEdit'
     }),
     allowedStatus() {
       if (this.search) return this.status
@@ -637,6 +645,7 @@ export default {
     },
     clearFields() {
       this.$store.commit('ticket/resetActualTicket')
+      this.value = this.$store.getters['ticket/getActualTicket']
     }
   }
 }
