@@ -32,7 +32,7 @@ class AnalystService {
 
   getOne(analystId: IAnalyst['_id']): Promise<IAnalyst> {
     return new Promise((resolve, reject) => {
-      ;+Analyst.findOne({
+      Analyst.findOne({
         _id: analystId
       }).exec((err: Error, analyst) => {
         if (err) return reject(err)
@@ -59,18 +59,24 @@ class AnalystService {
     })
   }
 
-  updateAnalyst(userId: IAnalyst['_id'], analyst: IAnalyst): Promise<void> {
+  updateAnalyst(userId: IAnalyst['_id'], analyst: IAnalyst): Promise<IAnalyst> {
     return new Promise((resolve, reject) => [
       Analyst.updateOne(
         {
           _id: userId
         },
         {
-          $set: analyst
+          $set: {
+            name: analyst.name,
+            color: analyst.color,
+            mergePictureWithExternalAccount:
+              analyst.mergePictureWithExternalAccount,
+            contactEmail: analyst.contactEmail
+          }
         }
       ).exec((err: Error) => {
         if (err) return reject(err)
-        return resolve()
+        return resolve(this.getOne(userId))
       })
     ])
   }

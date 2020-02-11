@@ -14,6 +14,7 @@ export interface IAnalyst extends Document {
   description: Schema.Types.ObjectId
   active: boolean
   picture: string
+  color: string
   mergePictureWithExternalAccount: boolean
   sounds: any
   chats: [Schema.Types.ObjectId]
