@@ -512,16 +512,6 @@ export default {
       initial: new Date().toISOString().substr(0, 10),
       final: new Date().toISOString().substr(0, 10),
       comment: '',
-      ticket: {
-        resume: '',
-        content: '',
-        comments: [],
-        group: {},
-        category: {},
-        priority: {},
-        created: new Date(),
-        modified: new Date()
-      },
       keymap: {
         'alt+a': () => {
           this.action.active = true
