@@ -58,7 +58,7 @@
               </v-tab>
               <v-tab-item>
                 <file-include
-                  :ticket-data="ticketData"
+                  :ticket-data="ticket"
                 />
               </v-tab-item>
               <v-tab>
@@ -512,7 +512,7 @@ export default {
       initial: new Date().toISOString().substr(0, 10),
       final: new Date().toISOString().substr(0, 10),
       comment: '',
-      ticketData: {
+      ticket: {
         resume: '',
         content: '',
         comments: [],
@@ -612,8 +612,8 @@ export default {
     cancelEdit() {
       this.editing = false
       this.readOnlyData = true
-      this.$axios.get(`/ticket/${this.ticketData._id}`).then(response => {
-        this.ticketData = response.data
+      this.$axios.get(`/ticket/${this.ticket._id}`).then(response => {
+        this.$store.commit('ticket/setActualTicket', response.data)
       })
     },
     changeCategory(category) {
