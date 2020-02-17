@@ -1,4 +1,4 @@
-# ccontrol
+# Ticket-dns
 
 Environment variables
 
