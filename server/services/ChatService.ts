@@ -32,7 +32,7 @@ class ChatService {
           if (result === null) {
             Chat.create(
               {
-                _id: new Types.ObjectId(),
+                _id: new mongoose.Types.ObjectId(),
                 participants: [toId, fromId]
               },
               (err: Error, result: IChat) => {
