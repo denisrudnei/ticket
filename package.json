@@ -1,7 +1,7 @@
 {
-  "name": "ccontrol",
+  "name": "ticket-dns",
   "version": "1.0.0",
-  "description": "My groundbreaking Nuxt.js project",
+  "description": "Ticket management system",
   "author": "Denis Rudnei de Souza",
   "private": true,
   "scripts": {
