@@ -38,6 +38,7 @@ export default {
             category: {
               name: newValue.name,
               description: newValue.description,
+              sla: newValue.sla._id,
               defaultGroup: newValue.defaultGroup._id,
               defaultStatus: newValue.defaultStatus._id,
               defaultPriority: newValue.defaultPriority._id

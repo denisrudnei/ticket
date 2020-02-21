@@ -134,7 +134,8 @@ class CategoryService {
             description: category.description,
             defaultGroup: category.defaultGroup,
             defaultStatus: category.defaultStatus,
-            defaultPriority: category.defaultPriority
+            defaultPriority: category.defaultPriority,
+            sla: category.sla
           }
         }
       ).exec((err: Error) => {
