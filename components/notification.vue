@@ -141,6 +141,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
+import notificationList from '@/graphql/query/profile/notification/list.graphql'
 export default {
   computed: {
     notificationTicketsToEdit() {
@@ -168,9 +170,16 @@ export default {
   },
   mounted() {
     if (this.user !== undefined && this.user._id !== undefined) {
-      this.$axios.post('/notification/').then(response => {
-        this.$store.commit('notification/setNotifications', response.data)
-      })
+      this.$apollo
+        .query({
+          query: ggl(notificationList)
+        })
+        .then(response => {
+          this.$store.commit(
+            'notification/setNotifications',
+            response.data.notification
+          )
+        })
     }
   },
   methods: {

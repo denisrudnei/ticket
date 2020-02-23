@@ -36,7 +36,7 @@
                 pa-1
               >
                 <v-switch
-                  :input-value="notification.read"
+                  :input-value="notification.read.map(r => r._id)"
                   :value="user._id"
                   :label="$t('read')"
                   @change="readNotification(notification)"
@@ -52,7 +52,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import readNotification from '@/mixins/readNotification'
 export default {
+  mixins: [readNotification],
   props: {
     notifications: {
       type: Array,
@@ -63,19 +65,7 @@ export default {
   },
   computed: mapGetters({
     user: 'auth/getUser'
-  }),
-  methods: {
-    readNotification(notification) {
-      this.$axios
-        .post(`/notification/${notification._id}/read`, notification)
-        .then(response => {
-          this.$store.commit('notification/updateNotification', response.data)
-          this.$toast.show('Lida', {
-            duration: 1000
-          })
-        })
-    }
-  }
+  })
 }
 </script>
 

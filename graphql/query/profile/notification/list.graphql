@@ -1,0 +1,6 @@
+#import "@/graphql/fragments/notificationList.graphql"
+query {
+  notification: Notification {
+    ...notificationList
+  }
+}

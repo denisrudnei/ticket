@@ -1,0 +1,17 @@
+fragment notificationList on Notification {
+  _id
+  to {
+    _id
+    name
+  }
+  content
+  read {
+    _id
+    name
+  }
+  date
+  from {
+    _id
+    name
+  }
+}

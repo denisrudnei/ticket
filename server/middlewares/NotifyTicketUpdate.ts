@@ -4,10 +4,6 @@ const NotifyTicketUpdate = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  // io.emit('notifyTicketUpdate', {
-  //   user: req.session.authUser._id,
-  //   ticket: req.params.id
-  // })
   next()
 }
 

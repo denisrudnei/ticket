@@ -15,10 +15,9 @@ export default {
     })
   },
 
-  read: async (req: express.Request, res: express.Response) => {
+  read: (req: express.Request, res: express.Response) => {
     const userId = req.session!.authUser._id
     NotificationService.toggleRead(userId, req.params.id).then(notification => {
-      // io.emit('readNotification', notification)
       return res.status(202).json(notification)
     })
   },

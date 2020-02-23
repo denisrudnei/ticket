@@ -61,7 +61,6 @@ export default {
   remove: (req: express.Request, res: express.Response) => {
     PathService.remove(req.session!.authUser._id, req.params.id)
       .then(() => {
-        // io.emit('paths/updatePath')
         return res.sendStatus(202)
       })
       .catch((e: Error) => {

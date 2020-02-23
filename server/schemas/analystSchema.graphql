@@ -4,6 +4,7 @@ type Analyst {
   status: String,
   lastTimeActive: Datetime
   contactEmail: String
+  email: String
   role: String
   color: String
   address: Address
@@ -11,4 +12,19 @@ type Analyst {
   active: Boolean
   picture: String
   sounds: Sound
+}
+
+input AnalystInput {
+  _id: ID
+  name: String
+  status: String,
+  lastTimeActive: Datetime
+  contactEmail: String
+  role: String
+  color: String
+  address: ID
+  description: String
+  active: Boolean
+  picture: String
+  sounds: ID
 }

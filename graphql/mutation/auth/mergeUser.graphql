@@ -1,0 +1,9 @@
+mutation MergeUser($email: String!, $user: AnalystInput!) {
+  MergeUser(email: $email, user: $user) {
+    _id
+    name
+    email
+    contactEmail
+    color
+  }
+}

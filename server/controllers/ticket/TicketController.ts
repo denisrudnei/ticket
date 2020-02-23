@@ -54,8 +54,6 @@ export default {
   create: (req: express.Request, res: express.Response) => {
     TicketService.create(req.body)
       .then(result => {
-        // io.emit(`notification/${req.body.group._id}`, result.notification)
-        // io.emit('addTicket', result.newTicket)
         return res.status(200).json(result)
       })
       .catch((e: Error) => {
@@ -66,8 +64,6 @@ export default {
   transfer: (req: express.Request, res: express.Response) => {
     TicketService.transferToGroup(req.params.id, req.body._id)
       .then(result => {
-        // io.emit('updateTicket', result.newTicket)
-        // io.emit(`notification/${req.body._id}`, result.notification)
         return res.status(200).json(result)
       })
       .catch((e: Error) => {
@@ -78,7 +74,6 @@ export default {
   updateStatus: async (req: express.Request, res: express.Response) => {
     await TicketService.changeStatus(req.params.id, req.body._id)
       .then(result => {
-        // io.emit('updateTicket', result)
         return res.status(200).json(result)
       })
       .catch((e: Error) => {
@@ -110,7 +105,6 @@ export default {
   edit: (req: express.Request, res: express.Response) => {
     TicketService.updateOne(req.params.id, req.body)
       .then(result => {
-        // io.emit('updateTicket', result)
         res.sendStatus(202)
       })
       .catch((e: Error) => {

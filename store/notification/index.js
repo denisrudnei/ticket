@@ -19,13 +19,13 @@ export const getters = {
   getUnread(state, getters, rootState, rootGetters) {
     const user = rootGetters['auth/getUser']
     return getters.getNotifications.filter(notification => {
-      return !notification.read.includes(user._id)
+      return !notification.read.map(r => r._id).includes(user._id)
     })
   },
   getRead(state, getters, rootState, rootGetters) {
     const user = rootGetters['auth/getUser']
     return getters.getNotifications.filter(notification => {
-      return notification.read.includes(user._id)
+      return notification.read.map(r => r._id).includes(user._id)
     })
   }
 }

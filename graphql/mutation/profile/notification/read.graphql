@@ -1,0 +1,6 @@
+#import "@/graphql/fragments/notificationList.graphql"
+mutation ReadNotification($_id: ID!) {
+  notification: ReadNotification(_id: $_id) {
+    ...notificationList
+  }
+}

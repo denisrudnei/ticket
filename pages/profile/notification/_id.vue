@@ -63,6 +63,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import readNotification from '@/mixins/readNotification'
 export default {
   watchQuery: true,
   filters: {
@@ -74,6 +75,7 @@ export default {
       if (size > 2) return `${size} pessoas receberam a notificação`
     }
   },
+  mixins: [readNotification],
   computed: mapGetters({
     user: 'auth/getUser',
     notifications: 'notification/getNotifications'
@@ -103,12 +105,7 @@ export default {
       this.$router.push(`/profile/notification/${notification._id}`)
     },
     read() {
-      const id = this.notification._id
-      this.$axios
-        .post(`/notification/${id}/read`, this.notification)
-        .then(response => {
-          this.$store.commit('notification/updateNotification', response.data)
-        })
+      this.readNotification(this.notification)
     }
   }
 }

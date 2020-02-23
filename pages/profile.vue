@@ -57,9 +57,6 @@ export default {
     user: 'auth/getUser'
   }),
   async created() {
-    await this.$axios.post(`/notification/`).then(response => {
-      this.$store.commit('notification/setNotifications', response.data)
-    })
     await this.$axios
       .post(`/analyst/${this.user._id}/groups`)
       .then(response => {

@@ -10,7 +10,7 @@ import { IGroup } from '../models/ticket/Group'
 const fields = ['to', 'from']
 
 class NotificationService {
-  getAll(userId: IAnalyst['_id']) {
+  getAll(userId: IAnalyst['_id']): Promise<INotification[]> {
     return new Promise((resolve, reject) => {
       Notification.find({
         to: {
@@ -32,6 +32,19 @@ class NotificationService {
         .exec((err: Error, notification) => {
           if (err) return reject(err)
           return resolve(notification)
+        })
+    })
+  }
+
+  getWhoRead(notificationId: INotification['_id']): Promise<IAnalyst[]> {
+    return new Promise((resolve, reject) => {
+      Notification.findOne({
+        _id: notificationId
+      })
+        .populate(['read'])
+        .exec((err: Error, result: INotification) => {
+          if (err) reject(err)
+          resolve(result.read)
         })
     })
   }
@@ -90,7 +103,7 @@ class NotificationService {
     })
   }
 
-  readall(userId: IAnalyst['_id']) {
+  readall(userId: IAnalyst['_id']): Promise<INotification[]> {
     return new Promise((resolve, reject) => {
       Notification.updateMany(
         {

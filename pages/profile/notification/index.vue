@@ -28,7 +28,26 @@
 </template>
 
 <script>
-export default {}
+import { mapGetters } from 'vuex'
+import ggl from 'graphql-tag'
+import NotificationList from '@/graphql/query/profile/notification/list.graphql'
+export default {
+  computed: mapGetters({
+    notifications: 'notification/getNotifications'
+  }),
+  created() {
+    this.$apollo
+      .query({
+        query: ggl(NotificationList)
+      })
+      .then(response => {
+        this.$store.commit(
+          'notification/setNotifications',
+          response.data.notification
+        )
+      })
+  }
+}
 </script>
 
 <style>
