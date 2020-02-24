@@ -169,6 +169,8 @@ import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
 import editTicket from '@/graphql/subscription/ticket/editTicket.graphql'
 import slaUpdate from '@/graphql/subscription/ticket/slaUpdate.graphql'
+import notification from '@/graphql/subscription/notification.graphql'
+import notifications from '@/graphql/subscription/notifications.graphql'
 import copyTicket from '@/graphql/mutation/ticket/copyTicket.graphql'
 import ticketSearch from '@/graphql/query/search/ticket.graphql'
 import hotkeyHelp from '@/components/hotkeyHelp'
@@ -283,6 +285,23 @@ export default {
         },
         result({ data }) {
           this.$store.dispatch('ticket/updateSla', data.ticket)
+        }
+      },
+      notification: {
+        query: ggl(notification),
+        result({ data }) {
+          this.$store.commit(
+            'notification/updateNotification',
+            data.Notification
+          )
+        }
+      },
+      notifications: {
+        query: ggl(notifications),
+        result({ data }) {
+          data.Notifications.forEach(notification => {
+            this.$store.commit('notification/updateNotification', notification)
+          })
         }
       }
     }

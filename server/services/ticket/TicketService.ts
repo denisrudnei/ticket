@@ -212,14 +212,6 @@ class TicketService {
         const newTicket = await Ticket.findOne({ _id: result._id })
           .populate(populateArray)
           .exec()
-
-        const notification = await Notification.create({
-          _id: new Types.ObjectId(),
-          name: 'TicketCreate',
-          from: newTicket!.openedBy._id,
-          to: newTicket!.group.analysts.map((a: IAnalyst) => a._id),
-          content: `${newTicket!.openedBy.name} abriu um novo chamado`
-        })
         return resolve(newTicket!)
       })
     })

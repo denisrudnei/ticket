@@ -84,6 +84,7 @@ type Subscription {
   RemovePath(userId: ID!): ID!
   SlaUpdate(tickets: [ID!]!): Ticket!
   Notification: Notification!
+  Notifications: [Notification!]!
 }
 
 scalar Datetime

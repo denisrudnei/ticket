@@ -1,10 +1,12 @@
-import { withFilter, PubSub } from 'graphql-yoga'
+import { withFilter } from 'graphql-yoga'
 import { Context } from 'graphql-yoga/dist/types'
 import { IResolvers } from 'graphql-tools'
+import NotificationService from '@/server/services/NotificationService'
 import TicketService from '../services/ticket/TicketService'
 import TicketEnum from '../enums/TicketEnum'
 import LogService from '../services/ticket/LogService'
 import Ticket, { ITicket } from '../../server/models/ticket/Ticket'
+import NotificationEnum from '../enums/NotificationEnum'
 
 const TicketResolver: IResolvers = {
   Query: {
@@ -71,7 +73,7 @@ const TicketResolver: IResolvers = {
       })
       return ticket
     },
-    CreateTicket: (_: any, { ticket }: any, { req }: Context) => {
+    CreateTicket: async (_: any, { ticket }: any, { req, pubSub }: Context) => {
       const {
         group,
         status,
@@ -93,7 +95,14 @@ const TicketResolver: IResolvers = {
         content,
         priority
       })
-      return TicketService.create(newTicket)
+      const createdTicket = await TicketService.create(newTicket)
+      const notification = await NotificationService.triggerForTicketCreation(
+        createdTicket
+      )
+      pubSub.publish(NotificationEnum.NOTIFICATION, {
+        Notification: notification
+      })
+      return createdTicket
     },
     EditTicket: (_: any, { _id, ticket }: any, { req, pubSub }: Context) => {
       const userId = req.session.authUser._id

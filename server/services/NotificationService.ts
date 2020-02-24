@@ -93,7 +93,10 @@ class NotificationService {
     })
   }
 
-  toggleRead(userId: IAnalyst['_id'], notificationId: INotification['_id']) {
+  toggleRead(
+    userId: IAnalyst['_id'],
+    notificationId: INotification['_id']
+  ): Promise<INotification> {
     return new Promise((resolve, reject) => {
       return this.getOne(notificationId).then(notification => {
         const read = notification.read.includes(userId)
@@ -120,6 +123,21 @@ class NotificationService {
         if (err) return reject(err)
         return resolve(this.getAll(userId))
       })
+    })
+  }
+
+  triggerForTicketCreation(newTicket: ITicket): Promise<INotification> {
+    return new Promise((resolve, reject) => {
+      const id = new mongoose.Types.ObjectId()
+      Notification.create({
+        _id: id,
+        name: 'TicketCreate',
+        from: newTicket!.openedBy._id,
+        to: newTicket!.group.analysts.map((a: IAnalyst) => a._id),
+        content: `${newTicket!.openedBy.name} abriu um novo chamado`
+      })
+        .then(() => resolve(this.getOne(id)))
+        .catch(err => reject(err))
     })
   }
 
