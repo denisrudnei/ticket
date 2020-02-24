@@ -6,5 +6,8 @@ mutation MergeUser($email: String!, $user: AnalystInput!) {
     contactEmail
     color
     picture
+    address {
+      _id
+    }
   }
 }

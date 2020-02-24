@@ -29,6 +29,7 @@
           filled
           label="Localização"
           :items="addresses.map(a => ({text: `${a.name} | ${a.city}, ${a.state} - ${a.country}`, value: a}))"
+          :value-comparator="compare"
           @change="updateAddress"
         />
       </v-col>
@@ -135,7 +136,9 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import compareObjectsWithId from '@/mixins/compareObjectsWithId'
 export default {
+  mixins: [compareObjectsWithId],
   data() {
     return {
       primary: '#FFFFFF',
