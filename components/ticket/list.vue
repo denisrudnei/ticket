@@ -72,6 +72,7 @@
                 >
                   <v-select
                     v-model="currentStatus"
+                    v-if="status.find(s => {return s._id === item.status._id})"
                     :items="status.find(s => {return s._id === item.status._id}).allowedStatus.map(s => ({ text: s.name, value: s }))"
                     filled
                     :label="$t('status')"
