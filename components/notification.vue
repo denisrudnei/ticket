@@ -145,6 +145,7 @@
 import { mapGetters } from 'vuex'
 import ggl from 'graphql-tag'
 import notificationList from '@/graphql/query/profile/notification/list.graphql'
+import readAllNotifications from '@/graphql/mutation/profile/notification/readAll.graphql'
 export default {
   computed: {
     notificationTicketsToEdit() {
@@ -186,9 +187,16 @@ export default {
   },
   methods: {
     readAllNotifications() {
-      this.$axios.post(`/notification/readall`).then(response => {
-        this.$store.commit('notification/setNotifications', response.data)
-      })
+      this.$apollo
+        .mutate({
+          mutation: ggl(readAllNotifications)
+        })
+        .then(response => {
+          this.$store.commit(
+            'notification/setNotifications',
+            response.data.ReadAllNotifications
+          )
+        })
     },
     setActual(ticketId) {
       const ticketIndex = this.ticketsToEdit.findIndex(t => {
