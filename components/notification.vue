@@ -31,110 +31,112 @@
         </v-badge>
       </v-btn>
     </template>
-    <v-tabs show-arrows>
-      <v-tab
-        title="Ticket"
-      >
-        <v-icon
-          class="primary--text"
+    <v-card>
+      <v-tabs show-arrows>
+        <v-tab
+          title="Ticket"
         >
-          work
-        </v-icon>
-      </v-tab>
-      <v-tab-item>
-        <v-card
-          v-if="notifications.length === 0"
-        >
-          <v-card-text>
-            <v-row>
-              <v-col
-                cols="12"
-                pa-3
-              >
-                Nenhuma notificação
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-        <v-list
-          v-if="notifications.length > 0"
-          two-line
-        >
-          <v-list-item
-            v-for="notification in notifications"
-            :key="notification._id"
-            :to="`/profile/notification/${notification._id}`"
+          <v-icon
+            class="primary--text"
           >
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ notification.content }}
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                {{ notification.date | date }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-btn
-                icon
-                class="primary--text"
-                :to="`/profile/notification/${notification._id}`"
-              >
-                <v-icon>
-                  info
-                </v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-      </v-tab-item>
-      <v-tab>
-        <v-icon
-          class="primary--text"
-        >
-          group
-        </v-icon>
-      </v-tab>
-      <v-tab-item>
-        <v-list>
-          <v-list-item v-for="notification in notificationTicketsToEdit" :key="notification.ticket" @click="setActual(notification.ticket)">
-            <v-list-item-content>
-              {{ `${notification.user.name} atualizou um chamado que está em sua pilha de trabalho` }}
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-tab-item>
-    </v-tabs>
-    <v-card
-      class="fixed-footer"
-    >
-      <v-btn
-        v-if="notifications.length > 0"
-        tile
-        text
-        block
-        @click="readAllNotifications()"
+            work
+          </v-icon>
+        </v-tab>
+        <v-tab-item>
+          <v-card
+            v-if="notifications.length === 0"
+          >
+            <v-card-text>
+              <v-row>
+                <v-col
+                  cols="12"
+                  pa-3
+                >
+                  Nenhuma notificação
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+          <v-list
+            v-if="notifications.length > 0"
+            two-line
+          >
+            <v-list-item
+              v-for="notification in notifications"
+              :key="notification._id"
+              :to="`/profile/notification/${notification._id}`"
+            >
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ notification.content }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ notification.date | date }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-btn
+                  icon
+                  class="primary--text"
+                  :to="`/profile/notification/${notification._id}`"
+                >
+                  <v-icon>
+                    info
+                  </v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list>
+        </v-tab-item>
+        <v-tab>
+          <v-icon
+            class="primary--text"
+          >
+            group
+          </v-icon>
+        </v-tab>
+        <v-tab-item>
+          <v-list>
+            <v-list-item v-for="notification in notificationTicketsToEdit" :key="notification.ticket" @click="setActual(notification.ticket)">
+              <v-list-item-content>
+                {{ `${notification.user.name} atualizou um chamado que está em sua pilha de trabalho` }}
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-tab-item>
+      </v-tabs>
+      <v-card
+        class="fixed-footer"
       >
-        Marcar todas como lidas
-        <v-icon
-          right
-          class="primary--text"
+        <v-btn
+          v-if="notifications.length > 0"
+          tile
+          text
+          block
+          @click="readAllNotifications()"
         >
-          details
-        </v-icon>
-      </v-btn>
-      <v-btn
-        tile
-        block
-        to="/profile/notification/all"
-      >
-        {{ $t('see_all_notifications') }}
-        <v-icon
-          right
-          class="primary--text"
+          Marcar todas como lidas
+          <v-icon
+            right
+            class="primary--text"
+          >
+            details
+          </v-icon>
+        </v-btn>
+        <v-btn
+          tile
+          block
+          to="/profile/notification/all"
         >
-          search
-        </v-icon>
-      </v-btn>
+          {{ $t('see_all_notifications') }}
+          <v-icon
+            right
+            class="primary--text"
+          >
+            search
+          </v-icon>
+        </v-btn>
+      </v-card>
     </v-card>
   </v-menu>
 </template>
