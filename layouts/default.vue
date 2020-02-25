@@ -191,6 +191,7 @@ export default {
   data() {
     return {
       fab: true,
+      audio: null,
       data: {},
       keymap: {
         'alt+p': () => this.$router.push('/profile'),
@@ -290,6 +291,18 @@ export default {
       notification: {
         query: ggl(notification),
         result({ data }) {
+          Notification.requestPermission(permission => {
+            if (permission === 'granted') {
+              const notification = new Notification('Notification', {
+                body: data.Notification.content
+              })
+              notification.onerror = function() {
+                this.$toast.error('Error')
+              }
+              this.audio.play()
+            }
+          })
+
           this.$store.commit(
             'notification/updateNotification',
             data.Notification
@@ -307,6 +320,7 @@ export default {
     }
   },
   mounted() {
+    this.audio = new Audio('/sounds/open-ended.ogg')
     const miniState = localStorage.getItem('mini')
     if (miniState) this.miniVariant = JSON.parse(miniState)
     if (this.logged) {
