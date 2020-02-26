@@ -169,7 +169,8 @@ import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
 import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
 import editTicket from '@/graphql/subscription/ticket/editTicket.graphql'
 import slaUpdate from '@/graphql/subscription/ticket/slaUpdate.graphql'
-import notification from '@/graphql/subscription/notification.graphql'
+import addNotification from '@/graphql/subscription/addNotification.graphql'
+import updateNotification from '@/graphql/subscription/updateNotification.graphql'
 import notifications from '@/graphql/subscription/notifications.graphql'
 import copyTicket from '@/graphql/mutation/ticket/copyTicket.graphql'
 import ticketSearch from '@/graphql/query/search/ticket.graphql'
@@ -288,24 +289,33 @@ export default {
           this.$store.dispatch('ticket/updateSla', data.ticket)
         }
       },
-      notification: {
-        query: ggl(notification),
+      addNotification: {
+        query: ggl(addNotification),
         result({ data }) {
           Notification.requestPermission(permission => {
             if (permission === 'granted') {
               const notification = new Notification('Notification', {
-                body: data.Notification.content
+                body: data.AddNotification.content
               })
               notification.onerror = function() {
                 this.$toast.error('Error')
               }
-              this.audio.play()
             }
+            this.audio.play()
           })
 
           this.$store.commit(
             'notification/updateNotification',
-            data.Notification
+            data.AddNotification
+          )
+        }
+      },
+      updateNotification: {
+        query: ggl(updateNotification),
+        result({ data }) {
+          this.$store.commit(
+            'notification/updateNotification',
+            data.UpdateNotification
           )
         }
       },

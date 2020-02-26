@@ -99,8 +99,8 @@ const TicketResolver: IResolvers = {
       const notification = await NotificationService.triggerForTicketCreation(
         createdTicket
       )
-      pubSub.publish(NotificationEnum.NOTIFICATION, {
-        Notification: notification
+      pubSub.publish(NotificationEnum.ADD_NOTIFICATION, {
+        AddNotification: notification
       })
       return createdTicket
     },

@@ -14,8 +14,8 @@ export default {
     ReadNotification: async (_: any, { _id }: any, { req, pubSub }: any) => {
       const userId = req.session.authUser._id
       const notification = await NotificationService.toggleRead(userId, _id)
-      pubSub.publish(NotificationEnum.NOTIFICATION, {
-        Notification: notification
+      pubSub.publish(NotificationEnum.UPDATE_NOTIFICATION, {
+        UpdateNotification: notification
       })
       return notification
     },
@@ -29,9 +29,14 @@ export default {
     }
   },
   Subscription: {
-    Notification: {
+    AddNotification: {
       subscribe: (_: any, __: any, { pubSub }: any) => {
-        return pubSub.asyncIterator(NotificationEnum.NOTIFICATION)
+        return pubSub.asyncIterator(NotificationEnum.ADD_NOTIFICATION)
+      }
+    },
+    UpdateNotification: {
+      subscribe: (_: any, __: any, { pubSub }: any) => {
+        return pubSub.asyncIterator(NotificationEnum.UPDATE_NOTIFICATION)
       }
     },
     Notifications: {

@@ -83,7 +83,8 @@ type Subscription {
   NewPath(userId: ID!): PathTree!
   RemovePath(userId: ID!): ID!
   SlaUpdate(tickets: [ID!]!): Ticket!
-  Notification: Notification!
+  AddNotification: Notification!
+  UpdateNotification: Notification!
   Notifications: [Notification!]!
 }
 
