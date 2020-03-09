@@ -6,9 +6,9 @@ export default {
     user: 'auth/getUser'
   }),
   methods: {
-    changeColor() {
+    changeColor(color) {
       this.$vuetify.theme.currentTheme.primary =
-        this.user.color || this.$vuetify.theme.currentTheme.primary
+        color || this.$vuetify.theme.currentTheme.primary
     },
     processInfo() {
       const { name, status, contactEmail, description } = this.user
@@ -22,8 +22,9 @@ export default {
           }
         })
         .then(response => {
-          this.$store.commit('auth/mergeUser', response.data.MergeUser)
-          this.changeColor()
+          this.$store.commit('auth/setUser', response.data.MergeUser)
+          const color = response.data.MergeUser.color
+          this.changeColor(color)
         })
     }
   }
