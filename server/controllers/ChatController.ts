@@ -1,6 +1,6 @@
 import express from 'express'
-import ChatService from '~/server/services/ChatService'
 import { IAnalyst } from '../models/Analyst'
+import ChatService from '~/server/services/ChatService'
 
 export default {
   createMessage: (req: express.Request, res: express.Response) => {

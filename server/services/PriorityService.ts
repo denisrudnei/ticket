@@ -28,7 +28,7 @@ class PriorityService {
   }
 
   getOne(_id: IPriority['_id']): Promise<IPriority> {
-    return Priority.findOne({_id: _id}).exec()
+    return Priority.findOne({ _id: _id }).exec()
   }
 
   edit(priority: IPriority): Promise<void> {

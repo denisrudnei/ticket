@@ -1,10 +1,9 @@
 import path from 'path'
 import Email from 'email-templates'
-import nodeMailer from 'nodemailer'
-import { IAnalyst } from '../models/Analyst'
-import express from 'express'
-import {} from 'jsonwebtoken'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
+import nodeMailer from 'nodemailer'
+import express from 'express'
+import { IAnalyst } from '../models/Analyst'
 
 const transport = nodeMailer.createTransport(
   new SMTPTransport({

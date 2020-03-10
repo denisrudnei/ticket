@@ -1,4 +1,4 @@
-import mongoose, { Types, ModelPopulateOptions } from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 import Message, { IMessage } from '../models/chat/Message'
 import Analyst from '../models/Analyst'
 import Chat, { IChat } from '../models/chat/Chat'

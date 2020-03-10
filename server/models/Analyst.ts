@@ -1,4 +1,4 @@
-import { models, model, Schema, Document, Model } from 'mongoose'
+import { models, model, Schema, Document } from 'mongoose'
 import Group, { IGroup } from './ticket/Group'
 const bcrypt = require('bcrypt')
 

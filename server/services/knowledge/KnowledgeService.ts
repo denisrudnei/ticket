@@ -1,14 +1,14 @@
 import mongoose, { Types } from 'mongoose'
 import AWS from 'aws-sdk'
 import fileUpload from 'express-fileupload'
+import pdf from 'html-pdf'
+import Group from '../../models/ticket/Group'
 import Knowledge, { IKnowledge } from '~/server/models/knowledge/Knowledge'
 import KnowledgeFile, {
   IKnowledgeFile
 } from '~/server/models/knowledge/KnowledgeFile'
-import Group from '../../models/ticket/Group'
 import S3 from '~/plugins/S3'
 import KnowledgeStatus from '~/server/models/knowledge/KnowledgeStatus'
-import pdf from 'html-pdf'
 
 class KnowledgeService {
   getAll() {
@@ -100,6 +100,7 @@ class KnowledgeService {
       })
     })
   }
+
   updateKnowledge(knowledgeId: IKnowledge['_id'], knowledge: IKnowledge) {
     return new Promise((resolve, reject) => {
       Knowledge.updateOne(
@@ -237,6 +238,7 @@ class KnowledgeService {
       })
     })
   }
+
   uploadPDF(name: string, body: any) {
     return new Promise((resolve, reject) => {
       S3.createBucket(() => {
@@ -245,13 +247,17 @@ class KnowledgeService {
           Key: `knowledge/pdf/${name}.pdf`,
           Body: body
         }
-        S3.upload(params, (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
-          if (err) return reject(err)
-          return resolve(data.Location)
-        })
+        S3.upload(
+          params,
+          (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
+            if (err) return reject(err)
+            return resolve(data.Location)
+          }
+        )
       })
     })
   }
+
   generatePDF(knowledgeId: IKnowledge['_id']): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       this.getOne(knowledgeId).then(knowledge => {

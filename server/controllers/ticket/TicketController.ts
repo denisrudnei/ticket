@@ -1,5 +1,4 @@
 import express from 'express'
-import { Types } from 'mongoose'
 import { UploadedFile } from 'express-fileupload'
 import TicketService from '../../services/ticket/TicketService'
 
