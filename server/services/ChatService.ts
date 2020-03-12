@@ -1,10 +1,10 @@
 import mongoose, { Types } from 'mongoose'
 import Message, { IMessage } from '../models/chat/Message'
-import Analyst from '../models/Analyst'
+import Analyst, { IAnalyst } from '../models/Analyst'
 import Chat, { IChat } from '../models/chat/Chat'
 
 class ChatService {
-  getChats(fromId: mongoose.Types.ObjectId): Promise<[IChat]> {
+  getChats(fromId: IAnalyst['_id']): Promise<[IChat]> {
     return new Promise((resolve, reject) => {
       Chat.find({
         participants: {
@@ -19,7 +19,7 @@ class ChatService {
     })
   }
 
-  getOne(fromId: Types.ObjectId, toId: Types.ObjectId): Promise<IChat> {
+  getOne(fromId: IAnalyst['_id'], toId: IAnalyst['_id']): Promise<IChat> {
     return new Promise((resolve, reject) => {
       Chat.findOne({
         participants: {
@@ -54,7 +54,7 @@ class ChatService {
     })
   }
 
-  addMessage(fromId: Types.ObjectId, toId: Types.ObjectId, content: string) {
+  addMessage(fromId: IAnalyst['_id'], toId: IAnalyst['_id'], content: string) {
     return new Promise(async (resolve, reject) => {
       const to = await Analyst.findOne({ _id: toId })
       const from = await Analyst.findOne({ _id: fromId })
@@ -101,7 +101,7 @@ class ChatService {
     })
   }
 
-  get(fromId: Types.ObjectId, toId: Types.ObjectId) {
+  get(fromId: IAnalyst['_id'], toId: IAnalyst['_id']) {
     return new Promise((resolve, reject) => {
       Message.find({
         $or: [
@@ -136,7 +136,7 @@ class ChatService {
     })
   }
 
-  changeStatus(userId: Types.ObjectId, status: string) {
+  changeStatus(userId: IAnalyst['_id'], status: string) {
     return new Promise((resolve, reject) => {
       Analyst.updateOne(
         {
@@ -154,7 +154,7 @@ class ChatService {
     })
   }
 
-  updateLastActive(userId: Types.ObjectId) {
+  updateLastActive(userId: IAnalyst['_id']) {
     return new Promise((resolve, reject) => {
       Analyst.updateOne(
         {
