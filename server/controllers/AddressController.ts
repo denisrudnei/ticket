@@ -2,7 +2,7 @@ import express from 'express'
 import AddressService from '~/server/services/AddressService'
 
 export default {
-  create: async (req: express.Request, res: express.Response) => {
+  create: (req: express.Request, res: express.Response) => {
     AddressService.create(req.body).then(() => {
       return res.sendStatus(200)
     })
