@@ -8,7 +8,7 @@ import KnowledgeFile, {
   IKnowledgeFile
 } from '~/server/models/knowledge/KnowledgeFile'
 import S3 from '~/plugins/S3'
-import KnowledgeStatus from '~/server/models/knowledge/KnowledgeStatus'
+import '~/server/models/knowledge/KnowledgeStatus'
 
 class KnowledgeService {
   getAll() {
