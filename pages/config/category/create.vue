@@ -5,7 +5,7 @@
 <script>
 import CategoryCreate from '@/components/ticket/category/create'
 import ggl from 'graphql-tag'
-import updateCategory from '@/graphql/mutation/config/category/editCategory.graphql'
+import createCategory from '@/graphql/mutation/config/category/createCategory.graphql'
 import categoryList from '@/graphql/query/config/category/categoryList.graphql'
 export default {
   components: {
@@ -15,10 +15,15 @@ export default {
     save(category) {
       this.$apollo
         .mutate({
-          mutation: ggl(updateCategory),
+          mutation: ggl(createCategory),
           variables: {
-            categoryId: category._id,
-            category: category
+            category: {
+              name: category.name,
+              description: category.description,
+              defaultGroup: category.defaultGroup._id,
+              defaultStatus: category.defaultStatus._id,
+              defaultPriority: category.defaultPriority._id
+            }
           },
           refetchQueries: [{ query: ggl(categoryList) }]
         })
