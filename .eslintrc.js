@@ -26,6 +26,7 @@ module.exports = {
   ],
   rules: {
     'vuetify/no-deprecated-classes': 'error',
+    'no-async-promise-executor': 0
     // '@typescript-eslint/rule-name': 'error'
   }
 }

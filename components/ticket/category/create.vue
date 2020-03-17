@@ -43,7 +43,9 @@
           <v-textarea v-model="category.description" filled placeholder="Descrição" />
         </v-col>
         <v-col cols="12">
-          <v-btn class="primary white--text" @click="addField()">{{ $t('add_field') }}</v-btn>
+          <v-btn class="primary white--text" @click="addField()">
+            {{ $t('add_field') }}
+          </v-btn>
         </v-col>
         <v-col cols="12">
           <v-row v-for="(field, index) in category.fields" :key="index">
@@ -61,7 +63,9 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-btn class="primary white--text" @click="save()">{{ $t('save') }}</v-btn>
+        <v-btn class="primary white--text" @click="save()">
+          {{ $t('save') }}
+        </v-btn>
       </v-form>
     </v-col>
   </v-row>

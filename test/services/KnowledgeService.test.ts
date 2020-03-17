@@ -1,12 +1,11 @@
+import faker from 'faker'
 import KnowledgeService from '../../server/services/knowledge/KnowledgeService'
 import Knowledge from '../../server/models/knowledge/Knowledge'
 import Category from '../../server/models/ticket/Category'
 import Group from '../../server/models/ticket/Group'
 import { IKnowledgeFile } from '../../server/models/knowledge/KnowledgeFile'
-import KnowledgeStatus from '../../server/models/knowledge/KnowledgeStatus'
-import faker from 'faker'
+import '../../server/models/knowledge/KnowledgeStatus'
 import 'mocha'
-
 
 describe('Knowledge', function() {
   this.timeout(0)

@@ -11,7 +11,7 @@ describe('CategoryService', function() {
 
   it('Crete a new category', async () => {
     const category = new Category({
-      name: 'Teste',
+      name: 'Test',
       father: null
     })
     await CategoryService.create(category)
@@ -20,7 +20,7 @@ describe('CategoryService', function() {
   it('Crete a new category with father', async () => {
     const father = await Category.findOne().exec()
     const category = new Category({
-      name: 'Teste',
+      name: 'Test',
       father: father
     })
     await CategoryService.create(category)
@@ -28,6 +28,7 @@ describe('CategoryService', function() {
 
   it('Show full name', async () => {
     const category = await Category.findOne()
+    /* eslint-disable-next-line */
     console.log(category.fullName)
   })
 
@@ -46,7 +47,7 @@ describe('CategoryService', function() {
       }
     }
     const category = new Category({
-      name: 'teste',
+      name: 'test',
       father: null,
       fields: [field1]
     })

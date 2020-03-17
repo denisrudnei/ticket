@@ -222,7 +222,7 @@ class PathService {
       })
         .select('+paths')
         .populate('paths')
-        .exec(async (err: Error, user) => {
+        .exec((err: Error, user) => {
           if (err) return reject(err)
           const response: PathTree[] = user.paths.map((path: IPath) => {
             return this.getOnePathTree(path._id)

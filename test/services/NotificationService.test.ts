@@ -40,6 +40,7 @@ describe('NotificationService', function() {
   it('Trigger a notification', async () => {
     const ticket = await Ticket.findOne({}).exec()
     const group = await Group.findOne({}).exec()
+    /* eslint-disable-next-line */
     console.log(group)
     const analyst = await Analyst.findOne({}).exec()
     await NotificationService.triggerForTicketTransfer(

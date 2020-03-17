@@ -1,6 +1,6 @@
-import seed from './seed'
+import { before, after } from 'mocha'
 import CheckACL from '../server/models/CheckACL'
-import 'mocha'
+import seed from './seed'
 
 before(function() {
   this.timeout(0)
