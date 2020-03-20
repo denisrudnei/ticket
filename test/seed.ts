@@ -75,24 +75,21 @@ const models: string[] = [
 
 const seed = {
   data: data,
-  execute: () => {
-    return new Promise(async (resolve, reject) => {
-      await mongoose.connect(
-        process.env.MONGODB_TESTING_URI || 'mongodb://127.0.0.1/testing',
-        {
-          useNewUrlParser: true,
-          useUnifiedTopology: true
-        },
-        async function(err) {
-          if (err) return reject(err)
-          await seed.loadModels(models as [string])
-          await seed.clearModels(data.map((v: IData) => v.model) as [string])
-          await seed.populate(data as [IData])
-          await TicketSeed()
-          return resolve()
-        }
-      )
-    })
+  execute: async () => {
+    await mongoose.connect(
+      process.env.MONGODB_TESTING_URI || 'mongodb://127.0.0.1/testing',
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      },
+      async function(err) {
+        if (err) throw err
+        await seed.loadModels(models as [string])
+        await seed.clearModels(data.map((v: IData) => v.model) as [string])
+        await seed.populate(data as [IData])
+        await TicketSeed()
+      }
+    )
   },
   loadModels: (paths: [string]) => {
     return new Promise((resolve, reject) => {
@@ -103,27 +100,21 @@ const seed = {
       resolve()
     })
   },
-  populate: (data: [IData]) => {
-    return new Promise(async (resolve, reject) => {
-      for (let i = 0; i < data.length; i++) {
-        const modelName = data[i].model
-        const Model = mongoose.model(modelName)
+  populate: async (data: [IData]) => {
+    for (let i = 0; i < data.length; i++) {
+      const modelName = data[i].model
+      const Model = mongoose.model(modelName)
 
-        for (let j = 0; j < data[i].documents.length; j++) {
-          await Model.create(data[i].documents[j])
-        }
+      for (let j = 0; j < data[i].documents.length; j++) {
+        await Model.create(data[i].documents[j])
       }
-      resolve()
-    })
+    }
   },
-  clearModels: (models: [string]) => {
-    return new Promise(async (resolve, reject) => {
-      for (let i = 0; i < models.length; i++) {
-        const Model = mongoose.model(models[i])
-        await Model.deleteMany({})
-      }
-      resolve()
-    })
+  clearModels: async (models: [string]) => {
+    for (let i = 0; i < models.length; i++) {
+      const Model = mongoose.model(models[i])
+      await Model.deleteMany({})
+    }
   },
   disconnect: mongoose.disconnect
 }

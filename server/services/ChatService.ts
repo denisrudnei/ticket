@@ -1,4 +1,4 @@
-import mongoose, { Types } from 'mongoose'
+import mongoose from 'mongoose'
 import Message, { IMessage } from '../models/chat/Message'
 import Analyst, { IAnalyst } from '../models/Analyst'
 import Chat, { IChat } from '../models/chat/Chat'
@@ -54,51 +54,53 @@ class ChatService {
     })
   }
 
-  addMessage(fromId: IAnalyst['_id'], toId: IAnalyst['_id'], content: string) {
-    return new Promise(async (resolve, reject) => {
-      const to = await Analyst.findOne({ _id: toId })
-      const from = await Analyst.findOne({ _id: fromId })
-        .populate(['chats'])
-        .exec()
-      const chat = await this.getOne(fromId, toId)
-      await Analyst.updateOne(
-        { _id: fromId },
-        { $addToSet: { chats: chat._id } }
-      ).exec()
-      const messageId = new mongoose.Types.ObjectId()
-      Message.create(
-        {
-          _id: messageId,
-          to: to._id,
-          from: from._id,
-          data: new Date(),
-          content: content
-        },
-        (err: Error, message: IMessage) => {
-          if (err) return reject(err)
-          Chat.updateOne(
-            {
-              _id: chat._id
-            },
-            {
-              $addToSet: {
-                messages: [messageId]
-              }
+  async addMessage(
+    fromId: IAnalyst['_id'],
+    toId: IAnalyst['_id'],
+    content: string
+  ) {
+    const to = await Analyst.findOne({ _id: toId })
+    const from = await Analyst.findOne({ _id: fromId })
+      .populate(['chats'])
+      .exec()
+    const chat = await this.getOne(fromId, toId)
+    await Analyst.updateOne(
+      { _id: fromId },
+      { $addToSet: { chats: chat._id } }
+    ).exec()
+    const messageId = new mongoose.Types.ObjectId()
+    Message.create(
+      {
+        _id: messageId,
+        to: to._id,
+        from: from._id,
+        data: new Date(),
+        content: content
+      },
+      (err: Error, message: IMessage) => {
+        if (err) throw err
+        Chat.updateOne(
+          {
+            _id: chat._id
+          },
+          {
+            $addToSet: {
+              messages: [messageId]
             }
-          ).exec((err: Error) => {
-            if (err) reject(err)
-            Message.populate<IMessage>(
-              message,
-              [{ path: 'to' }, { path: 'from' }],
-              (err: Error, result: IMessage) => {
-                if (err) reject(err)
-                resolve(result)
-              }
-            )
-          })
-        }
-      )
-    })
+          }
+        ).exec((err: Error) => {
+          if (err) throw err
+          Message.populate<IMessage>(
+            message,
+            [{ path: 'to' }, { path: 'from' }],
+            (err: Error, result: IMessage) => {
+              if (err) throw err
+              return result
+            }
+          )
+        })
+      }
+    )
   }
 
   get(fromId: IAnalyst['_id'], toId: IAnalyst['_id']) {

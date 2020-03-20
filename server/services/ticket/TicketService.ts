@@ -366,30 +366,28 @@ class TicketService {
     })
   }
 
-  insertFile(ticketId: ITicket['_id'], files: UploadedFile[]) {
-    return new Promise(async (resolve, reject) => {
-      const ticket = await Ticket.findOne({
-        _id: ticketId
-      }).exec()
-      for (let i = 0; i < files.length; i++) {
-        const f: UploadedFile = files[i]
+  async insertFile(ticketId: ITicket['_id'], files: UploadedFile[]) {
+    const ticket = await Ticket.findOne({
+      _id: ticketId
+    }).exec()
+    for (let i = 0; i < files.length; i++) {
+      const f: UploadedFile = files[i]
 
-        const name = `ticket/${ticketId}/${f.name} - ${i}`
-        const params = {
-          Bucket: process.env.BUCKET,
-          Key: name,
-          Body: f.data
-        }
-        await S3.upload(params).promise()
-
-        ticket!.files.push({
-          name: name,
-          type: f.mimetype
-        })
-        await ticket!.save()
+      const name = `ticket/${ticketId}/${f.name} - ${i}`
+      const params = {
+        Bucket: process.env.BUCKET,
+        Key: name,
+        Body: f.data
       }
-      return resolve(ticket!.files)
-    })
+      await S3.upload(params).promise()
+
+      ticket!.files.push({
+        name: name,
+        type: f.mimetype
+      })
+      await ticket!.save()
+    }
+    return ticket!.files
   }
 
   getFile(fileId: string): Promise<any> {
@@ -407,26 +405,22 @@ class TicketService {
     })
   }
 
-  removeFile(ticketId: ITicket['_id'], fileId: IFile['_id']): Promise<ITicket> {
-    return new Promise(async (resolve, reject) => {
-      const ticket = await Ticket.findOne({
-        _id: ticketId
-      }).exec()
-      S3.deleteObject(
-        {
-          Bucket: process.env.BUCKET,
-          Key: fileId
-        },
-        (err: Error) => {
-          if (err) return reject(err)
-          ticket!.files = ticket!.files.filter((f: any) => {
-            return f.name !== fileId
-          })
-          ticket!.save()
-          return resolve(ticket!)
-        }
-      )
+  async removeFile(
+    ticketId: ITicket['_id'],
+    fileId: IFile['_id']
+  ): Promise<ITicket> {
+    const ticket = await Ticket.findOne({
+      _id: ticketId
+    }).exec()
+    await S3.deleteObject({
+      Bucket: process.env.BUCKET,
+      Key: fileId
     })
+    ticket!.files = ticket!.files.filter((f: any) => {
+      return f.name !== fileId
+    })
+    ticket!.save()
+    return ticket!
   }
 
   overtakeSla(ticketId: ITicket['_id']): Promise<Boolean> {

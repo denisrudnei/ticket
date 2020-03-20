@@ -28,43 +28,39 @@ const categoryPopulate = [
 ]
 
 class CategoryService {
-  create(category: ICategory): Promise<ICategory> {
-    return new Promise(async (resolve, reject) => {
-      const newCategory = {
+  async create(category: ICategory): Promise<ICategory> {
+    const newCategory = {
+      _id: new mongoose.Types.ObjectId(),
+      name: category.name,
+      father: category.father,
+      fields: category.fields || []
+    }
+    let fatherFromDB: ICategory | null = null
+
+    if (newCategory.father) {
+      fatherFromDB = await Category.findOne({
+        _id: newCategory.father._id
+      }).exec()
+    }
+
+    if (fatherFromDB) {
+      category.father = newCategory.father._id
+    }
+
+    for (let i = 0; i < newCategory.fields.length; i++) {
+      newCategory.fields[i] = {
         _id: new mongoose.Types.ObjectId(),
-        name: category.name,
-        father: category.father,
-        fields: category.fields || []
+        ...newCategory.fields[i]
       }
-      let fatherFromDB: ICategory | null = null
+      newCategory.fields[i] = await Field.create(newCategory.fields[i])
+    }
 
-      if (newCategory.father) {
-        fatherFromDB = await Category.findOne({
-          _id: newCategory.father._id
-        }).exec()
-      }
-
-      if (fatherFromDB) {
-        category.father = newCategory.father._id
-      }
-
-      for (let i = 0; i < newCategory.fields.length; i++) {
-        newCategory.fields[i] = {
-          _id: new mongoose.Types.ObjectId(),
-          ...newCategory.fields[i]
-        }
-        newCategory.fields[i] = await Field.create(newCategory.fields[i])
-      }
-
-      Category.create(newCategory, (err: Error, categorySaved: ICategory) => {
-        if (err) reject(err)
-        if (fatherFromDB !== null) {
-          fatherFromDB.subs.push(categorySaved)
-          fatherFromDB.save()
-        }
-        resolve(categorySaved)
-      })
-    })
+    const categorySaved = Category.create(newCategory)
+    if (fatherFromDB !== null) {
+      fatherFromDB.subs.push(categorySaved)
+      fatherFromDB.save()
+    }
+    return categorySaved
   }
 
   getCategories() {

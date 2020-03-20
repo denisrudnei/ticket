@@ -141,33 +141,26 @@ class NotificationService {
     })
   }
 
-  triggerForTicketTransfer(
+  async triggerForTicketTransfer(
     ticketId: ITicket['_id'],
     groupId: IGroup['_id'],
     analystId: IAnalyst['_id']
-  ) {
-    return new Promise(async (resolve, reject) => {
-      const ticket = await TicketService.getOne(ticketId)
-      const group = await GroupService.getOne(groupId)
-      const analyst = await AnalystService.getOne(analystId)
+  ): Promise<INotification> {
+    const ticket = await TicketService.getOne(ticketId)
+    const group = await GroupService.getOne(groupId)
+    const analyst = await AnalystService.getOne(analystId)
 
-      Notification.create(
-        {
-          _id: new mongoose.Types.ObjectId(),
-          name: 'TicketTransfer',
-          from: analyst._id,
-          to: group.analysts,
-          meta: {
-            ticket
-          },
-          content: `${analyst.name} transferiu um chamado para seu grupo`
-        },
-        (err: Error, notification: INotification) => {
-          if (err) reject(err)
-          resolve(notification)
-        }
-      )
+    const notification = await Notification.create({
+      _id: new mongoose.Types.ObjectId(),
+      name: 'TicketTransfer',
+      from: analyst._id,
+      to: group.analysts,
+      meta: {
+        ticket
+      },
+      content: `${analyst.name} transferiu um chamado para seu grupo`
     })
+    return notification
   }
 }
 

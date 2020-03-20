@@ -53,10 +53,8 @@ describe('PathService', function() {
   })
 })
 
-function getUserId() {
-  return new Promise(async (resolve, reject) => {
-    const result = await Analyst.findOne({}).exec()
-    if (result === null) return reject(new Error('User not found'))
-    return resolve(result._id)
-  })
+async function getUserId() {
+  const result = await Analyst.findOne({}).exec()
+  if (result === null) return new Error('User not found')
+  return result._id
 }
