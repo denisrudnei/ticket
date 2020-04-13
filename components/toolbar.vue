@@ -16,6 +16,25 @@
       </v-icon>
     </v-btn>
     <v-spacer />
+    <v-row>
+      <v-col>
+        <v-text-field
+          v-model="ticketNumber"
+          type="search"
+          :placeholder="$t('search')" 
+          prepend-icon="search"
+          color="white"
+          single-line 
+          hide-details
+          append-outer-icon="clear"
+          flat
+          solo
+          @click:append-outer="clearText"
+          @click:prepend="search(ticketNumber)"
+        />
+      </v-col>
+    </v-row>
+
     <v-menu v-if="logged && isMobile" :close-on-content-click="false" class=".d-flex .d-sm-none" :nudge-width="250">
       <template v-slot:activator="{ on }">
         <v-btn text class="primary white--text" v-on="on">
@@ -90,6 +109,7 @@ export default {
   data() {
     return {
       isMobile: false,
+      ticketNumber: '',
       options: [
         {
           title: 'profile',
@@ -130,6 +150,10 @@ export default {
     window.removeEventListener('resize', this.onResize, { passive: true })
   },
   methods: {
+    search(content) {},
+    clearText() {
+      this.ticketNumber = ''
+    },
     logout() {
       this.$store.commit('logout/setLogout', true)
     },
