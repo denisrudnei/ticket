@@ -3,6 +3,7 @@
     v-if="chat"
     v-model="chat"
     scrollable
+    width="75vw"
   >
     <v-card>
       <v-toolbar
