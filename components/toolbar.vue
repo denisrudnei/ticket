@@ -20,7 +20,7 @@
       <v-col>
         <v-text-field
           v-model="ticketNumber"
-          type="search"
+          type="number"
           :placeholder="$t('search')" 
           prepend-icon="search"
           color="white"
@@ -31,6 +31,7 @@
           solo
           @click:append-outer="clearText"
           @click:prepend="search(ticketNumber)"
+          @keypress.enter="search(ticketNumber)"
         />
       </v-col>
     </v-row>
