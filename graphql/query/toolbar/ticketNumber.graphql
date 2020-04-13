@@ -1,0 +1,7 @@
+query TicketNumber($attributes: TicketAttributes!) {
+  SearchTicket(attributes: $attributes) {
+    docs {
+      _id
+    }
+  }
+}

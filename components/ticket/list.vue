@@ -144,8 +144,9 @@ import ticketSearch from '@/graphql/query/search/ticket.graphql'
 import ticketAttributes from '@/graphql/query/search/ticketAttributes.graphql'
 import changeStatusOfTickets from '@/graphql/mutation/ticket/list/changeStatusOfTickets.graphql'
 import transferTickets from '@/graphql/mutation/ticket/list/transferTickets.graphql'
-
+import addTicketsToEdit from '@/mixins/addTicketToEdit'
 export default {
+  mixins: [addTicketsToEdit],
   props: {
     url: {
       type: String,
@@ -458,12 +459,6 @@ export default {
     setDialog(id) {
       this.$store.dispatch('ticket/findTicket', id)
       this.$store.commit('ticket/setDialog', id)
-    },
-    addTicketsToEdit(ticket) {
-      this.$store.commit('ticket/setActualTicket', ticket)
-      this.$store.commit('ticket/setDialog', ticket._id)
-      this.$store.commit('ticket/addTicketsToEdit', ticket)
-      this.$store.dispatch('ticket/findTicket', ticket._id)
     }
   }
 }

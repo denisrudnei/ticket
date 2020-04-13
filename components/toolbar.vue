@@ -33,6 +33,17 @@
           @click:prepend="search(ticketNumber)"
           @keypress.enter="search(ticketNumber)"
         />
+        <v-dialog v-model="ticketNotFound" width="50vw">
+          <v-card>
+            <v-card-content>
+              <v-row>
+                <v-col>
+                  {{ $t('ticket_not_found') }}
+                </v-col>
+              </v-row>
+            </v-card-content>
+          </v-card>
+        </v-dialog>
       </v-col>
     </v-row>
 
@@ -92,11 +103,15 @@
 import { mapGetters } from 'vuex'
 import Notification from '@/components/notification'
 import Language from '@/components/language'
+import ticketNumber from '@/graphql/query/toolbar/ticketNumber.graphql'
+import ggl from 'graphql-tag'
+import addTicketsToEdit from '@/mixins/addTicketToEdit'
 export default {
   components: {
     Notification,
     Language
   },
+  mixins: [addTicketsToEdit],
   props: {
     app: {
       type: Boolean,
@@ -111,6 +126,7 @@ export default {
     return {
       isMobile: false,
       ticketNumber: '',
+      ticketNotFound: false,
       options: [
         {
           title: 'profile',
@@ -151,7 +167,28 @@ export default {
     window.removeEventListener('resize', this.onResize, { passive: true })
   },
   methods: {
-    search(content) {},
+    search(content) {
+      this.$apollo
+        .query({
+          query: ggl(ticketNumber),
+          variables: {
+            attributes: {
+              ticketNumber: parseInt(content)
+            }
+          }
+        })
+        .then(response => {
+          const tickets = response.data.SearchTicket.docs
+          if (tickets.length === 0) {
+            this.ticketNotFound = true
+          } else {
+            this.addTicketsToEdit(tickets[0])
+            /* eslint-disable */
+            console.log(response)
+          }
+       
+      })
+    },
     clearText() {
       this.ticketNumber = ''
     },
