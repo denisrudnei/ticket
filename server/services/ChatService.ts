@@ -58,7 +58,7 @@ class ChatService {
     fromId: IAnalyst['_id'],
     toId: IAnalyst['_id'],
     content: string
-  ) {
+  ): Promise<IMessage> {
     const to = await Analyst.findOne({ _id: toId })
     const from = await Analyst.findOne({ _id: fromId })
       .populate(['chats'])
@@ -69,38 +69,32 @@ class ChatService {
       { $addToSet: { chats: chat._id } }
     ).exec()
     const messageId = new mongoose.Types.ObjectId()
-    Message.create(
+    const message = await Message.create({
+      _id: messageId,
+      to: to._id,
+      from: from._id,
+      data: new Date(),
+      content: content
+    })
+
+    Chat.updateOne(
       {
-        _id: messageId,
-        to: to._id,
-        from: from._id,
-        data: new Date(),
-        content: content
+        _id: chat._id
       },
-      (err: Error, message: IMessage) => {
-        if (err) throw err
-        Chat.updateOne(
-          {
-            _id: chat._id
-          },
-          {
-            $addToSet: {
-              messages: [messageId]
-            }
-          }
-        ).exec((err: Error) => {
-          if (err) throw err
-          Message.populate<IMessage>(
-            message,
-            [{ path: 'to' }, { path: 'from' }],
-            (err: Error, result: IMessage) => {
-              if (err) throw err
-              return result
-            }
-          )
-        })
+      {
+        $addToSet: {
+          messages: [messageId]
+        }
       }
-    )
+    ).exec((err: Error) => {
+      if (err) throw err
+    })
+
+    const result = await Message.populate<IMessage>(message, [
+      { path: 'to' },
+      { path: 'from' }
+    ])
+    return result
   }
 
   get(fromId: IAnalyst['_id'], toId: IAnalyst['_id']) {

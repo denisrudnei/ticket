@@ -10,8 +10,11 @@
         class="primary white--text"
       >
         <v-avatar>
-          <img :src="other(chat.participants).picture">
+          <img
+            :src="other(chat.participants).picture"
+          >
         </v-avatar>
+       
         <v-spacer />
         <v-toolbar-items>
           <v-btn

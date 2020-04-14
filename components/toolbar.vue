@@ -16,37 +16,33 @@
       </v-icon>
     </v-btn>
     <v-spacer />
-    <v-row>
-      <v-col>
-        <v-text-field
-          v-model="ticketNumber"
-          type="number"
-          :placeholder="$t('search')" 
-          prepend-icon="search"
-          color="white"
-          single-line 
-          hide-details
-          append-outer-icon="clear"
-          flat
-          solo
-          @click:append-outer="clearText"
-          @click:prepend="search(ticketNumber)"
-          @keypress.enter="search(ticketNumber)"
-        />
-        <v-dialog v-model="ticketNotFound" width="50vw">
-          <v-card>
-            <v-card-content>
-              <v-row>
-                <v-col>
-                  {{ $t('ticket_not_found') }}
-                </v-col>
-              </v-row>
-            </v-card-content>
-          </v-card>
-        </v-dialog>
-      </v-col>
-    </v-row>
-
+    <v-text-field
+      v-if="logged"
+      v-model="ticketNumber"
+      type="number"
+      :placeholder="$t('search')" 
+      prepend-icon="search"
+      color="white"
+      single-line 
+      hide-details
+      append-outer-icon="clear"
+      flat
+      solo
+      @click:append-outer="clearText"
+      @click:prepend="search(ticketNumber)"
+      @keypress.enter="search(ticketNumber)"
+    />
+    <v-dialog v-model="ticketNotFound" width="50vw">
+      <v-card>
+        <v-card-content>
+          <v-row>
+            <v-col>
+              {{ $t('ticket_not_found') }}
+            </v-col>
+          </v-row>
+        </v-card-content>
+      </v-card>
+    </v-dialog>
     <v-menu v-if="logged && isMobile" :close-on-content-click="false" class=".d-flex .d-sm-none" :nudge-width="250">
       <template v-slot:activator="{ on }">
         <v-btn text class="primary white--text" v-on="on">
