@@ -4,14 +4,21 @@ import TicketService from '../../services/ticket/TicketService'
 
 export default {
   getTickets: (req: express.Request, res: express.Response) => {
-    let sortBy = req.query.sortBy || 'created'
-    const descending = parseInt(req.query.descending) || -1
+    type Query = {
+      descending: string
+      sortBy: string
+      page: string
+      limit: string
+    }
+    const query = req.query as Query
+    let sortBy: any = query.sortBy || 'created'
+    const descending = parseInt(query.descending) || -1
     sortBy = {
       [sortBy]: descending
     }
 
-    const page = parseInt(req.query.page) || 1
-    const limit = parseInt(req.query.limit) || 10
+    const page = parseInt(query.page) || 1
+    const limit = parseInt(query.limit) || 10
 
     TicketService.getTickets({}, sortBy, page, limit)
       .then(result => {
@@ -23,15 +30,17 @@ export default {
   },
 
   getByProfile: (req: express.Request, res: express.Response) => {
+    type Query = { descending: string; page: string; limit: string }
+    const query = req.query as Query
     const type = req.params.type
-    let sortBy = req.query.sortBy || 'created'
-    const descending = parseInt(req.query.descending) || -1
+    let sortBy: any = req.query.sortBy || 'created'
+    const descending = parseInt(query.descending) || -1
     sortBy = {
       [sortBy]: descending
     }
 
-    const page = parseInt(req.query.page) || 1
-    const limit = parseInt(req.query.limit) || 10
+    const page = parseInt(query.page) || 1
+    const limit = parseInt(query.limit) || 10
     const actualUser = req.session!.authUser._id
 
     TicketService.getTickets(
