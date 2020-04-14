@@ -19,6 +19,41 @@ class ChatService {
     })
   }
 
+  async getUnReadMessagesFromChat(
+    chatId: IChat['_id'],
+    userId: IAnalyst['_id']
+  ): Promise<IMessage[]> {
+    const chat: IChat = await Chat.findOne({ _id: chatId })
+
+    const messages = await Message.find({
+      _id: {
+        $in: chat.messages
+      }
+    })
+
+    const unReadMessages = messages.filter((message: IMessage) => {
+      const from = message.from as unknown
+      const analyst = from as IAnalyst
+      return analyst._id.toString() !== userId.toString() && !message.read
+    })
+    return unReadMessages
+  }
+
+  async readMessage(messageId: IMessage['_id']): Promise<void> {
+    await Message.updateOne(
+      { _id: messageId },
+      {
+        $set: {
+          read: true
+        }
+      },
+      (err: Error) => {
+        if (err) Promise.reject(err)
+        Promise.resolve()
+      }
+    )
+  }
+
   getOne(fromId: IAnalyst['_id'], toId: IAnalyst['_id']): Promise<IChat> {
     return new Promise((resolve, reject) => {
       Chat.findOne({

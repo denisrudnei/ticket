@@ -13,6 +13,10 @@ const ChatResolver: IResolvers = {
     GetOneChat: (_: any, { to }: any, { req }: Context) => {
       const from = req.session.authUser._id
       return ChatService.getOne(from, to)
+    },
+    GetUnReadMessagesFromChat: (_: any, { chatId }: any, { req }: Context) => {
+      const fromId = req.session.authUser._id
+      return ChatService.getUnReadMessagesFromChat(chatId, fromId)
     }
   },
   Mutation: {

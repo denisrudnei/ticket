@@ -179,11 +179,8 @@ export default {
             this.ticketNotFound = true
           } else {
             this.addTicketsToEdit(tickets[0])
-            /* eslint-disable */
-            console.log(response)
           }
-       
-      })
+        })
     },
     clearText() {
       this.ticketNumber = ''

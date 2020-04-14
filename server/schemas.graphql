@@ -37,6 +37,7 @@ type Query {
   KnowledgeById(_id: ID!): Knowledge!
   Role: [Role!]!
   Chat: [Chat!]!
+  GetUnReadMessagesFromChat(chatId: ID!): [Message!]!
   GetOneChat(to: ID!): Chat!
   Path: [Path]!
   PathTree: [PathTree]
