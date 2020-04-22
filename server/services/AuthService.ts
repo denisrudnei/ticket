@@ -69,7 +69,8 @@ class AuthService {
             Analyst.create(
               {
                 _id: new mongoose.Types.ObjectId(),
-                ...userBody
+                ...userBody,
+                email: email
               },
               (err: Error, newAnalyst: IAnalyst) => {
                 if (err) return reject(err)
