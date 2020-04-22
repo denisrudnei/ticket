@@ -12,7 +12,7 @@
         />
         <v-text-field
           v-model="analyst.email"
-          :placeholder="$t('name')"
+          :placeholder="$t('email')"
           filled
         />
         <v-select
@@ -52,11 +52,19 @@ export default {
   },
   methods: {
     save() {
-      this.$axios.post('/config/analyst', this.analyst).then(() => {
-        this.$toast.show('Criado novo analista', {
-          duration: 1000
+      this.$axios
+        .post('/config/analyst', this.analyst)
+        .then(() => {
+          this.$toast.show('Criado novo analista', {
+            duration: 1000
+          })
         })
-      })
+        .catch(() => {
+          this.$toast.error(this.$t('failed_to_create_new_analyst'), {
+            duration: '5000',
+            icon: 'error'
+          })
+        })
     }
   }
 }

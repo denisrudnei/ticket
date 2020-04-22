@@ -6,7 +6,13 @@ import { IGroup } from '../models/ticket/Group'
 const S3 = require('~/plugins/S3')
 
 class AnalystService {
-  create(analyst: IAnalyst): Promise<IAnalyst> {
+  async create(analyst: IAnalyst): Promise<IAnalyst> {
+    const existing = await Analyst.findOne({
+      email: {
+        $regex: new RegExp(`^${analyst.email}$`, 'i')
+      }
+    }).exec()
+    if (existing) return Promise.reject(new Error('User already registered'))
     return new Promise((resolve, reject) => {
       Analyst.create(
         {

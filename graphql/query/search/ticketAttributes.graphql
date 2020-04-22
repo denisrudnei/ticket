@@ -19,5 +19,6 @@ query {
     _id
     name
     picture
+    contactEmail
   }
 }

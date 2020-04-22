@@ -7,14 +7,7 @@
       <v-data-table
         :items="analysts"
         :headers="headers"
-      >
-        <template
-          slot="items"
-          slot-scope="data"
-        >
-          <td>{{ data.item.name }}</td>
-        </template>
-      </v-data-table>
+      />
     </v-col>
   </v-row>
 </template>
@@ -28,6 +21,10 @@ export default {
         {
           text: this.$t('name'),
           value: 'name'
+        },
+        {
+          text: this.$t('contact_email'),
+          value: 'contactEmail'
         }
       ]
     },

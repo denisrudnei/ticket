@@ -28,6 +28,7 @@ const AnalystSchema: Schema<IAnalyst> = new Schema({
   email: {
     type: String,
     select: false,
+    unique: true,
     required: [true, 'Necessário preencher o email']
   },
   status: {
