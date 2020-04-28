@@ -25,23 +25,21 @@ describe('NotificationService', function() {
     await NotificationService.toggleRead(user._id, notification._id)
   })
 
-  it('Read notification', async () => {
+  it('Should read a notification', async () => {
     const user = await Analyst.findOne().exec()
     const notification = await Notification.findOne().exec()
     await NotificationService.read(user._id, notification._id)
   })
 
-  it('Unread notification', async () => {
+  it('Should unread a notification', async () => {
     const user = await Analyst.findOne().exec()
     const notification = await Notification.findOne().exec()
     await NotificationService.unRead(user._id, notification._id)
   })
 
-  it('Trigger a notification', async () => {
+  it('Should Trigger a new notification', async () => {
     const ticket = await Ticket.findOne({}).exec()
     const group = await Group.findOne({}).exec()
-    /* eslint-disable-next-line */
-    console.log(group)
     const analyst = await Analyst.findOne({}).exec()
     await NotificationService.triggerForTicketTransfer(
       ticket!._id,
@@ -50,7 +48,22 @@ describe('NotificationService', function() {
     )
   })
 
-  it('Read all notifications', async () => {
+  it('Should return who reads the notification', async () => {
+    const notification = await Notification.findOne().exec()
+    await NotificationService.getWhoRead(notification._id)
+  })
+
+  it('Should trigger a new notification', async () => {
+    const analyst = await Analyst.findOne().exec()
+    const group = await Group.findOne().exec()
+    const ticket = new Ticket({
+      openedBy: analyst,
+      group
+    })
+    await NotificationService.triggerForTicketCreation(ticket)
+  })
+
+  it('Should read all notifications', async () => {
     const user = await Analyst.findOne().exec()
     await NotificationService.readall(user._id)
   })

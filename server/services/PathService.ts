@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import mongoose, { Types } from 'mongoose'
+import { Types } from 'mongoose'
 import Path, { IPath } from '../models/Path'
 import Analyst, { IAnalyst } from '../models/Analyst'
 import Ticket from '../models/ticket/Ticket'
@@ -63,7 +63,7 @@ class PathService {
     return new Promise((resolve, reject) => {
       Path.create(
         {
-          _id: new mongoose.Types.ObjectId(),
+          _id: new Types.ObjectId(),
           name: path.name,
           objectName: path.objectName,
           property: path.property
@@ -145,7 +145,10 @@ class PathService {
 
   getRefs() {
     return new Promise((resolve, reject) => {
-      const paths = Object.values(Ticket.schema.path)
+      const paths: any[] = Object.keys(Ticket.schema.paths).map(key => {
+        return Ticket.schema.path(key)
+      })
+
       const pathsWithObjects = paths.filter(v => {
         return v.options.ref !== undefined && v.options.ref !== null
       })
@@ -264,7 +267,7 @@ class PathService {
   }
 
   getOptions(ref: string) {
-    const model = require(this.getModule(ref))
+    const model = require(this.getModule(ref)).default
     return Object.keys(model.schema.paths).filter(r => {
       return this.filterSelected(model.schema.paths, r)
     })
