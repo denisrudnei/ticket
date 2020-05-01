@@ -107,8 +107,21 @@
           align="center"
         >
           <v-col
+            v-if="!search"
             cols="12"
-            md="4"
+            md="1"
+            pa-1
+          >
+            <v-text-field
+              :value="ticket.ticketNumber"
+              disabled
+              filled
+              :label="$t('ticket_number')"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            :md="!search ? 3 : 4"
             pa-1
           >
             <v-autocomplete
@@ -479,7 +492,10 @@ export default {
   },
   mixins: [compareObjectsWithId, showModal],
   props: {
-    search: Boolean,
+    search: {
+      type: Boolean,
+      default: false
+    },
     readonly: {
       type: Boolean,
       default: false
