@@ -8,10 +8,12 @@ export interface ISla extends Document {
 const SlaSchema = new Schema({
   _id: Schema.Types.ObjectId,
   name: {
-    type: String
+    type: String,
+    required: [true, 'Required field']
   },
   limit: {
-    type: Date
+    type: Date,
+    required: [true, 'Required field']
   }
 })
 

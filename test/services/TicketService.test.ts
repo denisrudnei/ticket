@@ -114,6 +114,34 @@ describe('Ticket', function() {
     } catch {}
   })
 
+  it('Should change status of tickets', async () => {
+    const tickets = await Ticket.find().exec()
+    const status = await Status.findOne().exec()
+    await TicketService.changeStatusOfTickets(
+      tickets.map(ticket => ticket._id),
+      status._id
+    )
+  })
+
+  it('Should change group of tickets', async () => {
+    const tickets = await Ticket.find().exec()
+    const group = await Group.findOne().exec()
+    await TicketService.transferTickets(
+      tickets.map(ticket => ticket._id),
+      group
+    )
+  })
+
+  it('Should return overtake sla', async () => {
+    const ticket = await Ticket.findOne().exec()
+    await TicketService.overtakeSla(ticket!._id)
+  })
+
+  it('Should return sla in percentage', async () => {
+    const ticket = await Ticket.findOne().exec()
+    await TicketService.slaPercentage(ticket!._id)
+  })
+
   it('Remove children', async () => {
     const tickets = await Ticket.find().exec()
     const first = tickets[0]

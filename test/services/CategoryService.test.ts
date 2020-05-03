@@ -1,18 +1,23 @@
+import { UploadedFile } from 'express-fileupload'
 import CategoryService from '../../server/services/ticket/CategoryService'
 import Category from '../../server/models/ticket/Category'
+import Sla from '../../server/models/ticket/Sla'
 import 'mocha'
 
-describe('CategoryService', function() {
+describe('CategoryService', async function() {
   this.timeout(0)
+
+  const sla = await Sla.findOne().exec()
 
   it('Get Categories', async () => {
     await CategoryService.getCategories()
   })
 
-  it('Crete a new category', async () => {
+  it('Create a new category', async () => {
     const category = new Category({
       name: 'Test',
-      father: null
+      father: null,
+      sla
     })
     await CategoryService.create(category)
   })
@@ -21,7 +26,8 @@ describe('CategoryService', function() {
     const father = await Category.findOne().exec()
     const category = new Category({
       name: 'Test',
-      father: father
+      father: father,
+      sla
     })
     await CategoryService.create(category)
   })
@@ -49,7 +55,8 @@ describe('CategoryService', function() {
     const category = new Category({
       name: 'test',
       father: null,
-      fields: [field1]
+      fields: [field1],
+      sla
     })
     await CategoryService.create(category)
   })
@@ -66,5 +73,20 @@ describe('CategoryService', function() {
   it('Get subs', async () => {
     const category = await Category.findOne().exec()
     await CategoryService.getSubsForCategory(category._id)
+  })
+
+  it('Should update a image to category', async () => {
+    const category = await Category.findOne().exec()
+    const image = {
+      name: 'categoryImage',
+      data: Buffer.from(''),
+      mimetype: 'image/png'
+    } as UploadedFile
+    await CategoryService.setImage(category._id, image)
+  })
+
+  it('Should return a image from category', async () => {
+    const category = await Category.findOne().exec()
+    await CategoryService.getImage(category._id)
   })
 })

@@ -116,10 +116,6 @@ class TicketService {
     })
   }
 
-  startSla(): boolean {
-    return false
-  }
-
   getOne(ticketId: ITicket['_id']): Promise<ITicket> {
     return new Promise((resolve, reject) => {
       Ticket.findOne({
@@ -243,7 +239,7 @@ class TicketService {
   }
 
   changeStatusOfTickets(
-    tickets: [ITicket['_id']],
+    tickets: ITicket['_id'][],
     statusId: IStatus['_id']
   ): Promise<ITicket[]> {
     const promises = tickets.map(ticketId => {
@@ -253,7 +249,7 @@ class TicketService {
   }
 
   transferTickets(
-    tickets: [ITicket['_id']],
+    tickets: ITicket['_id'][],
     groupId: IGroup['_id']
   ): Promise<ITicket[]> {
     const promises = tickets.map(ticketId => {

@@ -88,7 +88,7 @@ describe('Knowledge', function() {
   it('Get file', async () => {
     const knowledge = await Knowledge.findOne().exec()
     knowledge.files.forEach(async (f: IKnowledgeFile) => {
-      await KnowledgeService.getFile(f._id)
+      await KnowledgeService.getFile(`knowledge/${knowledge._id}/${f._id}`)
     })
   })
 

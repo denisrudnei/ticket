@@ -136,7 +136,7 @@ TicketSchema.methods.overtakeSla = async function() {
   })
     .populate(['sla'])
     .exec()
-  if (category.sla === undefined) return false
+  if (!category.sla) return false
 
   const slaBase = new Date('1970/01/01 00:00:00')
   const slaLimit = new Date(
