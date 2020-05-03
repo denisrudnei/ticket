@@ -1,6 +1,9 @@
 import mongoose, { Types } from 'mongoose'
+import { UploadedFile } from 'express-fileupload'
+import { GetObjectOutput } from 'aws-sdk/clients/s3'
 import Category, { ICategory } from '../../models/ticket/Category'
 import Field from '../../models/ticket/Field'
+import S3 from '~/plugins/S3'
 
 const categoryPopulate = [
   {
@@ -139,6 +142,33 @@ class CategoryService {
         resolve(this.getOneById(categoryId))
       })
     })
+  }
+
+  getImage(categoryId: ICategory['_id']): Promise<GetObjectOutput> {
+    return new Promise((resolve, reject) => {
+      S3.getObject(
+        {
+          Bucket: process.env.BUCKET,
+          Key: `category/${categoryId.toString()}`
+        },
+        (err: Error, file: GetObjectOutput) => {
+          if (err) return reject(err)
+          return resolve(file)
+        }
+      )
+    })
+  }
+
+  async setImage(
+    categoryId: ICategory['_id'],
+    image: UploadedFile
+  ): Promise<void> {
+    const params = {
+      Bucket: process.env.BUCKET,
+      Key: `category/${categoryId}`,
+      Body: image.data
+    }
+    await S3.upload(params).promise()
   }
 
   getSubsForCategory(id: Types.ObjectId): Promise<[ICategory]> {

@@ -8,7 +8,7 @@
               <v-row>
                 <v-col cols="12" md="4">
                   <nuxt-link :to="`/client/ticket/category/${category.name}?_id=${category._id}`">
-                    <v-img :src="`https://picsum.photos/200/300?url=${Math.random()}`" :aspect-ratio="1" />
+                    <v-img :src="`/api/category/${category._id}/image`" :aspect-ratio="1" />
                   </nuxt-link>
                 </v-col>
                 <v-col cols="12" md="8">

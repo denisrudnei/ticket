@@ -1,4 +1,5 @@
 import express from 'express'
+import { UploadedFile } from 'express-fileupload'
 import CategoryService from '../../services/ticket/CategoryService'
 import Category, { ICategory } from '../../models/ticket/Category'
 export default {
@@ -38,6 +39,23 @@ export default {
         return res.sendStatus(202)
       }
     )
+  },
+
+  getImage: (req: express.Request, res: express.Response) => {
+    CategoryService.getImage(req.params.id)
+      .then(response => {
+        res.send(response.Body)
+      })
+      .catch(() => {
+        res.sendStatus(404)
+      })
+  },
+
+  setImage: (req: express.Request, res: express.Response) => {
+    CategoryService.setImage(req.params.id, req.files!
+      .image as UploadedFile).then(() => {
+      res.sendStatus(202)
+    })
   },
 
   create: (req: express.Request, res: express.Response) => {

@@ -31,6 +31,18 @@ export default {
           this.$toast.show('Categoria criada', {
             duration: 1000
           })
+          if (category.image) {
+            const formData = new FormData()
+            formData.append('image', category.iamge)
+            this.$axios
+              .post(`/config/category/image/${category._id}`, formData)
+              .then(() => {
+                this.$toast.show('Image uploaded', {
+                  duration: 5000,
+                  icon: 'done'
+                })
+              })
+          }
           this.$router.push('/config/category')
         })
     }
