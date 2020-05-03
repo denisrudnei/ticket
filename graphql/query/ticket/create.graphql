@@ -14,6 +14,10 @@ query {
   Analyst {
     _id
     name
+    address {
+      _id
+      name
+    }
   }
   Category {
     _id
@@ -40,5 +44,10 @@ query {
     _id
     name
     weight
+  }
+
+  Address {
+    _id
+    name
   }
 }

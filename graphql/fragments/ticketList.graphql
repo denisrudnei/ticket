@@ -13,6 +13,10 @@ fragment ticketList on Ticket {
     _id
     name
   }
+  address {
+    _id
+    name
+  }
   actualUser {
     _id
     name

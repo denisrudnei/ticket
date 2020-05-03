@@ -98,7 +98,7 @@
             </v-tabs>
           </v-card-text>
         </v-card>
-      </v-menu>
+      </v-menu>  
       <v-form
         ref="form"
         lazy-validation
@@ -155,8 +155,28 @@
               :clearable="search || editing || !readonly"
               :value-comparator="compare"
               append-icon="search"
-              @change="setFieldInActualTicket($event, 'affectedUser')"
+              @change="changeAffectedUser($event)"
               @click:append="show('affectedUser', ticket.affectedUser)"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            md="4"
+            pa-1
+          >
+            <v-autocomplete
+              :value="ticket.address"
+              :rules="!search ? [v => !!v || 'Necessário preencher']: undefined"
+              :items="addresses.map(address => { return {text: address.name, value: address} })"
+              required
+              :readonly="readOnlyData"
+              filled
+              :label="$t('address')"
+              :clearable="search || editing || !readonly"
+              :value-comparator="compare"
+              append-icon="search"
+              @change="setFieldInActualTicket($event, 'address')"
+              @click:append="show('address', ticket.address)"
             />
           </v-col>
           <v-col
@@ -484,6 +504,7 @@ export default {
     }
   },
   head() {
+    if (!this.ticket.ticketNumber || !this.ticketsToEdit.length) return
     return {
       title: `[${this.ticket.ticketNumber}] - [${this.ticketsToEdit.length}] ${
         this.ticket.resume
@@ -506,7 +527,8 @@ export default {
         return {
           group: {},
           category: {},
-          priority: {}
+          priority: {},
+          address: {}
         }
       }
     }
@@ -521,6 +543,7 @@ export default {
       menuDateFinal: false,
       readOnlyData: false,
       analysts: [],
+      addresses: [],
       groups: [],
       status: [],
       categories: [],
@@ -585,6 +608,7 @@ export default {
         this.status = response.data.Status
         this.categories = response.data.Category
         this.priorities = response.data.priority
+        this.addresses = response.data.Address
       })
   },
   methods: {
@@ -621,6 +645,13 @@ export default {
       this.$axios.get(`/ticket/${this.ticket._id}`).then(response => {
         this.$store.commit('ticket/setActualTicket', response.data)
       })
+    },
+    changeAffectedUser(affectedUser) {
+      this.setFieldInActualTicket(affectedUser, 'affectedUser')
+      if (this.search) return
+      if (!this.ticket.affectedUser) return
+
+      this.setFieldInActualTicket(affectedUser.address, 'address')
     },
     changeCategory(category) {
       this.setFieldInActualTicket(category, 'category')

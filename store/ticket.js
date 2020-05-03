@@ -72,6 +72,8 @@ export const mutations = {
       status: {},
       openedBy: {},
       actualUser: {},
+      affectedUser: {},
+      address: {},
       slaCount: undefined,
       created: undefined,
       modified: undefined

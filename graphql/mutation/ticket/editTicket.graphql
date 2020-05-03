@@ -2,5 +2,7 @@
 mutation EditTicket($_id: ID!, $ticket: TicketCreateInput!) {
   ticket: EditTicket(_id: $_id, ticket: $ticket) {
     _id
+    ...ticketList
+    content
   }
 }

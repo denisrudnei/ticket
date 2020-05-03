@@ -36,6 +36,7 @@ input TicketAttributes {
   actualUser: String
   openedBy: String
   affectedUser: String
+  address: String
   category: String
   status: String
   group: String
@@ -48,6 +49,7 @@ input TicketCreateInput {
   affectedUser: ID!
   resume: String!
   content: String!
+  address: ID!
   group: ID!
   status: ID!
   category: ID!

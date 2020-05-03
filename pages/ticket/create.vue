@@ -29,6 +29,7 @@ export default {
             ticket: {
               actualUser: this.ticket.actualUser._id,
               affectedUser: this.ticket.affectedUser._id,
+              address: this.ticket.address._id,
               resume: this.ticket.resume,
               content: this.ticket.content,
               group: this.ticket.group._id,

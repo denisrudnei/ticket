@@ -369,6 +369,7 @@ export default {
         'actualUser',
         'openedBy',
         'status',
+        'address',
         'group',
         'priority',
         'ticketNumber',

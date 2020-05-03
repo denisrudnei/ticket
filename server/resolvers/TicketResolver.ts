@@ -78,6 +78,7 @@ const TicketResolver: IResolvers = {
         group,
         status,
         category,
+        address,
         actualUser,
         affectedUser,
         resume,
@@ -87,6 +88,7 @@ const TicketResolver: IResolvers = {
       const newTicket = new Ticket({
         group,
         status,
+        address,
         category,
         actualUser,
         affectedUser,

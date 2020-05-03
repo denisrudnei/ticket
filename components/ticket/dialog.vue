@@ -83,6 +83,7 @@ export default {
             ticket: {
               resume: this.actualTicket.resume,
               content: this.actualTicket.content,
+              address: this.actualTicket.address._id,
               status: this.actualTicket.status._id,
               group: this.actualTicket.group._id,
               category: this.actualTicket.category._id,

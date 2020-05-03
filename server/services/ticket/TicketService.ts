@@ -166,6 +166,7 @@ class TicketService {
             status: ticketBody.status,
             group: ticketBody.group,
             resume: ticketBody.resume,
+            address: ticketBody.address,
             content: ticketBody.content,
             category: ticketBody.category,
             actualUser: ticketBody.actualUser,
