@@ -4,6 +4,9 @@
   "description": "Ticket management system",
   "author": "Denis Rudnei de Souza",
   "private": true,
+  "engines": {
+    "node": ">=13.x"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --watch server/ --exec  \"ts-node -r tsconfig-paths/register server/index.ts\" -e ts",
     "backend": "cross-env NODE_ENV=development nodemon --watch server/ --exec  \"ts-node -r tsconfig-paths/register server/onlyServer.ts\" -e ts",
