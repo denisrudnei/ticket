@@ -17,7 +17,7 @@ export default {
       .query({
         query: ggl(priorityEdit),
         variables: {
-          _id: params.id
+          id: params.id
         }
       })
       .then(result => {
@@ -35,7 +35,7 @@ export default {
           variables: {
             priority: {
               ...this.priority,
-              _id: id
+              id: id
             }
           },
           refetchQueries: [{ query: ggl(priorityList) }]

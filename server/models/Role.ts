@@ -1,29 +1,20 @@
-import { models, model, Schema, Document } from 'mongoose'
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Field, ObjectType, ID } from 'type-graphql'
 
-export interface IRole extends Document {
-  _id: Schema.Types.ObjectId
-  name: string
-  description: string
+@Entity()
+@ObjectType()
+export class Role extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @Column()
+  @Field()
+  public name!: string
+
+  @Column()
+  @Field()
+  public description!: string
 }
 
-const RoleSchema = new Schema({
-  _id: Schema.Types.ObjectId,
-  name: {
-    type: Schema.Types.String
-  },
-  description: {
-    type: Schema.Types.String
-  }
-})
-
-RoleSchema.set('toJSON', {
-  getters: true,
-  virtuals: true
-})
-
-RoleSchema.set('toObject', {
-  getters: true,
-  virtuals: true
-})
-
-export default models.Role || model('Role', RoleSchema)
+export default Role

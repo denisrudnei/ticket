@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     update(group) {
-      this.$axios.put(`/config/group/${group._id}`, group).then(() => {
+      this.$axios.put(`/config/group/${group.id}`, group).then(() => {
         this.$toast.show('Atualizado', {
           duration: 5000,
           icon: 'done'

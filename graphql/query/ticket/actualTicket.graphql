@@ -1,32 +1,30 @@
 #import "@/graphql/fragments/ticketList.graphql"
 query GetTicket($id: ID!) {
-  TicketById(_id: $id) {
+  TicketById(id: $id) {
     ...ticketList
     content
     category {
       fields {
         required
         text
-        limits {
-          min
-          max
-        }
+        min
+        max
         value
       }
     }
     logs {
       user {
-        _id
+        id
         name
         picture
       }
       date
       group {
-        _id
+        id
         name
       }
       oldStatus {
-        _id
+        id
         name
       }
     }
@@ -37,14 +35,14 @@ query GetTicket($id: ID!) {
     }
     comments {
       user {
-        _id
+        id
         name
       }
       content
       date
     }
     priority {
-      _id
+      id
       name
       weight
     }

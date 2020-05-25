@@ -13,7 +13,7 @@ export default {
   },
 
   getOne: (req: express.Request, res: express.Response) => {
-    StatusService.getOne(req.params.id)
+    StatusService.getOne(parseInt(req.params.id))
       .then(status => {
         return res.status(200).json(status)
       })
@@ -33,7 +33,7 @@ export default {
   },
 
   edit: (req: express.Request, res: express.Response) => {
-    StatusService.edit(req.params.id, req.body)
+    StatusService.edit(parseInt(req.params.id), req.body)
       .then(() => {
         return res.sendStatus(202)
       })

@@ -1,13 +1,13 @@
 #import "@/graphql/fragments/knowledge.graphql"
-query KnowledgeById($_id: ID!){
-  knowledge: KnowledgeById(_id: $_id) {
+query KnowledgeById($id: ID!){
+  knowledge: KnowledgeById(id: $id) {
     ...list
     group {
-      _id
+      id
       name
     }
     category {
-      _id
+      id
       fullName
       name
     }

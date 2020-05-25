@@ -1,53 +1,88 @@
 import NotificationService from '@/server/services/NotificationService'
 import NotificationEnum from '@/server/enums/NotificationEnum'
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Ctx,
+  ID,
+  Arg,
+  Subscription,
+  Root,
+  FieldResolver,
+  Authorized,
+  PubSub,
+  PubSubEngine
+} from 'type-graphql'
+import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
+import Notification from '../models/Notification'
+import Analyst from '../models/Analyst'
 
-export default {
-  Query: {
-    Notification: (_: any, __: any, { req }: any) => {
-      return NotificationService.getAll(req.session.authUser._id)
-    },
-    NotificationById: (_: any, { _id }: any) => {
-      return NotificationService.getOne(_id)
-    }
-  },
-  Mutation: {
-    ReadNotification: async (_: any, { _id }: any, { req, pubSub }: any) => {
-      const userId = req.session.authUser._id
-      const notification = await NotificationService.toggleRead(userId, _id)
-      pubSub.publish(NotificationEnum.UPDATE_NOTIFICATION, {
-        UpdateNotification: notification
-      })
-      return notification
-    },
-    ReadAllNotifications: async (_: any, __: any, { req, pubSub }: any) => {
-      const userId = req.session.authUser._id
-      const notifications = await NotificationService.readall(userId)
-      pubSub.publish(NotificationEnum.READ_ALL_NOTIFICATIONS, {
-        Notifications: notifications
-      })
-      return notifications
-    }
-  },
-  Subscription: {
-    AddNotification: {
-      subscribe: (_: any, __: any, { pubSub }: any) => {
-        return pubSub.asyncIterator(NotificationEnum.ADD_NOTIFICATION)
-      }
-    },
-    UpdateNotification: {
-      subscribe: (_: any, __: any, { pubSub }: any) => {
-        return pubSub.asyncIterator(NotificationEnum.UPDATE_NOTIFICATION)
-      }
-    },
-    Notifications: {
-      subscribe: (_: any, __: any, { pubSub }: any) => {
-        return pubSub.asyncIterator(NotificationEnum.READ_ALL_NOTIFICATIONS)
-      }
-    }
-  },
-  Notification: {
-    read: ({ _id }: any) => {
-      return NotificationService.getWhoRead(_id)
-    }
+@Resolver(of => Notification)
+class NotificationResolver {
+  @Query(() => [Notification])
+  @Authorized('user')
+  Notification(@Ctx() { req }: ExpressContext) {
+    return NotificationService.getAll(req!.session!.authUser.id)
+  }
+
+  @Query(() => Notification)
+  @Authorized('user')
+  NotificationById(@Arg('id', () => ID) id: Notification['id']) {
+    return NotificationService.getOne(id)
+  }
+
+  @Mutation(() => Notification)
+  @Authorized('user')
+  async ReadNotification(
+    @Arg('id', () => ID) id: Notification['id'],
+    @Ctx() { req }: ExpressContext,
+    @PubSub() pubSub: PubSubEngine
+  ) {
+    const userId = req!.session!.authUser.id
+    const notification = await NotificationService.toggleRead(userId, id)
+    pubSub.publish(NotificationEnum.UPDATE_NOTIFICATION, notification)
+    return notification
+  }
+
+  @Mutation(() => [Notification])
+  @Authorized('user')
+  async ReadAllNotifications(
+    @Ctx() { req }: ExpressContext,
+    @PubSub() pubSub: PubSubEngine
+  ) {
+    const userId = req!.session!.authUser.id
+    const notifications = await NotificationService.readall(userId)
+    pubSub.publish(NotificationEnum.READ_ALL_NOTIFICATIONS, notifications)
+    return notifications
+  }
+
+  @FieldResolver()
+  read(@Root() root: Notification): Promise<Analyst[]> {
+    return NotificationService.getWhoRead(root.id)
+  }
+
+  @Subscription({
+    topics: NotificationEnum.ADD_NOTIFICATION
+  })
+  AddNotification(@Root() notificationPayload: Notification): Notification {
+    return notificationPayload
+  }
+
+  @Subscription({
+    topics: NotificationEnum.UPDATE_NOTIFICATION
+  })
+  UpdateNotification(@Root() notificationPayload: Notification): Notification {
+    return notificationPayload
+  }
+
+  @Subscription(() => [Notification], {
+    name: 'Notification',
+    topics: NotificationEnum.READ_ALL_NOTIFICATIONS
+  })
+  Notifications(@Root() notificationsPayload: Notification[]): Notification[] {
+    return notificationsPayload
   }
 }
+
+export default NotificationResolver

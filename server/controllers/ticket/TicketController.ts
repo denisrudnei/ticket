@@ -41,7 +41,7 @@ export default {
 
     const page = parseInt(query.page) || 1
     const limit = parseInt(query.limit) || 10
-    const actualUser = req.session!.authUser._id
+    const actualUser = req.session!.authUser.id
 
     TicketService.getTickets(
       {
@@ -70,7 +70,7 @@ export default {
   },
 
   transfer: (req: express.Request, res: express.Response) => {
-    TicketService.transferToGroup(req.params.id, req.body._id)
+    TicketService.transferToGroup(parseInt(req.params.id), req.body.id)
       .then(result => {
         return res.status(200).json(result)
       })
@@ -80,7 +80,7 @@ export default {
   },
 
   updateStatus: async (req: express.Request, res: express.Response) => {
-    await TicketService.changeStatus(req.params.id, req.body._id)
+    await TicketService.changeStatus(parseInt(req.params.id), req.body.id)
       .then(result => {
         return res.status(200).json(result)
       })
@@ -90,8 +90,12 @@ export default {
   },
 
   comment: (req: express.Request, res: express.Response) => {
-    const userId = req.session!.authUser._id
-    TicketService.commentOnTicket(req.params.id, userId, req.body.content)
+    const userId = req.session!.authUser.id
+    TicketService.commentOnTicket(
+      parseInt(req.params.id),
+      userId,
+      req.body.content
+    )
       .then(result => {
         return res.status(201).json(result)
       })
@@ -101,7 +105,7 @@ export default {
   },
 
   getOne: (req: express.Request, res: express.Response) => {
-    TicketService.getOne(req.params.id)
+    TicketService.getOne(parseInt(req.params.id))
       .then(result => {
         return res.status(200).json(result)
       })
@@ -111,7 +115,7 @@ export default {
   },
 
   edit: (req: express.Request, res: express.Response) => {
-    TicketService.updateOne(req.params.id, req.body)
+    TicketService.updateOne(parseInt(req.params.id), req.body)
       .then(result => {
         res.sendStatus(202)
       })
@@ -131,7 +135,10 @@ export default {
   },
 
   deleteFile: async (req: express.Request, res: express.Response) => {
-    await TicketService.removeFile(req.params.id, req.params.file)
+    await TicketService.removeFile(
+      parseInt(req.params.id),
+      parseInt(req.params.file)
+    )
       .then(() => {
         return res.sendStatus(201)
       })
@@ -142,7 +149,7 @@ export default {
 
   sendFile: async (req: express.Request, res: express.Response) => {
     const files = Object.values(req.files!) as UploadedFile[]
-    await TicketService.insertFile(req.params.id, files)
+    await TicketService.insertFile(parseInt(req.params.id), files)
       .then(result => {
         return res.status(200).json(result)
       })

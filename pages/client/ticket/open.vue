@@ -1,18 +1,18 @@
 <template>
   <v-row>
-    <v-col v-for="category in categories" :key="category._id" cols="12" md="4">
+    <v-col v-for="category in categories" :key="category.id" cols="12" md="4">
       <v-card tile>
         <v-card-text>
           <v-row>
             <v-col cols="12">
               <v-row>
                 <v-col cols="12" md="4">
-                  <nuxt-link :to="`/client/ticket/category/${category.name}?_id=${category._id}`">
-                    <v-img :src="`/api/category/${category._id}/image`" :aspect-ratio="1" />
+                  <nuxt-link :to="`/client/ticket/category/${category.name}?id=${category.id}`">
+                    <v-img :src="`/api/category/${category.id}/image`" :aspect-ratio="1" />
                   </nuxt-link>
                 </v-col>
                 <v-col cols="12" md="8">
-                  <nuxt-link tag="span" :to="`/client/ticket/category/${category.name}?_id=${category._id}`">
+                  <nuxt-link tag="span" :to="`/client/ticket/category/${category.name}?id=${category.id}`">
                     <h4>
                       {{ category.fullName }}
                     </h4>

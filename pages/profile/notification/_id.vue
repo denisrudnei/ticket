@@ -20,7 +20,7 @@
         <v-card-actions>
           <v-switch
             v-model="notification.read"
-            :value="user._id"
+            :value="user.id"
             label="Lido"
             @change="read()"
           />
@@ -91,18 +91,18 @@ export default {
   methods: {
     prev(notification) {
       const index = this.notifications.findIndex(ntf => {
-        return ntf._id === notification._id
+        return ntf.id === notification.id
       })
       return this.notifications[index - 1]
     },
     next(notification) {
       const index = this.notifications.findIndex(ntf => {
-        return ntf._id === notification._id
+        return ntf.id === notification.id
       })
       return this.notifications[index + 1]
     },
     goTo(notification) {
-      this.$router.push(`/profile/notification/${notification._id}`)
+      this.$router.push(`/profile/notification/${notification.id}`)
     },
     read() {
       this.readNotification(this.notification)

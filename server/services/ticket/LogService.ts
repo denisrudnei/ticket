@@ -1,36 +1,30 @@
-import { Types } from 'mongoose'
-import Log, { ILog } from '../../models/ticket/Log'
-import Ticket, { ITicket } from '../../models/ticket/Ticket'
-import { IAnalyst } from '../../models/Analyst'
+import Log from '../../models/ticket/Log'
+import Ticket from '../../models/ticket/Ticket'
+import Analyst from '../../models/Analyst'
 
 class LogService {
-  createTicketLog(actualUser: IAnalyst['_id'], ticket: ITicket): Promise<void> {
+  createTicketLog(
+    actualUser: Analyst['id'],
+    ticketId: Ticket['id']
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
-      Log.create(
-        {
-          _id: new Types.ObjectId(),
-          oldStatus: ticket.status,
-          date: new Date(),
-          user: actualUser,
-          group: ticket.group
-        },
-        (err: Error, log: ILog) => {
-          if (err) reject(err)
-          Ticket.updateOne(
-            {
-              _id: ticket._id
-            },
-            {
-              $addToSet: {
-                logs: [log]
-              }
-            }
-          ).exec((err: Error) => {
-            if (err) reject(err)
-            resolve()
+      Analyst.findOne(actualUser).then(async analyst => {
+        const log = new Log()
+        const ticket = await Ticket.findOne(ticketId, { relations: ['logs'] })
+
+        log.oldStatus = ticket!.status
+        log.date = new Date()
+        log.user = analyst!
+        log.group = ticket!.group
+        Log.create(log)
+          .save()
+          .then(log => {
+            ticket!.logs.push(log)
+            ticket!.save().then(() => {
+              resolve()
+            })
           })
-        }
-      )
+      })
     })
   }
 }

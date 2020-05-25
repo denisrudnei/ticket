@@ -1,31 +1,34 @@
-import { IResolvers } from 'graphql-tools'
+import { Query, Resolver, Arg, Int, Authorized } from 'type-graphql'
 import SearchService from '../services/ticket/SearchService'
-const SearchResolver: IResolvers = {
-  Query: {
-    SearchTicket: (
-      _: any,
-      { page, limit, descending, sortBy, attributes }: any
-    ) => {
-      const newAttributes: any = {}
-      for (const property in attributes) {
-        const attribute = attributes[property]
-        if (Array.isArray(attribute)) {
-          newAttributes[property] = {
-            $in: attribute
-          }
-        } else {
-          newAttributes[property] = attribute
-        }
-      }
-      return SearchService.getTickets(
-        newAttributes,
-        {
-          [sortBy]: descending
-        },
-        page,
-        limit
-      )
-    }
+import Ticket from '../models/ticket/Ticket'
+import TicketAttributes from '../inputs/TicketAttributes'
+import TicketPagination from '../models/TicketPagination'
+
+@Resolver()
+class SearchResolver {
+  @Query(() => TicketPagination)
+  @Authorized('user')
+  SearchTicket(
+    @Arg('page', () => Int, { nullable: true, defaultValue: 0 }) page: number,
+    @Arg('limit', () => Int, { nullable: true, defaultValue: 0 }) limit: number,
+    @Arg('attributes', () => TicketAttributes, { nullable: true })
+    attributes: TicketAttributes,
+    @Arg('descending', () => Int, { nullable: true, defaultValue: -1 })
+    descending: number,
+    @Arg('sortBy', {
+      nullable: true,
+      defaultValue: 'id'
+    })
+    sortBy: string
+  ): Promise<TicketPagination> {
+    return SearchService.getTickets(
+      attributes,
+      {
+        [sortBy]: descending
+      },
+      page,
+      limit
+    )
   }
 }
 

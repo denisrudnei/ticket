@@ -131,12 +131,12 @@
           </template>
           <v-btn
             v-for="ticket in ticketsToEdit"
-            :key="ticket._id"
+            :key="ticket.id"
             class="primary white--text"
             :title="ticket.resume"
             @click="setDialog(ticket)"
           >
-            {{ ticket.ticketNumber }}
+            {{ ticket.id }}
             <v-icon right>
               search
             </v-icon>
@@ -254,8 +254,8 @@ export default {
         query: ggl(editTicket),
         variables() {
           return {
-            tickets: this.tickets.map(t => {
-              return t._id
+            tickets: this.tickets.map(ticket => {
+              return ticket.id
             })
           }
         },
@@ -267,8 +267,8 @@ export default {
         query: ggl(transferToGroup),
         variables() {
           return {
-            tickets: this.tickets.map(t => {
-              return t._id
+            tickets: this.tickets.map(ticket => {
+              return ticket.id
             })
           }
         },
@@ -280,8 +280,8 @@ export default {
         query: ggl(slaUpdate),
         variables() {
           return {
-            tickets: this.tickets.map(t => {
-              return t._id
+            tickets: this.tickets.map(ticket => {
+              return ticket.id
             })
           }
         },
@@ -356,14 +356,14 @@ export default {
     },
     setDialog(ticket) {
       this.$store.commit('ticket/setActualTicket', ticket)
-      this.$store.commit('ticket/setDialog', ticket._id)
+      this.$store.commit('ticket/setDialog', ticket.id)
     },
     copyTicket(ticket) {
       this.$apollo
         .mutate({
           mutation: ggl(copyTicket),
           variables: {
-            ticketId: ticket._id
+            ticketId: ticket.id
           },
           refetchQueries: [
             {
@@ -374,7 +374,7 @@ export default {
         .then(response => {
           const ticket = response.data.ticket
           this.$store.commit('ticket/setActualTicket', ticket)
-          this.$store.commit('ticket/setDialog', ticket._id)
+          this.$store.commit('ticket/setDialog', ticket.id)
           this.$store.commit('ticket/setConfirmCopy', false)
         })
     }

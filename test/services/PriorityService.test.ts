@@ -1,13 +1,10 @@
 import PriorityService from '../../server/services/PriorityService'
-import Priority, { IPriority } from '../../server/models/ticket/Priority'
-import 'mocha'
+import Priority from '../../server/models/ticket/Priority'
 
 describe('Priority', function() {
-  this.timeout(0)
-
   it('Create new priority', async () => {
     await PriorityService.create(
-      new Priority({
+      Priority.create({
         name: 'test',
         weight: 0
       })
@@ -19,13 +16,13 @@ describe('Priority', function() {
   })
 
   it('Get one priority', async () => {
-    const priority = await Priority.findOne().exec()
-    await PriorityService.getOne(priority._id)
+    const priority = await Priority.findOne()
+    await PriorityService.getOne(priority!.id)
   })
 
   it('Edit priority', async () => {
-    const priority = await Priority.findOne().exec()
-    const newPriority = new Priority({
+    const priority = await Priority.findOne()
+    const newPriority = Priority.create({
       ...priority,
       name: 'new name'
     })
@@ -33,18 +30,18 @@ describe('Priority', function() {
   })
 
   it('Edit many priorities', async () => {
-    const priorities = await Priority.find().exec()
+    const priorities: Priority[] = await Priority.find()
     const newPriorities = priorities.map(p => {
-      return new Priority({
+      return Priority.create({
         ...p,
         name: 'newName'
       })
     })
-    await PriorityService.editMany(newPriorities as [IPriority])
+    await PriorityService.editMany(newPriorities)
   })
 
   it('Remove a priority', async () => {
-    const priority = await Priority.findOne().exec()
-    await PriorityService.remove(priority._id)
+    const priority = await Priority.findOne()
+    await PriorityService.remove(priority!.id)
   })
 })

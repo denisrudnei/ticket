@@ -1,13 +1,10 @@
 query {
   tree: PathTree {
-    _id
     name
   	children {
       name
       url
-      _id
       children {
-        _id
         name
       }
     }

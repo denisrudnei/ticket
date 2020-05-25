@@ -1,5 +1,5 @@
 type Analyst {
-  _id: ID
+  id: ID
   name: String
   status: String,
   lastTimeActive: Datetime
@@ -15,7 +15,7 @@ type Analyst {
 }
 
 input AnalystInput {
-  _id: ID
+  id: ID
   name: String
   status: String,
   lastTimeActive: Datetime

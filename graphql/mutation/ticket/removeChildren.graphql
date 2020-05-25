@@ -1,6 +1,6 @@
 mutation RemoveChildren($ticketId: ID!, $childrenId: ID!) {
   RemoveChildren(ticketId: $ticketId, childrenId: $childrenId) {
-    _id
+    id
     resume
   }
 }

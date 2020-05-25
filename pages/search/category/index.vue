@@ -8,7 +8,7 @@
         open-on-click
       >
         <template
-          v-slot:prepend="{ item }"
+          v-slot:prepend
         >
           <v-icon>layers</v-icon>
         </template>
@@ -46,7 +46,7 @@ export default {
         .query({
           query: ggl(getSubs),
           variables: {
-            categoryId: item._id
+            categoryId: item.id
           }
         })
         .then(response => {

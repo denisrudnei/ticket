@@ -4,7 +4,7 @@ import Path from '../models/Path'
 
 export default {
   getProfileInfo: (req: express.Request, res: express.Response) => {
-    const userId = req.session!.authUser._id
+    const userId = req.session!.authUser.id
     PathService.getProfileInfo(userId)
       .then(result => {
         return res.status(200).json(result)
@@ -21,12 +21,12 @@ export default {
   },
 
   createPath: (req: express.Request, res: express.Response) => {
-    const path = new Path({
-      name: req.body.name,
-      objectName: req.body.objectName,
-      property: req.body.property
-    })
-    const userId = req.session!.authUser._id
+    const path = new Path()
+    path.name = req.body.name
+    path.objectName = req.body.objectName
+    path.property = req.body.property
+
+    const userId = req.session!.authUser.id
     PathService.create(path, userId)
       .then(() => {
         return res.sendStatus(201)
@@ -37,7 +37,7 @@ export default {
   },
 
   getPaths: (req: express.Request, res: express.Response) => {
-    const userId = req.session!.authUser._id
+    const userId = req.session!.authUser.id
     PathService.getPathsTree(userId)
       .then(result => {
         return res.status(200).json(result)
@@ -48,7 +48,7 @@ export default {
   },
 
   getAddress: (req: express.Request, res: express.Response) => {
-    const userId = req.session!.authUser._id
+    const userId = req.session!.authUser.id
     PathService.getAddress(userId)
       .then(result => {
         return res.status(200).json(result)
@@ -59,7 +59,7 @@ export default {
   },
 
   remove: (req: express.Request, res: express.Response) => {
-    PathService.remove(req.session!.authUser._id, req.params.id)
+    PathService.remove(req.session!.authUser.id, parseInt(req.params.id))
       .then(() => {
         return res.sendStatus(202)
       })

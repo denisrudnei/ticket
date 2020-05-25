@@ -1,15 +1,14 @@
 query SearchTicket($attributes: TicketAttributes, $page: Int!, $limit: Int!) {
   ticket: SearchTicket(attributes: $attributes, page: $page, limit: $limit) {
     docs {
-      _id
-      ticketNumber
+      id
       resume
       status {
-        _id
+        id
         name
       }
       group {
-        _id
+        id
         name
       }
       created

@@ -1,40 +1,37 @@
-import { models, model, Schema, Document } from 'mongoose'
-import { IAnalyst } from '../Analyst'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne
+} from 'typeorm'
 
-export interface IComment extends Document {
-  user: IAnalyst['_id']
-  content: string
-  date: Date
+import { ObjectType, Field, ID } from 'type-graphql'
+import Analyst from '../Analyst'
+import Ticket from './Ticket'
+
+@Entity()
+@ObjectType()
+class Comment extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @ManyToOne(type => Analyst)
+  @Field(type => Analyst)
+  public user!: Analyst
+
+  @Column()
+  @Field()
+  public content!: string
+
+  @Column()
+  @Field()
+  public date: Date = new Date()
+
+  @ManyToOne(type => Ticket, Ticket => Ticket.comments)
+  @Field(type => Ticket)
+  public ticket!: Ticket
 }
 
-const CommentSchema: Schema<IComment> = new Schema({
-  _id: Schema.Types.ObjectId,
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'Analyst'
-  },
-  content: {
-    type: String,
-    required: [true, 'Necessário comentar algo']
-  },
-  date: {
-    type: Date,
-    default: Date.now
-  }
-})
-
-CommentSchema.pre('find', function() {
-  this.populate('user')
-})
-
-CommentSchema.set('toObject', {
-  getters: true,
-  virtuals: true
-})
-
-CommentSchema.set('toJSON', {
-  getters: true,
-  virtuals: true
-})
-
-export default models.Comment || model('Comment', CommentSchema)
+export default Comment

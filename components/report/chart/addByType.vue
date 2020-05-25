@@ -224,8 +224,8 @@ export default {
           }
 
           data = data.sort((a, b) => {
-            if (a._id > b._id) return 1
-            if (a._id < b._id) return -1
+            if (a.id > b.id) return 1
+            if (a.id < b.id) return -1
             return 0
           })
 
@@ -233,7 +233,7 @@ export default {
             data: data.map(value => value.total)
           })
 
-          chart.options.labels = data.map(value => value._id)
+          chart.options.labels = data.map(value => value.id)
           this.$store.commit('report/addByDateChart', chart)
         })
     },
@@ -249,7 +249,7 @@ export default {
 
       chart.series = this.report.map(value => value.total)
 
-      chart.options.labels = this.report.map(value => value.value[0].name)
+      chart.options.labels = this.report.map(value => value.name)
 
       this.$store.commit('report/addGroupedChart', chart)
     },
@@ -266,7 +266,7 @@ export default {
         name: title,
         data: this.report.map(value => {
           return {
-            x: value.value[0].name,
+            x: value.name,
             y: value.total
           }
         })
@@ -278,7 +278,7 @@ export default {
       await this.queryFiltred()
       const tiles = this.report.map(item => {
         return {
-          title: item.value[0].name,
+          title: item.name,
           value: item.total
         }
       })

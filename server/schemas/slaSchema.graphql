@@ -1,5 +1,5 @@
 type Sla {
-  _id: ID!
+  id: ID!
   name: String
   limit: Datetime
 }

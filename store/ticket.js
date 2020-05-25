@@ -107,13 +107,13 @@ export const mutations = {
     state.modalQuery = modalQuery
   },
   updateTicket(state, ticket) {
-    if (Object.prototype.hasOwnProperty.call(state.actualTicket, '_id')) {
-      if (state.actualTicket._id === ticket._id) {
+    if (Object.prototype.hasOwnProperty.call(state.actualTicket, 'id')) {
+      if (state.actualTicket.id === ticket.id) {
         state.actualTicket = ticket
       }
     }
     const index = state.tickets.findIndex(t => {
-      return t._id === ticket._id
+      return t.id === ticket.id
     })
 
     if (index !== -1) {
@@ -122,7 +122,7 @@ export const mutations = {
       state.tickets.push(ticket)
     }
     const searchIndex = state.modalTickets.findIndex(s => {
-      return s._id === ticket._id
+      return s.id === ticket.id
     })
     if (searchIndex !== -1) {
       Object.assign(state.modalTickets[searchIndex], ticket)
@@ -137,13 +137,13 @@ export const mutations = {
     state.tree = [
       item,
       ...state.tree.filter(i => {
-        return i._id !== item._id
+        return i.id !== item.id
       })
     ]
   },
   removeTreeItem(state, id) {
     state.tree = state.tree.filter(item => {
-      return item._id !== id
+      return item.id !== id
     })
   },
   setDialog(state, ticketId) {
@@ -154,13 +154,13 @@ export const mutations = {
   },
   removeFromEdit(state, id) {
     state.ticketsToEdit = state.ticketsToEdit.filter(ticket => {
-      return ticket._id !== id
+      return ticket.id !== id
     })
   },
   addTicketsToEdit(state, ticket) {
     state.ticketsToEdit = [
       ...state.ticketsToEdit.filter(t => {
-        return t._id !== ticket._id
+        return t.id !== ticket.id
       }),
       ticket
     ]
@@ -176,7 +176,7 @@ export const mutations = {
   },
   removeChildren(state, children) {
     state.actualTicket.children = state.actualTicket.children.filter(c => {
-      return c._id !== children._id
+      return c.id !== children.id
     })
   }
 }
@@ -186,8 +186,8 @@ export const actions = {
     commit('insertTicket', ticket)
   },
   updateSla({ commit, state }, ticket) {
-    if (Object.prototype.hasOwnProperty.call(state.actualTicket, '_id')) {
-      if (state.actualTicket._id === ticket._id) {
+    if (Object.prototype.hasOwnProperty.call(state.actualTicket, 'id')) {
+      if (state.actualTicket.id === ticket.id) {
         commit('setFieldInActualTicket', {
           field: 'slaCount',
           value: ticket.slaCount
@@ -204,6 +204,8 @@ export const actions = {
         }
       })
       .then(response => {
+        /* eslint-disable */
+        console.log(response.data)
         commit('setActualTicket', response.data.data.TicketById)
       })
   },

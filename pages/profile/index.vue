@@ -177,7 +177,7 @@ export default {
       this.$store.commit('auth/setColor', this.primary)
     },
     updatePictureMerge(value) {
-      this.$store.commit('auth/updatemergePictureWithExternalAccount', value)
+      this.$store.commit('auth/updateMergePictureWithExternalAccount', value)
     },
     save() {
       this.$axios.put('/analyst', this.user).then(() => {

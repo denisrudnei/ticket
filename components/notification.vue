@@ -63,8 +63,8 @@
           >
             <v-list-item
               v-for="notification in notifications"
-              :key="notification._id"
-              :to="`/profile/notification/${notification._id}`"
+              :key="notification.id"
+              :to="`/profile/notification/${notification.id}`"
             >
               <v-list-item-content>
                 <v-list-item-title>
@@ -78,7 +78,7 @@
                 <v-btn
                   icon
                   class="primary--text"
-                  :to="`/profile/notification/${notification._id}`"
+                  :to="`/profile/notification/${notification.id}`"
                 >
                   <v-icon>
                     info
@@ -153,7 +153,7 @@ export default {
         'notification/ticketsToEdit/getTicketsToEdit'
       ].map(ntf => {
         const userIndex = this.analysts.findIndex(a => {
-          return a._id === ntf.user
+          return a.id === ntf.user
         })
         const user = this.analysts[userIndex]
         return {
@@ -172,7 +172,7 @@ export default {
     })
   },
   mounted() {
-    if (this.user !== undefined && this.user._id !== undefined) {
+    if (this.user !== undefined && this.user.id !== undefined) {
       this.$apollo
         .query({
           query: ggl(notificationList)
@@ -200,7 +200,7 @@ export default {
     },
     setActual(ticketId) {
       const ticketIndex = this.ticketsToEdit.findIndex(t => {
-        return t._id === ticketId
+        return t.id === ticketId
       })
       if (ticketIndex !== -1) {
         this.$store.commit(

@@ -1,11 +1,11 @@
-import { IResolvers } from 'graphql-tools'
-import PathService from '../services/PathService'
-
-const RefResolver: IResolvers = {
-  Query: {
-    Ref: () => {
-      return PathService.getRefs()
-    }
+import { Resolver, Query, Authorized } from 'type-graphql'
+import PathService, { Ref } from '../services/PathService'
+@Resolver()
+class RefResolver {
+  @Query(() => [Ref])
+  @Authorized('user')
+  Ref() {
+    return PathService.getRefs()
   }
 }
 

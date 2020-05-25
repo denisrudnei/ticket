@@ -20,9 +20,9 @@ export default {
             category: {
               name: category.name,
               description: category.description,
-              defaultGroup: category.defaultGroup._id,
-              defaultStatus: category.defaultStatus._id,
-              defaultPriority: category.defaultPriority._id
+              defaultGroup: category.defaultGroup.id,
+              defaultStatus: category.defaultStatus.id,
+              defaultPriority: category.defaultPriority.id
             }
           },
           refetchQueries: [{ query: ggl(categoryList) }]
@@ -35,7 +35,7 @@ export default {
             const formData = new FormData()
             formData.append('image', category.iamge)
             this.$axios
-              .post(`/config/category/image/${category._id}`, formData)
+              .post(`/config/category/image/${category.id}`, formData)
               .then(() => {
                 this.$toast.show('Image uploaded', {
                   duration: 5000,

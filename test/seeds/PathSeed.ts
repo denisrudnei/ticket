@@ -1,13 +1,24 @@
-import mongoose from 'mongoose'
-import generate from './Generate'
-const seed = (number: number) => {
-  const template = () => ({
-    _id: new mongoose.Types.ObjectId(),
-    objectName: 'category',
-    property: 'name',
-    name: 'categories'
-  })
-  return generate(template, number)
+import { DeleteResult } from 'typeorm'
+import Generate from './Generate'
+import Seed from './Seed'
+import Path from '~/server/models/Path'
+
+class PathSeed implements Seed<Path> {
+  init(): Promise<Path> {
+    return Path.create({
+      objectName: 'category',
+      property: 'name',
+      name: 'categories'
+    }).save()
+  }
+
+  generateMany(number: number): Promise<Path[]> {
+    return Generate.many<PathSeed>(new PathSeed(), number)
+  }
+
+  destroy(): Promise<DeleteResult> {
+    return Path.delete({})
+  }
 }
 
-export default seed
+export default PathSeed

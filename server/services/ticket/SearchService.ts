@@ -1,29 +1,22 @@
+import TicketPagination from '@/server/models/TicketPagination'
 import Ticket from '../../models/ticket/Ticket'
-
-const SearchService = {
-  getTickets: (query: any = {}, sortBy: any, page = 1, limit = 10) => {
-    return new Promise((resolve, reject) => {
-      // TODO
-      const filterKeys = Object.keys(Ticket.schema.obj)
-      filterKeys.push('ticketNumber')
-      Object.keys(query).forEach(inQuery => {
-        if (!filterKeys.includes(inQuery)) delete query[inQuery]
-      })
-      Ticket.paginate(
-        query,
-        {
-          page,
-          limit,
-          sort: sortBy,
-          populate: ['status', 'children']
-        },
-        (err: Error, result) => {
-          if (err) return reject(err)
-          return resolve(result)
-        }
-      )
+class SearchService {
+  async getTickets(
+    query: any = {},
+    sortBy: any,
+    page = 1,
+    limit = 10
+  ): Promise<TicketPagination> {
+    const total = await Ticket.count()
+    const pages = Math.ceil(total / limit)
+    const result = await Ticket.find({
+      take: limit,
+      skip: (page === 0 ? 1 : page - 1) * limit
     })
+
+    // TODO
+    return new TicketPagination(result, total, page, pages, limit)
   }
 }
 
-export default SearchService
+export default new SearchService()

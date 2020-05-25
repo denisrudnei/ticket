@@ -35,11 +35,11 @@ export default {
     res: express.Response,
     next: express.NextFunction
   ) => {
-    const user = new Analyst({
+    const user = {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password
-    })
+    } as Analyst
     AuthService.register(user)
       .then(() => {
         return res.sendStatus(201)
@@ -86,7 +86,7 @@ export default {
   },
 
   reset: (req: express.Request, res: express.Response) => {
-    const userId = req.session!.authUser._id
+    const userId = req.session!.authUser.id
     AuthService.resetPassword(
       userId,
       req.body.oldPassword,
@@ -97,7 +97,7 @@ export default {
       })
       .catch((e: Error) => {
         return res.status(400).json({
-          message: 'Senha antiga errada'
+          message: 'Incorrect old password'
         })
       })
   }

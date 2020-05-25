@@ -1,120 +1,87 @@
-import mongoose from 'mongoose'
-import fileUpload from 'express-fileupload'
+import { UploadedFile } from 'express-fileupload'
 import AWS from 'aws-sdk'
-import Analyst, { IAnalyst } from '../../server/models/Analyst'
-import { IGroup } from '../models/ticket/Group'
-const S3 = require('~/plugins/S3')
+import Analyst from '../../server/models/Analyst'
+import Group from '../models/ticket/Group'
+import Sound from '../models/Sound'
+import S3 from '~/plugins/S3'
 
 class AnalystService {
-  async create(analyst: IAnalyst): Promise<IAnalyst> {
-    const existing = await Analyst.findOne({
-      email: {
-        $regex: new RegExp(`^${analyst.email}$`, 'i')
-      }
-    }).exec()
-    if (existing) return Promise.reject(new Error('User already registered'))
-    return new Promise((resolve, reject) => {
-      Analyst.create(
-        {
-          _id: new mongoose.Types.ObjectId(),
-          ...analyst
-        },
-        (err: Error, analyst: IAnalyst) => {
-          if (err) return reject(err)
-          return resolve(analyst)
-        }
-      )
-    })
-  }
-
-  getAnalysts(): Promise<[IAnalyst]> {
-    return new Promise((resolve, reject) => {
-      Analyst.find({}).exec((err: Error, analysts: [IAnalyst]) => {
-        if (err) return reject(err)
-        return resolve(analysts)
-      })
-    })
-  }
-
-  getOne(analystId: IAnalyst['_id']): Promise<IAnalyst> {
+  create(analyst: Analyst): Promise<Analyst> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
-        _id: analystId
-      }).exec((err: Error, analyst) => {
-        if (err) return reject(err)
-        return resolve(analyst)
+        where: {
+          email: analyst.email
+        }
+      }).then(existing => {
+        if (existing)
+          return Promise.reject(new Error('User already registered'))
+
+        Analyst.create({
+          ...analyst
+        })
+          .save()
+          .then((analyst: Analyst) => {
+            resolve(analyst)
+          })
       })
     })
   }
 
-  getConfigAnalysts() {
+  getAnalysts(): Promise<Analyst[]> {
     return new Promise((resolve, reject) => {
-      Analyst.find({})
-        .select({
-          active: 1,
-          emailVisible: 1,
-          mergePictureWithExternalAccount: 1,
-          role: 1,
-          color: 1,
-          name: 1
-        })
-        .exec((err: Error, analysts) => {
-          if (err) reject(err)
-          return resolve(analysts)
-        })
+      Analyst.find().then((analysts: Analyst[]) => {
+        resolve(analysts)
+      })
     })
   }
 
-  updateAnalyst(userId: IAnalyst['_id'], analyst: IAnalyst): Promise<IAnalyst> {
+  getOne(analystId: Analyst['id']): Promise<Analyst> {
+    return new Promise((resolve, reject) => {
+      Analyst.findOneOrFail(analystId).then((analyst: Analyst) => {
+        resolve(analyst)
+      })
+    })
+  }
+
+  getConfigAnalysts(): Promise<Analyst[]> {
+    return new Promise((resolve, reject) => {
+      Analyst.find().then((analysts: Analyst[]) => {
+        resolve(analysts)
+      })
+    })
+  }
+
+  updateAnalyst(userId: Analyst['id'], analyst: Analyst): Promise<Analyst> {
     return new Promise((resolve, reject) => [
-      Analyst.updateOne(
-        {
-          _id: userId
-        },
-        {
-          $set: {
-            name: analyst.name,
-            color: analyst.color,
-            mergePictureWithExternalAccount:
-              analyst.mergePictureWithExternalAccount,
-            contactEmail: analyst.contactEmail
-          }
-        }
-      ).exec((err: Error) => {
-        if (err) return reject(err)
-        return resolve(this.getOne(userId))
+      Analyst.findOne(userId).then(fromDb => {
+        fromDb!.name = analyst.name
+        fromDb!.color = analyst.color
+        fromDb!.mergePictureWithExternalAccount =
+          analyst.mergePictureWithExternalAccount
+        fromDb!.contactEmail = analyst.contactEmail
+        fromDb!.save().then(() => {
+          resolve(this.getOne(userId))
+        })
       })
     ])
   }
 
-  updateImage(
-    userId: IAnalyst['_id'],
-    file: fileUpload.UploadedFile
-  ): Promise<void> {
+  updateImage(userId: Analyst['id'], file: UploadedFile): Promise<void> {
     return new Promise((resolve, reject) => {
-      S3.createBucket(async () => {
+      Analyst.findOne(userId).then(analyst => {
         const name = userId
         const params = {
-          Bucket: process.env.BUCKET,
+          Bucket: process.env.BUCKET!,
           Key: `analyst/picture/${name}`,
           Body: file.data
         }
-        await S3.upload(
+        S3.upload(
           params,
           (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
-            if (err) return reject(err)
-            Analyst.updateOne(
-              {
-                _id: userId
-              },
-              {
-                $set: {
-                  picture: data.Location
-                }
-              }
-            ).exec((err: Error) => {
-              if (err) return reject(err)
-              return resolve()
+            if (err) reject(err)
+            analyst!.picture = data.Location!
+            analyst!.save().then(() => {
+              resolve()
             })
           }
         )
@@ -122,76 +89,52 @@ class AnalystService {
     })
   }
 
-  setSoundConfig(analystId: IAnalyst['_id'], config: any): Promise<void> {
-    return Analyst.updateOne(
-      {
-        _id: analystId
-      },
-      {
-        $set: {
-          sounds: {
-            chat: {
-              muted: config.chat.muted,
-              volume: config.chat.volume
-            },
-            notification: {
-              muted: config.notification.muted,
-              volume: config.notification.volume
-            }
-          }
-        }
-      }
-    ).exec()
-  }
-
-  getGroups(userId: IAnalyst['_id']): Promise<[IGroup]> {
+  setSoundConfig(analystId: Analyst['id'], config: Sound[]): Promise<void> {
     return new Promise((resolve, reject) => {
-      Analyst.findOne({ _id: userId }).then(analyst => {
-        analyst.getGroups((err: Error, result: [IGroup]) => {
-          if (err) return reject(err)
-          return resolve(result)
+      // TODO
+      Analyst.findOne(analystId, { relations: ['sounds'] }).then(analyst => {
+        analyst!.sounds.push(...config)
+        analyst!.save().then(() => {
+          resolve()
         })
       })
     })
   }
 
-  removeImage(userId: IAnalyst['_id']): Promise<void> {
+  getGroups(userId: Analyst['id']): Promise<Group[]> {
+    return new Promise((resolve, reject) => {
+      Analyst.findOne(userId).then(analyst => {
+        analyst!.getGroups().then((result: Group[]) => {
+          resolve(result)
+        })
+      })
+    })
+  }
+
+  removeImage(userId: Analyst['id']): Promise<void> {
     return new Promise((resolve, reject) => {
       S3.deleteObject(
         {
-          Bucket: process.env.BUCKET,
-          Key: userId
+          Bucket: process.env.BUCKET!,
+          Key: userId.toString()
         },
         () => {
-          Analyst.updateOne(
-            {
-              _id: userId
-            },
-            {
-              $set: {
-                picture: '/user.svg'
-              }
-            }
-          ).exec((err: Error) => {
-            if (err) return reject(err)
-            return resolve()
+          Analyst.findOne().then(analyst => {
+            analyst!.picture = '/user.svg'
+            analyst!.save().then(() => {
+              resolve()
+            })
           })
         }
       )
     })
   }
 
-  remove(userId: IAnalyst['_id']): Promise<void> {
+  remove(userId: Analyst['id']): Promise<void> {
     return new Promise((resolve, reject) => {
-      Analyst.deleteOne(
-        {
-          _id: userId
-        },
-        (err: Error) => {
-          if (err) reject(err)
-          return resolve()
-        }
-      )
+      Analyst.delete(userId).then(() => {
+        resolve()
+      })
     })
   }
 }

@@ -1,5 +1,5 @@
 type Chat {
-  _id: ID!
+  id: ID!
   participants: [Analyst]
   messages: [Message]
 }

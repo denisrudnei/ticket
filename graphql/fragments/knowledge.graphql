@@ -1,5 +1,5 @@
 fragment list on Knowledge {
-  _id
+  id
   name
   created
   status {

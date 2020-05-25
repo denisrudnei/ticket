@@ -5,19 +5,19 @@
     </v-col>
     <v-col cols="12">
       <v-row>
-        <v-col v-for="ticket in tickets" :key="ticket._id" cols="12" md="4">
+        <v-col v-for="ticket in tickets" :key="ticket.id" cols="12" md="4">
           <v-card tile :color="color(ticket)" class="white--text" dark>
             <v-card-text>
               <v-row>
                 <v-col cols="12">
-                  <nuxt-link :to="`/client/ticket/view/${ticket._id}`" tag="span">
+                  <nuxt-link :to="`/client/ticket/view/${ticket.id}`" tag="span">
                     <v-card-title class="text-center">
                       <p>{{ ticket.resume }}</p>
                     </v-card-title>
                   </nuxt-link>
                 </v-col>
                 <v-col>
-                  {{ $t('number_of_ticket') }}: {{ ticket.ticketNumber }}
+                  {{ $t('number_of_ticket') }}: {{ ticket.id }}
                 </v-col>
                 <v-col cols="12">
                   <v-progress-linear striped height="15" :value="ticket.slaPencentage" color="black">
@@ -31,7 +31,7 @@
                   <v-text-field filled :value="ticket.modified | date" :label="$t('modified_date')" />
                 </v-col>
                 <v-col cols="12">
-                  <v-btn :to="`/client/ticket/view/${ticket._id}`" block tile>
+                  <v-btn :to="`/client/ticket/view/${ticket.id}`" block tile>
                     {{ $t('see_details') }}
                     <v-icon right>
                       search
@@ -99,7 +99,7 @@ export default {
             page: page || 1,
             limit: 9,
             attributes: {
-              openedBy: this.user._id
+              openedBy: this.user.id
             }
           }
         })

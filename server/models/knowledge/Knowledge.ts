@@ -1,73 +1,55 @@
-import { models, model, Schema, Document } from 'mongoose'
-import { ICategory } from '../ticket/Category'
-import { IGroup } from '../ticket/Group'
-import { IStatus } from '../ticket/Status'
-import { IKnowledgeFile } from './KnowledgeFile'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany
+} from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql'
+import Category from '../ticket/Category'
+import Group from '../ticket/Group'
+import KnowledgeFile from './KnowledgeFile'
+import KnowledgeStatus from './KnowledgeStatus'
 
-export interface IKnowledge extends Document {
-  name: string
-  created: Date
-  category: ICategory['_id']
-  group: IGroup['_id']
-  status: IStatus['_id']
-  preview: string
-  files: [IKnowledgeFile['_id']]
+@Entity()
+@ObjectType()
+class Knowledge extends BaseEntity {
+  @Field(type => ID)
+  @PrimaryGeneratedColumn()
+  public id!: number
+
+  @Column()
+  @Field(type => String)
+  public name!: string
+
+  @Column()
+  @Field(type => Date)
+  public created: Date = new Date()
+
+  @ManyToOne(type => Category)
+  @Field(() => Category)
+  public category!: Category
+
+  @ManyToOne(type => Group)
+  @Field(() => Group)
+  public group!: Group
+
+  @ManyToOne(type => KnowledgeStatus)
+  @Field(type => KnowledgeStatus)
+  public status!: KnowledgeStatus
+
+  @Column()
+  @Field(type => String)
+  public url: string = ''
+
+  @Column()
+  @Field(type => String)
+  public preview!: string
+
+  @Field(type => [KnowledgeFile])
+  @OneToMany(type => KnowledgeFile, KnowledgeFile => KnowledgeFile.knowledge)
+  public files!: KnowledgeFile[]
 }
 
-const KnowledgeSchema = new Schema({
-  _id: Schema.Types.ObjectId,
-  name: {
-    type: String
-  },
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  category: {
-    type: Schema.Types.ObjectId,
-    ref: 'Category',
-    required: [true, 'Necessário haver uma categoria relacionada']
-  },
-  group: {
-    type: Schema.Types.ObjectId,
-    ref: 'Group',
-    required: [true, 'Necessário haver um grupo relacionado']
-  },
-  status: {
-    type: Schema.Types.ObjectId,
-    ref: 'KnowledgeStatus'
-  },
-  preview: {
-    type: String
-  },
-  url: {
-    type: String,
-    default: ''
-  },
-  files: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'KnowledgeFile'
-    }
-  ]
-})
-
-KnowledgeSchema.pre('find', function() {
-  this.populate(['category', 'group', 'status'])
-})
-
-KnowledgeSchema.pre('findOne', function() {
-  this.populate(['category', 'group', 'status'])
-})
-
-KnowledgeSchema.set('toJSON', {
-  virtuals: true,
-  getters: true
-})
-
-KnowledgeSchema.set('toObject', {
-  virtuals: true,
-  getters: true
-})
-
-export default models.Knowledge || model('Knowledge', KnowledgeSchema)
+export default Knowledge

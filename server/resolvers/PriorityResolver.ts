@@ -1,25 +1,40 @@
-import { IResolvers } from 'graphql-tools'
+import { Query, Resolver, Mutation, Arg, ID, Authorized } from 'type-graphql'
 import PriorityService from '../services/PriorityService'
+import Priority from '../models/ticket/Priority'
+import PriorityInput from '../inputs/PriorityInput'
 
-const PriorityResolver: IResolvers = {
-  Query: {
-    Priority: () => {
-      return PriorityService.getAll()
-    },
-    PriorityById: (_: any, { _id }: any) => {
-      return PriorityService.getOne(_id)
-    }
-  },
-  Mutation: {
-    CreatePriority: (_: any, { priority }: any) => {
-      return PriorityService.create(priority)
-    },
-    UpdatePriority: (_: any, { priority }: any) => {
-      return PriorityService.edit(priority)
-    },
-    UpdateManyPriorities: (_: any, { priorities }: any) => {
-      return PriorityService.editMany(priorities)
-    }
+@Resolver()
+class PriorityResolver {
+  @Query(() => [Priority])
+  @Authorized('user')
+  Priority() {
+    return PriorityService.getAll()
+  }
+
+  @Query(() => Priority)
+  @Authorized('user')
+  PriorityById(@Arg('id', () => ID) id: Priority['id']) {
+    return PriorityService.getOne(id)
+  }
+
+  @Mutation(() => Priority)
+  @Authorized('user')
+  CreatePriority(@Arg('priority', () => PriorityInput) priority: Priority) {
+    return PriorityService.create(priority)
+  }
+
+  @Mutation(() => Priority)
+  @Authorized('user')
+  UpdatePriority(@Arg('priority', () => PriorityInput) priority: Priority) {
+    return PriorityService.edit(priority)
+  }
+
+  @Mutation(() => [Priority])
+  @Authorized('user')
+  UpdateManyPriorities(
+    @Arg('priorities', () => [PriorityInput]) priorities: Priority[]
+  ) {
+    return PriorityService.editMany(priorities)
   }
 }
 

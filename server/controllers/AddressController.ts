@@ -15,13 +15,13 @@ export default {
   },
 
   getOne: (req: express.Request, res: express.Response) => {
-    AddressService.getOne(req.params.id).then(address => {
+    AddressService.getOne(parseInt(req.params.id)).then(address => {
       return res.status(200).json(address)
     })
   },
 
   edit: (req: express.Request, res: express.Response) => {
-    AddressService.edit(req.params.id, req.body).then(() => {
+    AddressService.edit(parseInt(req.params.id), req.body).then(() => {
       res.sendStatus(202)
     })
   }

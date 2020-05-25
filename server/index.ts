@@ -1,44 +1,43 @@
 import * as path from 'path'
+import http from 'http'
 import consola from 'consola'
-import { GraphQLServer, PubSub } from 'graphql-yoga'
-import { Context } from 'graphql-yoga/dist/types'
-import mongoose from 'mongoose'
+import { ApolloServer, PubSub } from 'apollo-server-express'
 import morgan from 'morgan'
+import createConnection from '@/server/db/typeormConnection'
+import { buildSchema, PubSubEngine } from 'type-graphql'
+import { customAuthChecker } from './authChecker'
 import app from '~/server/app'
 import CheckACL from '~/server/models/CheckACL'
-import resolvers from '~/server/resolvers'
 import TicketService from '~/server/services/ticket/TicketService'
 
 const { Nuxt, Builder } = require('nuxt')
 const config = require('~/nuxt.config.js')
 
-mongoose
-  .connect(
-    process.env.MONGODB_URI || 'mongodb://localhost/test',
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
-  .then(() => {
-    consola.log('Connection to mongodb')
-  })
-  .catch(() => {
-    consola.error('Failed to connect to mongodb')
-  })
-
 const pubSub = new PubSub()
 
 config.dev = !(process.env.NODE_ENV === 'production')
 
-const server = new GraphQLServer({
-  typeDefs: path.resolve('server/schemas.graphql'),
-  resolvers,
-  context: (req: Context) => ({
-    req: req.request,
-    pubSub
-  })
-})
-
 async function start() {
   const nuxt = new Nuxt(config)
+  await createConnection
+
+  const server = new ApolloServer({
+    schema: await buildSchema({
+      resolvers: [path.join(__dirname, 'resolvers/**/*.ts')],
+      authChecker: customAuthChecker,
+      pubSub: pubSub
+    }),
+    playground: {
+      endpoint: '/graphql'
+    },
+    subscriptions: {
+      path: `/subscriptions`
+    },
+    context: context => ({
+      req: context.req,
+      pubSub
+    })
+  })
 
   const {
     host = process.env.HOST || '127.0.0.1',
@@ -48,7 +47,7 @@ async function start() {
   // Build only in dev mode
   if (config.dev) {
     const builder = new Builder(nuxt)
-    server.express.use(morgan('dev'))
+    app.use(morgan('dev'))
     await builder.build()
   } else {
     await nuxt.ready()
@@ -58,24 +57,18 @@ async function start() {
     if (err) consola.error(err)
   })
 
-  server.express.use(app)
+  const httpServer = http.createServer(app)
+  server.installSubscriptionHandlers(httpServer)
+  server.applyMiddleware({ app })
+  app.use(nuxt.render)
 
-  server.start({
-    port: port,
-    endpoint: '/api/graphql',
-    playground: '/api/playground',
-    subscriptions: {
-      path: `/api/subscriptions`
-    }
+  httpServer.listen(port, () => {
+    consola.ready({
+      message: `Server listening on http://${host}:${port}`,
+      badge: true
+    })
   })
-
-  server.express.use(nuxt.render)
 
   TicketService.startAgenda(pubSub)
-
-  consola.ready({
-    message: `Server listening on http://${host}:${port}`,
-    badge: true
-  })
 }
 start()

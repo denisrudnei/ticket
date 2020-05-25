@@ -1,30 +1,19 @@
-import { models, model, Schema, Document } from 'mongoose'
+import { BaseEntity, PrimaryGeneratedColumn, Entity, Column } from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql'
 
-export interface IKnowledgeStatus extends Document {
-  name: string
-  description: string
+@Entity()
+@ObjectType()
+class KnowledgeStatus extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @Column()
+  @Field(type => String)
+  public name!: string
+
+  @Column()
+  public description!: string
 }
 
-const KnowledgeStatusSchema: Schema<IKnowledgeStatus> = new Schema({
-  _id: Schema.Types.ObjectId,
-  name: {
-    type: String,
-    required: [true, 'Necessário atribuir um nome']
-  },
-  description: {
-    type: String
-  }
-})
-
-KnowledgeStatusSchema.set('toObject', {
-  virtuals: true,
-  getters: true
-})
-
-KnowledgeStatusSchema.set('toJSON', {
-  virtuals: true,
-  getters: true
-})
-
-export default models.KnowledgeStatus ||
-  model('KnowledgeStatus', KnowledgeStatusSchema)
+export default KnowledgeStatus

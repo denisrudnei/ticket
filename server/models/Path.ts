@@ -1,33 +1,35 @@
-import { models, model, Schema, Document } from 'mongoose'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne
+} from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql'
+import Analyst from './Analyst'
 
-export interface IPath extends Document {
-  objectName: string
-  property: string
-  name: string
+@Entity()
+@ObjectType()
+export class Path extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @Column()
+  @Field()
+  public objectName!: string
+
+  @Column()
+  @Field()
+  public property!: string
+
+  @Column()
+  @Field()
+  public name!: string
+
+  @ManyToOne(type => Analyst)
+  @Field(type => Analyst)
+  public user!: Analyst
 }
 
-const PathSchema = new Schema({
-  _id: Schema.Types.ObjectId,
-  objectName: {
-    type: String
-  },
-  property: {
-    type: String
-  },
-  name: {
-    type: String,
-    required: true
-  }
-})
-
-PathSchema.set('toJSON', {
-  getters: true,
-  virtuals: true
-})
-
-PathSchema.set('toObject', {
-  getters: true,
-  virtuals: true
-})
-
-export default models.Path || model('Path', PathSchema)
+export default Path

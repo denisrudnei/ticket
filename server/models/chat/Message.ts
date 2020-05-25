@@ -1,44 +1,53 @@
-import { models, model, Schema, Document } from 'mongoose'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
+  ManyToMany,
+  ManyToOne,
+  JoinTable
+} from 'typeorm'
 
-export interface IMessage extends Document {
-  to: Schema.Types.ObjectId
-  from: Schema.Types.ObjectId
-  content: string
-  read: boolean
-  date: Date
+import { ObjectType, Field, ID } from 'type-graphql'
+import Analyst from '../Analyst'
+import Chat from './Chat'
+
+@Entity()
+@ObjectType()
+class Message extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @ManyToOne(type => Chat, Chat => Chat.messages)
+  @JoinColumn({ name: 'chat' })
+  public chat!: Chat
+
+  @ManyToOne(type => Analyst)
+  @JoinColumn({ name: 'to' })
+  @Field(type => Analyst)
+  public to!: Analyst
+
+  @ManyToOne(type => Analyst)
+  @JoinColumn({ name: 'from' })
+  @Field(type => Analyst)
+  public from!: Analyst
+
+  @Column()
+  @Field()
+  public content!: string
+
+  @ManyToMany(type => Analyst)
+  @JoinTable()
+  @Field(type => [Analyst])
+  public read!: Analyst[]
+
+  @Column()
+  @Field()
+  public date: Date = new Date()
 }
 
-const MessageSchema = new Schema({
-  _id: Schema.Types.ObjectId,
-  to: {
-    type: Schema.Types.ObjectId,
-    ref: 'Analyst'
-  },
-  from: {
-    type: Schema.Types.ObjectId,
-    ref: 'Analyst'
-  },
-  content: {
-    type: String,
-    default: ''
-  },
-  read: {
-    type: Boolean,
-    default: false
-  },
-  date: {
-    type: Date,
-    default: Date.now
-  }
-})
-
-MessageSchema.set('toJSON', {
-  virtuals: true,
-  getters: true
-})
-
-MessageSchema.pre('find', function() {
-  this.populate(['to', 'from'])
-})
-
-export default models.Message || model('Message', MessageSchema)
+export default Message

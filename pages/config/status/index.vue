@@ -15,7 +15,7 @@
         <template
           v-slot:item.edit="{ item }"
         >
-          <v-btn icon class="primary white--text" :to="`/config/status/edit/${item._id}`">
+          <v-btn icon class="primary white--text" :to="`/config/status/edit/${item.id}`">
             <v-icon>edit</v-icon>
           </v-btn>
         </template>

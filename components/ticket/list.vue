@@ -9,7 +9,7 @@
       <v-data-table
         v-model="selected"
         :show-select="true"
-        item-key="_id"
+        item-key="id"
         :items="tickets"
         :headers="headers"
         must-sort
@@ -37,14 +37,14 @@
             </v-icon>
           </v-btn>
         </template>
-        <template v-slot:item.ticketNumber="{ item }">
-          {{ item.ticketNumber }}
+        <template v-slot:item.id="{ item }">
+          {{ item.id }}
         </template>
         <template v-slot:item.priority="{ item }">
           {{ item.priority.name }}
         </template>
         <template v-slot:item.actualUser="{ item }">
-          <v-list-item :to="`/analyst/${item.actualUser._id}`">
+          <v-list-item :to="`/analyst/${item.actualUser.id}`">
             <v-list-item-avatar>
               <img :src="item.actualUser.picture">
             </v-list-item-avatar>
@@ -71,9 +71,9 @@
                   pa-4
                 >
                   <v-select
-                    v-if="status.find(s => {return s._id === item.status._id})"
+                    v-if="status.find(s => {return s.id === item.status.id})"
                     v-model="currentStatus"
-                    :items="status.find(s => {return s._id === item.status._id}).allowedStatus.map(s => ({ text: s.name, value: s }))"
+                    :items="status.find(s => {return s.id === item.status.id}).allowedStatus.map(s => ({ text: s.name, value: s }))"
                     filled
                     :label="$t('status')"
                   />
@@ -92,7 +92,7 @@
                 >
                   <v-select
                     v-model="currentGroup"
-                    :items="groups.filter(g => {return g._id !== item.group._id}).map(g => ({ text: g.name, value: g }))"
+                    :items="groups.filter(g => {return g.id !== item.group.id}).map(g => ({ text: g.name, value: g }))"
                     filled
                     label="Para qual grupo? "
                   />
@@ -204,7 +204,7 @@ export default {
         },
         {
           text: this.$t('number_of_ticket'),
-          value: 'ticketNumber'
+          value: 'id'
         },
         {
           text: this.$t('priority'),
@@ -324,9 +324,9 @@ export default {
             mutation: ggl(changeStatusOfTickets),
             variables: {
               tickets: this.selected.map(ticket => {
-                return ticket._id
+                return ticket.id
               }),
-              statusId: this.selectedStatus._id
+              statusId: this.selectedStatus.id
             }
           })
           .then(() => {
@@ -339,9 +339,9 @@ export default {
             mutation: ggl(transferTickets),
             variables: {
               tickets: this.selected.map(ticket => {
-                return ticket._id
+                return ticket.id
               }),
-              groupId: this.selectedGroup._id
+              groupId: this.selectedGroup.id
             }
           })
           .then(() => {
@@ -372,7 +372,7 @@ export default {
         'address',
         'group',
         'priority',
-        'ticketNumber',
+        'id',
         'ids'
       ]
       const attributes = {}
@@ -420,8 +420,8 @@ export default {
         .mutate({
           mutation: ggl(changeStatus),
           variables: {
-            ticketId: ticket._id,
-            statusId: this.currentStatus._id
+            ticketId: ticket.id,
+            statusId: this.currentStatus.id
           }
         })
         .then(response => {
@@ -440,8 +440,8 @@ export default {
         .mutate({
           mutation: ggl(transferToGroup),
           variables: {
-            ticketId: ticket._id,
-            groupId: this.currentGroup._id
+            ticketId: ticket.id,
+            groupId: this.currentGroup.id
           }
         })
         .then(response => {

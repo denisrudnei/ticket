@@ -1,41 +1,40 @@
 fragment ticketList on Ticket {
-  _id
-  ticketNumber
+  id
   priority {
-    _id
+    id
     name
   }
   openedBy {
-    _id
+    id
     name
   }
   affectedUser {
-    _id
+    id
     name
   }
   address {
-    _id
+    id
     name
   }
   actualUser {
-    _id
+    id
     name
     picture
   }
   category {
-    _id
+    id
     fullName
     name
   }
   group {
-    _id
+    id
     name
   }
   status {
-    _id
+    id
     name
     allowedStatus {
-      _id
+      id
       name
     }
   }

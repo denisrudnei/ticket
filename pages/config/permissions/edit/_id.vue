@@ -57,14 +57,14 @@ export default {
     return $axios.get('/role').then(response => {
       return {
         role: response.data.find(r => {
-          return r._id === params.id
+          return r.id === params.id
         })
       }
     })
   },
   methods: {
     save() {
-      this.$axios.put(`/config/role/${this.role._id}`, this.role).then(() => {
+      this.$axios.put(`/config/role/${this.role.id}`, this.role).then(() => {
         this.$toast.show('Role ataualizada com sucesso', {
           duration: 1000,
           icon: 'verified_user'

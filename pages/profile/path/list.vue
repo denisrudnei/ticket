@@ -14,7 +14,7 @@
           {{ item.property }}
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-btn class="primary white--text" icon title="Exluir" @click="deletePath(item._id)">
+          <v-btn class="primary white--text" icon title="Exluir" @click="deletePath(item.id)">
             <v-icon>
               delete
             </v-icon>
@@ -71,7 +71,7 @@ export default {
         .mutate({
           mutation: ggl(remove),
           variables: {
-            userId: this.user._id,
+            userId: this.user.id,
             path: id
           },
           refetchQueries: [
@@ -85,12 +85,12 @@ export default {
         })
         .then(() => {
           this.items = this.items.filter(item => {
-            return item._id !== id
+            return item.id !== id
           })
           this.$store.commit(
             'ticket/setTree',
             this.tree.filter(item => {
-              return item._id !== id
+              return item.id !== id
             })
           )
           this.$toast.show('Removido', {

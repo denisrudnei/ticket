@@ -14,7 +14,7 @@ export const getters = {
       return (
         a.name.toLowerCase().includes(state.searchName.toLowerCase()) &&
         (state.searchAddress !== ''
-          ? a.address === state.searchAddress._id
+          ? a.address === state.searchAddress.id
           : true)
       )
     })
@@ -42,14 +42,14 @@ export const mutations = {
   },
   updateStatus(state, info) {
     const analyst = state.analysts.find(a => {
-      return a._id === info.id
+      return a.id === info.id
     })
     if (analyst) {
       analyst.status = info.status
       state.analysts = [
         analyst,
         ...state.analysts.filter(a => {
-          return a._id !== info.id
+          return a.id !== info.id
         })
       ]
     }

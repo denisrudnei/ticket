@@ -1,104 +1,69 @@
-import mongoose from 'mongoose'
-import Group, { IGroup } from '../../models/ticket/Group'
-import { IAnalyst } from '../../models/Analyst'
+import Group from '../../models/ticket/Group'
+import Analyst from '../../models/Analyst'
 
 class GroupService {
-  getAll(): Promise<[IGroup]> {
+  getAll(): Promise<Group[]> {
     return new Promise((resolve, reject) => {
-      Group.find({}, (err: Error, groups: [IGroup]) => {
-        if (err) return reject(err)
-        if (groups === null) return reject(new Error('No group found'))
+      Group.find({ relations: ['analysts'] }).then(groups => {
         return resolve(groups)
       })
     })
   }
 
-  getOne(groupId: IGroup['_id']): Promise<IGroup> {
+  getOne(groupId: Group['id']): Promise<Group> {
     return new Promise((resolve, reject) => {
-      Group.findOne({
-        _id: groupId
-      })
-        .populate(['analysts'])
-        .exec((err: Error, group) => {
-          if (err) return reject(err)
-          if (group === null) return reject(new Error('No group found'))
-          return resolve(group)
-        })
-    })
-  }
-
-  create(group: IGroup): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const newGroup = new Group({
-        _id: new mongoose.Types.ObjectId(),
-        ...group
-      })
-
-      Group.create(newGroup, (err: Error) => {
-        if (err) return reject(err)
-        return resolve()
+      Group.findOne(groupId).then(group => {
+        if (!group) return reject(new Error('No group found'))
+        return resolve(group)
       })
     })
   }
 
-  edit(groupId: IGroup['_id'], group: IGroup): Promise<void> {
+  create(group: Group): Promise<Group> {
     return new Promise((resolve, reject) => {
-      Group.updateOne(
-        {
-          _id: groupId
-        },
-        {
-          $set: {
-            name: group.name,
-            analysts: group.analysts
-          }
-        }
-      ).exec((err: Error) => {
-        if (err) return reject(err)
-        return resolve()
+      resolve(Group.create(group).save())
+    })
+  }
+
+  edit(groupId: Group['id'], groupToEdit: Group): Promise<void> {
+    return new Promise((resolve, reject) => {
+      Group.findOne(groupId, { relations: ['analysts'] }).then(group => {
+        if (!group) reject(new Error('Group not found'))
+        group!.name = groupToEdit.name
+        group!.analysts = groupToEdit.analysts
+        group!.save()
+        resolve()
       })
     })
   }
 
   insertAnalyst(
-    groupId: IGroup['_id'],
-    analystId: IAnalyst['_id']
-  ): Promise<void> {
+    groupId: Group['id'],
+    analystId: Analyst['id']
+  ): Promise<Group> {
     return new Promise((resolve, reject) => {
-      Group.updateOne(
-        { _id: groupId },
-        {
-          $addToSet: {
-            analysts: [analystId]
-          }
-        },
-        err => {
-          if (err) return reject(err)
-          return resolve()
-        }
-      )
+      Group.findOne(groupId, { relations: ['analysts'] }).then(async group => {
+        const analyst = await Analyst.findOne(analystId)
+        group!.analysts.push(analyst!)
+        group!.save().then(group => {
+          resolve(group)
+        })
+      })
     })
   }
 
   removeAnalyst(
-    groupId: IGroup['_id'],
-    analystId: IAnalyst['_id']
-  ): Promise<void> {
+    groupId: Group['id'],
+    analystId: Analyst['id']
+  ): Promise<Group> {
     return new Promise((resolve, reject) => {
-      Group.updateOne(
-        { _id: groupId },
-        {
-          $pull: {
-            analysts: {
-              $in: [analystId]
-            }
-          }
-        },
-        err => {
-          if (err) return reject(err)
-          return resolve()
-        }
-      )
+      Group.findOne(groupId, { relations: ['analysts'] }).then(async group => {
+        const analyst = await Analyst.findOne(analystId)
+        group!.analysts.push(analyst!)
+        group!.save().then(group => {
+          resolve(group)
+        })
+      })
     })
   }
 }

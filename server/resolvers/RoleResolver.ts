@@ -1,11 +1,13 @@
-import { IResolvers } from 'graphql-tools'
+import { Resolver, Query, Authorized } from 'type-graphql'
 import RoleService from '../services/RoleService'
+import Role from '../models/Role'
 
-const RoleResolver: IResolvers = {
-  Query: {
-    Role: () => {
-      return RoleService.getRoles()
-    }
+@Resolver()
+class RoleResolver {
+  @Query(() => [Role])
+  @Authorized('user')
+  Role() {
+    return RoleService.getRoles()
   }
 }
 

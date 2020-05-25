@@ -34,14 +34,14 @@ export default {
         .mutate({
           mutation: ggl(CategoryEdit),
           variables: {
-            categoryId: newValue._id,
+            categoryId: newValue.id,
             category: {
               name: newValue.name,
               description: newValue.description,
-              sla: newValue.sla._id,
-              defaultGroup: newValue.defaultGroup._id,
-              defaultStatus: newValue.defaultStatus._id,
-              defaultPriority: newValue.defaultPriority._id
+              sla: newValue.sla.id,
+              defaultGroup: newValue.defaultGroup.id,
+              defaultStatus: newValue.defaultStatus.id,
+              defaultPriority: newValue.defaultPriority.id
             }
           },
           refetchQueries: [
@@ -62,7 +62,7 @@ export default {
             const formData = new FormData()
             formData.append('image', newValue.image)
             this.$axios
-              .post(`/config/category/image/${newValue._id}`, formData)
+              .post(`/config/category/image/${newValue.id}`, formData)
               .then(() => {
                 this.$toast.show('Image uploaded', {
                   duration: 5000,

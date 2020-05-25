@@ -21,10 +21,10 @@
 # import Notification from "./schemas/NotificationSchema.graphql"
 
 type Query {
-  TicketById(_id: ID!): Ticket!,
+  TicketById(id: ID!): Ticket!,
   Tickets(descending: Int = -1, sortBy: String = "created", page: Int = 1, limit: Int = 10): TicketPagination,
   Status: [Status],
-  FindStatus(_id: ID!): Status!
+  FindStatus(id: ID!): Status!
   Group: [Group]!
   Address: [Address!]!
   Category: [Category]!
@@ -34,7 +34,7 @@ type Query {
   SearchTicket(page: Int = 1, limit: Int = 10, descending: Int = -1, sortBy: String = "created", attributes: TicketAttributes): TicketPagination
   Knowledge: [Knowledge!]!
   KnowledgeByGroup(groupName: String!): [Knowledge]!
-  KnowledgeById(_id: ID!): Knowledge!
+  KnowledgeById(id: ID!): Knowledge!
   Role: [Role!]!
   Chat: [Chat!]!
   GetUnReadMessagesFromChat(chatId: ID!): [Message!]!
@@ -44,17 +44,17 @@ type Query {
   Ref: [Ref!]!
   Sla: [Sla!]!
   Priority: [Priority!]!
-  PriorityById(_id: ID!): Priority!,
+  PriorityById(id: ID!): Priority!,
   TicketReport(attributes: ReportAttributes, field: String!, ref: String!, start: Datetime, end: Datetime): [Report!]!
   ReportByDate(field: String!, start: Datetime, end: Datetime): [ReportByDate!]!
   Notification: [Notification!]!
-  NotificationById(_id: ID!): Notification!
+  NotificationById(id: ID!): Notification!
 }
 
 type Mutation {
   Login(email: String!, password: String!): Analyst
   CreateTicket(ticket: TicketCreateInput!): Ticket!
-  EditTicket(_id: ID!, ticket: TicketCreateInput!): Ticket!
+  EditTicket(id: ID!, ticket: TicketCreateInput!): Ticket!
   TransferTicket(ticketId: ID!, groupId: ID!): Ticket!
   TransferTickets(tickets: [ID!]!, groupId: ID!): [Ticket!]!
   ChangeStatus(ticketId: ID!, statusId: ID!): Ticket
@@ -72,7 +72,7 @@ type Mutation {
   RemoveChildren(ticketId: ID!, childrenId: ID!): Ticket!
   CreateSla(sla: SlaAttributes!): Sla!
   MergeUser(email: String!, user: AnalystInput!): Analyst!
-  ReadNotification(_id: ID!): Notification!
+  ReadNotification(id: ID!): Notification!
   ReadAllNotifications: [Notification!]!
 }
 

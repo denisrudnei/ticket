@@ -1,207 +1,134 @@
 import { differenceInMinutes, format } from 'date-fns'
-import { model, Schema, connection, Document } from 'mongoose'
-import mongoosePaginate from 'mongoose-paginate'
-import mongooseAutoIncrement from 'mongoose-auto-increment'
-import { IAnalyst } from '../Analyst'
-import { IAddress } from '../Address'
-import Category, { ICategory } from './Category'
-import { IGroup } from './Group'
-import { IStatus } from './Status'
-import { IComment } from './Comment'
-import { IPriority } from './Priority'
-import { ISla } from './Sla'
-import { ILog } from './Log'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+  ManyToOne,
+  OneToMany
+} from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql'
+import Analyst from '../Analyst'
+import Address from '../Address'
+import File from '../File'
+import Category from './Category'
+import Group from './Group'
+import Status from './Status'
+import Comment from './Comment'
+import Priority from './Priority'
+import Sla from './Sla'
+import Log from './Log'
 
-mongooseAutoIncrement.initialize(connection)
+@Entity()
+@ObjectType()
+class Ticket extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
 
-export interface ITicket extends Document {
-  category: ICategory['_id']
-  resume: string
-  content: string
-  group: IGroup['_id']
-  address: IAddress['_id']
-  status: IStatus['_id']
-  comments: [IComment['_id']]
-  affectedUser: IAnalyst['_id']
-  openedBy: IAnalyst['_id']
-  actualUser: IAnalyst['_id']
-  priority: IPriority['_id']
-  sla: ISla['_id']
-  father: ITicket['_id']
-  children: [ITicket['_id']]
-  files: any[]
-  logs: [ILog['_id']]
-  slaCount: Date
-  created: Date
-  modified: Date
-  overtakeSla(): Promise<Boolean>
-  slaPercentage(): Promise<Number>
-}
+  @Column({ nullable: false })
+  @Field(type => String)
+  public resume!: string
 
-const TicketSchema: Schema<ITicket> = new Schema(
-  {
-    _id: Schema.Types.ObjectId,
-    category: {
-      ref: 'Category',
-      type: Schema.Types.ObjectId,
-      required: [true, 'Preencha a categoria']
-    },
-    resume: {
-      type: String,
-      required: [true, 'Deve ter uma descrição']
-    },
-    content: {
-      type: String,
-      required: [true, 'Deve ter um conteúdo']
-    },
-    group: {
-      type: Schema.Types.ObjectId,
-      ref: 'Group',
-      required: [true, 'Necessário estar em um grupo']
-    },
-    address: {
-      type: Schema.Types.ObjectId,
-      ref: 'Address'
-    },
-    status: {
-      ref: 'Status',
-      type: Schema.Types.ObjectId,
-      required: [true, 'Deve ter um status']
-    },
-    comments: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Comment'
-      }
-    ],
-    affectedUser: {
-      type: Schema.Types.ObjectId,
-      ref: 'Analyst'
-    },
-    actualUser: {
-      type: Schema.Types.ObjectId,
-      ref: 'Analyst',
-      required: [true, 'É necessário abrir o chamado em nome de alguém']
-    },
-    openedBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'Analyst',
-      required: [true, 'É necessário abrir o chamado em nome de alguém']
-    },
-    priority: {
-      type: Schema.Types.ObjectId,
-      ref: 'Priority'
-    },
-    sla: {
-      type: Schema.Types.ObjectId,
-      ref: 'Sla'
-    },
-    father: {
-      type: Schema.Types.ObjectId,
-      ref: 'Ticket'
-    },
-    children: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Ticket'
-      }
-    ],
-    files: [
-      {
-        type: Object
-      }
-    ],
-    logs: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Log'
-      }
-    ],
-    slaCount: {
-      type: Date,
-      default: Date.now
-    }
-  },
-  {
-    timestamps: {
-      createdAt: 'created',
-      updatedAt: 'modified'
-    }
+  @Column({ nullable: false })
+  @Field(type => String)
+  public content!: string
+
+  @Field(type => Category)
+  @ManyToOne(type => Category, { eager: true, nullable: false })
+  public category!: Category
+
+  @ManyToOne(type => Group, { eager: true, nullable: false })
+  @Field(type => Group)
+  public group!: Group
+
+  @ManyToOne(type => Address, { eager: true, nullable: false })
+  @Field(type => Address)
+  public address!: Address
+
+  @ManyToOne(type => Status, { eager: true, nullable: false })
+  @Field(type => Status)
+  public status!: Status
+
+  @OneToMany(type => Comment, Comment => Comment.ticket)
+  @Field(type => Comment)
+  public comments!: Comment[]
+
+  @ManyToOne(type => Analyst, { eager: true, nullable: false })
+  @Field(type => Analyst)
+  public affectedUser!: Analyst
+
+  @ManyToOne(type => Analyst, { eager: true, nullable: false })
+  @Field(type => Analyst)
+  public openedBy!: Analyst
+
+  @ManyToOne(type => Analyst, { eager: true, nullable: false })
+  @Field(type => Analyst)
+  public actualUser!: Analyst
+
+  @ManyToOne(type => Priority, { eager: true, nullable: false })
+  @Field(type => Priority)
+  public priority!: Priority
+
+  @OneToOne(type => Ticket, Ticket => Ticket.children)
+  @JoinColumn({ name: 'father' })
+  @Field(type => Ticket)
+  public father!: Ticket
+
+  @OneToMany(type => Ticket, Ticket => Ticket.father)
+  @Field(type => [Ticket])
+  public children!: Ticket[]
+
+  @OneToMany(type => File, File => File.ticket)
+  @Field(type => [File])
+  public files!: File[]
+
+  @OneToMany(type => Log, Log => Log.ticket)
+  @Field(type => [Log])
+  public logs!: Log[]
+
+  @Column()
+  @Field()
+  public slaCount: Date = new Date()
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Field()
+  public created: Date = new Date()
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Field()
+  public modified: Date = new Date()
+
+  @Field()
+  public get overtakeSla(): boolean {
+    if (!this.category.sla) return false
+    const slaBase = new Date('1970/01/01 00:00:00')
+    const slaLimit = new Date(
+      `1970/01/01 ${format(this.category.sla.limit, 'HH:mm:ss')}`
+    )
+    return (
+      Math.abs(
+        differenceInMinutes(new Date(this.created), new Date(this.slaCount))
+      ) > Math.abs(differenceInMinutes(slaBase, slaLimit))
+    )
   }
-)
 
-TicketSchema.methods.overtakeSla = async function() {
-  const category = await Category.findOne({
-    _id: this.category
-  })
-    .populate(['sla'])
-    .exec()
-  if (!category.sla) return false
-
-  const slaBase = new Date('1970/01/01 00:00:00')
-  const slaLimit = new Date(
-    `1970/01/01 ${format(category.sla.limit, 'HH:mm:ss')}`
-  )
-  return (
-    Math.abs(
+  @Field()
+  public get slaPercentage(): Number {
+    if (!this.category!.sla) return 0
+    const slaBase = new Date('1970/01/01 00:00:00')
+    const slaLimit = new Date(
+      `1970/01/01 ${format(new Date(this.category!.sla.limit), 'HH:mm:ss')}`
+    )
+    const base = Math.abs(differenceInMinutes(slaBase, slaLimit)) / 100
+    const elapsed = Math.abs(
       differenceInMinutes(new Date(this.created), new Date(this.slaCount))
-    ) > Math.abs(differenceInMinutes(slaBase, slaLimit))
-  )
+    )
+    if (base === 0 || elapsed === 0) return 0
+    return elapsed / base
+  }
 }
 
-TicketSchema.methods.slaPercentage = async function() {
-  const category = await Category.findOne({
-    _id: this.category
-  })
-    .populate(['sla'])
-    .exec()
-  if (!category.sla) return 0
-  const slaBase = new Date('1970/01/01 00:00:00')
-  const slaLimit = new Date(
-    `1970/01/01 ${format(new Date(category.sla.limit), 'HH:mm:ss')}`
-  )
-
-  const base = Math.abs(differenceInMinutes(slaBase, slaLimit)) / 100
-
-  const elapsed = Math.abs(
-    differenceInMinutes(new Date(this.created), new Date(this.slaCount))
-  )
-  if (base === 0 || elapsed === 0) return 0
-
-  return elapsed / base
-}
-
-TicketSchema.pre('find', function() {
-  this.populate([
-    'status',
-    'group',
-    'openedBy',
-    'address',
-    'affectedUser',
-    'actualUser',
-    'category',
-    'priority'
-  ])
-})
-
-TicketSchema.set('toJSON', {
-  getters: true,
-  virtuals: true
-})
-
-TicketSchema.set('toObject', {
-  getters: true,
-  virtuals: true
-})
-
-TicketSchema.plugin(mongoosePaginate)
-TicketSchema.plugin(mongooseAutoIncrement.plugin, {
-  model: 'Ticket',
-  field: 'ticketNumber'
-})
-
-// interface TicketModel<T extends Document> extends PaginateModel<T>{}
-
-// const ticketModel: TicketModel<ITicket> = model<ITicket>('Ticket', TicketSchema)
-
-export default model<ITicket>('Ticket', TicketSchema)
+export default Ticket

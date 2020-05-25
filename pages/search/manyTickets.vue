@@ -88,7 +88,7 @@ export default {
     },
     search() {
       const query = {
-        ticketNumber: this.ticketsNumbers.map(n => parseInt(n))
+        id: this.ticketsNumbers.map(n => parseInt(n))
       }
       this.$store.commit('ticket/setQuery', query)
     },

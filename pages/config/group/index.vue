@@ -39,7 +39,7 @@
             >
               <v-list-item
                 v-for="analyst in item.analysts"
-                :key="analyst._id"
+                :key="analyst.id"
               >
                 <v-list-item-avatar>
                   <v-avatar>
@@ -124,7 +124,7 @@
         <template
           v-slot:item.edit="{ item }"
         >
-          <v-btn class="primary white--text" icon :to="`/config/group/edit/${item._id}`">
+          <v-btn class="primary white--text" icon :to="`/config/group/edit/${item.id}`">
             <v-icon>
               edit
             </v-icon>
@@ -186,7 +186,7 @@ export default {
   methods: {
     addToGroup(group, analyst) {
       this.$axios
-        .post(`/config/group/analyst/${group._id}`, this.currentAnalyst)
+        .post(`/config/group/analyst/${group.id}`, this.currentAnalyst)
         .then(response => {
           this.updateGroups()
           this.$toast.show('Adicionado', {
@@ -196,7 +196,7 @@ export default {
     },
     removeFromGroup(group, analyst) {
       this.$axios
-        .delete(`/config/group/analyst/${group._id}/${analyst._id}`)
+        .delete(`/config/group/analyst/${group.id}/${analyst.id}`)
         .then(response => {
           this.updateGroups()
           this.$toast.show('Removido do grupo', {
@@ -211,7 +211,7 @@ export default {
     },
     analystsToAdd(group) {
       return this.analysts.filter(a => {
-        return !group.analysts.map(ga => ga._id).includes(a._id)
+        return !group.analysts.map(ga => ga.id).includes(a.id)
       })
     }
   }

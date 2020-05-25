@@ -3,7 +3,7 @@
     <v-col cols="12">
       <v-list>
         <draggable v-model="items" :sort="true">
-          <v-list-item v-for="item in items" :key="item._id" @click="dummy">
+          <v-list-item v-for="item in items" :key="item.id" @click="dummy">
             <v-list-item-action>
               <v-btn class="primary white--text">
                 <v-icon left>
@@ -16,7 +16,7 @@
               {{ item.name }}
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn icon class="primary white--text" :to="`/config/priority/edit/${item._id}`">
+              <v-btn icon class="primary white--text" :to="`/config/priority/edit/${item.id}`">
                 <v-icon>
                   edit
                 </v-icon>

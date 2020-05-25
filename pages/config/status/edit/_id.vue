@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     update(status) {
-      this.$axios.put(`/config/status/${status._id}`, status).then(() => {
+      this.$axios.put(`/config/status/${status.id}`, status).then(() => {
         this.$toast.show('Atualizado', {
           duration: 1000,
           icon: 'done'

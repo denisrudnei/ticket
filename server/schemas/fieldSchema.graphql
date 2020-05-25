@@ -1,12 +1,8 @@
 type Field {
-  _id: ID
+  id: ID
   required: Boolean
   text: String
-  limits: FieldLimit
-  value: String
-}
-
-type FieldLimit {
   min: Int,
   max: Int
+  value: String
 }

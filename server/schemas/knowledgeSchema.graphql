@@ -1,5 +1,5 @@
 type Knowledge {
-  _id: ID
+  id: ID
   name: String!
   created: Datetime!
   category: Category!

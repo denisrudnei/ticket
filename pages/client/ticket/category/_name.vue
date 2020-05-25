@@ -57,7 +57,7 @@
           Campos
         </v-tab>
         <v-tab-item>
-          <v-col v-for="field in category.fields" :key="field._id" cols="12">
+          <v-col v-for="field in category.fields" :key="field.id" cols="12">
             <v-text-field :placeholder="field.text" filled />
           </v-col>
         </v-tab-item>
@@ -133,7 +133,7 @@ export default {
         if (!Object.prototype.hasOwnProperty.call(this.ticket, field))
           return true
 
-        if (!Object.prototype.hasOwnProperty.call(this.ticket[field], '_id'))
+        if (!Object.prototype.hasOwnProperty.call(this.ticket[field], 'id'))
           return true
       }
       return false
@@ -151,14 +151,15 @@ export default {
           mutation: ggl(createTicket),
           variables: {
             ticket: {
-              actualUser: this.user._id,
-              group: this.ticket.group._id,
-              status: this.ticket.status._id,
-              priority: this.ticket.priority._id,
-              category: this.category._id,
+              actualUser: this.user.id,
+              group: this.ticket.group.id,
+              status: this.ticket.status.id,
+              priority: this.ticket.priority.id,
+              category: this.category.id,
               resume: this.ticket.resume,
               content: this.ticket.content,
-              affectedUser: this.ticket.affectedUser._id
+              affectedUser: this.ticket.affectedUser.id,
+              openedBy: this.user.id
             }
           }
         })

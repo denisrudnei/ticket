@@ -16,8 +16,9 @@ export default ({ app, req }: any, inject: any) => {
       : req.protocol,
     host: process.client ? window.location.host : req.headers.host
   }
+
   const httpLink = createHttpLink({
-    uri: `${url.protocol}://${url.host}/api/graphql`,
+    uri: `${url.protocol}://${url.host}/graphql`,
     fetch,
     credentials: 'include',
     ...(process.server ? { headers: req.headers } : undefined)
@@ -25,7 +26,7 @@ export default ({ app, req }: any, inject: any) => {
   const wsOrWss = url.protocol.includes('https') ? 'wss://' : 'ws://'
 
   const wsLink = new WebSocketLink({
-    uri: `${wsOrWss}${url.host}/api/subscriptions`,
+    uri: `${wsOrWss}${url.host}/subscriptions`,
     options: {
       reconnect: true
     },

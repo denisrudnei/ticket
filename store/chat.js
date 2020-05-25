@@ -17,7 +17,7 @@ export const getters = {
   },
   getActive(state) {
     return state.chats.find(chat => {
-      return chat._id === state.active
+      return chat.id === state.active
     })
   },
   getVisible(state) {
@@ -28,14 +28,14 @@ export const getters = {
 export const mutations = {
   deleteChat(state, id) {
     state.chats = state.chats.filter(chat => {
-      return chat._id !== id
+      return chat.id !== id
     })
   },
   updateChat(state, chat) {
     state.chats = [
       chat,
       ...state.chats.filter(c => {
-        return c.chatId !== chat._id
+        return c.chatId !== chat.id
       })
     ]
   },
@@ -47,14 +47,14 @@ export const mutations = {
   },
   createChat(state, info) {
     const chat = {
-      _id: info.analyst._id,
+      id: info.analyst.id,
       to: info.analyst,
       messages: info.messages
     }
     state.chats = [
       chat,
       ...state.chats.filter(c => {
-        return c._id !== chat._id
+        return c.id !== chat.id
       })
     ]
   },
@@ -84,9 +84,9 @@ export const actions = {
       })
       .then(response => {
         commit('addChat', response.data.chat)
-        commit('setActive', response.data.chat._id)
+        commit('setActive', response.data.chat.id)
         commit('setMessages', response.data.chat.messages)
-        commit('setVisible', response.data.chat._id)
+        commit('setVisible', response.data.chat.id)
       })
   },
   send({ commit }, message) {

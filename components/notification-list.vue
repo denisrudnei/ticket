@@ -8,7 +8,7 @@
       >
         <v-list-item
           v-for="notification in notifications"
-          :key="notification._id"
+          :key="notification.id"
         >
           <v-list-item-content>
             <v-list-item-title>
@@ -25,7 +25,7 @@
               >
                 <v-btn
                   icon
-                  :to="`/profile/notification/${notification._id}`"
+                  :to="`/profile/notification/${notification.id}`"
                 >
                   <v-icon>
                     info
@@ -36,8 +36,8 @@
                 pa-1
               >
                 <v-switch
-                  :input-value="notification.read.map(r => r._id)"
-                  :value="user._id"
+                  :input-value="notification.read.map(r => r.id)"
+                  :value="user.id"
                   :label="$t('read')"
                   @change="readNotification(notification)"
                 />

@@ -4,12 +4,12 @@ mutation SendMessage($to: ID!, $message: String!){
     content
     to {
       name
-      _id
+      id
       picture
     }
     from {
       name
-      _id
+      id
       picture
     }
   }

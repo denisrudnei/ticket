@@ -1,12 +1,16 @@
-import _ from 'lodash'
-import { Types } from 'mongoose'
-import Path, { IPath } from '../models/Path'
-import Analyst, { IAnalyst } from '../models/Analyst'
+import lodash from 'lodash'
+import { ObjectType, Field, Int } from 'type-graphql'
+import Path from '../models/Path'
+import Analyst from '../models/Analyst'
 import Ticket from '../models/ticket/Ticket'
+import Address from '../models/Address'
 
+@ObjectType()
 class Info {
+  @Field()
   name: string
 
+  @Field(() => Int)
   total: number
 
   constructor(name: string, total: number) {
@@ -15,15 +19,35 @@ class Info {
   }
 }
 
-export class ProfileInfo {
-  opened: number | null
+@ObjectType()
+export class Ref {
+  constructor(objectName: string, options: string[]) {
+    this.objectName = objectName
+    this.options = options
+  }
 
+  @Field()
+  public objectName!: string
+
+  @Field(() => [String])
+  public options!: string[]
+}
+
+@ObjectType()
+export class ProfileInfo {
+  @Field(() => Int)
+  opened: number = 0
+
+  @Field(() => Int)
   total: number
 
+  @Field(() => [Info])
   categories: Info[]
 
+  @Field(() => [Info])
   status: Info[]
 
+  @Field(() => [Info])
   inName: Info[]
 
   constructor(
@@ -41,267 +65,178 @@ export class ProfileInfo {
   }
 }
 
-class PathTree {
-  _id: Types.ObjectId
+@ObjectType()
+export class PathTree {
+  @Field()
+  public id: string
 
-  id: string
+  @Field()
+  public name: string = ''
 
-  name: string
+  @Field()
+  public url!: string
 
-  children: any[]
+  @Field(type => [PathTree])
+  children: PathTree[]
 
-  constructor(_id: Types.ObjectId, id: string, name: string, children: any[]) {
-    this._id = _id
-    this.id = id
+  constructor(name: string, url: string, children: PathTree[]) {
+    this.id = name
     this.name = name
+    this.url = url
     this.children = children
   }
 }
 
+enum TicketObjects {
+  'category' = 'category',
+  'group' = 'group',
+  'address' = 'address',
+  'status' = 'status',
+  'affectedUser' = 'affectedUser',
+  'openedBy' = 'openedBy',
+  'actualUser' = 'actualUser',
+  'priority' = 'priority'
+}
+
 class PathService {
-  create(path: IPath, userId: IAnalyst['_id']): Promise<PathTree> {
+  create(pathToCreate: Path, userId: Analyst['id']): Promise<PathTree> {
     return new Promise((resolve, reject) => {
-      Path.create(
-        {
-          _id: new Types.ObjectId(),
-          name: path.name,
-          objectName: path.objectName,
-          property: path.property
-        },
-        (err: Error, path: IPath) => {
-          if (err) return reject(err)
-          Analyst.updateOne(
-            {
-              _id: userId
-            },
-            {
-              $push: {
-                paths: path
-              }
-            }
-          ).exec((err: Error) => {
-            if (err) return reject(err)
-            return resolve(this.getOnePathTree(path._id))
+      const path = Path.create()
+      path.name = pathToCreate.name
+      path.objectName = pathToCreate.objectName
+      path.property = pathToCreate.property
+      path.save().then((path: Path) => {
+        Analyst.findOne(userId, { relations: ['paths'] }).then(analyst => {
+          analyst!.paths.push(path)
+          analyst!.save().then(() => {
+            resolve(this.getOnePathTree(path.id))
           })
-        }
-      )
-    })
-  }
-
-  getProfileInfo(userId: IAnalyst['_id']) {
-    return new Promise((resolve, reject) => {
-      Ticket.find({})
-        .populate(['category', 'status', 'openedBy'])
-        .exec((err: Error, tickets) => {
-          if (err) return reject(err)
-          const opened = tickets.filter(t => {
-            return t.openedBy._id.toString() === userId
-          }).length
-          const total = tickets.length
-          const categories = _(tickets)
-            .groupBy('category')
-            .map(v => ({
-              name: v[0].category.fullName,
-              total: v.length
-            }))
-            .value()
-          const status = _(tickets)
-            .groupBy('status')
-            .map(v => ({
-              name: v[0].status.name,
-              total: v.length
-            }))
-            .value()
-          const inName = _(tickets)
-            .groupBy('actualUser')
-            .map(v => ({
-              name: v[0].actualUser._id,
-              total: v.length
-            }))
-            .value()
-            .filter((v: Info) => {
-              return v.name === userId
-            })
-
-          return resolve(
-            new ProfileInfo(opened, total, categories, status, inName)
-          )
         })
+      })
     })
   }
 
-  getAddress(userId: IAnalyst['_id']) {
+  getProfileInfo(userId: Analyst['id']): Promise<ProfileInfo> {
     return new Promise((resolve, reject) => {
-      Analyst.findOne({
-        _id: userId
-      })
-        .populate('address')
-        .exec((err: Error, analyst) => {
-          if (err) return reject(err)
-          return resolve(analyst.address)
+      Ticket.find({}).then(tickets => {
+        const opened = tickets.filter(t => {
+          return t.openedBy.id === userId
+        }).length
+        const total = tickets.length
+        const groupedByCategory = lodash.groupBy(tickets, 'category.name')
+        const categories = Object.keys(groupedByCategory).map(name => {
+          return new Info(name, groupedByCategory[name].length)
         })
-    })
-  }
-
-  getRefs() {
-    return new Promise((resolve, reject) => {
-      const paths: any[] = Object.keys(Ticket.schema.paths).map(key => {
-        return Ticket.schema.path(key)
-      })
-
-      const pathsWithObjects = paths.filter(v => {
-        return v.options.ref !== undefined && v.options.ref !== null
-      })
-      const onlyWithObjectId = pathsWithObjects.filter(o => {
-        return o.instance === 'ObjectID'
-      })
-      const pathsWithRefs = onlyWithObjectId.map(v => ({
-        objectName: v.path,
-        options: this.getOptions(v.options.ref)
-      }))
-      return resolve(pathsWithRefs)
-    })
-  }
-
-  getPaths(userId: IAnalyst['_id']) {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne({
-        _id: userId
-      })
-        .select('+paths')
-        .populate(['paths'])
-        .exec((err: Error, result) => {
-          if (err) reject(err)
-          resolve(result.paths)
+        const groupedByStatus = lodash.groupBy(tickets, 'status.name')
+        const status = Object.keys(groupedByStatus).map(name => {
+          return new Info(name, groupedByStatus[name].length)
         })
+        const groupedByInName = lodash.groupBy(tickets, 'actualUser.name')
+        const inName = Object.keys(groupedByInName).map(name => {
+          return new Info(name, groupedByInName[name].length)
+        })
+        // .filter(v => {
+        //   return v.name === userId
+        // })[0]
+        return resolve(
+          new ProfileInfo(opened, total, categories, status, inName)
+        )
+      })
     })
   }
 
-  getOnePathTree(pathId: IPath['_id']): Promise<PathTree> {
+  getAddress(userId: Analyst['id']): Promise<Address | null> {
     return new Promise((resolve, reject) => {
+      Analyst.findOne(userId, { relations: ['address'] }).then(analyst => {
+        return resolve(analyst!.address)
+      })
+    })
+  }
+
+  getRefs(): Promise<Ref[]> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne().then(ticket => {
+        const result = Object.values(TicketObjects).map(property => {
+          return new Ref(property, this.getOptions(ticket![property]))
+        })
+        resolve(result)
+      })
+    })
+  }
+
+  getPaths(userId: Analyst['id']) {
+    return new Promise((resolve, reject) => {
+      Analyst.findOne(userId, { relations: ['paths'] }).then(result => {
+        resolve(result!.paths)
+      })
+    })
+  }
+
+  getOnePathTree(pathId: Path['id']): Promise<PathTree> {
+    return new Promise((resolve, reject) => {
+      // FIXME
       function getId(object: any, property: string) {
         return object.map((value: any) => {
-          return value[property]._id
+          return value[property].id
         })[0]
       }
-      Path.findOne({
-        _id: pathId
-      }).exec(async (err: Error, path) => {
-        if (err) reject(err)
-        const tickets = await Ticket.find({})
-        const base = _(tickets)
-          .groupBy(`${path.objectName}.${path.property}`)
-          .value()
+      Path.findOne(pathId).then(async path => {
+        const tickets = await Ticket.find()
+        const base = lodash.groupBy(
+          tickets,
+          `${path!.objectName}.${path!.property}`
+        )
         const children = Object.keys(base)
           .filter(value => {
             return value !== 'undefined'
           })
           .map(k => {
-            return {
-              _id: `(${base[k].length}) ${k}`,
-              name: `(${base[k].length}) ${k}`,
-              url: `/search?${path.objectName}=${getId(
-                base[k],
-                path.objectName
-              )}`,
-              children: []
-            }
+            return new PathTree(
+              `(${base[k].length}) ${k}`,
+              `/search?${path!.objectName}=${getId(base[k], path!.objectName)}`,
+              []
+            )
           })
-        const response = new PathTree(
-          path._id,
-          path.property,
-          path.name,
-          children
-        )
-        resolve(response)
+        resolve(new PathTree(path!.name, '', children))
       })
     })
   }
 
-  getPathsTree(userId: IAnalyst['_id']): Promise<PathTree[]> {
+  getPathsTree(userId: Analyst['id']): Promise<PathTree[]> {
     return new Promise((resolve, reject) => {
-      Analyst.findOne({
-        _id: userId
-      })
-        .select('+paths')
-        .populate('paths')
-        .exec((err: Error, user) => {
-          if (err) return reject(err)
-          const response: PathTree[] = user.paths.map((path: IPath) => {
-            return this.getOnePathTree(path._id)
-          })
-          Promise.all(response).then(results => {
-            const result = results.filter(value => {
-              return value.children.length > 0
-            })
-            return resolve(result)
-          })
+      Analyst.findOne(userId, { relations: ['paths'] }).then(user => {
+        const response: Promise<PathTree>[] = user!.paths.map((path: Path) => {
+          return this.getOnePathTree(path.id)
         })
-    })
-  }
-
-  remove(
-    userId: IAnalyst['_id'],
-    pathId: IPath['_id']
-  ): Promise<IAnalyst['_id']> {
-    return new Promise((resolve, reject) => {
-      Path.deleteOne({
-        _id: pathId
-      }).exec((err: Error) => {
-        if (err) return reject(err)
-        Analyst.updateMany(
-          {},
-          {
-            $pull: {
-              paths: {
-                $in: [pathId]
-              }
-            }
-          }
-        ).exec((err: Error) => {
-          if (err) return reject(err)
-          resolve(userId)
+        Promise.all(response).then(results => {
+          const result = results.filter(value => {
+            return value.children.length > 0
+          })
+          return resolve(result)
         })
       })
     })
   }
 
-  getOptions(ref: string) {
-    const model = require(this.getModule(ref)).default
-    return Object.keys(model.schema.paths).filter(r => {
-      return this.filterSelected(model.schema.paths, r)
+  remove(userId: Analyst['id'], pathId: Path['id']): Promise<Analyst> {
+    return new Promise((resolve, reject) => {
+      Analyst.findOne(userId, { relations: ['paths'] }).then(analyst => {
+        analyst!.paths = analyst!.paths.filter(path => {
+          return path.id !== pathId
+        })
+        analyst!.save().then(() => {
+          Path.delete(pathId).then(() => {
+            resolve(analyst)
+          })
+        })
+      })
     })
   }
 
-  hasInstanceField(object: any) {
-    return Object.prototype.hasOwnProperty.call(object, 'instance')
-  }
-
-  instanceIsString(object: any) {
-    return object.instance === 'String'
-  }
-
-  isSelected(object: any) {
-    if (Object.prototype.hasOwnProperty.call(object.options, 'select')) {
-      return object.options.select
-    }
-    return true
-  }
-
-  filterSelected(paths: any, ref: string) {
-    return (
-      this.hasInstanceField(paths[ref]) &&
-      this.instanceIsString(paths[ref]) &&
-      this.isSelected(paths[ref])
-    )
-  }
-
-  getModule(ref: string) {
-    try {
-      return require.resolve(`@models/ticket/${ref}`)
-    } catch {
-      return require.resolve(`@models/index/${ref}`)
-    }
+  getOptions(ref: any): string[] {
+    return Object.getOwnPropertyNames(ref).filter(property => {
+      return typeof ref[property] === 'string'
+    })
   }
 }
 

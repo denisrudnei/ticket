@@ -24,7 +24,7 @@ export default {
           const formData = new FormData()
           formData.append('file', this.$refs.create.$refs.file.files[0])
           this.$axios
-            .post(`/knowledge/${response.data._id}/file`, formData)
+            .post(`/knowledge/${response.data.id}/file`, formData)
             .then(() => {
               this.$toast.show('Documento enviado com sucesso', {
                 duration: 5000,

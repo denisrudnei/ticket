@@ -1,22 +1,22 @@
 query {
    Status {
-    _id
+    id
     name
     allowedStatus {
-      _id
+      id
       name
     }
   }
   Group {
-    _id
+    id
     name
   }
   Category {
-    _id
+    id
     name
   }
   Analyst {
-    _id
+    id
     name
     picture
     contactEmail

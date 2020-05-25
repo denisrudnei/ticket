@@ -1,13 +1,13 @@
 query {
   analyst: Analyst {
-    _id
+    id
     name
     picture
   }
   chat: Chat {
-    _id
+    id
     participants {
-      _id
+      id
       name
       picture
     }

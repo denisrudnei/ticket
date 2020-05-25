@@ -21,7 +21,7 @@
         <v-card-text>
           <v-list>
             <draggable group="status" :list="status">
-              <v-list-item v-for="s in status" :key="s._id" @click="select">
+              <v-list-item v-for="s in status" :key="s.id" @click="select">
                 <v-list-item-content>
                   {{ s.name }}
                 </v-list-item-content>
@@ -39,7 +39,7 @@
         <v-card-text>
           <v-list>
             <draggable group="status" :list="actual.allowedStatus">
-              <v-list-item v-for="s in actual.allowedStatus" :key="s._id" @click="select">
+              <v-list-item v-for="s in actual.allowedStatus" :key="s.id" @click="select">
                 {{ s.name }}
               </v-list-item>
             </draggable>

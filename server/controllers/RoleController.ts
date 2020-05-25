@@ -23,7 +23,7 @@ export default {
   },
 
   setAnalystRole: (req: express.Request, res: express.Response) => {
-    RoleService.setAnalystRole(req.params.id, req.body.name)
+    RoleService.setAnalystRole(parseInt(req.params.id), req.body.name)
       .then(() => {
         return res.sendStatus(201)
       })

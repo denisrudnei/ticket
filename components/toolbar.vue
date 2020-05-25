@@ -18,7 +18,7 @@
     <v-spacer />
     <v-text-field
       v-if="logged"
-      v-model="ticketNumber"
+      v-model="id"
       type="number"
       :placeholder="$t('search')" 
       prepend-icon="search"
@@ -29,8 +29,8 @@
       flat
       solo
       @click:append-outer="clearText"
-      @click:prepend="search(ticketNumber)"
-      @keypress.enter="search(ticketNumber)"
+      @click:prepend="search(id)"
+      @keypress.enter="search(id)"
     />
     <v-dialog v-model="ticketNotFound" width="50vw">
       <v-card>
@@ -99,7 +99,7 @@
 import { mapGetters } from 'vuex'
 import Notification from '@/components/notification'
 import Language from '@/components/language'
-import ticketNumber from '@/graphql/query/toolbar/ticketNumber.graphql'
+import id from '@/graphql/query/toolbar/ticketNumber.graphql'
 import ggl from 'graphql-tag'
 import addTicketsToEdit from '@/mixins/addTicketToEdit'
 export default {
@@ -121,7 +121,7 @@ export default {
   data() {
     return {
       isMobile: false,
-      ticketNumber: '',
+      id: '',
       ticketNotFound: false,
       options: [
         {
@@ -166,10 +166,10 @@ export default {
     search(content) {
       this.$apollo
         .query({
-          query: ggl(ticketNumber),
+          query: ggl(id),
           variables: {
             attributes: {
-              ticketNumber: parseInt(content)
+              id: parseInt(content)
             }
           }
         })
@@ -183,7 +183,7 @@ export default {
         })
     },
     clearText() {
-      this.ticketNumber = ''
+      this.id = ''
     },
     logout() {
       this.$store.commit('logout/setLogout', true)

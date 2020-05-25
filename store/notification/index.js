@@ -9,7 +9,7 @@ export const getters = {
     const user = rootGetters['auth/getUser']
     return state.notifications
       .filter(notification => {
-        return notification.to.map(t => t._id).includes(user._id)
+        return notification.to.map(t => t.id).includes(user.id)
       })
       .sort((ntf1, ntf2) => {
         if (ntf1.date === ntf2.date) return 0
@@ -19,13 +19,13 @@ export const getters = {
   getUnread(state, getters, rootState, rootGetters) {
     const user = rootGetters['auth/getUser']
     return getters.getNotifications.filter(notification => {
-      return !notification.read.map(r => r._id).includes(user._id)
+      return !notification.read.map(r => r.id).includes(user.id)
     })
   },
   getRead(state, getters, rootState, rootGetters) {
     const user = rootGetters['auth/getUser']
     return getters.getNotifications.filter(notification => {
-      return notification.read.map(r => r._id).includes(user._id)
+      return notification.read.map(r => r.id).includes(user.id)
     })
   }
 }
@@ -40,7 +40,7 @@ export const mutations = {
   updateNotification(state, notification) {
     state.notifications = [
       ...state.notifications.filter(n => {
-        return n._id !== notification._id
+        return n.id !== notification.id
       }),
       notification
     ]

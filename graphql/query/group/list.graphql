@@ -1,6 +1,6 @@
 query {
   Group {
-    _id
+    id
     name
   }
 }

@@ -1,158 +1,73 @@
-import mongoose, { Types } from 'mongoose'
 import { UploadedFile } from 'express-fileupload'
 import { GetObjectOutput } from 'aws-sdk/clients/s3'
-import Category, { ICategory } from '../../models/ticket/Category'
-import Field from '../../models/ticket/Field'
+import Category from '../../models/ticket/Category'
 import S3 from '~/plugins/S3'
 
-const categoryPopulate = [
-  {
-    path: 'defaultGroup',
-    select: {
-      name: 1,
-      fullName: 1,
-      description: 1,
-      analysts: 0
-    }
-  },
-  {
-    path: 'defaultStatus',
-    select: {
-      name: 1
-    }
-  },
-  {
-    path: 'defaultPriority',
-    select: {
-      name: 1,
-      weight: 1
-    }
-  }
-]
-
 class CategoryService {
-  async create(category: ICategory): Promise<ICategory> {
-    const newCategory = {
-      _id: new mongoose.Types.ObjectId(),
-      name: category.name,
-      father: category.father,
-      fields: category.fields || []
-    }
-    let fatherFromDB: ICategory | null = null
+  create(category: Category): Promise<Category> {
+    return new Promise((resolve, reject) => {
+      const newCategory = Category.create(category)
 
-    if (newCategory.father) {
-      fatherFromDB = await Category.findOne({
-        _id: newCategory.father._id
-      }).exec()
-    }
-
-    if (fatherFromDB) {
-      category.father = newCategory.father._id
-    }
-
-    for (let i = 0; i < newCategory.fields.length; i++) {
-      newCategory.fields[i] = {
-        _id: new mongoose.Types.ObjectId(),
-        ...newCategory.fields[i]
-      }
-      newCategory.fields[i] = await Field.create(newCategory.fields[i])
-    }
-
-    const categorySaved = Category.create(newCategory)
-    if (fatherFromDB !== null) {
-      fatherFromDB.subs.push(categorySaved)
-      fatherFromDB.save()
-    }
-    return categorySaved
+      Category.create(newCategory)
+        .save()
+        .then(categorySaved => {
+          resolve(categorySaved)
+        })
+    })
   }
 
   getCategories() {
     return new Promise((resolve, reject) => {
-      Category.find({})
-        .populate(categoryPopulate)
-        .exec((err: Error, categories) => {
-          if (err) return reject(err)
-          return resolve(categories)
-        })
-    })
-  }
-
-  getOne(name: string): Promise<ICategory> {
-    return new Promise((resolve, reject) => {
-      Category.findOne({ name: name })
-        .populate([
-          {
-            path: 'defaultGroup',
-            select: {
-              name: 1,
-              fullName: 1,
-              description: 1,
-              analysts: 0
-            }
-          },
-          {
-            path: 'defaultStatus',
-            select: {
-              name: 1
-            }
-          },
-          {
-            path: 'defaultPriority',
-            select: {
-              name: 1,
-              weight: 1
-            }
-          }
-        ])
-        .exec((err: Error, result) => {
-          if (err) return reject(err)
-          return resolve(result)
-        })
-    })
-  }
-
-  getOneById(categoryId: ICategory['_id']): Promise<ICategory> {
-    return new Promise((resolve, reject) => {
-      Category.findOne({ _id: categoryId })
-        .populate(categoryPopulate)
-        .exec((err: Error, result: ICategory) => {
-          if (err) return reject(err)
-          return resolve(result)
-        })
-    })
-  }
-
-  edit(categoryId: ICategory['_id'], category: ICategory): Promise<ICategory> {
-    return new Promise((resolve, reject) => {
-      Category.updateOne(
-        { _id: categoryId },
-        {
-          $set: {
-            name: category.name,
-            father: category.father,
-            description: category.description,
-            defaultGroup: category.defaultGroup,
-            defaultStatus: category.defaultStatus,
-            defaultPriority: category.defaultPriority,
-            sla: category.sla
-          }
-        }
-      ).exec((err: Error) => {
-        if (err) return reject(err)
-        resolve(this.getOneById(categoryId))
+      Category.find({ relations: ['subs'] }).then(categories => {
+        return resolve(categories)
       })
     })
   }
 
-  getImage(categoryId: ICategory['_id']): Promise<GetObjectOutput> {
+  getOne(name: string): Promise<Category> {
+    return new Promise((resolve, reject) => {
+      Category.findOne({
+        where: {
+          name
+        },
+        relations: ['subs']
+      }).then(result => {
+        resolve(result)
+      })
+    })
+  }
+
+  getOneById(categoryId: Category['id']): Promise<Category> {
+    return new Promise((resolve, reject) => {
+      Category.findOne(categoryId, { relations: ['subs'] }).then(result => {
+        return resolve(result)
+      })
+    })
+  }
+
+  edit(
+    categoryId: Category['id'],
+    categoryToEdit: Category
+  ): Promise<Category> {
+    return new Promise((resolve, reject) => {
+      Category.findOne(categoryId).then(category => {
+        Object.assign(category, categoryToEdit)
+        category!.save().then(() => {
+          resolve(this.getOneById(categoryId))
+        })
+      })
+    })
+  }
+
+  getImage(categoryId: Category['id']): Promise<GetObjectOutput> {
     return new Promise((resolve, reject) => {
       S3.getObject(
         {
-          Bucket: process.env.BUCKET,
+          Bucket: process.env.BUCKET!,
           Key: `category/${categoryId.toString()}`
         },
         (err: Error, file: GetObjectOutput) => {
-          if (err) return reject(err)
+          if (err) reject(err)
           return resolve(file)
         }
       )
@@ -160,22 +75,21 @@ class CategoryService {
   }
 
   async setImage(
-    categoryId: ICategory['_id'],
+    categoryId: Category['id'],
     image: UploadedFile
   ): Promise<void> {
     const params = {
-      Bucket: process.env.BUCKET,
+      Bucket: process.env.BUCKET!,
       Key: `category/${categoryId}`,
       Body: image.data
     }
     await S3.upload(params).promise()
   }
 
-  getSubsForCategory(id: Types.ObjectId): Promise<[ICategory]> {
+  getSubsForCategory(id: Category['id']): Promise<Category[]> {
     return new Promise((resolve, reject) => {
-      Category.findOne({ _id: id }).exec((err: Error, result) => {
-        if (err) return reject(err)
-        return resolve(result.subs)
+      Category.findOne(id, { relations: ['subs'] }).then(result => {
+        return resolve(result!.subs)
       })
     })
   }

@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     update(address) {
-      this.$axios.put(`/address/${address._id}`, address).then(() => {
+      this.$axios.put(`/address/${address.id}`, address).then(() => {
         this.$toast.show('Atualizado', {
           duration: 1000,
           icon: 'done'

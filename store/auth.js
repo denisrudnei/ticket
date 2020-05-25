@@ -9,7 +9,7 @@ export const getters = {
 
 export const mutations = {
   setUserId(state, id) {
-    state.user._id = id
+    state.user.id = id
   },
   setUser(state, user) {
     state.user = user
@@ -26,7 +26,7 @@ export const mutations = {
   updateAddress(state, address) {
     state.user.address = address
   },
-  updatemergePictureWithExternalAccount(state, merge) {
+  updateMergePictureWithExternalAccount(state, merge) {
     state.user.mergePictureWithExternalAccount = merge
   },
   setColor(state, color) {

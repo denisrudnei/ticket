@@ -5,7 +5,7 @@
     </v-card-title>
     <v-card-text>
       <v-list two-line>
-        <v-list-item v-for="analyst in analysts" :key="analyst._id" :to="`/analyst/${analyst._id}`">
+        <v-list-item v-for="analyst in analysts" :key="analyst.id" :to="`/analyst/${analyst.id}`">
           <v-list-item-avatar>
             <v-avatar>
               <v-img :src="analyst.picture" />

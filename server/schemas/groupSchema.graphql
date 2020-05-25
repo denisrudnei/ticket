@@ -1,5 +1,5 @@
 type Group {
-  _id: ID
+  id: ID
   name: String
   analysts: [Analyst]
 }

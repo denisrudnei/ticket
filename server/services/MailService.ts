@@ -3,7 +3,7 @@ import Email from 'email-templates'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 import nodeMailer from 'nodemailer'
 import express from 'express'
-import { IAnalyst } from '../models/Analyst'
+import Analyst from '../models/Analyst'
 
 const transport = nodeMailer.createTransport(
   new SMTPTransport({
@@ -18,6 +18,7 @@ const transport = nodeMailer.createTransport(
 
 const email = new Email({
   juice: true,
+  preview: false,
   juiceResources: {
     preserveImportant: true,
     webResources: {
@@ -32,7 +33,7 @@ const email = new Email({
 
 class MailService {
   sendConfirmationEmail(
-    user: IAnalyst,
+    user: Analyst,
     req: express.Request,
     token: string
   ): Promise<void> {

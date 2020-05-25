@@ -24,7 +24,7 @@
           <v-btn
             class="primary white--text"
             icon
-            :to="`/config/permissions/edit/${item._id}`"
+            :to="`/config/permissions/edit/${item.id}`"
           >
             <v-icon>
               edit

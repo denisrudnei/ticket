@@ -18,7 +18,7 @@
           {{ item.country }}
         </template>
         <template v-slot:item.edit="{ item }">
-          <v-btn class="primary white--text" icon :to="`/config/address/edit/${item._id}`">
+          <v-btn class="primary white--text" icon :to="`/config/address/edit/${item.id}`">
             <v-icon>edit</v-icon>
           </v-btn>
         </template>

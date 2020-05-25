@@ -16,7 +16,7 @@
             multiple
             filled
             :label="$t('groups')"
-            :items="groups.map(g => {return {text: g.name, value: g._id}})"
+            :items="groups.map(g => {return {text: g.name, value: g.id}})"
           />    
         </v-col>
         <v-col
@@ -29,7 +29,7 @@
             multiple
             filled
             :label="$t('status')"
-            :items="status.map(g => {return {text: g.name, value: g._id}})"
+            :items="status.map(g => {return {text: g.name, value: g.id}})"
           />    
         </v-col>
         <v-col
@@ -42,7 +42,7 @@
             multiple
             filled
             :label="$t('opened_by')"
-            :items="analysts.map(g => {return {text: g.name, value: g._id}})"
+            :items="analysts.map(g => {return {text: g.name, value: g.id}})"
           />    
         </v-col>
       </v-row>

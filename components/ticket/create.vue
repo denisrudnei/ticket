@@ -113,7 +113,7 @@
             pa-1
           >
             <v-text-field
-              :value="ticket.ticketNumber"
+              :value="ticket.id"
               disabled
               filled
               :label="$t('ticket_number')"
@@ -504,9 +504,9 @@ export default {
     }
   },
   head() {
-    if (!this.ticket.ticketNumber || !this.ticketsToEdit.length) return
+    if (!this.ticket.id || !this.ticketsToEdit.length) return
     return {
-      title: `[${this.ticket.ticketNumber}] - [${this.ticketsToEdit.length}] ${
+      title: `[${this.ticket.id}] - [${this.ticketsToEdit.length}] ${
         this.ticket.resume
       }`
     }
@@ -577,7 +577,7 @@ export default {
       if (!this.ticket.status) return this.status
       if (!this.editing) return this.status
       const statusIndex = this.status.findIndex(s => {
-        return s._id === this.ticket.status._id
+        return s.id === this.ticket.status.id
       })
 
       const result = [this.ticket.status]
@@ -597,7 +597,7 @@ export default {
         this.analysts = response.data.Analyst
         if (!this.search && !this.readonly) {
           const openedBy = this.analysts.filter(a => {
-            return a._id === this.user._id
+            return a.id === this.user.id
           })[0]
           this.$store.commit('ticket/setFieldInActualTicket', {
             value: openedBy,
@@ -620,7 +620,7 @@ export default {
         content: this.comment
       }
       this.$axios
-        .post(`/ticket/comment/${this.ticket._id}`, comment)
+        .post(`/ticket/comment/${this.ticket.id}`, comment)
         .then(response => {
           this.comment = ''
           this.$store.commit('ticket/addComment', response.data)
@@ -642,7 +642,7 @@ export default {
     cancelEdit() {
       this.editing = false
       this.readOnlyData = true
-      this.$axios.get(`/ticket/${this.ticket._id}`).then(response => {
+      this.$axios.get(`/ticket/${this.ticket.id}`).then(response => {
         this.$store.commit('ticket/setActualTicket', response.data)
       })
     },
@@ -665,12 +665,12 @@ export default {
     changeValue(search, type, defaultAttr) {
       if (!this.ticket.category[defaultAttr]) return
       const index = this[search].findIndex(s => {
-        return s._id === this.ticket.category[defaultAttr]._id
+        return s.id === this.ticket.category[defaultAttr].id
       })
       if (
         this.ticket[type] === undefined ||
         (Object.prototype.hasOwnProperty.call(this.ticket, type) &&
-          !Object.prototype.hasOwnProperty.call(this.ticket[type], '_id'))
+          !Object.prototype.hasOwnProperty.call(this.ticket[type], 'id'))
       ) {
         this.setFieldInActualTicket(this[search][index], type)
       }

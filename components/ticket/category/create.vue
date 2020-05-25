@@ -68,10 +68,10 @@
                 <v-text-field v-model="field.text" label="Nome do campo" filled />
               </v-col>
               <v-col cols="2" pa-3>
-                <v-text-field v-model="field.limits.min" label="Tamanho mínimo" filled />
+                <v-text-field v-model="field.min" label="Tamanho mínimo" filled />
               </v-col>
               <v-col cols="2" pa-3>
-                <v-text-field v-model="field.limits.max" label="Tamanho máximo" filled />
+                <v-text-field v-model="field.max" label="Tamanho máximo" filled />
               </v-col>
               <v-col cols="12">
                 <v-checkbox v-model="field.required" label="Necessário preencher?" />
@@ -151,8 +151,8 @@ export default {
         this.status = response.data.status
         this.sla = response.data.sla
       })
-    if (this.category._id) {
-      this.image = `/api/category/${this.category._id}/image`
+    if (this.category.id) {
+      this.image = `/api/category/${this.category.id}/image`
     }
   },
   methods: {
@@ -168,10 +168,8 @@ export default {
       this.category.fields.push({
         text: '',
         required: false,
-        limits: {
-          min: 0,
-          max: 50
-        }
+        min: 0,
+        max: 50
       })
     },
     save() {

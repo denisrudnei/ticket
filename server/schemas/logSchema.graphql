@@ -1,5 +1,5 @@
 type Log {
-  _id: ID
+  id: ID
   user: Analyst
   date: Datetime
   oldStatus: Status

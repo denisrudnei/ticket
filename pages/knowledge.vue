@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <v-tabs color="primary white--text" show-arrows>
-        <v-tab v-for="group in groups" :key="group._id" :to="`/knowledge/group/${group.name}`">
+        <v-tab v-for="group in groups" :key="group.id" :to="`/knowledge/group/${group.name}`">
           {{ `(${group.length}) ${group.name}` }}
         </v-tab>
       </v-tabs>
@@ -21,7 +21,7 @@ export default {
         .value()
       return {
         groups: Object.keys(g).map(obj => ({
-          _id: g[obj][0]._id,
+          id: g[obj][0].id,
           name: obj,
           length: g[obj].length
         }))

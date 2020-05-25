@@ -1,5 +1,5 @@
 type Message {
-  _id: ID!
+  id: ID!
   to: Analyst!
   from: Analyst!
   content: String

@@ -1,13 +1,23 @@
-import mongoose from 'mongoose'
-import generate from './Generate'
+import { DeleteResult } from 'typeorm'
+import Generate from './Generate'
+import Seed from './Seed'
+import Priority from '~/server/models/ticket/Priority'
 
-const seed = (number: number) => {
-  const template = () => ({
-    _id: new mongoose.Types.ObjectId(),
-    name: 'test',
-    weight: 0
-  })
-  return generate(template, number)
+class PrioritySeed implements Seed<Priority> {
+  init(): Promise<Priority> {
+    return Priority.create({
+      name: 'test',
+      weight: 0
+    }).save()
+  }
+
+  generateMany(number: number): Promise<Priority[]> {
+    return Generate.many<PrioritySeed>(new PrioritySeed(), number)
+  }
+
+  destroy(): Promise<DeleteResult> {
+    return Priority.delete({})
+  }
 }
 
-export default seed
+export default PrioritySeed

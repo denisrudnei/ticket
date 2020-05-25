@@ -1,7 +1,7 @@
 #import "@/graphql/fragments/participantInfo.graphql"
 subscription NewMessage($to: ID!) {
   message: NewMessage(to: $to) {
-    _id
+    id
     content
     date
     to {

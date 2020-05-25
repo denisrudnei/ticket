@@ -19,7 +19,7 @@
           <v-text-field v-model="search" :label="$t('search')" />
           <v-list>
             <draggable group="group" :list="analysts">
-              <v-list-item v-for="analyst in analysts" :key="analyst._id" @click="select">
+              <v-list-item v-for="analyst in analysts" :key="analyst.id" @click="select">
                 {{ analyst.name }}
               </v-list-item>
             </draggable>
@@ -33,7 +33,7 @@
         <v-card-text>
           <v-list>
             <draggable group="group" :list="group.analysts">
-              <v-list-item v-for="analyst in group.analysts" :key="analyst._id" @click="select">
+              <v-list-item v-for="analyst in group.analysts" :key="analyst.id" @click="select">
                 {{ analyst.name }}
               </v-list-item>
             </draggable>

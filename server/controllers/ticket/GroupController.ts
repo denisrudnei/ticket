@@ -13,7 +13,7 @@ export default {
   },
 
   getOne: (req: express.Request, res: express.Response) => {
-    GroupService.getOne(req.params.id)
+    GroupService.getOne(parseInt(req.params.id))
       .then(group => {
         return res.status(200).json(group)
       })
@@ -33,7 +33,7 @@ export default {
   },
 
   insertAnalyst: (req: express.Request, res: express.Response) => {
-    GroupService.insertAnalyst(req.params.groupId, req.body._id)
+    GroupService.insertAnalyst(parseInt(req.params.groupId), req.body.id)
       .then(() => {
         return res.sendStatus(201)
       })
@@ -43,7 +43,7 @@ export default {
   },
 
   edit: (req: express.Request, res: express.Response) => {
-    GroupService.edit(req.params.id, req.body)
+    GroupService.edit(parseInt(req.params.id), req.body)
       .then(group => {
         return res.status(200).json(group)
       })
@@ -53,7 +53,10 @@ export default {
   },
 
   remove: (req: express.Request, res: express.Response) => {
-    GroupService.removeAnalyst(req.params.groupId, req.params.analystId)
+    GroupService.removeAnalyst(
+      parseInt(req.params.groupId),
+      parseInt(req.params.analystId)
+    )
       .then(() => {
         return res.sendStatus(201)
       })

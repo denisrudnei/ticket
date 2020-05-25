@@ -1,6 +1,6 @@
-query PriorityById($_id: ID!){
-  priority: PriorityById(_id: $_id) {
-    _id
+query PriorityById($id: ID!){
+  priority: PriorityById(id: $id) {
+    id
     name
     weight
   }

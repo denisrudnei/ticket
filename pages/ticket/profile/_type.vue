@@ -23,7 +23,7 @@ export default {
   },
   created() {
     this.$store.commit('ticket/setQuery', {
-      [this.type]: this.user._id
+      [this.type]: this.user.id
     })
   }
 }

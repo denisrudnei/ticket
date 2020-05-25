@@ -1,36 +1,36 @@
 query {
   category: Category {
-    _id
+    id
     fullName
     defaultStatus {
-      _id
+      id
       name
     }
     defaultGroup {
-      _id
+      id
       name
     }
     defaultPriority {
-      _id
+      id
       name
       weight
     }
   }
   group: Group {
-    _id
+    id
     name
   }
   status: Status {
-    _id
+    id
     name
   }
   priority: Priority {
-    _id
+    id
     name
     weight
   }
   sla: Sla {
-    _id
+    id
     name
     limit
   }

@@ -31,7 +31,7 @@ class AppController {
       roleSearchPath: 'session.authUser.role'
     })
 
-    this.express.use('/api', acl.authorize)
+    // this.express.use('/api', acl.authorize)
 
     this.express.use(bodyParser.json())
     this.express.use(compression())
@@ -45,7 +45,7 @@ class AppController {
   }
 
   routes() {
-    this.express.use('/api', routes)
+    this.express.use('/', routes)
     this.express.use(
       (
         err: Error,

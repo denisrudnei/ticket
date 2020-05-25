@@ -18,7 +18,7 @@ export const mutations = {
   removeGroup(state, groupId) {
     state.groups = [
       ...state.groups.filter(group => {
-        return group._id !== groupId
+        return group.id !== groupId
       })
     ]
   }

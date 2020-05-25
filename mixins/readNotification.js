@@ -3,12 +3,12 @@ import read from '@/graphql/mutation/profile/notification/read.graphql'
 export default {
   methods: {
     readNotification(notification) {
-      const id = notification._id
+      const id = notification.id
       this.$apollo
         .mutate({
           mutation: ggl(read),
           variables: {
-            _id: id
+            id: id
           }
         })
         .then(response => {

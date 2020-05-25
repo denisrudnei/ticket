@@ -1,12 +1,14 @@
 import express from 'express'
 import { UploadedFile } from 'express-fileupload'
+import Group from '../models/ticket/Group'
+import Sound, { SoundType } from '../models/Sound'
 import AnalystService from '~/server/services/AnalystService'
 import Analyst from '~/server/models/Analyst'
 
 export default {
   getAll: (req: express.Request, res: express.Response) => {
     AnalystService.getAnalysts()
-      .then(analysts => {
+      .then((analysts: Analyst[]) => {
         return res.status(200).json(analysts)
       })
       .catch((e: Error) => {
@@ -15,8 +17,8 @@ export default {
   },
 
   getOne: (req: express.Request, res: express.Response) => {
-    AnalystService.getOne(req.params.id)
-      .then(analyst => {
+    AnalystService.getOne(parseInt(req.params.id))
+      .then((analyst: Analyst) => {
         return res.status(200).json(analyst)
       })
       .catch((e: Error) => {
@@ -26,7 +28,7 @@ export default {
 
   getConfigAnalysts: (_: express.Request, res: express.Response) => {
     AnalystService.getConfigAnalysts()
-      .then(analysts => {
+      .then((analysts: Analyst[]) => {
         return res.status(200).json(analysts)
       })
       .catch((e: Error) => {
@@ -45,9 +47,9 @@ export default {
   },
 
   getGroups: (req: express.Request, res: express.Response) => {
-    const userId = req.params.id
+    const userId = parseInt(req.params.id)
     AnalystService.getGroups(userId)
-      .then(groups => {
+      .then((groups: Group[]) => {
         return res.status(200).json(groups)
       })
       .catch((e: Error) => {
@@ -60,17 +62,15 @@ export default {
     res: express.Response,
     next: express.NextFunction
   ) => {
-    const userId = req.session!.authUser._id
-    const soundConfig = {
-      chat: {
-        muted: req.body.chat.muted,
-        volume: req.body.chat.volume
-      },
-      notification: {
-        muted: req.body.notification.muted,
-        volume: req.body.notification.volume
-      }
-    }
+    const userId = req.session!.authUser.id
+    const chatSound = new Sound(SoundType.CHAT)
+    chatSound.muted = req.body.chat.muted
+    chatSound.volume = req.body.chat.volume
+    const notificationSound = new Sound(SoundType.NOTIFICATION)
+    notificationSound.muted = req.body.notification.muted
+    notificationSound.volume = req.body.notification.volume
+    const soundConfig = [chatSound, notificationSound]
+
     AnalystService.setSoundConfig(userId, soundConfig)
       .then(() => {
         res.sendStatus(201)
@@ -79,14 +79,14 @@ export default {
   },
 
   edit: (req: express.Request, res: express.Response) => {
-    const userId = req.session!.authUser._id
-    const analyst = new Analyst({
+    const userId = req.session!.authUser.id
+    const analyst = {
       name: req.body.name,
       contactEmail: req.body.contactEmail,
       color: req.body.color,
       address: req.body.address,
       mergePictureWithExternalAccount: req.body.mergePictureWithExternalAccount
-    })
+    } as Analyst
     AnalystService.updateAnalyst(userId, analyst)
       .then(() => {
         return res.sendStatus(202)
@@ -97,7 +97,7 @@ export default {
   },
 
   updateImage: (req: express.Request, res: express.Response) => {
-    const userId = req.session!.authUser._id
+    const userId = req.session!.authUser.id
     const file = req.files!.image as UploadedFile
     AnalystService.updateImage(userId, file)
       .then(() => {
@@ -109,7 +109,7 @@ export default {
   },
 
   removeImage: (req: express.Request, res: express.Response) => {
-    const userId = req.session!.authUser._id
+    const userId = req.session!.authUser.id
     AnalystService.removeImage(userId)
       .then(() => {
         return res.sendStatus(202)
@@ -120,7 +120,7 @@ export default {
   },
 
   remove: (req: express.Request, res: express.Response) => {
-    const userId = req.params.id
+    const userId = parseInt(req.params.id)
     AnalystService.remove(userId)
       .then(() => {
         return res.sendStatus(200)

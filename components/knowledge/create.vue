@@ -13,7 +13,7 @@
         filled
         :value-comparator="compare"
         placeholder="Categoria do problema"
-        :items="category.map(v => ({text: v.fullName, value: v}))"
+        :items="category.map(v => ({text: v.name, value: v}))"
       />
     </v-col>
     <v-col cols="12" md="6" pa-3>

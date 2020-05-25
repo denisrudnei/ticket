@@ -6,7 +6,7 @@
           {{ item.name }}
         </template>
         <template v-slot:item.actions="{item}">
-          <v-btn class="primary white--text" icon :to="`/config/knowledge/edit/${item._id}`">
+          <v-btn class="primary white--text" icon :to="`/config/knowledge/edit/${item.id}`">
             <v-icon>edit</v-icon>
           </v-btn>
           <v-btn class="primary white--text" icon @click="remove(item)">
@@ -43,9 +43,9 @@ export default {
   },
   methods: {
     remove(item) {
-      this.$axios.delete(`/knowledge/${item._id}`).then(() => {
+      this.$axios.delete(`/knowledge/${item.id}`).then(() => {
         this.items = this.items.filter(i => {
-          return i._id !== item._id
+          return i.id !== item.id
         })
         this.$toast.show('Apagado', {
           duration: 5000,

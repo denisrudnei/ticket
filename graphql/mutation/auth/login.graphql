@@ -1,6 +1,6 @@
 mutation Login($email: String!, $password: String!) {
   user: Login(email: $email, password: $password) {
-    _id
+    id
     name
     email
     color

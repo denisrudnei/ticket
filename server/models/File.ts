@@ -1,25 +1,34 @@
-import { models, model, Schema, Document } from 'mongoose'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne
+} from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql'
+import Ticket from './ticket/Ticket'
 
-export interface IFile extends Document {
-  name: string
+@Entity()
+@ObjectType()
+class File extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @Column()
+  @Field()
+  public name!: string
+
+  @Column()
+  @Field()
+  public type!: string
+
+  @Field()
+  public data!: String
+
+  @ManyToOne(type => Ticket, Ticket => Ticket.files)
+  @Field(type => Ticket)
+  public ticket!: Ticket
 }
 
-const FileSchema: Schema<IFile> = new Schema({
-  _id: Schema.Types.ObjectId,
-  name: {
-    type: String,
-    required: true
-  }
-})
-
-FileSchema.set('toJSON', {
-  getters: true,
-  virtuals: true
-})
-
-FileSchema.set('toObject', {
-  getters: true,
-  virtuals: true
-})
-
-export default models.File || model('File', FileSchema)
+export default File

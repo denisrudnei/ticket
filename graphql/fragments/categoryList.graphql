@@ -1,33 +1,31 @@
 fragment categoryList on Category {
-  _id
+  id
   name
   fullName
   description
   defaultGroup {
-    _id
+    id
     name
   }
   subs {
-    _id
+    id
   }
   sla {
-    _id
+    id
     name
   }
   defaultStatus {
-    _id
+    id
     name
   }
   defaultPriority {
-    _id
+    id
     name
   }
   fields {
     required
-    limits {
-      min
-      max
-    }
+    min
+    max
     value
     text
   }

@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    :value="dialog === actualTicket._id"
+    :value="dialog === actualTicket.id"
     fullscreen
     scrollable
   >
@@ -79,17 +79,17 @@ export default {
         .mutate({
           mutation: ggl(ticketEdit),
           variables: {
-            _id: this.actualTicket._id,
+            id: this.actualTicket.id,
             ticket: {
               resume: this.actualTicket.resume,
               content: this.actualTicket.content,
-              address: this.actualTicket.address._id,
-              status: this.actualTicket.status._id,
-              group: this.actualTicket.group._id,
-              category: this.actualTicket.category._id,
-              priority: this.actualTicket.priority._id,
-              affectedUser: this.actualTicket.affectedUser._id,
-              actualUser: this.actualTicket.actualUser._id
+              address: this.actualTicket.address.id,
+              status: this.actualTicket.status.id,
+              group: this.actualTicket.group.id,
+              category: this.actualTicket.category.id,
+              priority: this.actualTicket.priority.id,
+              affectedUser: this.actualTicket.affectedUser.id,
+              actualUser: this.actualTicket.actualUser.id
             }
           }
         })

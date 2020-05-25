@@ -1,56 +1,40 @@
-import Sla, { ISla } from '@/server/models/ticket/Sla'
-import { Types } from 'mongoose'
+import Sla from '@/server/models/ticket/Sla'
 
 class SlaService {
-  getAll(): Promise<[ISla]> {
+  getAll(): Promise<Sla[]> {
     return new Promise((resolve, reject) => {
-      Sla.find().exec((err: Error, results: [ISla]) => {
-        if (err) return reject(err)
+      Sla.find().then((results: Sla[]) => {
         resolve(results)
       })
     })
   }
 
-  getOne(slaId: ISla['_id']): Promise<ISla> {
+  getOne(slaId: Sla['id']): Promise<Sla> {
     return new Promise((resolve, reject) => {
-      Sla.findOne({
-        _id: slaId
-      }).exec((err: Error, result: ISla) => {
-        if (err) reject(err)
+      Sla.findOne(slaId).then(result => {
         resolve(result)
       })
     })
   }
 
-  create(sla: ISla): Promise<ISla> {
+  create(sla: Sla): Promise<Sla> {
     return new Promise((resolve, reject) => {
-      const newSla = new Sla({
-        _id: new Types.ObjectId(),
-        name: sla.name,
-        limit: sla.limit
-      })
-      Sla.create(newSla, (err: Error) => {
-        if (err) return reject(err)
-        return resolve(newSla)
-      })
+      const newSla = new Sla()
+      newSla!.name = sla.name
+      newSla!.limit = sla.limit
+
+      resolve(Sla.create(newSla).save())
     })
   }
 
-  edit(slaId: ISla['_id'], sla: ISla): Promise<ISla> {
+  edit(slaId: Sla['id'], slaToEdit: Sla): Promise<Sla> {
     return new Promise((resolve, reject) => {
-      Sla.updateOne(
-        {
-          _id: slaId
-        },
-        {
-          $set: {
-            name: sla.name,
-            limit: sla.limit
-          }
-        }
-      ).exec((err: Error) => {
-        if (err) reject(err)
-        resolve(this.getOne(slaId))
+      Sla.findOne(slaId).then(sla => {
+        sla!.name = slaToEdit.name
+        sla!.limit = slaToEdit.limit
+        sla!.save().then(() => {
+          resolve(this.getOne(slaId))
+        })
       })
     })
   }

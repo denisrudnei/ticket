@@ -81,9 +81,9 @@ export default {
       Object.keys(ticket).forEach(k => {
         if (
           ticket[k] !== undefined &&
-          Object.prototype.hasOwnProperty.call(ticket[k], '_id')
+          Object.prototype.hasOwnProperty.call(ticket[k], 'id')
         ) {
-          newTicket[k] = ticket[k]._id
+          newTicket[k] = ticket[k].id
         }
       })
       const fieldsToExclude = ['created', 'modified', 'resume', 'content']

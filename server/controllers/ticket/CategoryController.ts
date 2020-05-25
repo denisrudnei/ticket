@@ -1,7 +1,7 @@
 import express from 'express'
 import { UploadedFile } from 'express-fileupload'
 import CategoryService from '../../services/ticket/CategoryService'
-import Category, { ICategory } from '../../models/ticket/Category'
+import Category from '../../models/ticket/Category'
 export default {
   getCategories: (_: express.Request, res: express.Response) => {
     CategoryService.getCategories()
@@ -24,7 +24,7 @@ export default {
   },
 
   getSubs: (req: express.Request, res: express.Response) => {
-    CategoryService.getSubsForCategory(req.params!.id as ICategory['_id'])
+    CategoryService.getSubsForCategory(parseInt(req.params.id))
       .then(result => {
         return res.status(200).json(result)
       })
@@ -34,15 +34,13 @@ export default {
   },
 
   edit: (req: express.Request, res: express.Response) => {
-    CategoryService.edit(req.params!.id as ICategory['_id'], req.body).then(
-      () => {
-        return res.sendStatus(202)
-      }
-    )
+    CategoryService.edit(parseInt(req.params.id), req.body).then(() => {
+      return res.sendStatus(202)
+    })
   },
 
   getImage: (req: express.Request, res: express.Response) => {
-    CategoryService.getImage(req.params.id)
+    CategoryService.getImage(parseInt(req.params.id))
       .then(response => {
         res.send(response.Body)
       })
@@ -52,18 +50,18 @@ export default {
   },
 
   setImage: (req: express.Request, res: express.Response) => {
-    CategoryService.setImage(req.params.id, req.files!
+    CategoryService.setImage(parseInt(req.params.id), req.files!
       .image as UploadedFile).then(() => {
       res.sendStatus(202)
     })
   },
 
   create: (req: express.Request, res: express.Response) => {
-    const category = new Category({
+    const category = {
       name: req.body.name,
       father: req.body.father,
       fields: req.body.fields
-    })
+    } as Category
     CategoryService.create(category)
       .then(result => {
         return res.status(201).json(result)

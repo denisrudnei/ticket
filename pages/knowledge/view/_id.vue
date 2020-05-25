@@ -83,7 +83,7 @@ export default {
       .query({
         query: ggl(KnowledgeById),
         variables: {
-          _id: params.id
+          id: params.id
         }
       })
       .then(response => {
@@ -98,7 +98,7 @@ export default {
       .query({
         query: ggl(KnowledgeById),
         variables: {
-          _id: id
+          id: id
         }
       })
       .then(response => {
@@ -107,13 +107,13 @@ export default {
   },
   methods: {
     compare(obj1, obj2) {
-      return obj1._id === obj2._id
+      return obj1.id === obj2.id
     },
     openModal(field, value) {
       this.showModal = true
-      if (Object.prototype.hasOwnProperty.call(value, '_id')) {
+      if (Object.prototype.hasOwnProperty.call(value, 'id')) {
         this.$store.commit('ticket/setModalQuery', {
-          [field]: value._id
+          [field]: value.id
         })
         this.$store.commit('ticket/setModalList', true)
       }

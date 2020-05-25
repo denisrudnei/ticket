@@ -1,204 +1,146 @@
-import mongoose from 'mongoose'
-import Message, { IMessage } from '../models/chat/Message'
-import Analyst, { IAnalyst } from '../models/Analyst'
-import Chat, { IChat } from '../models/chat/Chat'
+import { In } from 'typeorm'
+import Message from '../models/chat/Message'
+import Analyst from '../models/Analyst'
+import Chat from '../models/chat/Chat'
 
 class ChatService {
-  getChats(fromId: IAnalyst['_id']): Promise<[IChat]> {
+  getChats(fromId: Analyst['id']): Promise<Chat[]> {
     return new Promise((resolve, reject) => {
-      Chat.find({
-        participants: {
-          $in: [fromId]
-        }
-      })
-        .populate(['participants', 'messages'])
-        .exec((err: Error, result: [IChat]) => {
-          if (err) reject(err)
-          resolve(result)
+      Chat.find({ relations: ['participants'] }).then(result => {
+        const chats = result.filter(chat => {
+          return chat.participants
+            .map(participant => participant.id)
+            .includes(fromId)
         })
+        resolve(chats)
+      })
     })
   }
 
   async getUnReadMessagesFromChat(
-    chatId: IChat['_id'],
-    userId: IAnalyst['_id']
-  ): Promise<IMessage[]> {
-    const chat: IChat = await Chat.findOne({ _id: chatId })
-
-    const messages = await Message.find({
-      _id: {
-        $in: chat.messages
-      }
+    chatId: Chat['id'],
+    userId: Analyst['id']
+  ): Promise<Message[]> {
+    const chat = await Chat.findOne(chatId, {
+      relations: ['messages', 'messages.from', 'messages.read']
     })
 
-    const unReadMessages = messages.filter((message: IMessage) => {
-      const from = message.from as unknown
-      const analyst = from as IAnalyst
-      return analyst._id.toString() !== userId.toString() && !message.read
+    // FIXME not getting analyst list from messages
+    const unReadMessages = chat!.messages.filter(message => {
+      return (
+        message.from.id !== userId &&
+        !message.read.map(analyst => analyst.id).includes(userId)
+      )
     })
     return unReadMessages
   }
 
-  async readMessage(messageId: IMessage['_id']): Promise<void> {
-    await Message.updateOne(
-      { _id: messageId },
-      {
-        $set: {
-          read: true
-        }
-      },
-      (err: Error) => {
-        if (err) Promise.reject(err)
-        Promise.resolve()
-      }
-    )
-  }
-
-  getOne(fromId: IAnalyst['_id'], toId: IAnalyst['_id']): Promise<IChat> {
+  readMessage(messageId: Message['id']): Promise<void> {
     return new Promise((resolve, reject) => {
-      Chat.findOne({
-        participants: {
-          $all: [fromId, toId]
-        }
-      })
-        .populate(['participants', 'messages'])
-        .exec((err: Error, result) => {
-          if (err) reject(err)
-          if (result === null) {
-            Chat.create(
-              {
-                _id: new mongoose.Types.ObjectId(),
-                participants: [toId, fromId]
-              },
-              (err: Error, result: IChat) => {
-                if (err) reject(err)
-                Chat.populate<IChat>(
-                  result,
-                  [{ path: 'participants' }],
-                  (err: Error, chat: IChat) => {
-                    if (err) reject(err)
-                    resolve(chat)
-                  }
-                )
-              }
-            )
-          } else {
-            resolve(result)
-          }
+      Message.findOne(messageId, { relations: ['read'] }).then(message => {
+        message!.read = []
+        message!.save().then(() => {
+          resolve()
         })
+      })
     })
   }
 
-  async addMessage(
-    fromId: IAnalyst['_id'],
-    toId: IAnalyst['_id'],
-    content: string
-  ): Promise<IMessage> {
-    const to = await Analyst.findOne({ _id: toId })
-    const from = await Analyst.findOne({ _id: fromId })
-      .populate(['chats'])
-      .exec()
-    const chat = await this.getOne(fromId, toId)
-    await Analyst.updateOne(
-      { _id: fromId },
-      { $addToSet: { chats: chat._id } }
-    ).exec()
-    const messageId = new mongoose.Types.ObjectId()
-    const message = await Message.create({
-      _id: messageId,
-      to: to._id,
-      from: from._id,
-      data: new Date(),
-      content: content
-    })
+  getOne(fromId: Analyst['id'], toId: Analyst['id']): Promise<Chat> {
+    return new Promise((resolve, reject) => {
+      Chat.find({ relations: ['participants', 'messages'] }).then(
+        async result => {
+          const to = await Analyst.findOne(toId)
+          const from = await Analyst.findOne(fromId)
 
-    Chat.updateOne(
-      {
-        _id: chat._id
-      },
-      {
-        $addToSet: {
-          messages: [messageId]
+          const chats = result.filter(chat => {
+            const participantsIds = chat.participants.map(
+              participant => participant.id
+            )
+            return (
+              participantsIds.includes(from!.id) &&
+              participantsIds.includes(to!.id)
+            )
+          })
+          if (chats.length === 0) {
+            const chat = Chat.create()
+            chat.participants = [to!, from!]
+            chat.save().then(chat => {
+              resolve(chat)
+            })
+          } else {
+            resolve(chats[0])
+          }
         }
-      }
-    ).exec((err: Error) => {
-      if (err) throw err
+      )
     })
-
-    const result = await Message.populate<IMessage>(message, [
-      { path: 'to' },
-      { path: 'from' }
-    ])
-    return result
   }
 
-  get(fromId: IAnalyst['_id'], toId: IAnalyst['_id']) {
+  addMessage(
+    fromId: Analyst['id'],
+    toId: Analyst['id'],
+    content: string
+  ): Promise<Message> {
+    return new Promise((resolve, reject) => {
+      Analyst.findOne(fromId, { relations: ['chats'] }).then(async from => {
+        const to = await Analyst.findOne(toId, { relations: ['chats'] })
+
+        const chat = await this.getOne(fromId, toId)
+        from!.chats.push(chat!)
+        const message = Message.create()
+        message.to = to!
+        message.from = from!
+        message.date = new Date()
+        message.content = content!
+        message.save().then(() => {
+          chat.messages.push(message)
+          chat.save().then(() => {
+            resolve(message)
+          })
+        })
+      })
+    })
+  }
+
+  get(fromId: Analyst['id'], toId: Analyst['id']): Promise<Message[]> {
     return new Promise((resolve, reject) => {
       Message.find({
-        $or: [
-          {
-            from: fromId,
-            to: toId
-          },
-          {
-            from: toId,
-            to: fromId
-          }
-        ]
+        where: {
+          $or: [
+            {
+              from: fromId,
+              to: toId
+            },
+            {
+              from: toId,
+              to: fromId
+            }
+          ]
+        }
+      }).then((messages: Message[]) => {
+        return resolve(messages)
       })
-        .populate([
-          {
-            path: 'to',
-            select: {
-              password: 0
-            }
-          },
-          {
-            path: 'from',
-            select: {
-              password: 0
-            }
-          }
-        ])
-        .exec((err: Error, messages) => {
-          if (err) return reject(err)
-          return resolve(messages)
+    })
+  }
+
+  changeStatus(userId: Analyst['id'], status: string): Promise<Analyst> {
+    return new Promise((resolve, reject) => {
+      Analyst.findOne(userId).then(analyst => {
+        analyst!.status = status
+        analyst!.save().then(() => {
+          resolve(analyst)
         })
-    })
-  }
-
-  changeStatus(userId: IAnalyst['_id'], status: string) {
-    return new Promise((resolve, reject) => {
-      Analyst.updateOne(
-        {
-          _id: userId
-        },
-        {
-          $set: {
-            status: status
-          }
-        }
-      ).exec((err: Error, result) => {
-        if (err) return reject(err)
-        return resolve(result)
       })
     })
   }
 
-  updateLastActive(userId: IAnalyst['_id']) {
+  updateLastActive(userId: Analyst['id']) {
     return new Promise((resolve, reject) => {
-      Analyst.updateOne(
-        {
-          _id: userId
-        },
-        {
-          $set: {
-            lastTimeActive: Date.now()
-          }
-        }
-      ).exec((err: Error, result) => {
-        if (err) return reject(err)
-        return resolve(result)
+      Analyst.findOne(userId).then(analyst => {
+        analyst!.lastTimeActive = new Date()
+        analyst!.save().then(() => {
+          resolve(analyst)
+        })
       })
     })
   }

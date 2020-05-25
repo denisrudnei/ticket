@@ -1,5 +1,5 @@
 type Ticket {
-  _id: ID
+  id: ID
   resume: String!
   content: String!
   status: Status!
@@ -16,7 +16,6 @@ type Ticket {
   openedBy: Analyst!
   created: Datetime
   modified: Datetime
-  ticketNumber: Int
   father: Ticket
   children: [Ticket]
   slaCount: Datetime

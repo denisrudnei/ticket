@@ -22,15 +22,13 @@ export default {
   },
   methods: {
     update(knowledge) {
-      this.$axios
-        .put(`/knowledge/${this.knowledge._id}`, knowledge)
-        .then(() => {
-          this.$toast.show('Atualizado', {
-            duration: 5000,
-            icon: 'done'
-          })
-          this.$router.push('/config/knowledge/list')
+      this.$axios.put(`/knowledge/${this.knowledge.id}`, knowledge).then(() => {
+        this.$toast.show('Atualizado', {
+          duration: 5000,
+          icon: 'done'
         })
+        this.$router.push('/config/knowledge/list')
+      })
     }
   }
 }

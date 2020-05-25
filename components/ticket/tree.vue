@@ -5,7 +5,7 @@
         v-if="data"
         :items="data.tree"
         open-on-click
-        item-key="_id"
+        item-key="id"
         activatable
       >
         <template
@@ -54,7 +54,7 @@ export default {
         query: ggl(removePath),
         variables() {
           return {
-            userId: this.user._id
+            userId: this.user.id
           }
         },
         result({ data }) {
@@ -65,7 +65,7 @@ export default {
         query: ggl(add),
         variables() {
           return {
-            userId: this.user._id
+            userId: this.user.id
           }
         },
         result({ data }) {

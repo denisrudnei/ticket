@@ -1,161 +1,133 @@
-import { models, model, Schema, Document } from 'mongoose'
-import Group, { IGroup } from './ticket/Group'
-const bcrypt = require('bcrypt')
+import {
+  In,
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  BeforeInsert,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
+  BeforeUpdate
+} from 'typeorm'
+import bcrypt from 'bcrypt'
+import { ObjectType, Field, ID } from 'type-graphql'
+import Group from './ticket/Group'
+import Role from './Role'
+import Address from './Address'
+import Path from './Path'
+import Chat from './chat/Chat'
+import Ticket from './ticket/Ticket'
+import Notification from './Notification'
+import Sound from './Sound'
 
-export interface IAnalyst extends Document {
-  email: string
-  status: string
-  lastTimeActive: Date
-  contactEmail: string
-  name: string
-  role: string
-  password: string
-  address: Schema.Types.ObjectId
-  description: Schema.Types.ObjectId
-  active: boolean
-  picture: string
-  color: string
-  mergePictureWithExternalAccount: boolean
-  sounds: any
-  chats: [Schema.Types.ObjectId]
-  paths: [Schema.Types.ObjectId]
-  getGroups: Function
-  verifyPassword: Function
-}
+@Entity()
+@ObjectType()
+class Analyst extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
 
-const AnalystSchema: Schema<IAnalyst> = new Schema({
-  _id: Schema.Types.ObjectId,
-  email: {
-    type: String,
-    select: false,
-    unique: true,
-    required: [true, 'Necessário preencher o email']
-  },
-  status: {
-    type: String,
-    enum: ['online', 'offline', 'away', 'busy']
-  },
-  lastTimeActive: {
-    type: Date,
-    default: Date.now
-  },
-  contactEmail: {
-    type: String,
-    required: false,
-    default: ''
-  },
-  name: {
-    type: String,
-    required: [true, 'Necessário preencher um nome']
-  },
-  role: {
-    type: String,
-    default: 'user',
-    enum: ['guest', 'user', 'admin'],
-    required: [true, 'O nível de acesso deve ser definido'],
-    select: false
-  },
-  color: {
-    type: String,
-    default: '',
-    select: false
-  },
-  password: {
-    type: String,
-    select: false
-  },
-  address: {
-    type: Schema.Types.ObjectId,
-    ref: 'Address'
-  },
-  description: {
-    type: String
-  },
-  active: {
-    type: Boolean,
-    default: false,
-    select: false
-  },
-  picture: {
-    type: String,
-    default: '/user.svg'
-  },
-  mergePictureWithExternalAccount: {
-    type: Boolean,
-    default: false,
-    select: false
-  },
-  sounds: {
-    type: Object,
-    default: {
-      chat: {
-        volume: 0,
-        muted: true
-      },
-      notification: {
-        volume: 0,
-        muted: false
-      }
-    }
-  },
-  chats: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Chat'
-    }
-  ],
-  paths: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Path',
-      select: false
-    }
-  ]
-})
+  @Column({ unique: true })
+  @Field()
+  public email!: string
 
-AnalystSchema.methods.getGroups = function(callback: Function) {
-  Group.find(
-    {
-      analysts: {
-        $in: [this._id]
-      }
-    },
-    (err: Error, result: [IGroup]) => {
-      callback(err, result)
-    }
-  )
-}
+  @Column()
+  @Field()
+  public status: string = 'offline'
 
-AnalystSchema.pre<IAnalyst>('save', function(next) {
-  const user = this
-  if (!user.isModified('password')) return next()
-  const salt = bcrypt.genSaltSync(12)
-  bcrypt.hash(user.password, salt, function(err: Error, hash: string) {
-    if (err) return next(err)
-    user.password = hash
-    next()
-  })
-})
+  @Column()
+  @Field()
+  public lastTimeActive: Date = new Date()
 
-AnalystSchema.methods.verifyPassword = function(
-  password: string,
-  next: Function
-) {
-  bcrypt.compare(password, this.password, (err: Error, result: boolean) => {
-    if (err) return next(err)
+  @Column({ nullable: false })
+  @Field()
+  public contactEmail: string = ''
+
+  @Column({ nullable: false })
+  @Field()
+  public name!: string
+
+  @Column()
+  @Field()
+  public role: string = 'user'
+
+  @Column()
+  public password!: string
+
+  @ManyToOne(type => Address)
+  @Field(type => Address, { nullable: true })
+  public address: Address | null = null
+
+  @Column()
+  @Field()
+  public description: string = ''
+
+  @Column()
+  @Field()
+  public active: boolean = false
+
+  @Column()
+  @Field()
+  public picture: string = '/user.svg'
+
+  @Column()
+  @Field()
+  public color: string = '#673ab7'
+
+  @Column()
+  @Field()
+  public mergePictureWithExternalAccount: boolean = false
+
+  @OneToMany(type => Sound, Sound => Sound.analyst)
+  @Field(type => [Sound])
+  public sounds!: Sound[]
+
+  @ManyToMany(type => Group, Group => Group.analysts)
+  @Field(type => [Group])
+  public groups!: Group[]
+
+  @ManyToMany(type => Chat, Chat => Chat.participants)
+  @JoinTable()
+  @Field(type => [Chat])
+  public chats!: Chat[]
+
+  @OneToMany(type => Ticket, Ticket => Ticket.actualUser)
+  @Field(type => [Ticket])
+  public ticketsActualUser!: Ticket[]
+
+  @OneToMany(type => Path, Path => Path.user)
+  @Field(type => [Path])
+  public paths!: Path[]
+
+  @ManyToMany(type => Notification, Notification => Notification.read)
+  @Field(type => [Notification])
+  public notificationsRead!: Notification[]
+
+  @ManyToMany(type => Notification, Notification => Notification.to)
+  @Field(type => [Notification])
+  public notificationsToMe!: Notification[]
+
+  public getGroups(): Promise<Group[]> {
+    return new Promise((resolve, reject) => {
+      Analyst.findOne(this.id, { relations: ['groups'] }).then(analyst => {
+        resolve(analyst!.groups)
+      })
+    })
+  }
+
+  @BeforeInsert()
+  hashPassword() {
+    const salt = bcrypt.genSaltSync(12)
+    this.password = bcrypt.hashSync(this.password, salt)
+  }
+
+  public verifyPassword(password: string, next: Function) {
+    const result = bcrypt.compareSync(password, this.password)
     if (!result) return next(new Error('Password incorrect'))
     return next(null, result)
-  })
+  }
 }
 
-AnalystSchema.set('toJSON', {
-  getters: true,
-  virtuals: true
-})
-
-AnalystSchema.set('toObject', {
-  getters: true,
-  virtuals: true
-})
-
-export default models.Analyst || model<IAnalyst>('Analyst', AnalystSchema)
+export default Analyst

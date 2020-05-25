@@ -1,12 +1,11 @@
 type Path {
-  _id: ID!
+  id: ID!
   objectName: String
   property: String
   name: String!
 }
 
 type PathTree {
-  _id: ID
   name: String
   url: String
   children: [PathTree]

@@ -1,29 +1,27 @@
 import PathService from '../../server/services/PathService'
 import Analyst from '../../server/models/Analyst'
 import Path from '../../server/models/Path'
-import 'mocha'
 
 describe('PathService', function() {
-  this.timeout(0)
-
   it('Create new path', async () => {
-    const userId = await getUserId()
-    const path = new Path({
-      path: 'group',
-      group: 'name',
-      name: 'Por grupo'
-    })
-    await PathService.create(path, userId)
+    const user = await Analyst.findOne()
+    const path = new Path()
+
+    path.objectName = 'group'
+    path.property = 'name'
+    path.name = 'Per group'
+
+    await PathService.create(path!, user!.id)
   })
 
   it('Get one path', async () => {
     const path = await Path.findOne()
-    await PathService.getOnePathTree(path._id)
+    await PathService.getOnePathTree(path!.id)
   })
 
   it('Get paths from user', async () => {
     const user = await Analyst.findOne()
-    await PathService.getPathsTree(user._id)
+    await PathService.getPathsTree(user!.id)
   })
 
   it('Get all refs', async () => {
@@ -31,30 +29,23 @@ describe('PathService', function() {
   })
 
   it('Get profile information', async () => {
-    const userId = await getUserId()
-
-    await PathService.getProfileInfo(userId)
+    const user = await Analyst.findOne()
+    await PathService.getProfileInfo(user!.id)
   })
 
   it('Get paths', async () => {
-    const userId = await getUserId()
-    return PathService.getPaths(userId)
+    const user = await Analyst.findOne()
+    return PathService.getPaths(user!.id)
   })
 
   it('Delete path', async () => {
-    const user = await Analyst.findOne({}).exec()
-    const path = user.paths[0]
-    await PathService.remove(user._id, path._id)
+    const user = await Analyst.findOne({})
+    const path = user!.paths[0]
+    await PathService.remove(user!.id, path.id)
   })
 
   it('Get address', async () => {
-    const userId = await getUserId()
-    await PathService.getAddress(userId)
+    const user = await Analyst.findOne()
+    await PathService.getAddress(user!.id)
   })
 })
-
-async function getUserId() {
-  const result = await Analyst.findOne({}).exec()
-  if (result === null) return new Error('User not found')
-  return result._id
-}

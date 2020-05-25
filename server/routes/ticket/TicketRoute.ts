@@ -1,6 +1,5 @@
 import express from 'express'
 import { body, param, validationResult } from 'express-validator'
-
 import TicketController from '../../controllers/ticket/TicketController'
 import NotifyTicketUpdate from '../../middlewares/NotifyTicketUpdate'
 import CreateTicketLog from '../../middlewares/CreateTicketLog'

@@ -1,166 +1,152 @@
-import mongoose from 'mongoose'
-import Notification, { INotification } from '../models/Notification'
+import { In } from 'typeorm'
+import Notification from '../models/Notification'
 import TicketService from '../services/ticket/TicketService'
 import GroupService from '../services/ticket/GroupService'
 import AnalystService from '../services/AnalystService'
-import '../models/ticket/Log'
-import { IAnalyst } from '../models/Analyst'
-import { ITicket } from '../models/ticket/Ticket'
-import { IGroup } from '../models/ticket/Group'
-const fields = ['to', 'from']
+import Analyst from '../models/Analyst'
+import Ticket from '../models/ticket/Ticket'
+import Group from '../models/ticket/Group'
+import TicketEnum from '../enums/TicketEnum'
 
 class NotificationService {
-  getAll(userId: IAnalyst['_id']): Promise<INotification[]> {
+  getAll(userId: Analyst['id']): Promise<Notification[]> {
     return new Promise((resolve, reject) => {
       Notification.find({
-        to: {
-          $in: [userId]
+        relations: ['to']
+      }).then(result => {
+        const notifications = result.filter(notification => {
+          const needToReceiveId = notification.to.map(to => to.id)
+          return needToReceiveId.includes(userId)
+        })
+        resolve(notifications)
+      })
+    })
+  }
+
+  getOne(id: Notification['id']): Promise<Notification> {
+    return new Promise((resolve, reject) => {
+      Notification.findOne(id).then(notification => {
+        return resolve(notification)
+      })
+    })
+  }
+
+  getWhoRead(notificationId: Notification['id']): Promise<Analyst[]> {
+    return new Promise((resolve, reject) => {
+      Notification.findOne(notificationId, { relations: ['read'] }).then(
+        result => {
+          resolve(result!.read)
         }
-      })
-        .populate(fields)
-        .exec((err: Error, notifications) => {
-          if (err) return reject(err)
-          return resolve(notifications)
-        })
-    })
-  }
-
-  getOne(id: INotification['_id']): Promise<INotification> {
-    return new Promise((resolve, reject) => {
-      Notification.findOne({ _id: id })
-        .populate(fields)
-        .exec((err: Error, notification) => {
-          if (err) return reject(err)
-          return resolve(notification)
-        })
-    })
-  }
-
-  getWhoRead(notificationId: INotification['_id']): Promise<IAnalyst[]> {
-    return new Promise((resolve, reject) => {
-      Notification.findOne({
-        _id: notificationId
-      })
-        .populate(['read'])
-        .exec((err: Error, result: INotification) => {
-          if (err) reject(err)
-          resolve(result.read)
-        })
+      )
     })
   }
 
   read(
-    userId: IAnalyst['_id'],
-    notificationId: INotification['_id']
-  ): Promise<INotification> {
+    userId: Analyst['id'],
+    notificationId: Notification['id']
+  ): Promise<Notification> {
     return new Promise((resolve, reject) => {
-      Notification.updateOne(
-        {
-          _id: notificationId
-        },
-        {
-          $addToSet: {
-            read: [userId]
-          }
-        }
-      ).exec((err: Error) => {
-        if (err) return reject(err)
-        return resolve(this.getOne(notificationId))
+      Analyst.findOne(userId).then(async analyst => {
+        const notification = await Notification.findOne(notificationId, {
+          relations: ['read']
+        })
+        notification!.read.push(analyst!)
+        notification!.save().then(() => {
+          resolve(notification)
+        })
       })
     })
   }
 
   unRead(
-    userId: IAnalyst['_id'],
-    notificationId: INotification['_id']
-  ): Promise<INotification> {
+    userId: Analyst['id'],
+    notificationId: Notification['id']
+  ): Promise<Notification> {
     return new Promise((resolve, reject) => {
-      Notification.updateOne(
-        {
-          _id: notificationId
-        },
-        {
-          $pull: {
-            read: {
-              $in: [userId]
-            }
-          }
-        }
-      ).exec((err: Error) => {
-        if (err) return reject(err)
-        return resolve(this.getOne(notificationId))
+      Notification.findOne(notificationId).then(notification => {
+        if (!notification!.read) notification!.read = []
+        notification!.read = notification!.read.filter(analyst => {
+          return analyst.id !== userId
+        })
+        resolve(notification)
       })
     })
   }
 
   toggleRead(
-    userId: IAnalyst['_id'],
-    notificationId: INotification['_id']
-  ): Promise<INotification> {
+    userId: Analyst['id'],
+    notificationId: Notification['id']
+  ): Promise<Notification> {
     return new Promise((resolve, reject) => {
-      return this.getOne(notificationId).then(notification => {
-        const read = notification.read.includes(userId)
-        if (read) return resolve(this.unRead(userId, notificationId))
-        return resolve(this.read(userId, notificationId))
-      })
-    })
-  }
-
-  readall(userId: IAnalyst['_id']): Promise<INotification[]> {
-    return new Promise((resolve, reject) => {
-      Notification.updateMany(
-        {
-          to: {
-            $in: [userId]
-          }
-        },
-        {
-          $addToSet: {
-            read: [userId]
-          }
+      Notification.findOne(notificationId, { relations: ['read'] }).then(
+        notification => {
+          const read = notification!.read
+            .map(analyst => analyst.id)
+            .includes(userId)
+          if (read) resolve(this.unRead(userId, notificationId))
+          resolve(this.read(userId, notificationId))
         }
-      ).exec((err: Error) => {
-        if (err) return reject(err)
-        return resolve(this.getAll(userId))
-      })
+      )
     })
   }
 
-  triggerForTicketCreation(newTicket: ITicket): Promise<INotification> {
+  readall(userId: Analyst['id']): Promise<Notification[]> {
     return new Promise((resolve, reject) => {
-      const id = new mongoose.Types.ObjectId()
-      Notification.create({
-        _id: id,
-        name: 'TicketCreate',
-        from: newTicket!.openedBy._id,
-        to: newTicket!.group.analysts.map((a: IAnalyst) => a._id),
-        content: `${newTicket!.openedBy.name} abriu um novo chamado`
+      Analyst.findOne(userId, {
+        relations: ['notificationsToMe']
+      }).then(user => {
+        const updates = user!.notificationsToMe.map(notification => {
+          notification.read.push(user!)
+          notification!.save()
+        })
+        Promise.all(updates).then(() => {
+          resolve(this.getAll(userId))
+        })
       })
-        .then(() => resolve(this.getOne(id)))
-        .catch(err => reject(err))
     })
   }
 
-  async triggerForTicketTransfer(
-    ticketId: ITicket['_id'],
-    groupId: IGroup['_id'],
-    analystId: IAnalyst['_id']
-  ): Promise<INotification> {
-    const ticket = await TicketService.getOne(ticketId)
-    const group = await GroupService.getOne(groupId)
-    const analyst = await AnalystService.getOne(analystId)
-
-    const notification = await Notification.create({
-      _id: new mongoose.Types.ObjectId(),
-      name: 'TicketTransfer',
-      from: analyst._id,
-      to: group.analysts,
-      meta: {
-        ticket
-      },
-      content: `${analyst.name} transferiu um chamado para seu grupo`
+  triggerForTicketCreation(newTicket: Ticket): Promise<Notification> {
+    return new Promise((resolve, reject) => {
+      const notification = Notification.create()
+      notification.name = 'TicketCreate'
+      notification.from = newTicket!.openedBy
+      notification.to = newTicket!.group.analysts
+      notification.type = TicketEnum.TICKET_CREATE
+      notification.content = `${newTicket!.openedBy.name} opened a new ticket`
+      notification
+        .save()
+        .then(notification => resolve(notification))
+        .catch((err: Error) => reject(err))
     })
-    return notification
+  }
+
+  triggerForTicketTransfer(
+    ticketId: Ticket['id'],
+    groupId: Group['id'],
+    analystId: Analyst['id']
+  ): Promise<Notification> {
+    return new Promise((resolve, reject) => {
+      AnalystService.getOne(analystId).then(async analyst => {
+        const ticket = await TicketService.getOne(ticketId)
+        const group = await Group.findOne(groupId, { relations: ['analysts'] })
+
+        const notification = Notification.create()
+
+        notification.name = 'TicketTransfer'
+        notification.from = analyst
+        notification.to = group!.analysts
+        notification.type = TicketEnum.TICKETS_TRANSFER_TO_GROUP
+        // meta: {
+        //   ticket
+        // },
+        notification.content = `${
+          analyst.name
+        } transferiu um chamado para seu grupo`
+
+        resolve(notification.save())
+      })
+    })
   }
 }
 

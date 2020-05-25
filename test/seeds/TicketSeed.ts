@@ -1,67 +1,42 @@
 import faker from 'faker'
-import mongoose from 'mongoose'
+import { DeleteResult } from 'typeorm'
 import Ticket from '../../server/models/ticket/Ticket'
-import Analyst from '../../server/models/Analyst'
-import Status from '../../server/models/ticket/Status'
-import Group from '../../server/models/ticket/Group'
-import Category from '../../server/models/ticket/Category'
 import CategorySeed from './CategorySeed'
-import AnalystSeed from './AnalystSeed'
 import GroupSeed from './GroupSeed'
 import StatusSeed from './StatusSeed'
+import Seed from './Seed'
+import Generate from './Generate'
+import AddressSeed from './AddressSeed'
+import PrioritySeed from './PrioritySeed'
+import Analyst from '~/server/models/Analyst'
 
-const analyst = async function() {
-  await Analyst.create(AnalystSeed(1)[0])
-  const result = await Analyst.findOne().exec()
-  return result
-}
-const group = async function() {
-  await Group.create(GroupSeed(1)[0])
-  const result = await Group.findOne().exec()
-  return result
-}
-const status = async function() {
-  await Status.create(StatusSeed(1)[0])
-  const result = await Status.findOne().exec()
-  return result
-}
-const category = async function() {
-  await Category.create(CategorySeed(1)[0])
-  const result = await Category.findOne().exec()
-  return result
-}
-
-const seed = async () => {
-  await mongoose.connect(
-    process.env.MONGODB_TESTING_URI || 'mongodb://127.0.0.1/testing',
-    {
-      useNewUrlParser: true
-    }
-  )
-  if (mongoose.connection.readyState !== 1) {
-    return new Error('Disconnected')
+class TicketSeed implements Seed<Ticket> {
+  init(): Promise<Ticket> {
+    return new Promise((resolve, reject) => {
+      new CategorySeed().init().then(async category => {
+        const ticket = new Ticket()
+        const analyst = await Analyst.findOne()
+        ticket.address = await new AddressSeed().init()
+        ticket.resume = faker.lorem.words(5)
+        ticket.content = faker.lorem.paragraph()
+        ticket.category = category
+        ticket.actualUser = analyst!
+        ticket.affectedUser = analyst!
+        ticket.openedBy = analyst!
+        ticket.priority = await new PrioritySeed().init()
+        ticket.group = await new GroupSeed().init()
+        ticket.status = await new StatusSeed().init()
+        resolve(Ticket.create(ticket).save())
+      })
+    })
   }
-  await Ticket.deleteMany({})
 
-  const analystResult = await analyst()
-  const categoryResult = await category()
-  const groupResult = await group()
-  const statusResult = await status()
-  const ticketsToSave = [
-    {
-      _id: new mongoose.Types.ObjectId(),
-      resume: faker.lorem.paragraph(),
-      content: faker.lorem.paragraph(),
-      category: categoryResult._id,
-      actualUser: analystResult._id,
-      affectedUser: analystResult._id,
-      openedBy: analystResult._id,
-      group: groupResult._id,
-      status: statusResult._id
-    }
-  ]
-  const saved = await Ticket.create(ticketsToSave)
-  return saved
+  generateMany(number: number): Promise<Ticket[]> {
+    return Generate.many<TicketSeed>(new TicketSeed(), number)
+  }
+
+  destroy(): Promise<DeleteResult> {
+    return Ticket.delete({})
+  }
 }
-
-export default seed
+export default TicketSeed

@@ -5,7 +5,7 @@
       pa-3
     >
       <v-data-table
-        :items="analysts.filter(a => { return a._id !== user._id })"
+        :items="analysts.filter(a => { return a.id !== user.id })"
         :headers="headers"
       >
         <template
@@ -57,7 +57,7 @@
                     <v-btn
                       class="primary white--text"
                       icon
-                      @click="updateRole(item._id)"
+                      @click="updateRole(item.id)"
                     >
                       <v-icon>
                         save

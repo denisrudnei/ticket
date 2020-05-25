@@ -1,13 +1,13 @@
 query {
   category: Category {
-    _id
+    id
     father {
-      _id
+      id
       name
     }
     name
     subs {
-      _id
+      id
       name
     }
   }

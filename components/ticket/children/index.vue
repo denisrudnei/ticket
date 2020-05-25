@@ -51,9 +51,9 @@
         :headers="headers"
       >
         <template
-          v-slot:item.ticketNumber="{ item }"
+          v-slot:item.id="{ item }"
         >
-          {{ item.ticketNumber }}
+          {{ item.id }}
         </template>
         <template v-slot:item.resume="{ item }">
           {{ item.resume }}
@@ -115,7 +115,7 @@ export default {
         },
         {
           text: this.$t('number_of_ticket'),
-          value: 'ticketNumber'
+          value: 'id'
         },
         {
           text: this.$t('status'),
@@ -164,9 +164,9 @@ export default {
       Object.keys(ticket).forEach(k => {
         if (
           ticket[k] !== undefined &&
-          Object.prototype.hasOwnProperty.call(ticket[k], '_id')
+          Object.prototype.hasOwnProperty.call(ticket[k], 'id')
         ) {
-          newTicket[k] = ticket[k]._id
+          newTicket[k] = ticket[k].id
         }
       })
       const fieldsToExclude = ['CreateTicketd', 'modified', 'resume', 'content']
@@ -192,8 +192,8 @@ export default {
         .mutate({
           mutation: ggl(addChildren),
           variables: {
-            ticketId: this.actualTicket._id,
-            children: children.map(t => t._id)
+            ticketId: this.actualTicket.id,
+            children: children.map(t => t.id)
           }
         })
         .then(() => {
@@ -211,8 +211,8 @@ export default {
         .mutate({
           mutation: ggl(removeChildren),
           variables: {
-            ticketId: this.actualTicket._id,
-            childrenId: children._id
+            ticketId: this.actualTicket.id,
+            childrenId: children.id
           }
         })
         .then(() => {

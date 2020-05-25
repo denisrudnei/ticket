@@ -35,7 +35,7 @@
         >
           <v-timeline-item
             v-for="message in messages"
-            :key="message._id"
+            :key="message.id"
           >
             <template
               v-slot:icon
@@ -103,7 +103,7 @@ export default {
       newMessage: {
         query: ggl(newMessage),
         variables() {
-          return { to: this.user._id }
+          return { to: this.user.id }
         },
         result({ data }) {
           this.$store.commit('chat/addMessage', data.message)
@@ -132,7 +132,7 @@ export default {
       this.$store.dispatch('chat/send', {
         content: this.text,
         date: new Date(),
-        to: this.other(this.chat.participants)._id
+        to: this.other(this.chat.participants).id
       })
       this.text = ''
     },
@@ -141,7 +141,7 @@ export default {
     },
     other(value) {
       return value.find(participant => {
-        return participant._id !== this.user._id
+        return participant.id !== this.user.id
       })
     },
     configureEditor(editor) {

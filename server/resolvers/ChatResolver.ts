@@ -1,48 +1,87 @@
-import { Context } from 'graphql-yoga/dist/types'
-import { withFilter } from 'graphql-yoga'
-import { IResolvers } from 'graphql-tools'
+import {
+  Mutation,
+  Resolver,
+  FieldResolver,
+  Query,
+  Ctx,
+  Arg,
+  ID,
+  Root,
+  Subscription,
+  PubSub,
+  PubSubEngine,
+  Args,
+  Authorized
+} from 'type-graphql'
+import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
 import ChatService from '../services/ChatService'
 import ChatEnum from '../enums/ChatEnum'
+import Chat from '../models/chat/Chat'
+import Analyst from '../models/Analyst'
+import Message from '../models/chat/Message'
 
-const ChatResolver: IResolvers = {
-  Query: {
-    Chat: (_: any, __: any, { req }: Context) => {
-      const from = req.session.authUser._id
-      return ChatService.getChats(from)
-    },
-    GetOneChat: (_: any, { to }: any, { req }: Context) => {
-      const from = req.session.authUser._id
-      return ChatService.getOne(from, to)
-    },
-    GetUnReadMessagesFromChat: (_: any, { chatId }: any, { req }: Context) => {
-      const fromId = req.session.authUser._id
-      return ChatService.getUnReadMessagesFromChat(chatId, fromId)
-    }
-  },
-  Mutation: {
-    SendMessage: (_: any, { to, message }: any, { pubSub, req }: Context) => {
-      const from = req.session.authUser._id
-      const result = ChatService.addMessage(from, to, message)
+@Resolver(of => Chat)
+class ChatResolver {
+  @Query(() => [Chat])
+  @Authorized('user')
+  Chat(@Ctx() { req }: ExpressContext) {
+    const from = req!.session!.authUser.id
+    return ChatService.getChats(from)
+  }
 
-      pubSub.publish(ChatEnum.NEW_CHAT_MESSAGE, {
-        NewMessage: result
+  @Query(() => Chat)
+  @Authorized('user')
+  GetOneChat(
+    @Arg('to', () => ID) to: Analyst['id'],
+    @Ctx() { req }: ExpressContext
+  ) {
+    const from = req!.session!.authUser.id
+    return ChatService.getOne(from, to)
+  }
+
+  @Query(() => [Message])
+  @Authorized('user')
+  GetUnReadMessagesFromChat(
+    @Arg('chatId', () => ID) chatId: Chat['id'],
+    @Ctx() { req }: ExpressContext
+  ) {
+    const fromId = req!.session!.authUser.id
+    return ChatService.getUnReadMessagesFromChat(chatId, fromId)
+  }
+
+  @Mutation(() => Message)
+  @Authorized('user')
+  SendMessage(
+    @Arg('to', () => ID) to: Analyst['id'],
+    @Arg('message') message: string,
+    @Ctx() { req }: ExpressContext,
+    @PubSub() pubSub: PubSubEngine
+  ): Promise<Message> {
+    const from = req!.session!.authUser.id
+    const result = ChatService.addMessage(from, to, message)
+
+    pubSub.publish(ChatEnum.NEW_CHAT_MESSAGE, result)
+    return result
+  }
+
+  @FieldResolver()
+  participants(@Root() root: Chat): Promise<Analyst[]> {
+    return new Promise((resolve, reject) => {
+      Chat.findOne(root.id, { relations: ['participants'] }).then(chat => {
+        resolve(chat!.participants)
       })
-      return result
+    })
+  }
+
+  @Subscription({
+    topics: ChatEnum.NEW_CHAT_MESSAGE,
+    filter: ({ payload, args }) => {
+      // TODO
+      return true
     }
-  },
-  Subscription: {
-    NewMessage: {
-      subscribe: withFilter(
-        (_, __, { pubSub }) => {
-          return pubSub.asyncIterator(ChatEnum.NEW_CHAT_MESSAGE)
-        },
-        async (payload, { to }) => {
-          const { NewMessage } = await payload
-          const value = await NewMessage
-          return value.to._id.toString() === to
-        }
-      )
-    }
+  })
+  NewMessage(@Root() messagePayload: Message): Message {
+    return messagePayload
   }
 }
 export default ChatResolver

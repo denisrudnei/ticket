@@ -1,69 +1,39 @@
-import mongoose from 'mongoose'
-import Address, { IAddress } from '../models/Address'
+import Address from '../models/Address'
 
 class AddressService {
-  create(address: IAddress): Promise<void> {
+  create(address: Address): Promise<void> {
     return new Promise((resolve, reject) => {
-      const { name, country, cep, city, state, street } = address
-
-      Address.create(
-        {
-          _id: new mongoose.Types.ObjectId(),
-          name,
-          country,
-          cep,
-          city,
-          street,
-          state
-        },
-        (err: Error) => {
-          if (err) return reject
+      Address.create(address)
+        .save()
+        .then(() => {
           return resolve()
-        }
-      )
+        })
     })
   }
 
-  getAll() {
+  getAll(): Promise<Address[]> {
     return new Promise((resolve, reject) => {
-      Address.find().exec((err: Error, addresses) => {
-        if (err) return reject(err)
+      Address.find().then(addresses => {
         return resolve(addresses)
       })
     })
   }
 
-  getOne(addressId: IAddress['_id']): Promise<IAddress> {
+  getOne(addressId: Address['id']): Promise<Address> {
     return new Promise((resolve, reject) => {
-      Address.findOne({
-        _id: addressId
-      }).exec((err: Error, address) => {
-        if (err) return reject(err)
+      Address.findOne(addressId).then(address => {
         return resolve(address)
       })
     })
   }
 
-  edit(addressId: IAddress['_id'], address: IAddress): Promise<void> {
+  edit(addressId: Address['id'], addressToEdit: Address): Promise<void> {
     return new Promise((resolve, reject) => {
-      const { name, country, cep, city, state, street } = address
-      Address.updateOne(
-        {
-          _id: addressId
-        },
-        {
-          $set: {
-            name,
-            country,
-            cep,
-            city,
-            state,
-            street
-          }
-        }
-      ).exec((err: Error) => {
-        if (err) return reject(err)
-        return resolve()
+      Address.findOne(addressId).then(address => {
+        Object.assign(address, addressToEdit)
+        address!.save().then(() => {
+          resolve()
+        })
       })
     })
   }

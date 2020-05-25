@@ -6,10 +6,10 @@
         :items="value"
         :headers="headers"
         show-select
-        item-key="ticketNumber"
+        item-key="id"
       >
-        <template v-slot:item.ticketNumber="{ item }">
-          {{ item.ticketNumber }}
+        <template v-slot:item.id="{ item }">
+          {{ item.id }}
         </template>
         <template v-slot:item.priority="{ item }">
           {{ item.priority.name }}
@@ -79,7 +79,7 @@ export default {
         },
         {
           text: this.$t('number_of_ticket'),
-          value: 'ticketNumber'
+          value: 'id'
         },
         {
           text: this.$t('priority'),

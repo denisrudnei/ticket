@@ -1,53 +1,53 @@
 query {
   Status {
-    _id
+    id
     name
     allowedStatus {
-      _id
+      id
       name
     }
   }
   Group {
-    _id
+    id
     name
   }
   Analyst {
-    _id
+    id
     name
     address {
-      _id
+      id
       name
     }
   }
   Category {
-    _id
+    id
     defaultGroup {
-      _id
+      id
       name
     }
     defaultStatus {
-      _id
+      id
       name
     }
     defaultPriority {
-      _id
+      id
       name
     }
     name
     subs {
-      _id
+      id
       name
     }
     fullName
   }
   priority: Priority {
-    _id
+    id
     name
     weight
   }
 
   Address {
-    _id
+    id
     name
   }
 }

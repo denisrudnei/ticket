@@ -1,24 +1,24 @@
 query CategoryByName($name: String!) {
   category: CategoryByName(name: $name) {
-    _id
+    id
     fullName
     name
     defaultStatus {
-      _id
+      id
       name
     }
     defaultGroup {
-      _id
+      id
       name
     }
     defaultPriority {
-      _id
+      id
       name
       weight
     }
   }
   analyst: Analyst {
-    _id
+    id
     name
   }
 }

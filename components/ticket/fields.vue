@@ -3,7 +3,7 @@
     <v-col v-if="ticket.category" cols="12" pa-3>
       <v-text-field
         v-for="field in ticket.category.fields"
-        :key="field._id"
+        :key="field.id"
         :disabled="!edit"
         :required="field.required"
         filled

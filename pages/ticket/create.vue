@@ -27,15 +27,15 @@ export default {
           query: create,
           variables: {
             ticket: {
-              actualUser: this.ticket.actualUser._id,
-              affectedUser: this.ticket.affectedUser._id,
-              address: this.ticket.address._id,
+              actualUser: this.ticket.actualUser.id,
+              affectedUser: this.ticket.affectedUser.id,
+              address: this.ticket.address.id,
               resume: this.ticket.resume,
               content: this.ticket.content,
-              group: this.ticket.group._id,
-              category: this.ticket.category._id,
-              priority: this.ticket.priority._id,
-              status: this.ticket.status._id
+              group: this.ticket.group.id,
+              category: this.ticket.category.id,
+              priority: this.ticket.priority.id,
+              status: this.ticket.status.id
             }
           }
         })

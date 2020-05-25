@@ -1,72 +1,56 @@
-import { Types } from 'mongoose'
-import Priority, { IPriority } from '../models/ticket/Priority'
+import Priority from '../models/ticket/Priority'
 
 class PriorityService {
-  create(priority: IPriority): Promise<void> {
+  create(priority: Priority): Promise<Priority> {
     return new Promise((resolve, reject) => {
-      Priority.create(
-        {
-          _id: new Types.ObjectId(),
-          name: priority.name,
-          weight: priority.weight
-        },
-        (err: Error) => {
-          if (err) reject(err)
-          resolve()
-        }
-      )
+      Priority.create({
+        name: priority.name,
+        weight: priority.weight
+      })
+        .save()
+        .then(priority => {
+          resolve(priority)
+        })
     })
   }
 
-  getAll(): Promise<IPriority[]> {
+  getAll(): Promise<Priority[]> {
     return new Promise((resolve, reject) => {
-      Priority.find().exec((err: Error, result) => {
-        if (err) reject(err)
+      Priority.find().then(result => {
         resolve(result)
       })
     })
   }
 
-  getOne(_id: IPriority['_id']): Promise<IPriority> {
-    return Priority.findOne({ _id: _id }).exec()
-  }
-
-  edit(priority: IPriority): Promise<void> {
+  getOne(id: Priority['id']): Promise<Priority> {
     return new Promise((resolve, reject) => {
-      Priority.updateOne(
-        {
-          _id: priority._id
-        },
-        {
-          $set: {
-            name: priority.name,
-            weight: priority.weight
-          }
-        },
-        err => {
-          if (err) reject(err)
-          resolve()
-        }
-      )
+      Priority.findOne(id).then(priority => {
+        resolve(priority)
+      })
     })
   }
 
-  editMany(priorities: [IPriority]) {
+  edit(priorityToEdit: Priority): Promise<Priority> {
+    return new Promise((resolve, reject) => {
+      Priority.findOne(priorityToEdit.id).then(priority => {
+        priority!.name = priorityToEdit.name
+        priority!.save().then(priority => {
+          resolve(priority)
+        })
+      })
+    })
+  }
+
+  editMany(priorities: Priority[]) {
     const all = priorities.map(priority => this.edit(priority))
     return Promise.all(all)
   }
 
-  remove(priorityId: Types.ObjectId): Promise<void> {
+  remove(priorityId: Priority['id']): Promise<void> {
     return new Promise((resolve, reject) => {
-      Priority.deleteOne(
-        {
-          _id: priorityId
-        },
-        err => {
-          if (err) reject(err)
-          resolve()
-        }
-      )
+      Priority.delete(priorityId).then(() => {
+        resolve()
+      })
     })
   }
 }

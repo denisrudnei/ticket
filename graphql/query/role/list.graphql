@@ -1,6 +1,6 @@
 query {
   roles: Role {
-    _id
+    id
     name
     description
   }

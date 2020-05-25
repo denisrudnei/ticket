@@ -1,12 +1,23 @@
-import mongoose from 'mongoose'
-import generate from './Generate'
+import { DeleteResult } from 'typeorm'
+import Generate from './Generate'
+import Seed from './Seed'
+import Status from '~/server/models/ticket/Status'
 
-const seed = (number: number) => {
-  const template = () => ({
-    _id: new mongoose.Types.ObjectId(),
-    name: 'status'
-  })
-  return generate(template, number)
+class StatusSeed implements Seed<Status> {
+  init(): Promise<Status> {
+    return Status.create({
+      name: 'new Status',
+      description: 'status'
+    }).save()
+  }
+
+  generateMany(number: number): Promise<Status[]> {
+    return Generate.many<StatusSeed>(new StatusSeed(), number)
+  }
+
+  destroy(): Promise<DeleteResult> {
+    return Status.delete({})
+  }
 }
 
-export default seed
+export default StatusSeed

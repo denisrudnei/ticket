@@ -4,9 +4,9 @@ export default {
       if (obj1 === null || obj1 === undefined) return false
       if (obj2 === null || obj2 === undefined) return false
       ;[obj1, obj2].forEach(obj => {
-        if (!Object.prototype.hasOwnProperty.call(obj, '_id')) return false
+        if (!Object.prototype.hasOwnProperty.call(obj, 'id')) return false
       })
-      return obj1._id === obj2._id
+      return obj1.id === obj2.id
     }
   }
 }

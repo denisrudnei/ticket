@@ -1,19 +1,30 @@
 import faker from 'faker'
-import mongoose from 'mongoose'
-import generate from './Generate'
+import { DeleteResult } from 'typeorm'
+import Analyst from '../../server/models/Analyst'
+import Generate from './Generate'
+import Seed from './Seed'
 
-const seed = (number: number) => {
-  const template = () => ({
-    _id: new mongoose.Types.ObjectId(),
-    name: faker.name.firstName(),
-    role: 'user',
-    color: '#fff',
-    password: faker.internet.password(),
-    address: null,
-    active: true,
-    email: faker.internet.email()
-  })
-  return generate(template, number)
+class AnalystSeed implements Seed<Analyst> {
+  init(): Promise<Analyst> {
+    const analyst = new Analyst()
+    analyst.email = faker.internet.email()
+    analyst.name = faker.name.firstName()
+    analyst.role = 'user'
+    analyst.color = '#fff'
+    analyst.password = faker.internet.password()
+    analyst.address = null
+    analyst.active = true
+
+    return analyst.save()
+  }
+
+  generateMany(number: number): Promise<Analyst[]> {
+    return Generate.many<AnalystSeed>(new AnalystSeed(), number)
+  }
+
+  destroy(): Promise<DeleteResult> {
+    return Analyst.delete({})
+  }
 }
 
-export default seed
+export default AnalystSeed

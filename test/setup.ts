@@ -1,16 +1,29 @@
+import 'reflect-metadata'
 import { before, after } from 'mocha'
+import { connection } from '@/server/db/testConnection'
+import consola from 'consola'
 import CheckACL from '../server/models/CheckACL'
-import seed from './seed'
+import SeedExecutor from './seed'
 
-before(function() {
+before(async function() {
   this.timeout(0)
+  await connection
+
+  const seed = new SeedExecutor()
+  await seed.destroy()
+  await seed.execute()
+  consola.info('Seed finished')
+
   CheckACL.checkDb((err: Error) => {
     if (err) throw err
   })
-  return seed.execute()
 })
 
-after(function() {
-  this.timeout(0)
-  return seed.disconnect()
+after(function(done) {
+  const seed = new SeedExecutor()
+  try {
+    seed.destroy()
+  } finally {
+    done()
+  }
 })

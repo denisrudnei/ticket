@@ -27,6 +27,8 @@
 
 <script>
 import afterLogin from '@/mixins/afterLogin'
+import login from '@/graphql/mutation/auth/login.graphql'
+import ggl from 'graphql-tag'
 export default {
   mixins: [afterLogin],
   data() {
@@ -44,12 +46,20 @@ export default {
   },
   methods: {
     localLogin() {
-      this.$auth
-        .loginWith('local', {
-          data: this.userLogin
+      this.$apollo
+        .mutate({
+          mutation: ggl(login),
+          variables: {
+            email: this.userLogin.email,
+            password: this.userLogin.password
+          }
         })
-        .then(async () => {
-          await this.processInfo()
+        .then(result => {
+          this.$store.commit('auth/setUser', result.data.user)
+          this.$auth.loginWith('local', {
+            data: this.userLogin
+          })
+          this.processInfo()
         })
         .catch(() => {
           this.$toast.error('Falha ao logar', {

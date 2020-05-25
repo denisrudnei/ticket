@@ -24,7 +24,7 @@ export default {
   },
 
   getOne: (req: express.Request, res: express.Response) => {
-    const id = req.params.id
+    const id = parseInt(req.params.id)
     KnowledgeService.getOne(id as any)
       .then(knowledge => {
         return res.status(200).json(knowledge)
@@ -37,7 +37,7 @@ export default {
   getFile: (req: express.Request, res: express.Response) => {
     const id = req.params.id
     KnowledgeService.getFile(id)
-      .then(file => {
+      .then((file: Buffer) => {
         return res.end(file)
       })
       .catch((e: Error) => {
@@ -46,7 +46,7 @@ export default {
   },
 
   getAllFiles: (req: express.Request, res: express.Response) => {
-    const id = req.params.id
+    const id = parseInt(req.params.id)
     KnowledgeService.getAllFiles(id)
       .then(file => {
         return res.end(file)
@@ -82,7 +82,7 @@ export default {
   edit: (req: express.Request, res: express.Response) => {
     const knowledge = req.body
 
-    KnowledgeService.updateKnowledge(req.params.id, knowledge)
+    KnowledgeService.updateKnowledge(parseInt(req.params.id), knowledge)
       .then(result => {
         return res.status(201).json(result)
       })
@@ -104,7 +104,7 @@ export default {
 
   addFile: (req: express.Request, res: express.Response) => {
     const file = req.files!.file as UploadedFile
-    const id = req.params.id
+    const id = parseInt(req.params.id)
     KnowledgeService.addFile(id, file)
       .then(() => {
         return res.sendStatus(201)
@@ -115,7 +115,7 @@ export default {
   },
 
   remove: (req: express.Request, res: express.Response) => {
-    const knowledgeId = req.params.id
+    const knowledgeId = parseInt(req.params.id)
     KnowledgeService.remove(knowledgeId)
       .then(() => {
         return res.sendStatus(202)

@@ -1,28 +1,21 @@
-import mongoose from 'mongoose'
-import KnowledgeStatus, {
-  IKnowledgeStatus
-} from '../../models/knowledge/KnowledgeStatus'
+import KnowledgeStatus from '../../models/knowledge/KnowledgeStatus'
 
 class KnowledgeStatusService {
-  create(status: IKnowledgeStatus): Promise<IKnowledgeStatus> {
+  create(status: KnowledgeStatus): Promise<KnowledgeStatus> {
     return new Promise((resolve, reject) => {
-      KnowledgeStatus.create(
-        {
-          _id: new mongoose.Types.ObjectId(),
-          ...status
-        },
-        (err: Error, result: IKnowledgeStatus) => {
-          if (err) return reject(err)
+      KnowledgeStatus.create({
+        ...status
+      })
+        .save()
+        .then((result: KnowledgeStatus) => {
           return resolve(result)
-        }
-      )
+        })
     })
   }
 
-  getAll(): Promise<[IKnowledgeStatus]> {
+  getAll(): Promise<KnowledgeStatus[]> {
     return new Promise((resolve, reject) => {
-      KnowledgeStatus.find({}, (err: Error, result: [IKnowledgeStatus]) => {
-        if (err) return reject(err)
+      KnowledgeStatus.find().then((result: KnowledgeStatus[]) => {
         return resolve(result)
       })
     })

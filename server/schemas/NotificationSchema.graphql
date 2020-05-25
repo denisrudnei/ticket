@@ -1,5 +1,5 @@
 type Notification {
-  _id: ID!
+  id: ID!
   from: Analyst!
   to: [Analyst!]!
   date: Datetime!

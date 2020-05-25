@@ -1,37 +1,43 @@
-import { models, model, Schema, Document } from 'mongoose'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+  JoinColumn,
+  OneToMany
+} from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql'
+import Ticket from './Ticket'
 
-export interface IStatus extends Document {
-  name: string
-  allowedStatus: [IStatus['_id']]
-  slaRun: boolean
+@Entity()
+@ObjectType()
+class Status extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @Column()
+  @Field()
+  public name!: string
+
+  @Column({ nullable: true })
+  @Field()
+  public description!: string
+
+  @ManyToMany(type => Status)
+  @JoinTable()
+  @Field(type => [Status])
+  public allowedStatus!: Status[]
+
+  @Column()
+  @Field()
+  public slaRun: boolean = false
+
+  @OneToMany(type => Ticket, status => status)
+  @Field(type => [Ticket])
+  public tickets!: Ticket[]
 }
 
-const StatusSchema: Schema<IStatus> = new Schema({
-  _id: Schema.Types.ObjectId,
-  name: {
-    type: String,
-    required: [true, 'Necessário identificar o status']
-  },
-  allowedStatus: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Status'
-    }
-  ],
-  slaRun: {
-    type: Boolean,
-    default: false
-  }
-})
-
-StatusSchema.set('toJSON', {
-  getters: true,
-  virtuals: true
-})
-
-StatusSchema.set('toObject', {
-  getters: true,
-  virtuals: true
-})
-
-export default models.Status || model('Status', StatusSchema)
+export default Status

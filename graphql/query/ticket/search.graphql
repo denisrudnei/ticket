@@ -1,23 +1,23 @@
 query {
-  ticketNumber
+  id
   status: Status {
-    _id
+    id
     name
   }
   group: Group {
-    _id
+    id
     name
   }
   category: Category {
-    _id
+    id
     name
   }
   analyst: Analyst {
-    _id
+    id
     name
   }
   priority: Priority {
-    _id
+    id
     name
     weight
   }

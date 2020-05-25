@@ -1,20 +1,31 @@
-import { models, model, Schema, Document } from 'mongoose'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany
+} from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql'
+import Ticket from './Ticket'
 
-export interface IPriority extends Document {
-  weight: number
-  name: string
+@Entity()
+@ObjectType()
+class Priority extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @Column()
+  @Field()
+  public weight!: number
+
+  @Column()
+  @Field()
+  public name!: string
+
+  @OneToMany(type => Ticket, Ticket => Ticket.priority)
+  @Field(type => [Ticket])
+  public tickets!: Ticket[]
 }
 
-const PrioritySchema: Schema<IPriority> = new Schema({
-  weight: {
-    type: Number,
-    required: [true, 'Necessário um valor']
-  },
-  name: {
-    type: String,
-    default: '',
-    required: [true, 'Precisa de uma descrição']
-  }
-})
-
-export default models.Priority || model('Priority', PrioritySchema)
+export default Priority

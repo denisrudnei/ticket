@@ -1,29 +1,31 @@
-import { Schema, model, models, Document } from 'mongoose'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne
+} from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql'
+import Knowledge from './Knowledge'
 
-export interface IKnowledgeFile extends Document {
-  name: string
-  url: string
+@Entity()
+@ObjectType()
+class KnowledgeFile extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @Column()
+  @Field(type => String)
+  public name!: string
+
+  @Column()
+  @Field(type => String)
+  public url: string = ''
+
+  @ManyToOne(type => Knowledge, Knowledge => Knowledge.files)
+  @Field(type => Knowledge)
+  public knowledge!: Knowledge
 }
 
-const KnowledgeFileSchema: Schema<IKnowledgeFile> = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  url: {
-    type: String
-  }
-})
-
-KnowledgeFileSchema.set('toObject', {
-  virtuals: true,
-  getters: true
-})
-
-KnowledgeFileSchema.set('toJSON', {
-  virtuals: true,
-  getters: true
-})
-
-export default models.KnowledgeFile ||
-  model('KnowledgeFile', KnowledgeFileSchema)
+export default KnowledgeFile

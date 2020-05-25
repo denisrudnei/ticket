@@ -1,87 +1,77 @@
-import { models, model, Schema, Document } from 'mongoose'
-import { IGroup } from './Group'
-import { IStatus } from './Status'
-import { IPriority } from './Priority'
-import { IField } from './Field'
-import { ISla } from './Sla'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  JoinColumn,
+  ManyToOne,
+  JoinTable,
+  ManyToMany
+} from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql'
+import Group from './Group'
+import Status from './Status'
+import Priority from './Priority'
+import CategoryField from './CategoryField'
+import Sla from './Sla'
 
-export interface ICategory extends Document {
-  name: string
-  father: ICategory['_id']
-  description: string
-  subs: [ICategory['_id']]
-  defaultGroup: IGroup['_id']
-  defaultStatus: IStatus['_id']
-  defaultPriority: IPriority['_id']
-  fields: [IField['_id']]
-  sla: ISla['_id']
+@Entity()
+@ObjectType()
+class Category extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @Column()
+  @Field(type => String)
+  public name!: string
+
+  @OneToMany(type => Category, Category => Category.subs)
+  @Field(type => [Category])
+  public father!: Category
+
+  @Column()
+  @Field()
+  public description!: string
+
+  @ManyToMany(type => Category, Category => Category.father)
+  @JoinTable()
+  @Field(type => [Category])
+  public subs!: Category[]
+
+  @ManyToOne(type => Group, { nullable: false, eager: true })
+  @Field(type => Group)
+  @JoinColumn({ name: 'defaultGroup' })
+  public defaultGroup!: Group
+
+  @ManyToOne(type => Status, { nullable: false, eager: true })
+  @Field(type => Status)
+  @JoinColumn({ name: 'defaultStatus' })
+  public defaultStatus!: Status
+
+  @ManyToOne(type => Priority, { nullable: false, eager: true })
+  @Field(type => Priority)
+  @JoinColumn({ name: 'defaultPriority' })
+  public defaultPriority!: Priority
+
+  @OneToMany(type => CategoryField, CategoryField => CategoryField.category)
+  @JoinColumn({ name: 'fields' })
+  @Field(type => [CategoryField])
+  public fields!: CategoryField[]
+
+  @ManyToOne(type => Sla, Sla => Sla.categories, {
+    nullable: false,
+    eager: true
+  })
+  @Field(type => Sla)
+  public sla!: Sla
+
+  @Field()
+  public get fullName(): string {
+    if (!this.father) return this.name
+    return `${this.father.fullName}.${this.name}`
+  }
 }
 
-const CategorySchema: Schema<ICategory> = new Schema({
-  _id: Schema.Types.ObjectId,
-  name: {
-    type: String
-  },
-  father: {
-    type: Schema.Types.ObjectId,
-    ref: 'Category'
-  },
-  description: {
-    type: String
-  },
-  subs: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Category'
-    }
-  ],
-  defaultGroup: {
-    type: Schema.Types.ObjectId,
-    ref: 'Group'
-  },
-  defaultStatus: {
-    type: Schema.Types.ObjectId,
-    ref: 'Status'
-  },
-  fields: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Field'
-    }
-  ],
-  defaultPriority: {
-    type: Schema.Types.ObjectId,
-    ref: 'Priority'
-  },
-  sla: {
-    type: Schema.Types.ObjectId,
-    ref: 'Sla'
-  }
-})
-
-CategorySchema.virtual('fullName').get(function(this: ICategory) {
-  if (this.father === null || this.father === undefined) return this.name
-  return `${this.father.fullName}.${this.name}`
-})
-
-CategorySchema.pre('find', function(next) {
-  this.populate(['father', 'fields', 'sla'])
-  next()
-})
-
-CategorySchema.pre('findOne', function(next) {
-  this.populate(['father', 'fields', 'subs', 'sla'])
-  next()
-})
-
-CategorySchema.set('toJSON', {
-  getters: true,
-  virtuals: true
-})
-
-CategorySchema.set('toObject', {
-  getters: true,
-  virtuals: true
-})
-
-export default models.Category || model('Category', CategorySchema)
+export default Category

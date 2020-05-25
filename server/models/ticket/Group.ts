@@ -1,36 +1,34 @@
-import { models, model, Schema, Document } from 'mongoose'
-import { IAnalyst } from '../Analyst'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable
+} from 'typeorm'
 
-export interface IGroup extends Document {
-  name: string
-  analysts: [IAnalyst['_id']]
+import { ObjectType, Field, ID } from 'type-graphql'
+import Analyst from '../Analyst'
+
+@Entity()
+@ObjectType()
+class Group extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @Column()
+  @Field()
+  public name!: string
+
+  @Column({ nullable: true })
+  @Field()
+  public description!: string
+
+  @ManyToMany(type => Analyst, Analyst => Analyst.groups)
+  @JoinTable()
+  @Field(type => [Analyst])
+  public analysts!: Analyst[]
 }
 
-const GroupSchema = new Schema({
-  _id: Schema.Types.ObjectId,
-  name: {
-    type: String
-  },
-  analysts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Analyst'
-    }
-  ]
-})
-
-GroupSchema.pre('find', function() {
-  this.populate(['analysts'])
-})
-
-GroupSchema.set('toJSON', {
-  getters: true,
-  virtuals: true
-})
-
-GroupSchema.set('toObject', {
-  getters: true,
-  virtuals: true
-})
-
-export default models.Group || model('Group', GroupSchema)
+export default Group

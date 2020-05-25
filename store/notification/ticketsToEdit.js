@@ -12,7 +12,7 @@ export const mutations = {
   addNotification(state, { notification, rootGetters }) {
     if (
       rootGetters['ticket/getTicketsToEdit']
-        .map(t => t._id)
+        .map(t => t.id)
         .includes(notification.ticket)
     ) {
       state.ticketsToEdit = [

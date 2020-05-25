@@ -1,15 +1,15 @@
 query {
   Group {
-    _id
+    id
     name
     analysts {
-      _id
+      id
       name
       picture
     }
   }
   Analyst {
-    _id
+    id
     name
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <iframe src="/api/playground" frameborder="0" />
+      <iframe src="/graphql" frameborder="0" />
     </v-col>
   </v-row>
 </template>

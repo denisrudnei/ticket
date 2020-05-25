@@ -45,7 +45,7 @@
           Alterar status
         </v-list-item-content>
       </v-list-item>
-      <v-list-item v-for="analyst in analysts" v-show="!mini" :key="analyst._id" @click="openChat(analyst)">
+      <v-list-item v-for="analyst in analysts" v-show="!mini" :key="analyst.id" @click="openChat(analyst)">
         <v-list-item-avatar>
           <v-badge
             overlap
@@ -103,7 +103,7 @@ export default {
     analysts() {
       return this.$store.getters['analyst/getAnalysts']
         .filter(analyst => {
-          return analyst._id !== this.user._id
+          return analyst.id !== this.user.id
         })
         .filter(analyst => {
           return analyst.name
@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     openChat(analyst) {
-      this.$store.dispatch('chat/getOneChat', analyst._id)
+      this.$store.dispatch('chat/getOneChat', analyst.id)
     },
     getStatus(status) {
       const colors = [

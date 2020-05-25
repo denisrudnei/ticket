@@ -1,67 +1,59 @@
-import { models, model, Schema, Document } from 'mongoose'
-import TicketEnums from '../enums/TicketEnum'
-import { IAnalyst } from './Analyst'
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  ManyToMany,
+  JoinTable
+} from 'typeorm'
 
-export interface INotification extends Document {
-  from: IAnalyst['_id']
-  to: [IAnalyst['_id']]
-  date: Date
-  name: string
-  read: [IAnalyst['_id']]
-  content: string
-  type: string
-  meta: any
+import { ObjectType, Field, ID } from 'type-graphql'
+import TicketEnums from '../enums/TicketEnum'
+import Analyst from './Analyst'
+
+@Entity()
+@ObjectType()
+class Notification extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @ManyToOne(type => Analyst, { eager: true })
+  @Field(type => Analyst)
+  public from!: Analyst
+
+  @ManyToMany(type => Analyst, Analyst => Analyst.notificationsToMe, {
+    eager: true
+  })
+  @JoinTable()
+  @Field(type => [Analyst])
+  public to!: Analyst[]
+
+  @Column()
+  @Field()
+  public date: Date = new Date()
+
+  @Column()
+  @Field()
+  public name!: string
+
+  @ManyToMany(type => Analyst, Analyst => Analyst.notificationsRead, {
+    eager: true
+  })
+  @JoinTable()
+  @Field(type => [Analyst])
+  public read!: Analyst[]
+
+  @Column()
+  @Field()
+  public content!: string
+
+  @Column()
+  @Field()
+  public type!: string
+
+  public meta = ''
 }
 
-const NotificationSchema: Schema<INotification> = new Schema({
-  _id: Schema.Types.ObjectId,
-  from: {
-    type: Schema.Types.ObjectId,
-    ref: 'Analyst'
-  },
-  to: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Analyst'
-    }
-  ],
-  date: {
-    type: Date,
-    default: Date.now
-  },
-  name: String,
-  content: String,
-  type: {
-    type: String,
-    enum: [
-      TicketEnums.TICKET_CHANGE_STATUS,
-      TicketEnums.TICKET_TRANSFER_TO_GROUP,
-      TicketEnums.TICKET_EDIT
-    ]
-  },
-  meta: {
-    type: Object
-  },
-  read: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Analyst'
-    }
-  ]
-})
-
-NotificationSchema.pre('find', function() {
-  this.populate(['to', 'from'])
-})
-
-NotificationSchema.set('toJSON', {
-  getters: true,
-  virtuals: true
-})
-
-NotificationSchema.set('toObject', {
-  getters: true,
-  virtuals: true
-})
-
-export default models.Notification || model('Notification', NotificationSchema)
+export default Notification

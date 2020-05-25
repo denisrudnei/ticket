@@ -1,11 +1,13 @@
-import { IResolvers } from 'graphql-tools'
+import { Resolver, Query, Mutation, Authorized } from 'type-graphql'
 import AddressService from '../services/AddressService'
+import Address from '../models/Address'
 
-const AddressResolver: IResolvers = {
-  Query: {
-    Address: () => {
-      return AddressService.getAll()
-    }
+@Resolver()
+class AddressResolver {
+  @Query(() => [Address])
+  @Authorized('user')
+  Address() {
+    return AddressService.getAll()
   }
 }
 

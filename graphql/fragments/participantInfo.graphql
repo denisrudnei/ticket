@@ -1,5 +1,5 @@
 fragment participantInfo on Analyst {
-  _id
+  id
   name
   picture
 }

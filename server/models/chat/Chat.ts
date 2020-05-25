@@ -1,24 +1,29 @@
-import { models, model, Schema, Document } from 'mongoose'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  OneToMany,
+  ManyToMany,
+  JoinTable
+} from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql'
+import Analyst from '../Analyst'
+import Message from './Message'
 
-export interface IChat extends Document {
-  participants: [Schema.Types.ObjectId]
-  messages: [Schema.Types.ObjectId]
+@Entity()
+@ObjectType()
+class Chat extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  @Field(type => ID)
+  public id!: number
+
+  @ManyToMany(type => Analyst, Analyst => Analyst.chats)
+  @Field(type => [Analyst])
+  public participants!: Analyst[]
+
+  @OneToMany(type => Message, Message => Message.chat)
+  @Field(type => [Message])
+  public messages!: Message[]
 }
 
-const ChatSchema = new Schema({
-  _id: Schema.Types.ObjectId,
-  participants: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Analyst'
-    }
-  ],
-  messages: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Message'
-    }
-  ]
-})
-
-export default models.Chat || model('Chat', ChatSchema)
+export default Chat

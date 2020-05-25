@@ -5,7 +5,7 @@
         Som de notificação do chat
       </v-subheader>
       <v-slider
-        v-model="sound.chat.volume"
+        v-model="soundChat.volume"
         thumb-label
         min="0"
         max="100"
@@ -14,7 +14,7 @@
         prepend-icon="volume_down"
       />
       <v-col cols="12" pa-3>
-        <v-checkbox v-model="sound.chat.muted" :label="$t('mute')" />
+        <v-checkbox v-model="soundChat.muted" :label="$t('mute')" />
         <v-btn class="primary white--text" @click="playChat()">
           {{ $t('test') }}
           <v-icon>
@@ -29,7 +29,7 @@
         Som de notificação geral
       </v-subheader>
       <v-slider
-        v-model="sound.notification.volume"
+        v-model="soundNotification.volume"
         thumb-label
         min="0"
         max="100"
@@ -38,7 +38,7 @@
         prepend-icon="volume_down"
       />
       <v-col cols="12" pa-3>
-        <v-checkbox v-model="sound.notification.muted" :label="$t('mute')" />
+        <v-checkbox v-model="soundNotification.muted" :label="$t('mute')" />
         <v-btn class="primary white--text" @click="playNotification()">
           {{ $t('test') }}
           <v-icon>
@@ -64,25 +64,25 @@ export default {
     return {
       audioChat: { volume: 0 },
       audioNotification: { volume: 0 },
-      sound: {
-        chat: {
-          muted: true,
-          volume: 0
-        },
-        notitifcation: {
-          muted: false,
-          volume: 0
-        }
+      soundChat: {
+        type: 'chat',
+        muted: true,
+        volume: 0
+      },
+      soundNotification: {
+        type: 'notitifcation',
+        muted: false,
+        volume: 0
       }
     }
   },
 
   watch: {
-    'sound.chat.volume': function(value) {
+    'soundChat.volume': function(value) {
       this.audioChat.volume = value / 100
       this.$store.commit('sound/setChatVolume', value / 100)
     },
-    'sound.notification.volume': function(value) {
+    'soundNotification.volume': function(value) {
       this.audioNotification.volume = value / 100
       this.$store.commit('sound/setNotificationVolume', value / 100)
     }
@@ -106,12 +106,17 @@ export default {
       this.audioNotification.play()
     },
     save() {
-      this.$axios.put('/analyst/sound', this.sound).then(() => {
-        this.$toast.show('Atualizado', {
-          duration: 1000,
-          icon: 'done'
+      this.$axios
+        .put('/analyst/sound', {
+          chat: this.audioChat,
+          notification: this.audioNotification
         })
-      })
+        .then(() => {
+          this.$toast.show('Atualizado', {
+            duration: 1000,
+            icon: 'done'
+          })
+        })
     }
   }
 }

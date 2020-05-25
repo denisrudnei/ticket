@@ -1,11 +1,11 @@
 subscription($userId: ID!) {
   pathItem: NewPath(userId: $userId) {
     name
-    _id
+    id
     url
     children {
       name
-      _id
+      id
       url
       children {
         name

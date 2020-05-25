@@ -231,7 +231,7 @@ export default {
       }
 
       this.$axios
-        .post(`/ticket/${this.ticket._id}/file`, formData, {
+        .post(`/ticket/${this.ticket.id}/file`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -245,7 +245,7 @@ export default {
     },
     removeFileInServer(file) {
       this.$axios
-        .delete(`/ticket/${this.ticket._id}/${file.name}/file`)
+        .delete(`/ticket/${this.ticket.id}/${file.name}/file`)
         .then(() => {
           const files = this.ticket.files.filter(f => {
             return f.name !== file.name
