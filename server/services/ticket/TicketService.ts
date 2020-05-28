@@ -1,18 +1,16 @@
-import consola from 'consola'
-import AWS from 'aws-sdk'
-import { UploadedFile } from 'express-fileupload'
+import '~/server/models/Notification'
+
 import Agenda from 'agenda'
 import { PubSubEngine } from 'apollo-server-express'
-import { In, getConnection } from 'typeorm'
-import TicketEnum from '~/server/enums/TicketEnum'
-import Ticket from '~/server/models/ticket/Ticket'
-import Comment from '~/server/models/ticket/Comment'
-import Group from '~/server/models/ticket/Group'
-import '~/server/models/Notification'
-import Status from '~/server/models/ticket/Status'
-import File from '~/server/models/File'
+import AWS from 'aws-sdk'
+import { UploadedFile } from 'express-fileupload'
 import S3 from '~/plugins/S3'
 import Analyst from '~/server/models/Analyst'
+import File from '~/server/models/File'
+import Comment from '~/server/models/ticket/Comment'
+import Group from '~/server/models/ticket/Group'
+import Status from '~/server/models/ticket/Status'
+import Ticket from '~/server/models/ticket/Ticket'
 
 class TicketService {
   async startAgenda(pubSub: PubSubEngine): Promise<void> {

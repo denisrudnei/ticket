@@ -5,6 +5,8 @@ services:
   - postgres:latest
 
 variables:
+  DB_HOST: 'postgres'
+  DATABASE: 'postgres'
   PASSWORD: 'postgres'
   POSTGRES_PASSWORD: 'postgres'
 
