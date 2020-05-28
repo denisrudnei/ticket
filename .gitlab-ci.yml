@@ -5,7 +5,6 @@ services:
   - postgres:latest
 
 variables:
-  DB_USERNAME: runner
   PASSWORD: 'postgres'
   POSTGRES_PASSWORD: 'postgres'
 
