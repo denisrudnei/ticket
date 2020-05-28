@@ -6,7 +6,8 @@ services:
 
 variables:
   DB_USERNAME: runner
-  PASSWORD: ''
+  PASSWORD: 'postgres'
+  POSTGRES_PASSWORD: 'postgres'
 
 test:
   script:
