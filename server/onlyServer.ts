@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import * as path from 'path'
 import http from 'http'
 import consola from 'consola'
@@ -16,7 +17,7 @@ const pubSub = new PubSub()
 async function start() {
   const server = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [path.resolve(__dirname, 'resolvers/**/*.ts')],
+      resolvers: [path.resolve(__dirname, 'resolvers/**/*')],
       authChecker: customAuthChecker,
       pubSub: pubSub
     }),

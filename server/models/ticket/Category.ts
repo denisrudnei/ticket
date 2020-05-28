@@ -1,20 +1,21 @@
+import { Field, ID, ObjectType } from 'type-graphql'
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  OneToMany,
+  Entity,
   JoinColumn,
-  ManyToOne,
   JoinTable,
-  ManyToMany
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
 } from 'typeorm'
-import { ObjectType, Field, ID } from 'type-graphql'
-import Group from './Group'
-import Status from './Status'
-import Priority from './Priority'
+
 import CategoryField from './CategoryField'
+import Group from './Group'
+import Priority from './Priority'
 import Sla from './Sla'
+import Status from './Status'
 
 @Entity()
 @ObjectType()

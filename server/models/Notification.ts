@@ -1,15 +1,14 @@
+import { Field, ID, ObjectType } from 'type-graphql'
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  Entity,
+  JoinTable,
   ManyToMany,
-  JoinTable
+  ManyToOne,
+  PrimaryGeneratedColumn
 } from 'typeorm'
 
-import { ObjectType, Field, ID } from 'type-graphql'
-import TicketEnums from '../enums/TicketEnum'
 import Analyst from './Analyst'
 
 @Entity()

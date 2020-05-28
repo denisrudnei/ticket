@@ -1,17 +1,17 @@
 import {
-  Resolver,
-  Query,
   Arg,
-  ID,
+  Authorized,
   FieldResolver,
-  Root,
-  Authorized
+  ID,
+  Query,
+  Resolver,
+  Root
 } from 'type-graphql'
-import KnowledgeService from '../services/knowledge/KnowledgeService'
+
 import Knowledge from '../models/knowledge/Knowledge'
-import Group from '../models/ticket/Group'
-import Status from '../models/ticket/Status'
 import Category from '../models/ticket/Category'
+import Group from '../models/ticket/Group'
+import KnowledgeService from '../services/knowledge/KnowledgeService'
 
 @Resolver(of => Knowledge)
 class KnowledgeResolver {

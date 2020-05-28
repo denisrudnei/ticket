@@ -1,7 +1,8 @@
-import { Query, Resolver, FieldResolver, Root, Authorized } from 'type-graphql'
-import GroupService from '../services/ticket/GroupService'
-import Group from '../models/ticket/Group'
+import { Authorized, FieldResolver, Query, Resolver, Root } from 'type-graphql'
+
 import Analyst from '../models/Analyst'
+import Group from '../models/ticket/Group'
+import GroupService from '../services/ticket/GroupService'
 
 @Resolver(of => Group)
 class GroupResolver {

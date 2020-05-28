@@ -1,7 +1,7 @@
 import SlaService from '@/server/services/ticket/SlaService'
-import { Resolver, Query, Mutation, Arg, Authorized } from 'type-graphql'
-import Sla from '../models/ticket/Sla'
+import { Arg, Authorized, Mutation, Query, Resolver } from 'type-graphql'
 import SlaAttributes from '../inputs/SlaAttributes'
+import Sla from '../models/ticket/Sla'
 
 @Resolver()
 class SlaResolver {

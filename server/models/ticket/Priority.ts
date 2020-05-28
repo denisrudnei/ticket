@@ -1,11 +1,12 @@
+import { Field, ID, ObjectType } from 'type-graphql'
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  OneToMany
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn
 } from 'typeorm'
-import { ObjectType, Field, ID } from 'type-graphql'
+
 import Ticket from './Ticket'
 
 @Entity()

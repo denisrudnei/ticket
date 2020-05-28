@@ -1,22 +1,23 @@
+import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
 import {
+  Arg,
+  Authorized,
+  Ctx,
+  ID,
+  Mutation,
+  PubSub,
+  PubSubEngine,
   Query,
   Resolver,
-  Mutation,
-  Ctx,
-  Arg,
-  ID,
-  PubSubEngine,
-  PubSub,
   Root,
-  Subscription,
-  Authorized
+  Subscription
 } from 'type-graphql'
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
-import PathService, { PathTree } from '../services/PathService'
+
 import PathEnum from '../enums/PathEnum'
+import PathInput from '../inputs/PathInput'
 import Analyst from '../models/Analyst'
 import Path from '../models/Path'
-import PathInput from '../inputs/PathInput'
+import PathService, { PathTree } from '../services/PathService'
 
 @Resolver()
 class PathResolver {
@@ -43,11 +44,11 @@ class PathResolver {
   ) {
     const userId = req!.session!.authUser.id
     const result = await PathService.create(path, userId)
-    pubSub.publish(PathEnum.NEW_PATH_ADDED, result)
+    await pubSub.publish(PathEnum.NEW_PATH_ADDED, result)
     return result
   }
 
-  @Mutation(() => Analyst)
+  @Mutation(() => Boolean)
   @Authorized('user')
   RemovePath(
     @Arg('path', () => ID) path: Path['id'],
@@ -56,11 +57,14 @@ class PathResolver {
   ) {
     const result = PathService.remove(userId, path)
     pubSub.publish(PathEnum.PATH_REMOVED, result)
-    return userId
+    return true
   }
 
   @Subscription({
-    topics: PathEnum.NEW_PATH_ADDED
+    topics: PathEnum.NEW_PATH_ADDED,
+    filter: ({ payload, args }) => {
+      return true
+    }
   })
   NewPath(@Root() pathPayload: PathTree): PathTree {
     return pathPayload
@@ -68,7 +72,10 @@ class PathResolver {
 
   @Subscription({
     name: 'RemovePath',
-    topics: PathEnum.PATH_REMOVED
+    topics: PathEnum.PATH_REMOVED,
+    filter: ({ payload, args }) => {
+      return true
+    }
   })
   RemovePathSubscription(@Root() pathPayload: PathTree): PathTree {
     return pathPayload

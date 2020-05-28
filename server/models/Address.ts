@@ -1,6 +1,5 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
-import { ObjectType, Field, ID } from 'type-graphql'
-import Ticket from './ticket/Ticket'
+import { Field, ID, ObjectType } from 'type-graphql'
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
 @ObjectType()

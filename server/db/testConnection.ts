@@ -1,16 +1,14 @@
 import path from 'path'
 import { createConnection } from 'typeorm'
-import Analyst from '../models/Analyst'
-const modelsPath = path.resolve(__dirname, '..', 'models/**/*.ts')
 
 export const connection = createConnection({
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'postgres',
-  database: 'ticket',
-  entities: [modelsPath],
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+  username: process.env.DB_USERNAME || 'postgres',
+  password: process.env.PASSWORD || 'postgres',
+  database: process.env.DATABASE || 'test',
+  entities: [path.resolve(__dirname, '..', 'models/**/*')],
   synchronize: true,
   dropSchema: true,
   logging: ['error']

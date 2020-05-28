@@ -1,10 +1,10 @@
 import { UploadedFile } from 'express-fileupload'
-import CategoryService from '../../server/services/ticket/CategoryService'
 import Category from '../../server/models/ticket/Category'
-import SlaSeed from '../seeds/SlaSeed'
+import CategoryService from '../../server/services/ticket/CategoryService'
 import GroupSeed from '../seeds/GroupSeed'
-import StatusSeed from '../seeds/StatusSeed'
 import PrioritySeed from '../seeds/PrioritySeed'
+import SlaSeed from '../seeds/SlaSeed'
+import StatusSeed from '../seeds/StatusSeed'
 import CategoryField from '~/server/models/ticket/CategoryField'
 
 describe('CategoryService', function() {

@@ -42,4 +42,5 @@ class TicketInput {
   @Field(type => ID, { nullable: true })
   id!: Ticket['id'][]
 }
+
 export default TicketInput

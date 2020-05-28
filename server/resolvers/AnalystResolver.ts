@@ -1,10 +1,17 @@
-import { Resolver, Query, FieldResolver, Root, Authorized } from 'type-graphql'
-import AnalystService from '../services/AnalystService'
+import {
+  Authorized,
+  FieldResolver,
+  Query,
+  Resolver,
+  Root,
+  ResolverInterface
+} from 'type-graphql'
 import Analyst from '../models/Analyst'
 import Chat from '../models/chat/Chat'
-import Group from '../models/ticket/Group'
 import { Path } from '../models/Path'
 import Sound from '../models/Sound'
+import Group from '../models/ticket/Group'
+import AnalystService from '../services/AnalystService'
 
 @Resolver(of => Analyst)
 class AnalystResolver {

@@ -3,12 +3,10 @@ import { createConnection } from 'typeorm'
 
 export default createConnection({
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'postgres',
-  database: 'ticket',
-  entities: [path.resolve(__dirname, '..', 'models/**/*.ts')],
+  url:
+    process.env.DATABASE_URL ||
+    'postgres://postgres:postgres@localhost:5432/test',
+  entities: [path.resolve(__dirname, '..', 'models/**/*')],
   synchronize: true,
   logging: ['error']
 })

@@ -1,7 +1,7 @@
-import { Query, Resolver, Mutation, Arg, ID, Authorized } from 'type-graphql'
-import PriorityService from '../services/PriorityService'
-import Priority from '../models/ticket/Priority'
+import { Arg, Authorized, ID, Mutation, Query, Resolver } from 'type-graphql'
 import PriorityInput from '../inputs/PriorityInput'
+import Priority from '../models/ticket/Priority'
+import PriorityService from '../services/PriorityService'
 
 @Resolver()
 class PriorityResolver {

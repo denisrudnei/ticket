@@ -1,6 +1,7 @@
-import { Resolver, Query, Authorized } from 'type-graphql'
-import RoleService from '../services/RoleService'
+import { Authorized, Query, Resolver } from 'type-graphql'
+
 import Role from '../models/Role'
+import RoleService from '../services/RoleService'
 
 @Resolver()
 class RoleResolver {

@@ -1,11 +1,11 @@
-import { Resolver, Query, Arg, Authorized } from 'type-graphql'
+import { Arg, Authorized, Query, Resolver } from 'type-graphql'
+import ReportAttributes from '../inputs/ReportAttributes'
+import Ticket from '../models/ticket/Ticket'
 import ReportService, {
-  ReportByDate,
   GroupedResult,
+  ReportByDate,
   TicketTimeField
 } from '../services/ticket/ReportService'
-import Ticket from '../models/ticket/Ticket'
-import ReportAttributes from '../inputs/ReportAttributes'
 
 @Resolver()
 class ReportResolver {

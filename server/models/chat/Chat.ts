@@ -1,12 +1,12 @@
+import { Field, ID, ObjectType } from 'type-graphql'
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   BaseEntity,
-  OneToMany,
+  Entity,
   ManyToMany,
-  JoinTable
+  OneToMany,
+  PrimaryGeneratedColumn
 } from 'typeorm'
-import { ObjectType, Field, ID } from 'type-graphql'
+
 import Analyst from '../Analyst'
 import Message from './Message'
 

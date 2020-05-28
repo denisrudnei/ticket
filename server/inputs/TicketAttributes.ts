@@ -36,4 +36,5 @@ class TicketAttributes {
   @Field(type => ID, { nullable: true })
   id!: Ticket['id'][]
 }
+
 export default TicketAttributes

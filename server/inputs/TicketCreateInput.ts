@@ -32,4 +32,5 @@ class TicketCreateInput {
   @Field(type => ID)
   priority!: Priority['id']
 }
+
 export default TicketCreateInput

@@ -1,31 +1,31 @@
 import NotificationService from '@/server/services/NotificationService'
+import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
 import {
+  Arg,
+  Authorized,
+  Ctx,
+  FieldResolver,
+  ID,
+  Int,
+  Mutation,
+  PubSub,
+  PubSubEngine,
   Query,
   Resolver,
-  Mutation,
-  Subscription,
-  Arg,
-  Ctx,
-  PubSubEngine,
-  ID,
-  FieldResolver,
   Root,
-  Authorized,
-  Int,
-  PubSub
+  Subscription
 } from 'type-graphql'
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
-import TicketService from '../services/ticket/TicketService'
-import TicketEnum from '../enums/TicketEnum'
-import LogService from '../services/ticket/LogService'
 import Ticket from '../../server/models/ticket/Ticket'
 import NotificationEnum from '../enums/NotificationEnum'
-import Group from '../models/ticket/Group'
-import Status from '../models/ticket/Status'
-import Log from '../models/ticket/Log'
-import Comment from '../models/ticket/Comment'
-import TicketInput from '../inputs/TicketInput'
+import TicketEnum from '../enums/TicketEnum'
 import TicketCreateInput from '../inputs/TicketCreateInput'
+import TicketInput from '../inputs/TicketInput'
+import Comment from '../models/ticket/Comment'
+import Group from '../models/ticket/Group'
+import Log from '../models/ticket/Log'
+import Status from '../models/ticket/Status'
+import LogService from '../services/ticket/LogService'
+import TicketService from '../services/ticket/TicketService'
 
 @Resolver(of => Ticket)
 class TicketResolver {

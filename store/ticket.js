@@ -204,8 +204,6 @@ export const actions = {
         }
       })
       .then(response => {
-        /* eslint-disable */
-        console.log(response.data)
         commit('setActualTicket', response.data.data.TicketById)
       })
   },

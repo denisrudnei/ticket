@@ -1,10 +1,11 @@
-import * as path from 'path'
+import 'reflect-metadata'
 import http from 'http'
-import consola from 'consola'
-import { ApolloServer, PubSub } from 'apollo-server-express'
-import morgan from 'morgan'
+import * as path from 'path'
 import createConnection from '@/server/db/typeormConnection'
-import { buildSchema, PubSubEngine } from 'type-graphql'
+import { ApolloServer, PubSub } from 'apollo-server-express'
+import consola from 'consola'
+import morgan from 'morgan'
+import { buildSchema } from 'type-graphql'
 import { customAuthChecker } from './authChecker'
 import app from '~/server/app'
 import CheckACL from '~/server/models/CheckACL'
@@ -20,10 +21,9 @@ config.dev = !(process.env.NODE_ENV === 'production')
 async function start() {
   const nuxt = new Nuxt(config)
   await createConnection
-
   const server = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [path.join(__dirname, 'resolvers/**/*.ts')],
+      resolvers: [path.resolve(__dirname, 'resolvers/**/*.js')],
       authChecker: customAuthChecker,
       pubSub: pubSub
     }),

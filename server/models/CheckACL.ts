@@ -1,4 +1,5 @@
 import Role from './Role'
+
 const AclRules = require('~/nacl.json')
 
 interface IPermission {

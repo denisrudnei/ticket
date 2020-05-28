@@ -1,12 +1,13 @@
+import { Field, ID, ObjectType } from 'type-graphql'
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
   ManyToOne,
-  OneToMany
+  OneToMany,
+  PrimaryGeneratedColumn
 } from 'typeorm'
-import { ObjectType, Field, ID } from 'type-graphql'
+
 import Category from '../ticket/Category'
 import Group from '../ticket/Group'
 import KnowledgeFile from './KnowledgeFile'

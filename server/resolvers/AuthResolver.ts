@@ -1,8 +1,8 @@
-import { Resolver, Mutation, Arg, Ctx } from 'type-graphql'
 import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
-import AuthService from '../services/AuthService'
-import Analyst from '../models/Analyst'
+import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
 import AnalystInput from '../inputs/AnalystInput'
+import Analyst from '../models/Analyst'
+import AuthService from '../services/AuthService'
 
 @Resolver()
 class AuthResolver {

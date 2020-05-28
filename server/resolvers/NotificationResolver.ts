@@ -1,22 +1,23 @@
-import NotificationService from '@/server/services/NotificationService'
 import NotificationEnum from '@/server/enums/NotificationEnum'
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Ctx,
-  ID,
-  Arg,
-  Subscription,
-  Root,
-  FieldResolver,
-  Authorized,
-  PubSub,
-  PubSubEngine
-} from 'type-graphql'
+import NotificationService from '@/server/services/NotificationService'
 import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
-import Notification from '../models/Notification'
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  FieldResolver,
+  ID,
+  Mutation,
+  PubSub,
+  PubSubEngine,
+  Query,
+  Resolver,
+  Root,
+  Subscription
+} from 'type-graphql'
+
 import Analyst from '../models/Analyst'
+import Notification from '../models/Notification'
 
 @Resolver(of => Notification)
 class NotificationResolver {

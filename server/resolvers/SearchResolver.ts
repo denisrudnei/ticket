@@ -1,8 +1,7 @@
-import { Query, Resolver, Arg, Int, Authorized } from 'type-graphql'
-import SearchService from '../services/ticket/SearchService'
-import Ticket from '../models/ticket/Ticket'
+import { Arg, Authorized, Int, Query, Resolver } from 'type-graphql'
 import TicketAttributes from '../inputs/TicketAttributes'
 import TicketPagination from '../models/TicketPagination'
+import SearchService from '../services/ticket/SearchService'
 
 @Resolver()
 class SearchResolver {

@@ -1,24 +1,24 @@
+import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
 import {
-  Mutation,
-  Resolver,
-  FieldResolver,
-  Query,
-  Ctx,
   Arg,
+  Authorized,
+  Ctx,
+  FieldResolver,
   ID,
-  Root,
-  Subscription,
+  Mutation,
   PubSub,
   PubSubEngine,
-  Args,
-  Authorized
+  Query,
+  Resolver,
+  Root,
+  Subscription
 } from 'type-graphql'
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
-import ChatService from '../services/ChatService'
+
 import ChatEnum from '../enums/ChatEnum'
-import Chat from '../models/chat/Chat'
 import Analyst from '../models/Analyst'
+import Chat from '../models/chat/Chat'
 import Message from '../models/chat/Message'
+import ChatService from '../services/ChatService'
 
 @Resolver(of => Chat)
 class ChatResolver {

@@ -1,25 +1,25 @@
 import { differenceInMinutes, format } from 'date-fns'
+import { Field, ID, ObjectType } from 'type-graphql'
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  OneToOne,
+  Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn
 } from 'typeorm'
-import { ObjectType, Field, ID } from 'type-graphql'
-import Analyst from '../Analyst'
+
 import Address from '../Address'
+import Analyst from '../Analyst'
 import File from '../File'
 import Category from './Category'
-import Group from './Group'
-import Status from './Status'
 import Comment from './Comment'
-import Priority from './Priority'
-import Sla from './Sla'
+import Group from './Group'
 import Log from './Log'
+import Priority from './Priority'
+import Status from './Status'
 
 @Entity()
 @ObjectType()

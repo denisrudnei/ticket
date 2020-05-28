@@ -1,5 +1,6 @@
 query {
   path: Path {
+    id
     name
     objectName
     property

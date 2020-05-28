@@ -1,15 +1,15 @@
 import {
-  Resolver,
-  Query,
   Arg,
-  ID,
+  Authorized,
   FieldResolver,
-  Root,
+  ID,
+  Query,
+  Resolver,
   ResolverInterface,
-  Authorized
+  Root
 } from 'type-graphql'
-import StatusService from '../services/ticket/StatusService'
 import Status from '../models/ticket/Status'
+import StatusService from '../services/ticket/StatusService'
 
 @Resolver(of => Status)
 class StatusResolver implements ResolverInterface<Status> {

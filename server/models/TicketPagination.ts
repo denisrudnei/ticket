@@ -1,4 +1,5 @@
-import { ObjectType, Field, Int } from 'type-graphql'
+import { Field, Int, ObjectType } from 'type-graphql'
+
 import Ticket from './ticket/Ticket'
 
 @ObjectType()

@@ -1,26 +1,24 @@
-import {
-  In,
-  BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  BeforeInsert,
-  ManyToMany,
-  JoinTable,
-  OneToMany,
-  BeforeUpdate
-} from 'typeorm'
 import bcrypt from 'bcrypt'
-import { ObjectType, Field, ID } from 'type-graphql'
-import Group from './ticket/Group'
-import Role from './Role'
+import { Field, ID, ObjectType } from 'type-graphql'
+import {
+  BaseEntity,
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm'
+
 import Address from './Address'
-import Path from './Path'
 import Chat from './chat/Chat'
-import Ticket from './ticket/Ticket'
 import Notification from './Notification'
+import Path from './Path'
 import Sound from './Sound'
+import Group from './ticket/Group'
+import Ticket from './ticket/Ticket'
 
 @Entity()
 @ObjectType()

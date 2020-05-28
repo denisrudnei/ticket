@@ -1,6 +1,6 @@
-import { Resolver, Query, Mutation, Authorized } from 'type-graphql'
-import AddressService from '../services/AddressService'
+import { Authorized, Query, Resolver } from 'type-graphql'
 import Address from '../models/Address'
+import AddressService from '../services/AddressService'
 
 @Resolver()
 class AddressResolver {

@@ -1,17 +1,17 @@
 import {
+  Arg,
+  Authorized,
+  FieldResolver,
+  ID,
   Mutation,
   Query,
   Resolver,
-  Arg,
-  ID,
-  FieldResolver,
-  Root,
-  Authorized
+  Root
 } from 'type-graphql'
-import CategoryService from '../services/ticket/CategoryService'
-import Category from '../models/ticket/Category'
 import CategoryInput from '../inputs/CategoryInput'
+import Category from '../models/ticket/Category'
 import CategoryField from '../models/ticket/CategoryField'
+import CategoryService from '../services/ticket/CategoryService'
 
 @Resolver(of => Category)
 class CategoryResolver {

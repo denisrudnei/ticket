@@ -1,17 +1,16 @@
+import { Field, ID, ObjectType } from 'type-graphql'
 import {
   BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
-  JoinColumn,
-  OneToOne,
   Column,
-  ManyToMany,
-  ManyToOne
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn
 } from 'typeorm'
-import { ObjectType, Field, ID } from 'type-graphql'
+
 import Analyst from '../Analyst'
-import Status from './Status'
 import Group from './Group'
+import Status from './Status'
 import Ticket from './Ticket'
 
 @Entity()

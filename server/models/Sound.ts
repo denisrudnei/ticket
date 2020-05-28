@@ -1,11 +1,12 @@
+import { Field, Float, ID, ObjectType } from 'type-graphql'
 import {
-  Entity,
   BaseEntity,
+  Column,
+  Entity,
   ManyToOne,
-  PrimaryGeneratedColumn,
-  Column
+  PrimaryGeneratedColumn
 } from 'typeorm'
-import { ObjectType, Field, ID, Float } from 'type-graphql'
+
 import Analyst from './Analyst'
 
 export enum SoundType {
@@ -26,6 +27,7 @@ class Sound extends BaseEntity {
   public id!: number
 
   @Field()
+  @Column()
   public type!: SoundType
 
   @Field(type => Float)
