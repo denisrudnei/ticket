@@ -7,12 +7,8 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm'
 
+import { SoundType } from '../enums/SoundTypeEnum'
 import Analyst from './Analyst'
-
-export enum SoundType {
-  NOTIFICATION = 'NOTIFICATION',
-  CHAT = 'CHAT'
-}
 
 @Entity()
 @ObjectType()

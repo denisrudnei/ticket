@@ -1,7 +1,8 @@
 import express from 'express'
 import { UploadedFile } from 'express-fileupload'
 import Group from '../models/ticket/Group'
-import Sound, { SoundType } from '../models/Sound'
+import Sound from '../models/Sound'
+import { SoundType } from '../enums/SoundTypeEnum'
 import AnalystService from '~/server/services/AnalystService'
 import Analyst from '~/server/models/Analyst'
 

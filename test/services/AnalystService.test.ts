@@ -4,6 +4,7 @@ import AnalystService from '../../server/services/AnalystService'
 import Analyst from '../../server/models/Analyst'
 
 describe('Analyst', function() {
+  this.timeout(10_000)
   it('Get analysts', async () => {
     await AnalystService.getAnalysts()
   })

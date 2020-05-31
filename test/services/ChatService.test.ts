@@ -29,4 +29,19 @@ describe('ChatService', function() {
     const message = await Message.findOne()
     await ChatService.readMessage(message!.id)
   })
+
+  it('Should change status from analyst', async () => {
+    const user = await Analyst.findOne()
+    await ChatService.changeStatus(user!.id, 'Online')
+  })
+
+  it('Should last time when user is active', async () => {
+    const user = await Analyst.findOne()
+    await ChatService.updateLastActive(user!.id)
+  })
+
+  it('Should get all messages from two users', async () => {
+    const [to, from] = await Analyst.find()
+    await ChatService.get(to!.id, from!.id)
+  })
 })

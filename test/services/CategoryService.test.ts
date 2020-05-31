@@ -8,6 +8,7 @@ import StatusSeed from '../seeds/StatusSeed'
 import CategoryField from '~/server/models/ticket/CategoryField'
 
 describe('CategoryService', function() {
+  this.timeout(10_000)
   it('Get Categories', async () => {
     await CategoryService.getCategories()
   })

@@ -105,18 +105,16 @@ class ChatService {
   get(fromId: Analyst['id'], toId: Analyst['id']): Promise<Message[]> {
     return new Promise((resolve, reject) => {
       Message.find({
-        where: {
-          $or: [
-            {
-              from: fromId,
-              to: toId
-            },
-            {
-              from: toId,
-              to: fromId
-            }
-          ]
-        }
+        where: [
+          {
+            from: fromId,
+            to: toId
+          },
+          {
+            from: toId,
+            to: fromId
+          }
+        ]
       }).then((messages: Message[]) => {
         return resolve(messages)
       })

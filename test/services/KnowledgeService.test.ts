@@ -7,6 +7,7 @@ import KnowledgeFile from '../../server/models/knowledge/KnowledgeFile'
 import '../../server/models/knowledge/KnowledgeStatus'
 
 describe('Knowledge', function() {
+  this.timeout(10_000)
   it('Get all knowledges', async () => {
     await KnowledgeService.getAll()
   })
