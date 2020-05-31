@@ -16,5 +16,5 @@
         
       steps:
         - checkout # check out the code in the project directory
-        - run: npm install --ignore-scripts
+        - run: npm install
         - run: npm run test
