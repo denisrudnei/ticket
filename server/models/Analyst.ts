@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { Field, ID, ObjectType } from 'type-graphql'
 import {
   BaseEntity,

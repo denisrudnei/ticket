@@ -12,12 +12,12 @@ variables:
 
 test:
   script:
-    - npm install
+    - npm install --ignore-scripts
     - npm run test
 
 coverage:
   script:
-    - npm install
+    - npm install --ignore-scripts
     - npm run test
     - npm run coverage
   allow_failure: true
