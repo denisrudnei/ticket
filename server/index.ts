@@ -23,7 +23,7 @@ async function start() {
   await createConnection
   const server = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [path.resolve(__dirname, 'resolvers/**/*.js')],
+      resolvers: [path.resolve(__dirname, 'resolvers/**/*')],
       authChecker: customAuthChecker,
       pubSub: pubSub
     }),

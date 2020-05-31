@@ -45,11 +45,7 @@ class CategoryResolver {
   }
 
   @Mutation(() => Category)
-  CreateCategory(
-    @Arg('category', () => CategoryInput)
-    @Arg('category', () => CategoryInput)
-    category: Category
-  ) {
+  CreateCategory(@Arg('category', () => CategoryInput) category: Category) {
     return CategoryService.create(category)
   }
 

@@ -9,7 +9,9 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  BeforeUpdate,
+  AfterLoad
 } from 'typeorm'
 
 import Address from './Address'
@@ -53,6 +55,8 @@ class Analyst extends BaseEntity {
 
   @Column()
   public password!: string
+
+  private tempPassword!: string
 
   @ManyToOne(type => Address)
   @Field(type => Address, { nullable: true })
@@ -115,16 +119,23 @@ class Analyst extends BaseEntity {
     })
   }
 
-  @BeforeInsert()
-  hashPassword() {
-    const salt = bcrypt.genSaltSync(12)
-    this.password = bcrypt.hashSync(this.password, salt)
+  @AfterLoad()
+  checkPasswordChanged() {
+    this.tempPassword = this.password
   }
 
-  public verifyPassword(password: string, next: Function) {
-    const result = bcrypt.compareSync(password, this.password)
-    if (!result) return next(new Error('Password incorrect'))
-    return next(null, result)
+  @BeforeInsert()
+  @BeforeUpdate()
+  hashPassword() {
+    if (this.password && this.password !== this.tempPassword) {
+      const salt = bcrypt.genSaltSync(12)
+      this.password = bcrypt.hashSync(this.password, salt)
+    }
+    this.tempPassword = ''
+  }
+
+  public verifyPassword(password: string) {
+    return bcrypt.compareSync(password, this.password)
   }
 }
 

@@ -36,7 +36,7 @@ export default {
 
   getFile: (req: express.Request, res: express.Response) => {
     const id = req.params.id
-    KnowledgeService.getFile(id)
+    KnowledgeService.getFile(parseInt(id))
       .then((file: Buffer) => {
         return res.end(file)
       })

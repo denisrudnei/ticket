@@ -25,7 +25,6 @@ class Message extends BaseEntity {
   public chat!: Chat
 
   @ManyToOne(type => Analyst)
-  @JoinColumn({ name: 'to' })
   @Field(type => Analyst)
   public to!: Analyst
 

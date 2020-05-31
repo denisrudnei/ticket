@@ -1,11 +1,5 @@
-import {
-  Authorized,
-  FieldResolver,
-  Query,
-  Resolver,
-  Root,
-  ResolverInterface
-} from 'type-graphql'
+import { Authorized, FieldResolver, Query, Resolver, Root } from 'type-graphql'
+
 import Analyst from '../models/Analyst'
 import Chat from '../models/chat/Chat'
 import { Path } from '../models/Path'

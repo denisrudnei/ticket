@@ -24,6 +24,9 @@ class Knowledge extends BaseEntity {
   @Field(type => String)
   public name!: string
 
+  @Column({ nullable: true })
+  public key!: string
+
   @Column()
   @Field(type => Date)
   public created: Date = new Date()

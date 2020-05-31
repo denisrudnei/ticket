@@ -90,7 +90,7 @@ describe('Knowledge', function() {
   it('Get file', async () => {
     const knowledge = await Knowledge.findOne({}, { relations: ['files'] })
     knowledge!.files.forEach(async (f: KnowledgeFile) => {
-      await KnowledgeService.getFile(`knowledge/${knowledge!.id}/${f.id}`)
+      await KnowledgeService.getFile(f.id)
     })
   })
 

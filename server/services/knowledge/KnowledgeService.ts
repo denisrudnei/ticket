@@ -74,10 +74,12 @@ class KnowledgeService {
 
   setPreviewInPDF(knowledgeId: Knowledge['id'], name: string): Promise<void> {
     return new Promise((resolve, reject) => {
+      const key = `knowledge/pdf/${name}.pdf`
       this.generatePDF(knowledgeId).then(response => {
-        this.uploadPDF(name, response).then(link => {
+        this.uploadPDF(key, response).then(link => {
           Knowledge.findOne(knowledgeId).then(knowledge => {
             knowledge!.url = link
+            knowledge!.key = key
             knowledge!.save().then(() => {
               resolve()
             })
@@ -93,10 +95,7 @@ class KnowledgeService {
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       Knowledge.findOne(knowledgeId).then(knowledge => {
-        knowledge!.name = knowledgeToEdit.name
-        knowledge!.category = knowledgeToEdit!.category
-        knowledge!.group = knowledgeToEdit!.group
-        knowledge!.preview = knowledgeToEdit!.preview
+        Object.assign(knowledge, knowledgeToEdit)
         knowledge!.save().then(() => {
           this.setPreviewInPDF(knowledgeId, knowledge!.name)
           return resolve()
@@ -109,9 +108,10 @@ class KnowledgeService {
     return new Promise((resolve, reject) => {
       Knowledge.findOne(knowledgeId).then(knowledge => {
         S3.createBucket(() => {
+          const name = `knowledge/${knowledgeId}/${file.name}`
           const params = {
             Bucket: process.env.BUCKET!,
-            Key: `knowledge/${knowledgeId}/${file.name}`,
+            Key: name,
             Body: file.data
           }
           S3.upload(
@@ -119,7 +119,7 @@ class KnowledgeService {
             (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
               if (err) reject(err)
               KnowledgeFile.create({
-                name: file.name,
+                name,
                 url: data.Location!
               })
                 .save()
@@ -140,9 +140,10 @@ class KnowledgeService {
   addTempFile(file: fileUpload.UploadedFile): Promise<string> {
     return new Promise((resolve, reject) => {
       S3.createBucket(() => {
+        const name = `knowledge/temp/${file.name}`
         const params = {
           Bucket: process.env.BUCKET!,
-          Key: `knowledge/temp/${file.name}`,
+          Key: name,
           Body: file.data
         }
         S3.upload(
@@ -150,7 +151,7 @@ class KnowledgeService {
           (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
             if (err) reject(err)
             KnowledgeFile.create({
-              name: file.name,
+              name,
               url: data.Location!
             })
               .save()
@@ -174,38 +175,52 @@ class KnowledgeService {
     })
   }
 
-  getFile(id: string): Promise<Buffer> {
+  getFile(id: KnowledgeFile['id']): Promise<Buffer> {
     return new Promise((resolve, reject) => {
-      S3.getObject(
-        {
-          Bucket: process.env.BUCKET!,
-          Key: id
-        },
-        (err: Error, file: AWS.S3.Types.GetObjectOutput) => {
-          if (err) reject(err)
-          return resolve(file.Body as Buffer)
-        }
-      )
+      KnowledgeFile.findOne(id).then(knowledgeFile => {
+        S3.getObject(
+          {
+            Bucket: process.env.BUCKET!,
+            Key: knowledgeFile!.name
+          },
+          (err: Error, file: AWS.S3.Types.GetObjectOutput) => {
+            if (err) reject(err)
+            return resolve(file.Body as Buffer)
+          }
+        )
+      })
     })
   }
 
-  remove(id: Knowledge['id']) {
+  remove(id: Knowledge['id']): Promise<void> {
     return new Promise((resolve, reject) => {
       Knowledge.findOne(id, { relations: ['files'] }).then(knowledge => {
-        knowledge!.files.forEach(file => {
-          KnowledgeFile.delete(file)
-        })
-        knowledge!.remove().then(() => {
+        const deleteFilesFromKnowledge = knowledge!.files.map(file => {
           S3.deleteObject(
             {
               Bucket: process.env.BUCKET!,
-              Key: id.toString()
+              Key: file.name
             },
-            (err: Error, obj: AWS.S3.Types.DeleteObjectOutput) => {
+            (err: Error) => {
               if (err) reject(err)
-              return resolve(obj)
             }
           )
+          return KnowledgeFile.delete(file.id)
+        })
+        Promise.all(deleteFilesFromKnowledge).then(() => {
+          Knowledge.delete(knowledge!.id).then(() => {
+            if (!knowledge!.key) resolve()
+            S3.deleteObject(
+              {
+                Bucket: process.env.BUCKET!,
+                Key: knowledge!.key
+              },
+              (err: Error) => {
+                if (err) reject(err)
+                return resolve()
+              }
+            )
+          })
         })
       })
     })
@@ -216,7 +231,7 @@ class KnowledgeService {
       S3.createBucket(() => {
         const params = {
           Bucket: process.env.BUCKET!,
-          Key: `knowledge/pdf/${name}.pdf`,
+          Key: name,
           Body: body
         }
         S3.upload(

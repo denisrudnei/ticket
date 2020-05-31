@@ -39,7 +39,10 @@ describe('PathService', function() {
   })
 
   it('Delete path', async () => {
-    const user = await Analyst.findOne({})
+    const users = await Analyst.find({ relations: ['paths'] })
+    const user = users.find(user => {
+      return user.paths.length > 0
+    })
     const path = user!.paths[0]
     await PathService.remove(user!.id, path.id)
   })

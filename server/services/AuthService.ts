@@ -15,10 +15,9 @@ class AuthService {
           return reject(new Error('Username or password incorrect'))
         }
 
-        user!.verifyPassword(password, (err: Error) => {
-          if (err) return reject(err)
-          return resolve(user)
-        })
+        if (!user!.verifyPassword(password))
+          return reject(new Error('Incorrect password'))
+        return resolve(user)
       })
     })
   }
@@ -105,14 +104,13 @@ class AuthService {
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       Analyst.findOne(userId).then(user => {
-        user!.verifyPassword(oldPassword, (err: Error, result: boolean) => {
-          if (err || !result) {
-            return reject(new Error('incorrect old password'))
-          }
-          user!.password = newPassword
-          user!.save().then(() => {
-            return resolve()
-          })
+        const result = user!.verifyPassword(oldPassword)
+        if (!result) {
+          return reject(new Error('incorrect old password'))
+        }
+        user!.password = newPassword
+        user!.save().then(() => {
+          return resolve()
         })
       })
     })

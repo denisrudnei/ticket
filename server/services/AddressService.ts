@@ -1,12 +1,12 @@
 import Address from '../models/Address'
 
 class AddressService {
-  create(address: Address): Promise<void> {
+  create(address: Address): Promise<Address> {
     return new Promise((resolve, reject) => {
       Address.create(address)
         .save()
         .then(() => {
-          return resolve()
+          return resolve(address)
         })
     })
   }
@@ -27,12 +27,12 @@ class AddressService {
     })
   }
 
-  edit(addressId: Address['id'], addressToEdit: Address): Promise<void> {
+  edit(addressId: Address['id'], addressToEdit: Address): Promise<Address> {
     return new Promise((resolve, reject) => {
       Address.findOne(addressId).then(address => {
         Object.assign(address, addressToEdit)
-        address!.save().then(() => {
-          resolve()
+        address!.save().then(address => {
+          resolve(address)
         })
       })
     })
