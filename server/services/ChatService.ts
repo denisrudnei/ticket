@@ -64,7 +64,9 @@ class ChatService {
           })
           if (chats.length === 0) {
             const chat = Chat.create()
-            chat.participants = [to!, from!]
+            chat.participants = []
+            chat.messages = []
+            chat.participants.push(to!, from!)
             chat.save().then(chat => {
               resolve(chat)
             })
@@ -86,7 +88,7 @@ class ChatService {
         const to = await Analyst.findOne(toId, { relations: ['chats'] })
 
         const chat = await this.getOne(fromId, toId)
-        from!.chats.push(chat!)
+        from!.chats.push(chat)
         const message = Message.create()
         message.to = to!
         message.from = from!

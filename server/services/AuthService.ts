@@ -79,7 +79,7 @@ class AuthService {
           },
           process.env.JWT_TOKEN as string
         )
-        MailService.sendConfirmationEmail(analyst!, req, token)
+        MailService.sendConfirmationEmail(analyst!, req, token).catch(reject)
         resolve(token)
       })
     })

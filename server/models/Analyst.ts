@@ -5,7 +5,6 @@ import {
   BeforeInsert,
   Column,
   Entity,
-  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -91,7 +90,6 @@ class Analyst extends BaseEntity {
   public groups!: Group[]
 
   @ManyToMany(type => Chat, Chat => Chat.participants)
-  @JoinTable()
   @Field(type => [Chat])
   public chats!: Chat[]
 

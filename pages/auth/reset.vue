@@ -28,7 +28,10 @@ export default {
           this.showMessage()
         })
         .catch(() => {
-          this.showMessage()
+          this.$toast.error('Falha ao mandar email de reset', {
+            duration: 10000,
+            icon: 'error'
+          })
         })
     },
     showMessage() {

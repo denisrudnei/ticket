@@ -4,7 +4,8 @@ import {
   Entity,
   ManyToMany,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  JoinTable
 } from 'typeorm'
 
 import Analyst from '../Analyst'
@@ -19,6 +20,7 @@ class Chat extends BaseEntity {
 
   @ManyToMany(type => Analyst, Analyst => Analyst.chats)
   @Field(type => [Analyst])
+  @JoinTable()
   public participants!: Analyst[]
 
   @OneToMany(type => Message, Message => Message.chat)
