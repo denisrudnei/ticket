@@ -8,6 +8,9 @@ import {
   Resolver,
   Root
 } from 'type-graphql'
+import { ManagedUpload } from 'aws-sdk/clients/s3'
+import { GraphQLUpload } from 'graphql-upload'
+import { UploadedFile } from 'express-fileupload'
 import CategoryInput from '../inputs/CategoryInput'
 import Category from '../models/ticket/Category'
 import CategoryField from '../models/ticket/CategoryField'
@@ -27,9 +30,25 @@ class CategoryResolver {
     return CategoryService.getOne(name)
   }
 
+  @Query(() => String)
+  @Authorized('user')
+  GetCategoryImage(@Arg('id', () => ID) id: Category['id']): Promise<Buffer> {
+    return CategoryService.getImage(id)
+  }
+
+  @Mutation(() => String)
+  @Authorized('user')
+  SetCategoryImage(
+    @Arg('id', () => ID) id: Category['id'],
+    @Arg('file', () => GraphQLUpload) file: UploadedFile
+  ): Promise<string> {
+    return CategoryService.setImage(id, file)
+  }
+
+  @Mutation(() => String)
   @Query(() => [Category])
   @Authorized('user')
-  GetSubs(@Arg('categoryId', Category => ID) categoryId: Category['id']) {
+  GetSubs(@Arg('categoryId', () => ID) categoryId: Category['id']) {
     return CategoryService.getSubsForCategory(categoryId)
   }
 

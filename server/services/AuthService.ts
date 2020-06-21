@@ -85,13 +85,13 @@ class AuthService {
     })
   }
 
-  resetPasswordWithToken(token: string, newPassword: string): Promise<void> {
+  resetPasswordWithToken(token: string, newPassword: string): Promise<Analyst> {
     return new Promise((resolve, reject) => {
       const info = jwt.verify(token, process.env.JWT_TOKEN!) as Analyst
       Analyst.findOne(info.id).then(analyst => {
         analyst!.password = newPassword
-        analyst!.save().then(() => {
-          resolve()
+        analyst!.save().then(analyst => {
+          resolve(analyst)
         })
       })
     })

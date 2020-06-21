@@ -14,12 +14,12 @@
             v-slot:item.preview="{ item }"
           >
             <v-img
-              :src="item.data || `/api/ticket/${item.name}/file`"
-              @click="setActivePreview(item.data || `/api/ticket/${item.name}/file`)"
+              :src="item.data || item.url"
+              @click="setActivePreview(item.data || item.url)"
             />
             <audio
               v-if="item.type.includes('audio')"
-              :src="item.data || `/api/ticket/${item.name}/file`"
+              :src="item.data || item.url"
               controls
             />
           </template>

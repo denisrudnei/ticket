@@ -42,7 +42,7 @@ export default {
   getImage: (req: express.Request, res: express.Response) => {
     CategoryService.getImage(parseInt(req.params.id))
       .then(response => {
-        res.send(response.Body)
+        res.send(response)
       })
       .catch(() => {
         res.sendStatus(404)

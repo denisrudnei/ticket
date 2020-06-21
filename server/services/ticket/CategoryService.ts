@@ -1,14 +1,12 @@
 import { UploadedFile } from 'express-fileupload'
-import { GetObjectOutput } from 'aws-sdk/clients/s3'
+import { GetObjectOutput, ManagedUpload } from 'aws-sdk/clients/s3'
 import Category from '../../models/ticket/Category'
 import S3 from '~/plugins/S3'
 
 class CategoryService {
   create(category: Category): Promise<Category> {
     return new Promise((resolve, reject) => {
-      const newCategory = Category.create(category)
-
-      Category.create(newCategory)
+      Category.create(category)
         .save()
         .then(categorySaved => {
           resolve(categorySaved)
@@ -59,7 +57,7 @@ class CategoryService {
     })
   }
 
-  getImage(categoryId: Category['id']): Promise<GetObjectOutput> {
+  getImage(categoryId: Category['id']): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       S3.getObject(
         {
@@ -67,23 +65,26 @@ class CategoryService {
           Key: `category/${categoryId.toString()}`
         },
         (err: Error, file: GetObjectOutput) => {
-          if (err) reject(err)
-          return resolve(file)
+          if (err) return reject(err)
+          if (file === null) return reject(new Error('No image found'))
+          return resolve(file.Body as Buffer)
         }
       )
     })
   }
 
-  async setImage(
-    categoryId: Category['id'],
-    image: UploadedFile
-  ): Promise<void> {
+  setImage(categoryId: Category['id'], image: UploadedFile): Promise<string> {
     const params = {
       Bucket: process.env.BUCKET!,
       Key: `category/${categoryId}`,
       Body: image.data
     }
-    await S3.upload(params).promise()
+    return new Promise((resolve, reject) => {
+      S3.upload(params, (err: Error, data: ManagedUpload.SendData) => {
+        if (err) return reject(err)
+        resolve(data.Location)
+      })
+    })
   }
 
   getSubsForCategory(id: Category['id']): Promise<Category[]> {

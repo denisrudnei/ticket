@@ -53,5 +53,21 @@ class AuthResolver {
     delete req!.session!.authUser
     return true
   }
+
+  @Mutation(() => String)
+  GenerateEmailToReset(
+    @Arg('email') email: string,
+    @Ctx() context: ExpressContext
+  ): Promise<string> {
+    return AuthService.generateEmailToReset(email, context.req)
+  }
+
+  @Mutation(() => Analyst)
+  ResetPasswordWithToken(
+    @Arg('token') token: string,
+    @Arg('newPassword') newPassword: string
+  ): Promise<Analyst> {
+    return AuthService.resetPasswordWithToken(token, newPassword)
+  }
 }
 export default AuthResolver

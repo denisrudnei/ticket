@@ -24,6 +24,7 @@ import Comment from '../models/ticket/Comment'
 import Group from '../models/ticket/Group'
 import Log from '../models/ticket/Log'
 import Status from '../models/ticket/Status'
+import File from '../models/File'
 import LogService from '../services/ticket/LogService'
 import TicketService from '../services/ticket/TicketService'
 
@@ -40,7 +41,7 @@ class TicketResolver {
     return new Promise((resolve, reject) => {
       Ticket.findOne(ticket.id, {
         relations: ['logs']
-      }).then(() => {
+      }).then(ticket => {
         resolve(ticket!.logs)
       })
     })
@@ -51,7 +52,7 @@ class TicketResolver {
     return new Promise((resolve, reject) => {
       Ticket.findOne(ticket.id, {
         relations: ['comments']
-      }).then(() => {
+      }).then(ticket => {
         resolve(ticket!.comments)
       })
     })
@@ -62,8 +63,19 @@ class TicketResolver {
     return new Promise((resolve, reject) => {
       Ticket.findOne(ticket.id, {
         relations: ['children']
-      }).then(() => {
+      }).then(ticket => {
         resolve(ticket!.children)
+      })
+    })
+  }
+
+  @FieldResolver()
+  files(@Root() ticket: Ticket): Promise<File[]> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne(ticket.id, {
+        relations: ['files']
+      }).then(ticket => {
+        resolve(ticket!.files)
       })
     })
   }

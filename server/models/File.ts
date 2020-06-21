@@ -25,7 +25,8 @@ class File extends BaseEntity {
   public type!: string
 
   @Field()
-  public data!: String
+  @Column()
+  public url!: String
 
   @ManyToOne(type => Ticket, Ticket => Ticket.files)
   @Field(type => Ticket)

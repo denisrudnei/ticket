@@ -45,6 +45,7 @@ class Log extends BaseEntity {
   public group!: Group
 
   @ManyToOne(type => Ticket, Ticket => Ticket.logs)
+  @JoinColumn()
   @Field(type => Ticket)
   public ticket!: Ticket
 }

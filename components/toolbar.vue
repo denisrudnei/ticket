@@ -163,18 +163,16 @@ export default {
     window.removeEventListener('resize', this.onResize, { passive: true })
   },
   methods: {
-    search(content) {
+    search(idToSearch) {
       this.$apollo
         .query({
           query: ggl(id),
           variables: {
-            attributes: {
-              id: parseInt(content)
-            }
+            ids: [idToSearch]
           }
         })
         .then(response => {
-          const tickets = response.data.SearchTicket.docs
+          const tickets = response.data.SearchByIds.docs
           if (tickets.length === 0) {
             this.ticketNotFound = true
           } else {

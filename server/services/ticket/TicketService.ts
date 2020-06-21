@@ -219,10 +219,11 @@ class TicketService {
             Key: name,
             Body: f.data
           }
-          await S3.upload(params).promise()
+          const { Location } = await S3.upload(params).promise()
           const file = File.create()
           file.name = name
           file.type = f.mimetype
+          file.url = Location!
           await file.save()
           ticket!.files.push(file)
           await ticket!.save()
@@ -232,7 +233,7 @@ class TicketService {
     })
   }
 
-  getFile(fileId: string): Promise<any> {
+  getFile(fileId: string): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       S3.getObject(
         {
@@ -241,7 +242,7 @@ class TicketService {
         },
         (err: Error, file: AWS.S3.Types.GetObjectOutput) => {
           if (err) reject(err)
-          return resolve(file.Body)
+          return resolve(file.Body as Buffer)
         }
       )
     })

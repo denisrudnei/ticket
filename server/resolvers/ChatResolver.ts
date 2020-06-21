@@ -73,6 +73,15 @@ class ChatResolver {
     })
   }
 
+  @FieldResolver()
+  messages(@Root() root: Chat): Promise<Message[]> {
+    return new Promise((resolve, reject) => {
+      Chat.findOne(root.id, { relations: ['messages'] }).then(chat => {
+        resolve(chat!.messages)
+      })
+    })
+  }
+
   @Subscription({
     topics: ChatEnum.NEW_CHAT_MESSAGE,
     filter: ({ payload, args }) => {

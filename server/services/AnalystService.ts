@@ -29,7 +29,7 @@ class AnalystService {
 
   getAnalysts(): Promise<Analyst[]> {
     return new Promise((resolve, reject) => {
-      Analyst.find().then((analysts: Analyst[]) => {
+      Analyst.find().then(analysts => {
         resolve(analysts)
       })
     })
@@ -37,7 +37,7 @@ class AnalystService {
 
   getOne(analystId: Analyst['id']): Promise<Analyst> {
     return new Promise((resolve, reject) => {
-      Analyst.findOneOrFail(analystId).then((analyst: Analyst) => {
+      Analyst.findOneOrFail(analystId).then(analyst => {
         resolve(analyst)
       })
     })
@@ -45,7 +45,7 @@ class AnalystService {
 
   getConfigAnalysts(): Promise<Analyst[]> {
     return new Promise((resolve, reject) => {
-      Analyst.find().then((analysts: Analyst[]) => {
+      Analyst.find().then(analysts => {
         resolve(analysts)
       })
     })
@@ -66,7 +66,7 @@ class AnalystService {
     ])
   }
 
-  updateImage(userId: Analyst['id'], file: UploadedFile): Promise<void> {
+  updateImage(userId: Analyst['id'], file: UploadedFile): Promise<Analyst> {
     return new Promise((resolve, reject) => {
       Analyst.findOne(userId).then(analyst => {
         const name = userId
@@ -80,8 +80,8 @@ class AnalystService {
           (err: Error, data: AWS.S3.Types.CompleteMultipartUploadOutput) => {
             if (err) reject(err)
             analyst!.picture = data.Location!
-            analyst!.save().then(() => {
-              resolve()
+            analyst!.save().then(analyst => {
+              resolve(analyst)
             })
           }
         )
@@ -111,7 +111,7 @@ class AnalystService {
     })
   }
 
-  removeImage(userId: Analyst['id']): Promise<void> {
+  removeImage(userId: Analyst['id']): Promise<Analyst> {
     return new Promise((resolve, reject) => {
       S3.deleteObject(
         {
@@ -121,8 +121,8 @@ class AnalystService {
         () => {
           Analyst.findOne().then(analyst => {
             analyst!.picture = '/user.svg'
-            analyst!.save().then(() => {
-              resolve()
+            analyst!.save().then(analyst => {
+              resolve(analyst)
             })
           })
         }
