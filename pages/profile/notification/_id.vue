@@ -19,8 +19,8 @@
         </v-card-text>
         <v-card-actions>
           <v-switch
-            v-model="notification.read"
-            :value="user.id"
+            :input-value="notification.read.map(user => user.id.toString())"
+            :value="user.id.toString()"
             label="Lido"
             @change="read()"
           />
@@ -31,11 +31,11 @@
       <v-row>
         <v-btn
           outlined
-          :disabled="prev(notification) === undefined"
+          :disabled="prev() === undefined"
           fab
           color="primary"
           icon
-          @click="goTo(prev(notification))"
+          @click="goTo(prev())"
         >
           <v-icon>
             keyboard_arrow_up
@@ -46,11 +46,11 @@
       <v-row>
         <v-btn
           outlined
-          :disabled="next(notification) === undefined"
+          :disabled="next() === undefined"
           fab
           color="primary"
           icon
-          @click="goTo(next(notification))"
+          @click="goTo(next())"
         >
           <v-icon>
             keyboard_arrow_down
@@ -65,7 +65,6 @@
 import { mapGetters } from 'vuex'
 import readNotification from '@/mixins/readNotification'
 export default {
-  watchQuery: true,
   filters: {
     numberOfPeople(notification) {
       const size = notification.to.length
@@ -76,33 +75,44 @@ export default {
     }
   },
   mixins: [readNotification],
-  computed: mapGetters({
-    user: 'auth/getUser',
-    notifications: 'notification/getNotifications'
-  }),
-  asyncData({ $axios, params }) {
-    const id = params.id
-    return $axios.get(`/notification/${id}`).then(response => {
-      return {
-        notification: response.data
-      }
+  data() {
+    return {
+      notification: null
+    }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'auth/getUser',
+      notifications: 'notification/getNotifications'
     })
   },
+  created() {
+    this.getNotification()
+  },
   methods: {
-    prev(notification) {
+    async getNotification() {
+      const id = this.$route.params.id
+      const { data } = await this.$axios.get(`/notification/${id}`)
+      this.notification = data
+    },
+    prev() {
+      if (this.notification === null) return undefined
       const index = this.notifications.findIndex(ntf => {
-        return ntf.id === notification.id
+        return ntf.id === this.notification.id.toString()
       })
       return this.notifications[index - 1]
     },
-    next(notification) {
+    next() {
+      if (this.notification === null) return undefined
       const index = this.notifications.findIndex(ntf => {
-        return ntf.id === notification.id
+        return ntf.id === this.notification.id.toString()
       })
+
       return this.notifications[index + 1]
     },
     goTo(notification) {
       this.$router.push(`/profile/notification/${notification.id}`)
+      this.getNotification()
     },
     read() {
       this.readNotification(this.notification)

@@ -322,7 +322,7 @@ export default {
       notifications: {
         query: ggl(notifications),
         result({ data }) {
-          data.Notifications.forEach(notification => {
+          data.Notification.forEach(notification => {
             this.$store.commit('notification/updateNotification', notification)
           })
         }

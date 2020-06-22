@@ -1,0 +1,11 @@
+query GetOneGroup ($id: ID!) {
+  group: GetOneGroup (id: $id) {
+    id
+    name
+    description
+    analysts {
+      id
+      name
+    }
+  }
+}

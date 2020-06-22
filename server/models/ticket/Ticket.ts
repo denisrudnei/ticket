@@ -64,9 +64,9 @@ class Ticket extends BaseEntity {
   @Field(type => Analyst)
   public openedBy!: Analyst
 
-  @ManyToOne(type => Analyst, { eager: true, nullable: false })
-  @Field(type => Analyst)
-  public actualUser!: Analyst
+  @ManyToOne(type => Analyst, { eager: true, nullable: true })
+  @Field(type => Analyst, { nullable: true })
+  public actualUser?: Analyst | null
 
   @ManyToOne(type => Priority, { eager: true, nullable: false })
   @Field(type => Priority)

@@ -9,23 +9,23 @@ export const getters = {
     const user = rootGetters['auth/getUser']
     return state.notifications
       .filter(notification => {
-        return notification.to.map(t => t.id).includes(user.id)
+        return notification.to.map(t => t.id).includes(user.id.toString())
       })
       .sort((ntf1, ntf2) => {
         if (ntf1.date === ntf2.date) return 0
-        return ntf1 > ntf2 ? 1 : -1
+        return ntf1.id > ntf2.id ? 1 : -1
       })
   },
   getUnread(state, getters, rootState, rootGetters) {
     const user = rootGetters['auth/getUser']
     return getters.getNotifications.filter(notification => {
-      return !notification.read.map(r => r.id).includes(user.id)
+      return !notification.read.map(r => r.id).includes(user.id.toString())
     })
   },
   getRead(state, getters, rootState, rootGetters) {
     const user = rootGetters['auth/getUser']
     return getters.getNotifications.filter(notification => {
-      return notification.read.map(r => r.id).includes(user.id)
+      return notification.read.map(r => r.id).includes(user.id.toString())
     })
   }
 }

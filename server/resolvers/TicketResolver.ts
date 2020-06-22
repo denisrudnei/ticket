@@ -143,7 +143,7 @@ class TicketResolver {
   @Mutation(() => [Ticket])
   @Authorized('user')
   ChangeStatusOfTickets(
-    @Arg('ticket', type => [ID]) tickets: Ticket['id'][],
+    @Arg('tickets', type => [ID]) tickets: Ticket['id'][],
     @Arg('statusId', type => ID) statusId: Status['id'],
     @PubSub() pubSub: PubSubEngine
   ): Promise<Ticket[]> {
@@ -258,17 +258,31 @@ class TicketResolver {
   }
 
   @Subscription({
-    topics: TicketEnum.SLA_UPDATE
+    topics: TicketEnum.SLA_UPDATE,
+    filter: ({ args, payload }) => {
+      const tickets = args.tickets as Ticket['id'][]
+      return tickets.includes(payload.id)
+    }
   })
-  SlaUpdate(@Root() ticketPayload: Ticket): Ticket {
+  SlaUpdate(
+    @Root() ticketPayload: Ticket,
+    @Arg('tickets', () => [ID]) tickets: Ticket['id'][]
+  ): Ticket {
     return ticketPayload
   }
 
   @Subscription({
     name: 'EditTicket',
-    topics: TicketEnum.TICKET_EDIT
+    topics: TicketEnum.TICKET_EDIT,
+    filter: ({ args, payload }) => {
+      const tickets = args.tickets as Ticket['id'][]
+      return tickets.includes(payload.id)
+    }
   })
-  EditTicketSubscription(@Root() ticketPayload: Ticket): Ticket {
+  EditTicketSubscription(
+    @Root() ticketPayload: Ticket,
+    @Arg('tickets', () => [ID]) tickets: Ticket['id'][]
+  ): Ticket {
     return ticketPayload
   }
 

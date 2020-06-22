@@ -1,5 +1,5 @@
 #import "@/graphql/fragments/ticketList.graphql"
-mutation EditTicket($id: ID!, $ticket: TicketCreateInput!) {
+mutation EditTicket($id: ID!, $ticket: TicketInput!) {
   ticket: EditTicket(id: $id, ticket: $ticket) {
     id
     ...ticketList

@@ -86,7 +86,9 @@ class TicketService {
     return new Promise((resolve, reject) => {
       Ticket.findOne(ticketId).then(ticket => {
         Object.assign(ticket, ticketBody)
-        resolve(ticket!.save())
+        ticket!.save().then(() => {
+          resolve(this.getOne(ticketId))
+        })
       })
     })
   }
@@ -140,6 +142,7 @@ class TicketService {
       Ticket.findOne(ticketId).then(async ticket => {
         const group = await Group.findOne(groupId)
         ticket!.group = group!
+        ticket!.actualUser = null
         ticket!.save().then(ticket => {
           resolve(ticket)
         })

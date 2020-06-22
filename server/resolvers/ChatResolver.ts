@@ -89,7 +89,10 @@ class ChatResolver {
       return true
     }
   })
-  NewMessage(@Root() messagePayload: Message): Message {
+  NewMessage(
+    @Root() messagePayload: Message,
+    @Arg('to', () => ID) to: Analyst['id']
+  ): Message {
     return messagePayload
   }
 }

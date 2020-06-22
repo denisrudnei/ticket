@@ -4,27 +4,51 @@
 
 <script>
 import CreateGroup from '@/components/ticket/group/create'
+import GetGroup from '@/graphql/query/config/group/getGroup.graphql'
+import EditGroup from '@/graphql/mutation/config/group/editGroup.graphql'
+import ggl from 'graphql-tag'
 export default {
   components: {
     CreateGroup
   },
-  asyncData({ $axios, params }) {
+  asyncData({ app, params }) {
     const id = params.id
-    return $axios.get(`/group/${id}`).then(response => {
-      return {
-        group: response.data
-      }
-    })
+
+    return app.$apollo
+      .query({
+        query: ggl(GetGroup),
+        variables: {
+          id
+        }
+      })
+      .then(response => {
+        return {
+          group: response.data.group
+        }
+      })
   },
   methods: {
     update(group) {
-      this.$axios.put(`/config/group/${group.id}`, group).then(() => {
-        this.$toast.show('Atualizado', {
-          duration: 5000,
-          icon: 'done'
+      this.$apollo
+        .mutate({
+          mutation: ggl(EditGroup),
+
+          variables: {
+            groupId: group.id,
+            group: {
+              name: group.name,
+              description: group.description,
+              analysts: group.analysts.map(analyst => analyst.id)
+            }
+          }
         })
-        this.$router.push('/config/group')
-      })
+        .then(() => {
+          this.$toast.show('Atualizado', {
+            duration: 5000,
+            icon: 'done'
+          })
+          this.$router.push('/config/group')
+        })
     }
   }
 }

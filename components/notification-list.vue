@@ -37,7 +37,7 @@
               >
                 <v-switch
                   :input-value="notification.read.map(r => r.id)"
-                  :value="user.id"
+                  :value="user.id.toString()"
                   :label="$t('read')"
                   @change="readNotification(notification)"
                 />

@@ -25,14 +25,12 @@ class GroupService {
     })
   }
 
-  edit(groupId: Group['id'], groupToEdit: Group): Promise<void> {
+  edit(groupId: Group['id'], groupToEdit: Group): Promise<Group> {
     return new Promise((resolve, reject) => {
       Group.findOne(groupId, { relations: ['analysts'] }).then(group => {
         if (!group) reject(new Error('Group not found'))
-        group!.name = groupToEdit.name
-        group!.analysts = groupToEdit.analysts
-        group!.save()
-        resolve()
+        Object.assign(group, groupToEdit)
+        resolve(group!.save())
       })
     })
   }

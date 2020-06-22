@@ -39,16 +39,16 @@ class PathResolver {
   @Authorized('user')
   async AddPath(
     @Arg('path', () => PathInput) path: Path,
-    @Ctx() { req }: ExpressContext,
+    @Ctx() context: ExpressContext,
     @PubSub() pubSub: PubSubEngine
   ) {
-    const userId = req!.session!.authUser.id
+    const userId = context.req!.session!.authUser.id
     const result = await PathService.create(path, userId)
     await pubSub.publish(PathEnum.NEW_PATH_ADDED, result)
     return result
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Path)
   @Authorized('user')
   RemovePath(
     @Arg('path', () => ID) path: Path['id'],
@@ -57,58 +57,34 @@ class PathResolver {
   ) {
     const result = PathService.remove(userId, path)
     pubSub.publish(PathEnum.PATH_REMOVED, result)
-    return true
+    return result
   }
 
   @Subscription({
     topics: PathEnum.NEW_PATH_ADDED,
-    filter: ({ payload, args }) => {
-      return true
+    filter: async ({ payload, args, context }) => {
+      const { userId } = args
+      const user = await Analyst.findOne(userId, { relations: ['paths'] })
+      return user!.paths.map(path => path.id).includes(user!.id)
     }
   })
-  NewPath(@Root() pathPayload: PathTree): PathTree {
+  NewPath(
+    @Root() pathPayload: PathTree,
+    @Arg('userId', () => ID) userId: Analyst['id']
+  ): PathTree {
     return pathPayload
   }
 
   @Subscription({
     name: 'RemovePath',
-    topics: PathEnum.PATH_REMOVED,
-    filter: ({ payload, args }) => {
-      return true
-    }
+    topics: PathEnum.PATH_REMOVED
   })
-  RemovePathSubscription(@Root() pathPayload: PathTree): PathTree {
+  RemovePathSubscription(
+    @Root() pathPayload: Path,
+    @Arg('userId', () => ID) userId: Analyst['id']
+  ): Path {
     return pathPayload
   }
-
-  // Subscription: {
-  //   NewPath: {
-  //     subscribe: withFilter(
-  //       (_, __, { pubSub }) => {
-  //         return pubSub.asyncIterator(PathEnum.NEW_PATH_ADDED)
-  //       },
-  //       async (payload, { userId }) => {
-  //         const { NewPath } = await payload
-  //         const result = await NewPath
-  //         const user = await Analyst.findOne(userId)
-  //         return user!.paths.includes(result.id.toString())
-  //       }
-  //     )
-  //   },
-  //   RemovePath: {
-  //     subscribe: withFilter(
-  //       (_, __, { pubSub }) => {
-  //         return pubSub.asyncIterator(PathEnum.PATH_REMOVED)
-  //       },
-  //       async (payload, { userId }) => {
-  //         const { RemovePath } = await payload
-  //         const result = await RemovePath
-  //         const user = await Analyst.findOne(userId)
-  //         return user!.id.toString() === result.toString()
-  //       }
-  //     )
-  //   }
-  // }
 }
 
 export default PathResolver

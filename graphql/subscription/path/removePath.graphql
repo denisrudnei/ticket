@@ -1,3 +1,5 @@
 subscription($userId: ID!) {
-  path: RemovePath(userId: $userId)
+  path: RemovePath(userId: $userId) {
+    id
+  }
 }

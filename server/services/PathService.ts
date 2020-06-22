@@ -218,16 +218,17 @@ class PathService {
     })
   }
 
-  remove(userId: Analyst['id'], pathId: Path['id']): Promise<Analyst> {
+  remove(userId: Analyst['id'], pathId: Path['id']): Promise<Path> {
     return new Promise((resolve, reject) => {
       Analyst.findOne(userId, { relations: ['paths'] }).then(analyst => {
         analyst!.paths = analyst!.paths.filter(path => {
           return path.id !== pathId
         })
-        analyst!.save().then(() => {
-          Path.delete(pathId).then(() => {
-            resolve(analyst)
-          })
+        analyst!.save().then(async () => {
+          const path = await Path.findOne(pathId)
+          await Path.delete(pathId)
+
+          resolve(path)
         })
       })
     })

@@ -12,6 +12,8 @@ import {
 import Analyst from '../models/Analyst'
 import Group from '../models/ticket/Group'
 import GroupService from '../services/ticket/GroupService'
+import GroupCreateInput from '../inputs/GroupCreateInput'
+import GroupEditInput from '../inputs/GroupEditInput'
 
 @Resolver(of => Group)
 class GroupResolver {
@@ -25,6 +27,39 @@ class GroupResolver {
   @Authorized('user')
   GetOneGroup(@Arg('id', () => ID) id: Group['id']): Promise<Group> {
     return GroupService.getOne(id)
+  }
+
+  @Mutation(() => Group)
+  @Authorized('user')
+  CreateGroup(@Arg('group', () => GroupCreateInput) group: Group) {
+    return GroupService.create(group)
+  }
+
+  @Mutation(() => Group)
+  EditGroup(
+    @Arg('groupId', () => ID) groupId: Group['id'],
+    @Arg('group', () => GroupEditInput) group: Group
+  ): Promise<Group> {
+    return new Promise((resolve, reject) => {
+      if (!group!.analysts) {
+        resolve(GroupService.edit(groupId, group))
+      } else {
+        const analystsUnknown: unknown = group!.analysts
+        const analysts = analystsUnknown as Analyst['id'][]
+        Promise.all(
+          analysts.map(analyst => {
+            return Analyst.findOne(analyst)
+          })
+        )
+          .then(result => {
+            group!.analysts = result as Analyst[]
+            resolve(GroupService.edit(groupId, group))
+          })
+          .catch(e => {
+            reject(e)
+          })
+      }
+    })
   }
 
   @Mutation(() => Group)

@@ -23,12 +23,14 @@
         placeholder="Nome na listagem"
       />
     </v-col>
-    <v-btn class="primary white--text" :disabled="selected.name === ''" @click="save()">
-      <v-icon left>
-        save
-      </v-icon>
-      {{ $t('save') }}
-    </v-btn>
+    <v-col pa-3>
+      <v-btn class="primary white--text" :disabled="selected.name === ''" @click="save()">
+        <v-icon left>
+          save
+        </v-icon>
+        {{ $t('save') }}
+      </v-btn>
+    </v-col>
   </v-row>
 </template>
 
