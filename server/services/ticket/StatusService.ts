@@ -20,9 +20,7 @@ class StatusService {
   create(status: Status): Promise<Status> {
     return new Promise((resolve, reject) => {
       const newStatus = new Status()
-      newStatus.name = status.name
-      newStatus.slaRun = status.slaRun
-      newStatus.description = status.description
+      Object.assign(newStatus, status)
       newStatus.save().then(() => {
         resolve(newStatus)
       })
@@ -37,14 +35,14 @@ class StatusService {
     })
   }
 
-  edit(statusId: Status['id'], statusToEdit: Status): Promise<void> {
+  edit(statusId: Status['id'], statusToEdit: Status): Promise<Status> {
     return new Promise((resolve, reject) => {
       Status.findOne(statusId).then(status => {
         status!.name = statusToEdit.name
         status!.allowedStatus = statusToEdit.allowedStatus
         status!.slaRun = statusToEdit.slaRun
-        status!.save().then(() => {
-          resolve()
+        status!.save().then(updated => {
+          resolve(updated)
         })
       })
     })

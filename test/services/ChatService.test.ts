@@ -2,6 +2,7 @@ import ChatService from '@/server/services/ChatService'
 import Analyst from '~/server/models/Analyst'
 import Chat from '~/server/models/chat/Chat'
 import Message from '~/server/models/chat/Message'
+import AnalystStatus from '~/server/enums/AnalystStatus'
 
 describe('ChatService', function() {
   it('Should get one chat, if not exists, create a new one', async () => {
@@ -32,7 +33,7 @@ describe('ChatService', function() {
 
   it('Should change status from analyst', async () => {
     const user = await Analyst.findOne()
-    await ChatService.changeStatus(user!.id, 'Online')
+    await ChatService.changeStatus(user!.id, AnalystStatus.ONLINE)
   })
 
   it('Should last time when user is active', async () => {

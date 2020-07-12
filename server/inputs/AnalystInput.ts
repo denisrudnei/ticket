@@ -1,19 +1,16 @@
 import { InputType, Field, ID } from 'type-graphql'
-import Status from '../models/ticket/Status'
 import Analyst from '../models/Analyst'
 import Address from '../models/Address'
 import Sound from '../models/Sound'
+import AnalystStatus from '../enums/AnalystStatus'
 
 @InputType()
 class AnalystInput {
-  @Field(type => ID, { nullable: true })
-  id!: Analyst['id']
-
   @Field({ nullable: true })
   name!: string
 
-  @Field(type => ID, { nullable: true })
-  status!: Status['id']
+  @Field(type => AnalystStatus, { nullable: true })
+  status!: AnalystStatus
 
   @Field({ nullable: true })
   contactEmail!: string

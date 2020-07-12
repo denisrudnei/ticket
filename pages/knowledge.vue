@@ -13,20 +13,26 @@
 
 <script>
 import _ from 'lodash'
+import KnowledgeList from '@/graphql/query/knowledge/list.graphql'
+import ggl from 'graphql-tag'
 export default {
-  asyncData({ $axios }) {
-    return $axios.get('/knowledge/all').then(response => {
-      const g = _(response.data)
-        .groupBy('group.name')
-        .value()
-      return {
-        groups: Object.keys(g).map(obj => ({
-          id: g[obj][0].id,
-          name: obj,
-          length: g[obj].length
-        }))
-      }
-    })
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(KnowledgeList)
+      })
+      .then(response => {
+        const g = _(response.data.knowledge)
+          .groupBy('group.name')
+          .value()
+        return {
+          groups: Object.keys(g).map(obj => ({
+            id: g[obj][0].id,
+            name: obj,
+            length: g[obj].length
+          }))
+        }
+      })
   },
   mounted() {
     if (this.$route.path === '/knowledge' && this.groups.length > 0) {

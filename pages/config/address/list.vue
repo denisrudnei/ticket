@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import addressList from '@/graphql/query/address/list.graphql'
+import ggl from 'graphql-tag'
 export default {
   data() {
     return {
@@ -65,9 +67,13 @@ export default {
     }
   },
   created() {
-    this.$axios.get('/address').then(response => {
-      this.addresses = response.data
-    })
+    this.$apollo
+      .query({
+        query: ggl(addressList)
+      })
+      .then(response => {
+        this.addresses = response.data.Address
+      })
   }
 }
 </script>

@@ -242,6 +242,17 @@ class TicketResolver {
     return removeChildren
   }
 
+  @Mutation(() => Comment)
+  @Authorized('user')
+  CommentOnTicket(
+    @Arg('ticketId', () => ID) ticketId: Ticket['id'],
+    @Arg('content') content: string,
+    @Ctx() context: ExpressContext
+  ) {
+    const userId = context.req.session!.authUser!.id
+    return TicketService.commentOnTicket(ticketId, userId, content)
+  }
+
   @Subscription({
     topics: TicketEnum.TICKET_TRANSFER_TO_GROUP
   })

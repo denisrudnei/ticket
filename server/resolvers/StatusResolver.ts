@@ -6,10 +6,13 @@ import {
   Query,
   Resolver,
   ResolverInterface,
-  Root
+  Root,
+  Mutation
 } from 'type-graphql'
 import Status from '../models/ticket/Status'
 import StatusService from '../services/ticket/StatusService'
+import StatusCreateInput from '../inputs/StatusCreateInput'
+import StatusEditInput from '../inputs/StatusEditInput'
 
 @Resolver(of => Status)
 class StatusResolver implements ResolverInterface<Status> {
@@ -33,6 +36,43 @@ class StatusResolver implements ResolverInterface<Status> {
           resolve(status!.allowedStatus)
         }
       )
+    })
+  }
+
+  @Authorized('admin')
+  @Mutation(() => Status)
+  CreateStatus(
+    @Arg('status', () => StatusCreateInput) status: StatusCreateInput
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      const statusToSave = new Status()
+      Object.assign(statusToSave, status)
+
+      Status.findByIds(status.allowedStatus).then(allowedStatus => {
+        statusToSave.allowedStatus = allowedStatus
+        StatusService.create(statusToSave).then(newStatus => {
+          resolve(newStatus)
+        })
+      })
+    })
+  }
+
+  @Authorized('admin')
+  @Mutation(() => Status)
+  UpdateStatus(
+    @Arg('id', () => ID) id: Status['id'],
+    @Arg('status', () => StatusEditInput) status: StatusEditInput
+  ): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      const statusToEdit = new Status()
+      Object.assign(statusToEdit, status)
+      Status.findByIds(status.allowedStatus).then(allowedStatus => {
+        statusToEdit.allowedStatus = allowedStatus
+        StatusService.edit(id, statusToEdit).then(newStatus => {
+          resolve(newStatus)
+        })
+        return StatusService.edit(id, statusToEdit)
+      })
     })
   }
 }

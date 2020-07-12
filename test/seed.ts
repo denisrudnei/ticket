@@ -10,6 +10,7 @@ import PathSeed from './seeds/PathSeed'
 import SlaSeed from './seeds/SlaSeed'
 import PrioritySeed from './seeds/PrioritySeed'
 import Seed from './seeds/Seed'
+import RoleSeed from './seeds/RoleSeed'
 
 class SeedExecutor {
   public data: Seed<any>[]
@@ -17,6 +18,7 @@ class SeedExecutor {
   constructor() {
     consola.info('Seed executor created')
     this.data = [
+      new RoleSeed(),
       new AnalystSeed(),
       new CategorySeed(),
       new StatusSeed(),

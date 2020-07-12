@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import resetPassword from '@/graphql/mutation/profile/resetPassword.graphql'
+import ggl from 'graphql-tag'
 export default {
   data() {
     return {
@@ -69,23 +71,26 @@ export default {
   methods: {
     resetPassword() {
       if (this.$refs.form.validate()) {
-        this.$axios.post('/auth/password/reset', this.user).then(
-          () => {
+        this.$apollo
+          .mutate({
+            mutation: ggl(resetPassword),
+            variables: {
+              oldPassword: this.user.oldPassword,
+              newPassword: this.user.newPassword
+            }
+          })
+          .then(() => {
             this.$toast.show('Resetado', {
               duration: 1000,
               icon: 'lock_open'
             })
-          },
-          error => {
-            this.$toast.error(
-              `Falha ao resetar: ${error.response.data.message}`,
-              {
-                duration: 5000,
-                icon: 'error'
-              }
-            )
-          }
-        )
+          })
+          .catch(() => {
+            this.$toast.error('Falha ao resetar', {
+              duration: 5000,
+              icon: 'error'
+            })
+          })
       }
     }
   }

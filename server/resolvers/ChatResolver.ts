@@ -19,6 +19,8 @@ import Analyst from '../models/Analyst'
 import Chat from '../models/chat/Chat'
 import Message from '../models/chat/Message'
 import ChatService from '../services/ChatService'
+import AnalystStatus from '../enums/AnalystStatus'
+import StatusColor from '../enums/StatusColor'
 
 @Resolver(of => Chat)
 class ChatResolver {
@@ -39,6 +41,16 @@ class ChatResolver {
     return ChatService.getOne(from, to)
   }
 
+  @Mutation(() => Analyst)
+  @Authorized('user')
+  ChangeChatStatus(
+    @Arg('status') status: AnalystStatus,
+    @Ctx() context: ExpressContext
+  ) {
+    const userId = context.req.session!.authUser!.id
+    return ChatService.changeStatus(userId, status)
+  }
+
   @Query(() => [Message])
   @Authorized('user')
   GetUnReadMessagesFromChat(
@@ -47,6 +59,16 @@ class ChatResolver {
   ) {
     const fromId = req!.session!.authUser.id
     return ChatService.getUnReadMessagesFromChat(chatId, fromId)
+  }
+
+  @Query(() => [[String]])
+  AnalystStatus() {
+    return Object.entries(AnalystStatus)
+  }
+
+  @Query(() => [[String]])
+  StatusColor() {
+    return Object.entries(StatusColor)
   }
 
   @Mutation(() => Message)

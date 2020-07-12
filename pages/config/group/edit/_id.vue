@@ -43,7 +43,7 @@ export default {
           }
         })
         .then(() => {
-          this.$toast.show('Atualizado', {
+          this.$toast.show(this.$t('updated'), {
             duration: 5000,
             icon: 'done'
           })

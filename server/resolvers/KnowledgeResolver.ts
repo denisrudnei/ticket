@@ -5,13 +5,15 @@ import {
   ID,
   Query,
   Resolver,
-  Root
+  Root,
+  Mutation
 } from 'type-graphql'
 
 import Knowledge from '../models/knowledge/Knowledge'
 import Category from '../models/ticket/Category'
 import Group from '../models/ticket/Group'
 import KnowledgeService from '../services/knowledge/KnowledgeService'
+import KnowledgeInput from '../inputs/KnowledgeInput'
 
 @Resolver(of => Knowledge)
 class KnowledgeResolver {
@@ -31,6 +33,20 @@ class KnowledgeResolver {
   @Authorized('user')
   KnowledgeById(@Arg('id', () => ID) id: Knowledge['id']) {
     return KnowledgeService.getOne(id)
+  }
+
+  @Mutation(() => Knowledge)
+  @Authorized('user')
+  CreateKnowledge(
+    @Arg('knowledge', () => KnowledgeInput) knowledge: Knowledge
+  ) {
+    return KnowledgeService.create(knowledge)
+  }
+
+  @Mutation(() => Boolean)
+  @Authorized('user')
+  RemoveKnowledge(@Arg('id', () => ID) id: Knowledge['id']) {
+    return KnowledgeService.remove(id)
   }
 
   @FieldResolver()

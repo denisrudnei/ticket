@@ -4,6 +4,9 @@
 
 <script>
 import create from '@/components/knowledge/create'
+import CreateKnowledge from '@/graphql/mutation/config/knowledge/create.graphql'
+import KnowledgeList from '@/graphql/query/config/knowledge/list.graphql'
+import ggl from 'graphql-tag'
 export default {
   components: {
     create
@@ -13,22 +16,33 @@ export default {
       knowledge: null
     }
   },
-  asyncData({ $axios, params }) {
-    return $axios.get(`/knowledge/view/${params.id}`).then(response => {
-      return {
-        knowledge: response.data
-      }
-    })
+  asyncData({ app, params }) {
+    return app.$apollo
+      .query({
+        query: ggl(KnowledgeList)
+      })
+      .then(response => {
+        return {
+          knowledge: response.data.knowledge
+        }
+      })
   },
   methods: {
     update(knowledge) {
-      this.$axios.put(`/knowledge/${this.knowledge.id}`, knowledge).then(() => {
-        this.$toast.show('Atualizado', {
-          duration: 5000,
-          icon: 'done'
+      this.$apollo
+        .mutate({
+          mutation: ggl(CreateKnowledge),
+          variables: {
+            knowledge
+          }
         })
-        this.$router.push('/config/knowledge/list')
-      })
+        .then(() => {
+          this.$toast.show(this.$t('updated'), {
+            duration: 5000,
+            icon: 'done'
+          })
+          this.$router.push('/config/knowledge/list')
+        })
     }
   }
 }

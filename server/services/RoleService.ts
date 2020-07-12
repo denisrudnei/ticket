@@ -3,6 +3,14 @@ import CheckACL from '~/server/models/CheckACL'
 import Role from '~/server/models/Role'
 
 class RoleService {
+  getOne(id: Role['id']): Promise<Role> {
+    return new Promise((resolve, reject) => {
+      Role.findOne(id).then(role => {
+        resolve(role)
+      })
+    })
+  }
+
   getRoles(): Promise<Role[]> {
     return new Promise((resolve, reject) => {
       CheckACL.checkDb((err: Error) => {
@@ -14,23 +22,27 @@ class RoleService {
     })
   }
 
-  updateRole(roleId: Role['id'], roleToEdit: Role): Promise<void> {
+  updateRole(roleId: Role['id'], roleToEdit: Role): Promise<Role> {
     return new Promise((resolve, reject) => {
       Role.findOne(roleId).then(role => {
         role!.description = roleToEdit.description
-        role!.save().then(() => {
-          resolve()
+        role!.save().then(role => {
+          resolve(role)
         })
       })
     })
   }
 
-  setAnalystRole(analystId: Analyst['id'], roleName: string): Promise<void> {
+  setAnalystRole(
+    analystId: Analyst['id'],
+    roleId: Role['id']
+  ): Promise<Boolean> {
     return new Promise((resolve, reject) => {
-      Analyst.findOne(analystId).then(analyst => {
-        analyst!.role = roleName
+      Analyst.findOne(analystId).then(async analyst => {
+        const role = await Role.findOne(roleId)
+        analyst!.role = role!
         analyst!.save().then(() => {
-          resolve()
+          resolve(true)
         })
       })
     })

@@ -49,6 +49,9 @@
 <script>
 import compareObjectsWithId from '@/mixins/compareObjectsWithId'
 import ImageUploadAdapter from '@/plugins/image-upload-adapter'
+import ListCategory from '@/graphql/query/config/category/categoryList.graphql'
+import ListGroup from '@/graphql/query/config/group/list.graphql'
+import ggl from 'graphql-tag'
 export default {
   mixins: [compareObjectsWithId],
   props: {
@@ -93,11 +96,15 @@ export default {
     this.editor = require('@ckeditor/ckeditor5-build-classic')
   },
   async created() {
-    const category = await this.$axios.get('/category/')
-    const group = await this.$axios.get('/group/')
+    const category = await this.$apollo.query({
+      query: ggl(ListCategory)
+    })
+    const group = await this.$apollo.query({
+      query: ggl(ListGroup)
+    })
 
-    this.category = category.data
-    this.group = group.data
+    this.category = category.Group
+    this.group = group.category
   },
   methods: {
     save() {

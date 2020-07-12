@@ -1,0 +1,15 @@
+mutation CreateKnowledge($knowledge: KnowledgeAttribute!) {
+  CreateKnowledge(knowledge: $knowledge) {
+    id
+    name
+    description
+    category {
+      id
+      name
+    }
+    group {
+      id
+      name
+    }
+  }
+}

@@ -1,0 +1,6 @@
+mutation SetSoundConfig($config: [SoundInput!]!) {
+  SetSoundConfig(config: $config) {
+    id
+    name
+  }
+}

@@ -1,0 +1,10 @@
+query {
+  Address {
+    id
+    name
+    street
+    city
+    state
+    country
+  }
+}

@@ -6,9 +6,12 @@
     >
       <v-text-field
         v-model="actual.name"
-        placeholder="Nome"
+        :placeholder="$t('name')"
         filled
       />
+    </v-col>
+    <v-col cols="12">
+      <v-textarea v-model="actual.description" filled :placeholder="$t('description')" />
     </v-col>
     <v-col cols="12">
       <v-switch v-model="actual.slaRun" :label="$t('sla_able_to_run')" />
@@ -61,6 +64,8 @@
 
 <script>
 import draggable from 'vuedraggable'
+import statusList from '@/graphql/query/status/list.graphql'
+import ggl from 'graphql-tag'
 export default {
   components: {
     draggable
@@ -81,6 +86,7 @@ export default {
       status: [],
       actualData: {
         name: '',
+        description: '',
         allowedStatus: [],
         slaRun: false
       }
@@ -92,9 +98,13 @@ export default {
     }
   },
   created() {
-    this.$axios.get('/status').then(response => {
-      this.status = response.data
-    })
+    this.$apollo
+      .query({
+        query: ggl(statusList)
+      })
+      .then(response => {
+        this.status = response.data.Status
+      })
   },
   methods: {
     select() {},

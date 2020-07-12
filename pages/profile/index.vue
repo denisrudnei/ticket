@@ -137,6 +137,11 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import compareObjectsWithId from '@/mixins/compareObjectsWithId'
+import ggl from 'graphql-tag'
+import AddressList from '@/graphql/query/address/list.graphql'
+import profileInfo from '@/graphql/query/profile/list.graphql'
+import update from '@/graphql/mutation/profile/analyst/update.graphql'
+import removeImage from '@/graphql/mutation/profile/analyst/removeImage.graphql'
 export default {
   mixins: [compareObjectsWithId],
   data() {
@@ -154,17 +159,25 @@ export default {
       this.updatePrimary()
     }
   },
-  asyncData({ $axios }) {
-    return $axios.get('/address').then(response => {
-      return {
-        addresses: response.data
-      }
-    })
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(AddressList)
+      })
+      .then(response => {
+        return {
+          addresses: response.data.Address
+        }
+      })
   },
   created() {
-    this.$axios.get('/profile').then(response => {
-      this.info = response.data
-    })
+    this.$apollo
+      .query({
+        query: ggl(profileInfo)
+      })
+      .then(response => {
+        this.info = response.data.ProfileInfo
+      })
   },
   methods: {
     ...mapMutations({
@@ -180,29 +193,48 @@ export default {
       this.$store.commit('auth/updateMergePictureWithExternalAccount', value)
     },
     save() {
-      this.$axios.put('/analyst', this.user).then(() => {
-        this.$toast.show('Salvo com êxito', {
-          duration: 1000,
-          icon: 'update'
+      const { name, contactEmail, color, description } = this.user
+      const analyst = {
+        name,
+        contactEmail,
+        color,
+        description,
+        address: this.user.address ? this.user.address.id : null
+      }
+      this.$apollo
+        .mutate({
+          mutation: ggl(update),
+          variables: {
+            analyst
+          }
         })
-      })
+        .then(() => {
+          this.$toast.show('Salvo com êxito', {
+            duration: 1000,
+            icon: 'update'
+          })
+        })
     },
     openImageSelection() {
       this.$refs.profileImage.click()
     },
     removeImage() {
-      this.$axios.delete('/analyst/image').then(
-        () => {
-          this.$store.commit('auth/removeImage')
-          this.$toast.show('Imagem removida com sucesso', {
-            duration: 5000,
-            icon: 'done'
-          })
-        },
-        () => {
-          this.$toast.error('Falha ao realizar a remoção da imagem de perfil')
-        }
-      )
+      this.$apollo
+        .mutate({
+          mutation: ggl(removeImage)
+        })
+        .then(
+          () => {
+            this.$store.commit('auth/removeImage')
+            this.$toast.show('Imagem removida com sucesso', {
+              duration: 5000,
+              icon: 'done'
+            })
+          },
+          () => {
+            this.$toast.error('Falha ao realizar a remoção da imagem de perfil')
+          }
+        )
     },
     updateImage() {
       if (!this.$refs.profileImage.files[0]) return

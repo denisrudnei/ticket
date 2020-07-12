@@ -192,7 +192,7 @@ class KnowledgeService {
     })
   }
 
-  remove(id: Knowledge['id']): Promise<void> {
+  remove(id: Knowledge['id']): Promise<boolean> {
     return new Promise((resolve, reject) => {
       Knowledge.findOne(id, { relations: ['files'] }).then(knowledge => {
         const deleteFilesFromKnowledge = knowledge!.files.map(file => {
@@ -217,7 +217,7 @@ class KnowledgeService {
               },
               (err: Error) => {
                 if (err) reject(err)
-                return resolve()
+                return resolve(true)
               }
             )
           })

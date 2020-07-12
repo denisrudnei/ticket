@@ -13,6 +13,7 @@ import {
   AfterLoad
 } from 'typeorm'
 
+import AnalystStatus from '../enums/AnalystStatus'
 import Address from './Address'
 import Chat from './chat/Chat'
 import Notification from './Notification'
@@ -20,6 +21,7 @@ import Path from './Path'
 import Sound from './Sound'
 import Group from './ticket/Group'
 import Ticket from './ticket/Ticket'
+import Role from './Role'
 
 @Entity()
 @ObjectType()
@@ -33,8 +35,8 @@ class Analyst extends BaseEntity {
   public email!: string
 
   @Column()
-  @Field()
-  public status: string = 'offline'
+  @Field(() => AnalystStatus)
+  public status: AnalystStatus = AnalystStatus.OFFLINE
 
   @Column()
   @Field()
@@ -48,9 +50,9 @@ class Analyst extends BaseEntity {
   @Field()
   public name!: string
 
-  @Column()
-  @Field()
-  public role: string = 'user'
+  @ManyToOne(() => Role, { nullable: false })
+  @Field(() => Role)
+  public role!: Role
 
   @Column()
   public password!: string

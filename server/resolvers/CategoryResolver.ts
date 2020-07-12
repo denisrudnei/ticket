@@ -8,7 +8,6 @@ import {
   Resolver,
   Root
 } from 'type-graphql'
-import { ManagedUpload } from 'aws-sdk/clients/s3'
 import { GraphQLUpload } from 'graphql-upload'
 import { UploadedFile } from 'express-fileupload'
 import CategoryInput from '../inputs/CategoryInput'
@@ -45,7 +44,6 @@ class CategoryResolver {
     return CategoryService.setImage(id, file)
   }
 
-  @Mutation(() => String)
   @Query(() => [Category])
   @Authorized('user')
   GetSubs(@Arg('categoryId', () => ID) categoryId: Category['id']) {

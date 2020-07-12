@@ -19,6 +19,8 @@ import Sound from '../models/Sound'
 import Group from '../models/ticket/Group'
 import AnalystService from '../services/AnalystService'
 import AnalystInput from '../inputs/AnalystInput'
+import { Role } from '../models/Role'
+import SoundInput from '../inputs/SoundInput'
 
 @Resolver(of => Analyst)
 class AnalystResolver {
@@ -28,19 +30,28 @@ class AnalystResolver {
     return AnalystService.getAnalysts()
   }
 
-  @Mutation(() => Analyst)
+  @Query(() => Analyst)
   @Authorized('user')
-  UpdateAnalyst(
-    @Arg('analyst', () => AnalystInput) analyst: Analyst,
-    @Ctx() context: ExpressContext
-  ): Promise<Analyst> {
-    const id = context.req!.session!.authUser.id
-    return AnalystService.updateAnalyst(id, analyst)
+  AnalystById(@Arg('id', () => ID) id: Analyst['id']) {
+    return AnalystService.getOne(id)
   }
 
   @Mutation(() => Analyst)
   @Authorized('user')
-  RemoveImage(@Arg('id', () => ID) id: Analyst['id']): Promise<Analyst> {
+  UpdateAnalyst(
+    @Arg('analyst', () => AnalystInput) analyst: AnalystInput,
+    @Ctx() context: ExpressContext
+  ): Promise<Analyst> {
+    const id = context.req!.session!.authUser.id
+    const analystToEdit = new Analyst()
+    Object.assign(analystToEdit, analyst)
+    return AnalystService.updateAnalyst(id, analystToEdit)
+  }
+
+  @Mutation(() => Analyst)
+  @Authorized('user')
+  RemoveImage(@Ctx() context: ExpressContext): Promise<Analyst> {
+    const id = context.req!.session!.authUser.id
     return AnalystService.removeImage(id)
   }
 
@@ -52,6 +63,23 @@ class AnalystResolver {
   ): Promise<Analyst> {
     const id = context!.req!.session!.authUser.id
     return AnalystService.updateImage(id, file)
+  }
+
+  @Mutation(() => Analyst)
+  @Authorized('user')
+  SetSoundConfig(
+    @Arg('config', () => [SoundInput]) config: SoundInput[],
+    @Ctx() context: ExpressContext
+  ) {
+    const userId = context.req!.session!.authUser.id
+    const newConfig = config.map(sound => {
+      const toReturn = new Sound(sound.type, userId)
+      toReturn.muted = sound.muted
+      toReturn.volume = sound.volume
+      toReturn.type = sound.type
+      return toReturn
+    })
+    return AnalystService.setSoundConfig(userId, newConfig)
   }
 
   @FieldResolver()
@@ -68,6 +96,15 @@ class AnalystResolver {
     return new Promise((resolve, reject) => {
       Analyst.findOne(root.id, { relations: ['groups'] }).then(analyst => {
         resolve(analyst!.groups)
+      })
+    })
+  }
+
+  @FieldResolver()
+  role(@Root() root: Analyst): Promise<Role> {
+    return new Promise((resolve, reject) => {
+      Analyst.findOne(root.id, { relations: ['role'] }).then(analyst => {
+        resolve(analyst!.role)
       })
     })
   }

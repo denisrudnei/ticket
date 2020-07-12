@@ -5,43 +5,47 @@
       <AddByType :chart-types="chartTypes" :content-type="contentType" @add="add" />
     </v-col>
     <client-only>
-      <v-col
-        v-for="chart in charts"
-        :key="chart.id"
-        cols="12"
-        :md="chart.ln || 4"
-        class="ma-2"
-      >
-        <v-card>
-          <!-- TODO -->
-          <v-select
-            disabled
-            :value="chart.ln"
-            :items="Array.from({length:12}, (x, i) => i + 1)"
-          />
-          <v-card-title>
-            <h5>{{ chart.id }}</h5>
-          </v-card-title>
-          <v-card-text>
-            <apexchart
-              width="100%"
-              :options="chart.options"
-              :type="chart.type"
-              :series="chart.series"
-            />
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              icon
-              class="red white--text"
-              @click="removeChart(chart)"
-            >
-              <v-icon>
-                delete
-              </v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+      <v-col class="ma-3">
+        <v-row>
+          <v-col
+            v-for="chart in charts"
+            :key="chart.id"
+            cols="12"
+            :md="chart.ln || 4"
+            class="pa-2"
+          >
+            <v-card>
+              <!-- TODO -->
+              <v-select
+                disabled
+                :value="chart.ln"
+                :items="Array.from({length:12}, (x, i) => i + 1)"
+              />
+              <v-card-title>
+                <h5>{{ chart.id }}</h5>
+              </v-card-title>
+              <v-card-text>
+                <apexchart
+                  width="100%"
+                  :options="chart.options"
+                  :type="chart.type"
+                  :series="chart.series"
+                />
+              </v-card-text>
+              <v-card-actions>
+                <v-btn
+                  icon
+                  class="red white--text"
+                  @click="removeChart(chart)"
+                >
+                  <v-icon>
+                    delete
+                  </v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-col>
     </client-only>
   </v-row>

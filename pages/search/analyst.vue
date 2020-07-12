@@ -15,6 +15,8 @@
 
 <script>
 import AnalystList from '@/components/analyst/list'
+import AddressList from '@/graphql/query/address/list.graphql'
+import ggl from 'graphql-tag'
 export default {
   components: {
     AnalystList
@@ -43,9 +45,13 @@ export default {
     }
   },
   created() {
-    this.$axios.get('/address').then(response => {
-      this.addresses = response.data
-    })
+    this.$apollo
+      .query({
+        query: ggl(AddressList)
+      })
+      .then(response => {
+        this.addresses = response.data.Address
+      })
   },
   methods: {
     reset() {

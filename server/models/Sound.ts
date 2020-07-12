@@ -1,28 +1,23 @@
 import { Field, Float, ID, ObjectType } from 'type-graphql'
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn
-} from 'typeorm'
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm'
 
-import { SoundType } from '../enums/SoundTypeEnum'
+import SoundType from '../enums/SoundTypeEnum'
 import Analyst from './Analyst'
 
 @Entity()
 @ObjectType()
 class Sound extends BaseEntity {
-  constructor(soundType: SoundType) {
+  constructor(soundType: SoundType, analystId: Analyst['id']) {
     super()
     this.type = soundType
+    this.id = `${soundType}-${analystId}`
   }
 
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   @Field(type => ID)
-  public id!: number
+  public id!: string
 
-  @Field()
+  @Field(() => SoundType)
   @Column()
   public type!: SoundType
 

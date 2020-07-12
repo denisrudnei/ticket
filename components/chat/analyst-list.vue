@@ -120,34 +120,20 @@ export default {
       .then(response => {
         this.$store.commit('analyst/setAnalysts', response.data.analyst)
         this.$store.commit('chat/setChats', response.data.chat)
+        this.colors = response.data.colors.map(color => {
+          return {
+            status: color[0],
+            color: color[1]
+          }
+        })
       })
-    // this.$socket.on('chat/status/update', newInfo => {
-    //   this.$store.commit('analyst/updateStatus', newInfo)
-    // })
   },
   methods: {
     openChat(analyst) {
       this.$store.dispatch('chat/getOneChat', analyst.id)
     },
     getStatus(status) {
-      const colors = [
-        {
-          status: 'offline',
-          color: 'black'
-        },
-        {
-          status: 'busy',
-          color: 'red'
-        },
-        {
-          status: 'away',
-          color: 'yellow'
-        },
-        {
-          status: 'online',
-          color: 'green'
-        }
-      ]
+      const colors = []
       const result = colors.find(s => {
         return s.status === status
       })

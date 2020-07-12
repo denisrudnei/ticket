@@ -7,6 +7,6 @@ export const customAuthChecker: AuthChecker<ExpressContext> = (
 ) => {
   const { req } = context
   if (!req!.session!.authUser) return false
-  if (req!.session!.authUser.role === 'admin') return true
-  return roles.includes(req!.session!.authUser.role)
+  if (req!.session!.authUser.role.name === 'admin') return true
+  return roles.includes(req!.session!.authUser.role.name)
 }

@@ -92,7 +92,7 @@ export default {
           refetchQueries: [{ query: ggl(listPriority) }]
         })
         .then(() => {
-          this.$toast.show('Atualizado', {
+          this.$toast.show(this.$t('updated'), {
             duration: 1000,
             icon: 'done'
           })

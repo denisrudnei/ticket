@@ -6,40 +6,43 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import ChangeStatus from '@/graphql/mutation/chat/changeStatus.graphql'
+import status from '@/graphql/query/chat/status.graphql'
+import ggl from 'graphql-tag'
 export default {
   data() {
     return {
-      status: [
-        {
-          value: 'online',
-          text: 'Disponível'
-        },
-        {
-          value: 'busy',
-          text: 'Ocupado'
-        },
-        {
-          value: 'away',
-          text: 'Ausente'
-        },
-        {
-          value: 'offline',
-          text: 'Desconectado'
-        }
-      ]
+      status: []
     }
   },
   computed: mapGetters({
     user: 'auth/getUser'
   }),
+  created() {
+    this.$apollo
+      .query({
+        query: ggl(status)
+      })
+      .then(response => {
+        this.status = response.data.AnalystStatus.map(status => {
+          return {
+            value: status[1],
+            text: this.$t(status[0])
+          }
+        })
+      })
+  },
   methods: {
     changeStatus(status) {
-      this.$axios
-        .put('/chat/status', {
-          status: status
+      this.$apollo
+        .mutate({
+          mutation: ggl(ChangeStatus),
+          variables: {
+            status
+          }
         })
         .then(() => {
-          this.$toast.show('Atualizado', {
+          this.$toast.show(this.$t('updated'), {
             duration: 1000,
             icon: 'done'
           })

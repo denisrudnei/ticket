@@ -1,45 +1,23 @@
 <template>
   <v-row>
-    <v-col cols="12" md="6" pa-3>
+    <v-col v-for="sound in sounds" :key="sound.id" cols="12" md="6" pa-3>
       <v-subheader>
-        Som de notificação do chat
+        <!-- Som de notificação do chat -->
+        {{ sound.type }}
       </v-subheader>
       <v-slider
-        v-model="soundChat.volume"
+        v-model="sound.volume"
         thumb-label
         min="0"
         max="100"
         :step="1"
         append-icon="volume_up"
         prepend-icon="volume_down"
+        @input="changeVolume(sound.type, sound.volume)"
       />
       <v-col cols="12" pa-3>
-        <v-checkbox v-model="soundChat.muted" :label="$t('mute')" />
-        <v-btn class="primary white--text" @click="playChat()">
-          {{ $t('test') }}
-          <v-icon>
-            play_arrow
-          </v-icon>
-        </v-btn>
-      </v-col>
-    </v-col>
-    
-    <v-col cols="12" md="6" pa-3>
-      <v-subheader>
-        Som de notificação geral
-      </v-subheader>
-      <v-slider
-        v-model="soundNotification.volume"
-        thumb-label
-        min="0"
-        max="100"
-        :step="1"
-        append-icon="volume_up"
-        prepend-icon="volume_down"
-      />
-      <v-col cols="12" pa-3>
-        <v-checkbox v-model="soundNotification.muted" :label="$t('mute')" />
-        <v-btn class="primary white--text" @click="playNotification()">
+        <v-checkbox v-model="sound.muted" :label="$t('mute')" />
+        <v-btn class="primary white--text" @click="play(sound.type)">
           {{ $t('test') }}
           <v-icon>
             play_arrow
@@ -59,60 +37,71 @@
 </template>
 
 <script>
+import sound from '@/graphql/mutation/profile/sound.graphql'
+import list from '@/graphql/query/profile/sound.graphql'
+import ggl from 'graphql-tag'
 export default {
   data() {
     return {
-      audioChat: { volume: 0 },
-      audioNotification: { volume: 0 },
-      soundChat: {
-        type: 'chat',
-        muted: true,
-        volume: 0
-      },
-      soundNotification: {
-        type: 'notitifcation',
-        muted: false,
-        volume: 0
+      types: [],
+      audio: {
+        CHAT: { volume: 0 },
+        NOTIFICATION: { volume: 0 }
       }
     }
   },
-
-  watch: {
-    'soundChat.volume': function(value) {
-      this.audioChat.volume = value / 100
-      this.$store.commit('sound/setChatVolume', value / 100)
-    },
-    'soundNotification.volume': function(value) {
-      this.audioNotification.volume = value / 100
-      this.$store.commit('sound/setNotificationVolume', value / 100)
-    }
-  },
-  asyncData({ $axios }) {
-    return $axios.post('/auth/user').then(response => {
-      return {
-        sound: response.data.user.sounds
-      }
-    })
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(list)
+      })
+      .then(response => {
+        return {
+          sounds: response.data.GetSounds,
+          types: response.data.soundTypes
+        }
+      })
   },
   mounted() {
-    this.audioChat = new Audio('/sounds/open-ended.ogg')
-    this.audioNotification = new Audio('/sounds/open-ended.ogg')
+    this.sounds = this.types.map(type => {
+      const exist = this.sounds.find(sound => {
+        return sound.type === type[0]
+      })
+      if (exist) return exist
+      return {
+        type: type[0],
+        volume: 0,
+        muted: false
+      }
+    })
+    this.audio.CHAT = new Audio('/sounds/open-ended.ogg')
+    this.audio.NOTIFICATION = new Audio('/sounds/open-ended.ogg')
   },
   methods: {
-    playChat() {
-      this.audioChat.play()
+    changeVolume(type, value) {
+      this.audio[type].volume = value / 100
+      this.$store.commit('sound/setChatVolume', value / 100)
     },
-    playNotification() {
-      this.audioNotification.play()
+    play(type) {
+      this.audio[type].play()
     },
     save() {
-      this.$axios
-        .put('/analyst/sound', {
-          chat: this.audioChat,
-          notification: this.audioNotification
+      this.$apollo
+        .mutate({
+          mutation: ggl(sound),
+          variables: {
+            config: this.sounds.map(value => {
+              const { volume, muted, type } = value
+              return {
+                volume,
+                muted,
+                type
+              }
+            })
+          }
         })
         .then(() => {
-          this.$toast.show('Atualizado', {
+          this.$toast.show(this.$t('updated'), {
             duration: 1000,
             icon: 'done'
           })

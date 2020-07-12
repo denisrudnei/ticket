@@ -2,6 +2,7 @@ import { In } from 'typeorm'
 import Message from '../models/chat/Message'
 import Analyst from '../models/Analyst'
 import Chat from '../models/chat/Chat'
+import AnalystStatus from '../enums/AnalystStatus'
 
 class ChatService {
   getChats(fromId: Analyst['id']): Promise<Chat[]> {
@@ -123,7 +124,7 @@ class ChatService {
     })
   }
 
-  changeStatus(userId: Analyst['id'], status: string): Promise<Analyst> {
+  changeStatus(userId: Analyst['id'], status: AnalystStatus): Promise<Analyst> {
     return new Promise((resolve, reject) => {
       Analyst.findOne(userId).then(analyst => {
         analyst!.status = status

@@ -1,0 +1,18 @@
+query {
+  ProfileInfo {
+    opened
+    total
+    categories {
+      name
+      total
+    }
+    status {
+      name
+      total
+    }
+    inName {
+      name
+      total
+    }
+  }
+}

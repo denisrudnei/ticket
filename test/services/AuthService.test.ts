@@ -2,6 +2,7 @@ import faker from 'faker'
 import express from 'express'
 import AuthService from '../../server/services/AuthService'
 import Analyst from '../../server/models/Analyst'
+import Role from '~/server/models/Role'
 const password = 'password'
 const email = 'testUser'
 
@@ -32,6 +33,7 @@ describe('Auth', function() {
     const newUser = new Analyst()
     newUser.name = 'testLogin'
     newUser.email = faker.internet.email()
+    newUser.role = (await Role.findOne()) as Role
     newUser.password = password
     await newUser.save()
     await AuthService.login(email, password)

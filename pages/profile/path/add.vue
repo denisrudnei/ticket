@@ -51,7 +51,7 @@ export default {
       }
     }
   },
-  asyncData({ app, $axios }) {
+  asyncData({ app }) {
     return app.$apollo
       .query({
         query: ggl(ref)

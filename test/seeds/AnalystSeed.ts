@@ -3,19 +3,24 @@ import { DeleteResult } from 'typeorm'
 import Analyst from '../../server/models/Analyst'
 import Generate from './Generate'
 import Seed from './Seed'
+import RoleSeed from './RoleSeed'
 
 class AnalystSeed implements Seed<Analyst> {
   init(): Promise<Analyst> {
-    const analyst = new Analyst()
-    analyst.email = faker.internet.email()
-    analyst.name = faker.name.firstName()
-    analyst.role = 'user'
-    analyst.color = '#fff'
-    analyst.password = faker.internet.password()
-    analyst.address = null
-    analyst.active = true
+    return new Promise((resolve, reject) => {
+      new RoleSeed().init().then(role => {
+        const analyst = new Analyst()
+        analyst.email = faker.internet.email()
+        analyst.name = faker.name.firstName()
+        analyst.role = role
+        analyst.color = '#fff'
+        analyst.password = faker.internet.password()
+        analyst.address = null
+        analyst.active = true
 
-    return analyst.save()
+        resolve(analyst.save())
+      })
+    })
   }
 
   generateMany(number: number): Promise<Analyst[]> {

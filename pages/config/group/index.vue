@@ -136,9 +136,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import ggl from 'graphql-tag'
 import list from '@/graphql/query/config/group/list.graphql'
+import insertAnalyst from '@/graphql/mutation/config/group/insertAnalyst.graphql'
+import removeAnalyst from '@/graphql/mutation/config/group/removeAnalyst.graphql'
 export default {
   data() {
     return {
@@ -165,11 +166,7 @@ export default {
           value: 'edit'
         }
       ]
-    },
-    ...mapGetters({
-      groups: 'group/getGroups',
-      analysts: 'analyst/getAnalysts'
-    })
+    }
   },
   asyncData({ app, store }) {
     return app.$apollo
@@ -185,9 +182,15 @@ export default {
   },
   methods: {
     addToGroup(group, analyst) {
-      this.$axios
-        .post(`/config/group/analyst/${group.id}`, this.currentAnalyst)
-        .then(response => {
+      this.$apollo
+        .mutate({
+          mutation: ggl(insertAnalyst),
+          variables: {
+            groupId: group.id,
+            analystId: analyst.id
+          }
+        })
+        .then(() => {
           this.updateGroups()
           this.$toast.show('Adicionado', {
             duration: 1000
@@ -195,9 +198,15 @@ export default {
         })
     },
     removeFromGroup(group, analyst) {
-      this.$axios
-        .delete(`/config/group/analyst/${group.id}/${analyst.id}`)
-        .then(response => {
+      this.$apollo
+        .mutate({
+          mutation: ggl(removeAnalyst),
+          variables: {
+            groupId: group.id,
+            analystId: analyst.id
+          }
+        })
+        .then(() => {
           this.updateGroups()
           this.$toast.show('Removido do grupo', {
             duration: 1000
@@ -205,9 +214,13 @@ export default {
         })
     },
     updateGroups() {
-      this.$axios.get('/group').then(response => {
-        this.$store.commit('group/setGroups', response.data)
-      })
+      this.$apollo
+        .query({
+          query: ggl(list)
+        })
+        .then(response => {
+          this.$store.commit('group/setGroups', response.data.Group)
+        })
     },
     analystsToAdd(group) {
       return this.analysts.filter(a => {

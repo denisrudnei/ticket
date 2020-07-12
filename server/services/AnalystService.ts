@@ -3,6 +3,8 @@ import AWS from 'aws-sdk'
 import Analyst from '../../server/models/Analyst'
 import Group from '../models/ticket/Group'
 import Sound from '../models/Sound'
+import Role from '../models/Role'
+import SoundResolver from '../resolvers/SoundResolver'
 import S3 from '~/plugins/S3'
 
 class AnalystService {
@@ -12,12 +14,16 @@ class AnalystService {
         where: {
           email: analyst.email
         }
-      }).then(existing => {
+      }).then(async existing => {
+        const role = await Role.findOne({
+          name: 'user'
+        })
         if (existing)
           return Promise.reject(new Error('User already registered'))
 
         Analyst.create({
-          ...analyst
+          ...analyst,
+          ...role
         })
           .save()
           .then((analyst: Analyst) => {
@@ -54,13 +60,10 @@ class AnalystService {
   updateAnalyst(userId: Analyst['id'], analyst: Analyst): Promise<Analyst> {
     return new Promise((resolve, reject) => [
       Analyst.findOne(userId).then(fromDb => {
-        fromDb!.name = analyst.name
-        fromDb!.color = analyst.color
-        fromDb!.mergePictureWithExternalAccount =
-          analyst.mergePictureWithExternalAccount
-        fromDb!.contactEmail = analyst.contactEmail
-        fromDb!.save().then(() => {
-          resolve(this.getOne(userId))
+        analyst.role = fromDb!.role
+        Object.assign(fromDb, analyst)
+        fromDb!.save().then(saved => {
+          resolve(saved)
         })
       })
     ])
@@ -89,13 +92,15 @@ class AnalystService {
     })
   }
 
-  setSoundConfig(analystId: Analyst['id'], config: Sound[]): Promise<void> {
+  setSoundConfig(analystId: Analyst['id'], config: Sound[]): Promise<Analyst> {
     return new Promise((resolve, reject) => {
-      // TODO
       Analyst.findOne(analystId, { relations: ['sounds'] }).then(analyst => {
+        config.forEach(sound => {
+          sound.save()
+        })
         analyst!.sounds.push(...config)
-        analyst!.save().then(() => {
-          resolve()
+        analyst!.save().then(analyst => {
+          resolve(analyst)
         })
       })
     })
@@ -118,7 +123,8 @@ class AnalystService {
           Bucket: process.env.BUCKET!,
           Key: userId.toString()
         },
-        () => {
+        err => {
+          if (err) reject(err)
           Analyst.findOne().then(analyst => {
             analyst!.picture = '/user.svg'
             analyst!.save().then(analyst => {

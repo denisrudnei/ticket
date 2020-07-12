@@ -8,6 +8,8 @@
 
 <script>
 import KnowledgeList from '@/components/knowledge/list'
+import List from '@/graphql/query/knowledge/list.graphql'
+import ggl from 'graphql-tag'
 export default {
   components: {
     KnowledgeList
@@ -34,12 +36,16 @@ export default {
       ]
     }
   },
-  asyncData({ $axios }) {
-    return $axios.get('/knowledge/').then(response => {
-      return {
-        items: response.data
-      }
-    })
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(List)
+      })
+      .then(response => {
+        return {
+          items: response.data
+        }
+      })
   }
 }
 </script>

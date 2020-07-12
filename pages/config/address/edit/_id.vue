@@ -4,27 +4,54 @@
 
 <script>
 import AddressCreate from '@/components/address/create'
+import AddressById from '@/graphql/query/address/addressById.graphql'
+import edit from '@/graphql/mutation/config/address/edit.graphql'
+import list from '@/graphql/query/address/list.graphql'
+import ggl from 'graphql-tag'
 export default {
   components: {
     AddressCreate
   },
-  asyncData({ $axios, params }) {
+  asyncData({ app, params }) {
     const id = params.id
-    return $axios.get(`/address/${id}`).then(response => {
-      return {
-        address: response.data
-      }
-    })
+    return app.$apollo
+      .query({
+        query: ggl(AddressById),
+        variables: {
+          id
+        }
+      })
+      .then(response => {
+        return {
+          address: response.data.AddressById
+        }
+      })
   },
   methods: {
     update(address) {
-      this.$axios.put(`/address/${address.id}`, address).then(() => {
-        this.$toast.show('Atualizado', {
-          duration: 1000,
-          icon: 'done'
+      this.$apollo
+        .mutate({
+          mutation: ggl(edit),
+          variables: {
+            id: address.id,
+            address: {
+              name: address.name,
+              cep: address.cep,
+              street: address.street,
+              state: address.state,
+              city: address.city,
+              country: address.country
+            }
+          },
+          refetchQueries: [{ query: ggl(list) }]
         })
-      })
-      this.$router.push('/config/address/list')
+        .then(() => {
+          this.$toast.show(this.$t('updated'), {
+            duration: 1000,
+            icon: 'done'
+          })
+          this.$router.push('/config/address/list')
+        })
     }
   }
 }

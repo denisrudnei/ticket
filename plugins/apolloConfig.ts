@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
 import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
+import { createUploadLink } from 'apollo-upload-client'
 import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -17,12 +17,13 @@ export default ({ app, req }: any, inject: any) => {
     host: process.client ? window.location.host : req.headers.host
   }
 
-  const httpLink = createHttpLink({
-    uri: `${url.protocol}://${url.host}/graphql`,
+  const httpLink = createUploadLink({
     fetch,
     credentials: 'include',
+    uri: `${url.protocol}://${url.host}/graphql`,
     ...(process.server ? { headers: req.headers } : undefined)
   })
+
   const wsOrWss = url.protocol.includes('https') ? 'wss://' : 'ws://'
 
   const wsLink = new WebSocketLink({

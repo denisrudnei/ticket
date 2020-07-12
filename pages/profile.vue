@@ -49,6 +49,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import GroupList from '@/graphql/query/profile/groups.graphql'
+import ggl from 'graphql-tag'
+
 export default {
   data() {
     return {}
@@ -56,10 +59,17 @@ export default {
   computed: mapGetters({
     user: 'auth/getUser'
   }),
-  async created() {
-    await this.$axios.post(`/analyst/${this.user.id}/groups`).then(response => {
-      this.notificationGroups = response.data
-    })
+  created() {
+    this.$apollo
+      .query({
+        query: ggl(GroupList),
+        variables: {
+          id: this.user.id
+        }
+      })
+      .then(response => {
+        this.notificationGroups = response.data.AnalystById
+      })
   }
 }
 </script>

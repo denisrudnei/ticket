@@ -1,0 +1,11 @@
+mutation CreateStatus($status: StatusCreateInput!) {
+  CreateStatus (status: $status) {
+    id
+    name
+    description
+    allowedStatus {
+      id
+      name
+    }
+  }
+}

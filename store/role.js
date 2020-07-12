@@ -13,11 +13,3 @@ export const getters = {
     return state.roles
   }
 }
-
-export const actions = {
-  downloadRoles: function({ commit }) {
-    this.$axios.get('/role').then(response => {
-      commit('setRoles', response.data)
-    })
-  }
-}

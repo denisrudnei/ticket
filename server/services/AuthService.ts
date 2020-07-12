@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import express from 'express'
 import Analyst from '../models/Analyst'
+import Role from '../models/Role'
 import MailService from './MailService'
 
 class AuthService {
@@ -9,7 +10,8 @@ class AuthService {
       Analyst.findOne({
         where: {
           email: email
-        }
+        },
+        relations: ['role']
       }).then(user => {
         if (!user) {
           return reject(new Error('Username or password incorrect'))
@@ -26,12 +28,14 @@ class AuthService {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
         email: user.email
-      }).then(userFromDB => {
+      }).then(async userFromDB => {
         if (userFromDB) return reject(new Error('Already registered'))
 
         const analyst = new Analyst()
         Object.assign(analyst, user)
-
+        analyst.role = (await Role.findOne({
+          name: 'user'
+        })) as Role
         analyst.save().then(analyst => {
           resolve(analyst)
         })
@@ -101,7 +105,7 @@ class AuthService {
     userId: Analyst['id'],
     oldPassword: string,
     newPassword: string
-  ): Promise<void> {
+  ): Promise<boolean> {
     return new Promise((resolve, reject) => {
       Analyst.findOne(userId).then(user => {
         const result = user!.verifyPassword(oldPassword)
@@ -110,7 +114,7 @@ class AuthService {
         }
         user!.password = newPassword
         user!.save().then(() => {
-          return resolve()
+          return resolve(true)
         })
       })
     })

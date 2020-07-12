@@ -154,7 +154,7 @@ class TicketService {
     ticketId: Ticket['id'],
     userId: Analyst['id'],
     content: string
-  ) {
+  ): Promise<Comment> {
     return new Promise((resolve, reject) => {
       Ticket.findOne(ticketId, {
         relations: ['comments']

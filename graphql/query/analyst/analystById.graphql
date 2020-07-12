@@ -1,0 +1,8 @@
+query AnalystById($id: ID!) {
+  AnalystById(id: $id) {
+    id
+    name
+    contactEmail
+    picture
+  }
+}

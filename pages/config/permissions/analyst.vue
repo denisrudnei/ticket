@@ -16,7 +16,7 @@
         <template
           v-slot:item.role="{ item }"
         >
-          {{ item.role }}
+          {{ item.role.name }}
         </template>
         <template
           v-slot:item.actions="{ item }"
@@ -76,6 +76,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import list from '@/graphql/query/config/role/list.graphql'
+import UpdateRole from '@/graphql/mutation/config/permissions/edit.graphql'
+import ggl from 'graphql-tag'
 export default {
   data() {
     return {
@@ -100,28 +103,41 @@ export default {
       ]
     },
     ...mapGetters({
-      roles: 'role/getRoles',
       user: 'auth/getUser'
     })
   },
-  asyncData({ $axios }) {
-    return $axios.get('/config/analyst').then(response => {
-      return {
-        analysts: response.data
-      }
-    })
-  },
-  mounted() {
-    this.$store.dispatch('role/downloadRoles')
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(list)
+      })
+      .then(response => {
+        return {
+          analysts: response.data.analyst,
+          roles: response.data.role
+        }
+      })
   },
   methods: {
     updateRole(analystId) {
-      this.$axios.post(`/config/role/${analystId}`, this.selected).then(() => {
-        this.$toast.show('Alterado', {
-          duration: 1000,
-          icon: 'verified_user'
+      /* eslint-disable */
+      this.$apollo
+        .mutate({
+          mutation: ggl(UpdateRole),
+          variables: {
+            userId: analystId,
+            roleId: this.selected.id
+          }
         })
-      })
+        .then(result => {
+          this.analysts.find(user => {
+            return user.id === analystId
+          }).role = this.selected
+          this.$toast.show('Alterado', {
+            duration: 1000,
+            icon: 'verified_user'
+          })
+        })
     }
   }
 }

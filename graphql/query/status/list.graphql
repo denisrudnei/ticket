@@ -2,5 +2,9 @@ query {
   Status {
     id,
     name
+    allowedStatus {
+      id
+      name
+    }
   }
 }

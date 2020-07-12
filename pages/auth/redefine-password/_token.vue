@@ -1,6 +1,6 @@
 <template>
   <v-form>
-    <v-text-field v-model="user.password" solo :placeholder="$t('new_password')" type="password" />
+    <v-text-field v-model="password" solo :placeholder="$t('new_password')" type="password" />
     <v-btn class="primary white--text" @click="redefine()">
       {{ $t('save_new_password') }}
       <v-icon right>
@@ -11,20 +11,26 @@
 </template>
 
 <script>
+import resetPasswordWithToken from '@/graphql/mutation/auth/resetPasswordWithToken.graphql'
+import ggl from 'graphql-tag'
 export default {
   auth: false,
   data() {
     return {
-      user: {
-        password: ''
-      }
+      password: ''
     }
   },
   methods: {
     redefine() {
       const token = this.$route.params.token
-      this.$axios
-        .post(`/auth/redefine-password/${token}`, this.user)
+      this.$apollo
+        .mutate({
+          mutation: ggl(resetPasswordWithToken),
+          variables: {
+            token,
+            newPassword: this.password
+          }
+        })
         .then(() => {
           this.$toast.show('Alterada', {
             duration: 1000,

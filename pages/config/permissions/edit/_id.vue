@@ -44,6 +44,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import RoleById from '@/graphql/query/role/roleById.graphql'
+import edit from '@/graphql/mutation/config/role/edit.graphql'
+import ggl from 'graphql-tag'
 export default {
   data() {
     return {
@@ -53,24 +56,40 @@ export default {
   computed: mapGetters({
     roles: 'role/getRoles'
   }),
-  asyncData({ $axios, params }) {
-    return $axios.get('/role').then(response => {
-      return {
-        role: response.data.find(r => {
-          return r.id === params.id
-        })
-      }
-    })
+  asyncData({ app, params }) {
+    return app.$apollo
+      .query({
+        query: ggl(RoleById),
+        variables: {
+          id: params.id
+        }
+      })
+      .then(response => {
+        return {
+          role: response.data.RoleById
+        }
+      })
   },
   methods: {
     save() {
-      this.$axios.put(`/config/role/${this.role.id}`, this.role).then(() => {
-        this.$toast.show('Role ataualizada com sucesso', {
-          duration: 1000,
-          icon: 'verified_user'
+      this.$apollo
+        .mutate({
+          mutation: ggl(edit),
+          variables: {
+            roleId: this.role.id,
+            role: {
+              name: this.role.name,
+              description: this.role.description
+            }
+          }
         })
-        this.$router.push('/config/permissions')
-      })
+        .then(() => {
+          this.$toast.show('Role ataualizada com sucesso', {
+            duration: 1000,
+            icon: 'verified_user'
+          })
+          this.$router.push('/config/permissions')
+        })
     }
   }
 }

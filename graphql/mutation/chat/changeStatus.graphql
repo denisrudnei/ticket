@@ -1,0 +1,5 @@
+mutation ChangeStatus($status: String!) {
+  ChangeChatStatus(status: $status) {
+    id
+  }
+}

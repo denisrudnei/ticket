@@ -1,0 +1,5 @@
+mutation RemoveImage {
+  RemoveImage {
+    id
+  }
+}

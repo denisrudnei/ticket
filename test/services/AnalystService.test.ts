@@ -2,6 +2,7 @@ import fileUpload from 'express-fileupload'
 import faker from 'faker'
 import AnalystService from '../../server/services/AnalystService'
 import Analyst from '../../server/models/Analyst'
+import Role from '~/server/models/Role'
 
 describe('Analyst', function() {
   this.timeout(10_000)
@@ -13,6 +14,7 @@ describe('Analyst', function() {
     await AnalystService.create({
       email: faker.internet.email(),
       name: faker.internet.userName(),
+      role: await Role.findOne(),
       password: 'test'
     } as Analyst)
   })
@@ -24,11 +26,6 @@ describe('Analyst', function() {
   it('Get one analyst', async () => {
     const toFind = await Analyst.findOne()
     await AnalystService.getOne(toFind!.id)
-  })
-
-  it('Remove user image', async () => {
-    const analyst = await Analyst.findOne()
-    await AnalystService.removeImage(analyst!.id)
   })
 
   it('Update one analyst', async () => {

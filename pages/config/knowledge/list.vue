@@ -19,6 +19,9 @@
 </template>
 
 <script>
+import KnowledgeList from '@/graphql/query/knowledge/list.graphql'
+import RemoveKnowledge from '@/graphql/mutation/config/knowledge/remove.graphql'
+import ggl from 'graphql-tag'
 export default {
   computed: {
     headers() {
@@ -34,24 +37,32 @@ export default {
       ]
     }
   },
-  asyncData({ $axios }) {
-    return $axios.get('/knowledge/all').then(response => {
-      return {
-        items: response.data
-      }
-    })
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(KnowledgeList)
+      })
+      .then(response => {
+        return {
+          items: response.data.knowledge
+        }
+      })
   },
   methods: {
     remove(item) {
-      this.$axios.delete(`/knowledge/${item.id}`).then(() => {
-        this.items = this.items.filter(i => {
-          return i.id !== item.id
+      this.$apollo
+        .mutate({
+          mutation: ggl(RemoveKnowledge)
         })
-        this.$toast.show('Apagado', {
-          duration: 5000,
-          icon: 'delete'
+        .then(() => {
+          this.items = this.items.filter(i => {
+            return i.id !== item.id
+          })
+          this.$toast.show('Apagado', {
+            duration: 5000,
+            icon: 'delete'
+          })
         })
-      })
     }
   }
 }

@@ -1,4 +1,5 @@
 import actualTicket from '@/graphql/query/ticket/actualTicket.graphql'
+import ggl from 'graphql-tag'
 
 export const state = () => ({
   tickets: [],
@@ -196,15 +197,15 @@ export const actions = {
     }
   },
   findTicket: async function({ commit }, id) {
-    await this.$axios
-      .post('/graphql', {
-        query: actualTicket,
+    await this.app.$apollo
+      .query({
+        query: ggl(actualTicket),
         variables: {
           id
         }
       })
       .then(response => {
-        commit('setActualTicket', response.data.data.TicketById)
+        commit('setActualTicket', response.data.TicketById)
       })
   },
   updateTree: async function({ commit }) {

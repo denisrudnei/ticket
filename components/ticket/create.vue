@@ -485,6 +485,8 @@ import Children from '@/components/ticket/children/index'
 import compareObjectsWithId from '@/mixins/compareObjectsWithId'
 import showModal from '@/mixins/showModal'
 import create from '@/graphql/query/ticket/create.graphql'
+import CommentOnTicket from '@/graphql/mutation/ticket/commentOnTicket.graphql'
+import TicketById from '@/graphql/query/ticket/actualTicket.graphql'
 export default {
   name: 'TicketCreate',
   components: {
@@ -597,8 +599,9 @@ export default {
         this.analysts = response.data.Analyst
         if (!this.search && !this.readonly) {
           const openedBy = this.analysts.filter(a => {
-            return a.id === this.user.id
+            return a.id === this.user.id.toString()
           })[0]
+
           this.$store.commit('ticket/setFieldInActualTicket', {
             value: openedBy,
             field: 'openedBy'
@@ -616,11 +619,14 @@ export default {
       this.$store.commit('ticket/setFieldInActualTicket', { field, value })
     },
     addComment() {
-      const comment = {
-        content: this.comment
-      }
-      this.$axios
-        .post(`/ticket/comment/${this.ticket.id}`, comment)
+      this.$apollo
+        .mutate({
+          mutation: ggl(CommentOnTicket),
+          variables: {
+            ticketId: this.ticket.id,
+            content: this.comment
+          }
+        })
         .then(response => {
           this.comment = ''
           this.$store.commit('ticket/addComment', response.data)
@@ -642,9 +648,16 @@ export default {
     cancelEdit() {
       this.editing = false
       this.readOnlyData = true
-      this.$axios.get(`/ticket/${this.ticket.id}`).then(response => {
-        this.$store.commit('ticket/setActualTicket', response.data)
-      })
+      this.$apollo
+        .query({
+          query: ggl(TicketById),
+          variables: {
+            id: this.ticket.id
+          }
+        })
+        .then(response => {
+          this.$store.commit('ticket/setActualTicket', response.data.TicketById)
+        })
     },
     changeAffectedUser(affectedUser) {
       this.setFieldInActualTicket(affectedUser, 'affectedUser')

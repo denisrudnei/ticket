@@ -1,0 +1,7 @@
+mutation EditRole($roleId: ID!, $role: RoleInput!) {
+  EditRole(roleId: $roleId, role: $role) {
+    id
+    name
+    description
+  }
+}

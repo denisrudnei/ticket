@@ -4,18 +4,27 @@
 
 <script>
 import CreateGroup from '@/components/ticket/group/create'
+import create from '@/graphql/mutation/config/group/create.graphql'
+import ggl from 'graphql-tag'
 export default {
   components: {
     CreateGroup
   },
   methods: {
     save(group) {
-      this.$axios.post('/config/group', group).then(() => {
-        this.$toast.show('Grupo criado', {
-          duration: 1000
+      this.$apollo
+        .mutate({
+          mutation: ggl(create),
+          variables: {
+            group
+          }
         })
-        this.$router.push('/config/group')
-      })
+        .then(() => {
+          this.$toast.show('Grupo criado', {
+            duration: 1000
+          })
+          this.$router.push('/config/group')
+        })
     }
   }
 }

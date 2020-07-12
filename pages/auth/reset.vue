@@ -1,6 +1,6 @@
 <template>
   <v-form>
-    <v-text-field v-model="user.email" type="email" solo :placeholder="$t('you_registered_email')" />
+    <v-text-field v-model="email" type="email" solo :placeholder="$t('you_registered_email')" />
     <v-btn class="primary white--text" tile @click="reset()">
       {{ $t('send_email') }}
       <v-icon right>
@@ -11,19 +11,24 @@
 </template>
 
 <script>
+import sendEmailToReset from '@/graphql/mutation/auth/sendEmailToReset.graphql'
+import ggl from 'graphql-tag'
 export default {
   auth: false,
   data() {
     return {
-      user: {
-        email: ''
-      }
+      email: ''
     }
   },
   methods: {
     reset() {
-      this.$axios
-        .post('/auth/redefine', this.user)
+      this.$apollo
+        .mutate({
+          mutation: ggl(sendEmailToReset),
+          variables: {
+            email: this.email
+          }
+        })
         .then(() => {
           this.showMessage()
         })

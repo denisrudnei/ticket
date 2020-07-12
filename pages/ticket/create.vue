@@ -8,6 +8,7 @@
 <script>
 import TicketCreate from '@/components/ticket/create'
 import create from '@/graphql/mutation/ticket/create.graphql'
+import ggl from 'graphql-tag'
 export default {
   components: {
     TicketCreate
@@ -22,9 +23,9 @@ export default {
   },
   methods: {
     create() {
-      this.$axios
-        .post('/graphql', {
-          query: create,
+      this.$apollo
+        .mutate({
+          mutation: ggl(create),
           variables: {
             ticket: {
               actualUser: this.ticket.actualUser.id,

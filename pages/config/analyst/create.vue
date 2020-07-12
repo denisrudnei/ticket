@@ -34,6 +34,9 @@
 </template>
 
 <script>
+import GroupList from '@/graphql/query/group/list.graphql'
+import CreateAnalyst from '@/graphql/mutation/config/analyst/create.graphql'
+import ggl from 'graphql-tag'
 export default {
   data() {
     return {
@@ -46,14 +49,23 @@ export default {
     }
   },
   created() {
-    this.$axios.get('/group').then(result => {
-      this.groups = result.data
-    })
+    this.$apollo
+      .query({
+        query: ggl(GroupList)
+      })
+      .then(result => {
+        this.groups = result.data.Group
+      })
   },
   methods: {
     save() {
-      this.$axios
-        .post('/config/analyst', this.analyst)
+      this.$apollo
+        .mutate({
+          mutation: ggl(CreateAnalyst),
+          variables: {
+            analyst: this.analyst
+          }
+        })
         .then(() => {
           this.$toast.show('Criado novo analista', {
             duration: 1000

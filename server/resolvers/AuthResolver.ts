@@ -62,6 +62,16 @@ class AuthResolver {
     return AuthService.generateEmailToReset(email, context.req)
   }
 
+  @Mutation(() => Boolean)
+  ResetPassword(
+    @Arg('newPassword') newPassword: string,
+    @Arg('oldPassword') oldPassword: string,
+    @Ctx() context: ExpressContext
+  ) {
+    const userId = context.req!.session!.authUser.id
+    return AuthService.resetPassword(userId, oldPassword, newPassword)
+  }
+
   @Mutation(() => Analyst)
   ResetPasswordWithToken(
     @Arg('token') token: string,

@@ -27,6 +27,9 @@ async function start() {
       authChecker: customAuthChecker,
       pubSub: pubSub
     }),
+    uploads: {
+      maxFiles: 20
+    },
     playground: {
       endpoint: '/graphql'
     },

@@ -16,6 +16,6 @@ describe('Role', function() {
   it('Update analyst role', async () => {
     const analyst = await Analyst.findOne()
     const role = await Role.findOne()
-    await RoleService.setAnalystRole(analyst!.id, role!.name)
+    await RoleService.setAnalystRole(analyst!.id, role!.id)
   })
 })

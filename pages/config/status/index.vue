@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import StatusList from '@/graphql/query/status/list.graphql'
+import ggl from 'graphql-tag'
 export default {
   computed: {
     headers() {
@@ -40,12 +42,16 @@ export default {
       ]
     }
   },
-  asyncData({ $axios }) {
-    return $axios.get('/status').then(response => {
-      return {
-        status: response.data
-      }
-    })
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(StatusList)
+      })
+      .then(response => {
+        return {
+          status: response.data.Status
+        }
+      })
   }
 }
 </script>
