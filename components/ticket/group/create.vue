@@ -6,8 +6,20 @@
     >
       <v-form>
         <v-text-field
-          v-model="group.name"
+          v-model="groupData.name"
           :placeholder="$t('name')"
+          filled
+        />
+      </v-form>
+    </v-col>
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-form>
+        <v-textarea
+          v-model="groupData.description"
+          :placeholder="$t('description')"
           filled
         />
       </v-form>
@@ -43,7 +55,7 @@
     </v-col>
     <v-col cols="12">
       <v-btn
-        :disabled="group.name.length === 0"
+        :disabled="groupData.name.length === 0"
         class="primary white--text"
         @click="save(group)"  
       >
@@ -64,10 +76,9 @@ export default {
       type: Object,
       default: () => {
         return {
-          group: {
-            name: '',
-            analysts: []
-          }
+          name: '',
+          description: '',
+          analysts: []
         }
       }
     }
@@ -77,6 +88,7 @@ export default {
       search: '',
       groupData: {
         name: '',
+        description: '',
         analysts: []
       }
     }

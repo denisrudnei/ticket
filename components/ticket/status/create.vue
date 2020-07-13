@@ -76,6 +76,7 @@ export default {
       default: () => {
         return {
           name: '',
+          description: '',
           allowedStatus: []
         }
       }

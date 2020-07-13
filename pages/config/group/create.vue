@@ -12,6 +12,7 @@ export default {
   },
   methods: {
     save(group) {
+      group.analysts = group.analysts.map(analyst => analyst.id)
       this.$apollo
         .mutate({
           mutation: ggl(create),
@@ -24,6 +25,9 @@ export default {
             duration: 1000
           })
           this.$router.push('/config/group')
+        })
+        .catch(() => {
+          this.$toast.error('Falha ao cadastrar grupo')
         })
     }
   }
