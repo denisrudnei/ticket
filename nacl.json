@@ -111,6 +111,21 @@
         "resource": "/api/auth/*",
         "methods": ["POST"],
         "action": "allow"
+      },
+      {
+        "resource": "/playground/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/subscriptions/*",
+        "methods": "*",
+        "action": "allow"
+      },
+      {
+        "resource": "/graphql/*",
+        "methods": ["*"],
+        "action": "allow"
       }
     ]
   }
