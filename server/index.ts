@@ -22,6 +22,7 @@ async function start() {
   const nuxt = new Nuxt(config)
   await createConnection
   const server = new ApolloServer({
+    introspection: true,
     schema: await buildSchema({
       resolvers: [path.resolve(__dirname, 'resolvers/**/*')],
       authChecker: customAuthChecker,
