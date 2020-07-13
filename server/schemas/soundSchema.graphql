@@ -1,9 +1,0 @@
-type SoundConfig {
-  volume: Float
-  muted: Boolean
-}
-
-type Sound {
-  chat: SoundConfig,
-  notification: SoundConfig
-}

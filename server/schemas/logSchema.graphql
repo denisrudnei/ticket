@@ -1,8 +1,0 @@
-type Log {
-  id: ID
-  user: Analyst
-  date: Datetime
-  oldStatus: Status
-  group: Group
-  newStatus: Status
-}

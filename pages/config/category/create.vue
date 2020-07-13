@@ -22,7 +22,8 @@ export default {
               description: category.description,
               defaultGroup: category.defaultGroup.id,
               defaultStatus: category.defaultStatus.id,
-              defaultPriority: category.defaultPriority.id
+              defaultPriority: category.defaultPriority.id,
+              sla: category.sla.id
             }
           },
           refetchQueries: [{ query: ggl(categoryList) }]

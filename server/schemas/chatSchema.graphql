@@ -1,5 +1,0 @@
-type Chat {
-  id: ID!
-  participants: [Analyst]
-  messages: [Message]
-}

@@ -4,6 +4,7 @@ import consola from 'consola'
 import bodyParser from 'body-parser'
 import compression from 'compression'
 import acl from 'express-acl'
+import fileUploader from 'express-fileupload'
 import routes from '~/server/routes/index'
 
 class AppController {
@@ -16,12 +17,8 @@ class AppController {
   }
 
   middlewares() {
-    acl.config({
-      baseUrl: '',
-      filename: 'nacl.json',
-      roleSearchPath: 'session.authUser.role.name'
-    })
-    this.express.use('/api', acl.authorize)
+    this.express.use(bodyParser.json())
+    this.express.use(compression())
     this.express.use(
       session({
         secret: process.env.SESSION_KEY as string,
@@ -29,8 +26,19 @@ class AppController {
         saveUninitialized: false
       })
     )
-    this.express.use(bodyParser.json())
-    this.express.use(compression())
+    acl.config({
+      baseUrl: '',
+      filename: 'nacl.json',
+      roleSearchPath: 'session.authUser.role.name'
+    })
+    this.express.use('/api', acl.authorize)
+    this.express.use(
+      fileUploader({
+        limits: {
+          fileSize: 10 * 1024 * 1024
+        }
+      })
+    )
   }
 
   routes() {

@@ -1,8 +1,0 @@
-type Field {
-  id: ID
-  required: Boolean
-  text: String
-  min: Int,
-  max: Int
-  value: String
-}

@@ -45,9 +45,12 @@ class AuthService {
 
   mergeUser(email: string, userBody: Analyst): Promise<Analyst> {
     return new Promise((resolve, reject) => {
-      Analyst.findOne({
-        email: email.toLowerCase()
-      }).then(analyst => {
+      Analyst.findOne(
+        {
+          email: email.toLowerCase()
+        },
+        { relations: ['role'] }
+      ).then(analyst => {
         if (!analyst) {
           Analyst.create({
             ...userBody,

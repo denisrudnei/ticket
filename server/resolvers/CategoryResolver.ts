@@ -11,9 +11,14 @@ import {
 import { GraphQLUpload } from 'graphql-upload'
 import { UploadedFile } from 'express-fileupload'
 import CategoryInput from '../inputs/CategoryInput'
+import CategoryCreateInput from '../inputs/CategoryCreateInput'
 import Category from '../models/ticket/Category'
 import CategoryField from '../models/ticket/CategoryField'
 import CategoryService from '../services/ticket/CategoryService'
+import Group from '../models/ticket/Group'
+import Priority from '../models/ticket/Priority'
+import Sla from '../models/ticket/Sla'
+import Status from '../models/ticket/Status'
 
 @Resolver(of => Category)
 class CategoryResolver {
@@ -61,8 +66,61 @@ class CategoryResolver {
     })
   }
 
+  @FieldResolver()
+  defaultGroup(@Root() category: Category): Promise<Group> {
+    return new Promise((resolve, reject) => {
+      Category.findOne(category.id, { relations: ['defaultGroup'] }).then(
+        category => {
+          resolve(category!.defaultGroup)
+        }
+      )
+    })
+  }
+
+  @FieldResolver()
+  defaultStatus(@Root() category: Category): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      Category.findOne(category.id, { relations: ['defaultStatus'] }).then(
+        category => {
+          resolve(category!.defaultStatus)
+        }
+      )
+    })
+  }
+
+  @FieldResolver()
+  defaultPriority(@Root() category: Category): Promise<Priority> {
+    return new Promise((resolve, reject) => {
+      Category.findOne(category.id, { relations: ['defaultPriority'] }).then(
+        category => {
+          resolve(category!.defaultPriority)
+        }
+      )
+    })
+  }
+
+  @FieldResolver()
+  sla(@Root() category: Category): Promise<Sla> {
+    return new Promise((resolve, reject) => {
+      Category.findOne(category.id, { relations: ['sla'] }).then(category => {
+        resolve(category!.sla)
+      })
+    })
+  }
+
+  @FieldResolver()
+  subs(@Root() category: Category): Promise<Category[]> {
+    return new Promise((resolve, reject) => {
+      Category.findOne(category.id, { relations: ['subs'] }).then(category => {
+        resolve(category!.subs)
+      })
+    })
+  }
+
   @Mutation(() => Category)
-  CreateCategory(@Arg('category', () => CategoryInput) category: Category) {
+  CreateCategory(
+    @Arg('category', () => CategoryCreateInput) category: Category
+  ) {
     return CategoryService.create(category)
   }
 

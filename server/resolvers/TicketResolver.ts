@@ -27,6 +27,10 @@ import Status from '../models/ticket/Status'
 import File from '../models/File'
 import LogService from '../services/ticket/LogService'
 import TicketService from '../services/ticket/TicketService'
+import Priority from '../models/ticket/Priority'
+import Analyst from '../models/Analyst'
+import Address from '../models/Address'
+import Category from '../models/ticket/Category'
 
 @Resolver(of => Ticket)
 class TicketResolver {
@@ -65,6 +69,105 @@ class TicketResolver {
         relations: ['children']
       }).then(ticket => {
         resolve(ticket!.children)
+      })
+    })
+  }
+
+  @FieldResolver()
+  openedBy(@Root() ticket: Ticket): Promise<Analyst> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne(ticket.id, {
+        relations: ['openedBy']
+      }).then(ticket => {
+        resolve(ticket!.openedBy)
+      })
+    })
+  }
+
+  @FieldResolver()
+  actualUser(@Root() ticket: Ticket): Promise<Analyst | null> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne(ticket.id, {
+        relations: ['actualUser']
+      }).then(ticket => {
+        resolve(ticket!.actualUser)
+      })
+    })
+  }
+
+  @FieldResolver()
+  affectedUser(@Root() ticket: Ticket): Promise<Analyst> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne(ticket.id, {
+        relations: ['affectedUser']
+      }).then(ticket => {
+        resolve(ticket!.affectedUser)
+      })
+    })
+  }
+
+  @FieldResolver()
+  group(@Root() ticket: Ticket): Promise<Group> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne(ticket.id, {
+        relations: ['group']
+      }).then(ticket => {
+        resolve(ticket!.group)
+      })
+    })
+  }
+
+  @FieldResolver()
+  status(@Root() ticket: Ticket): Promise<Status> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne(ticket.id, {
+        relations: ['status']
+      }).then(ticket => {
+        resolve(ticket!.status)
+      })
+    })
+  }
+
+  @FieldResolver()
+  priority(@Root() ticket: Ticket): Promise<Priority> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne(ticket.id, {
+        relations: ['priority']
+      }).then(ticket => {
+        resolve(ticket!.priority)
+      })
+    })
+  }
+
+  @FieldResolver()
+  address(@Root() ticket: Ticket): Promise<Address> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne(ticket.id, {
+        relations: ['address']
+      }).then(ticket => {
+        resolve(ticket!.address)
+      })
+    })
+  }
+
+  @FieldResolver()
+  category(@Root() ticket: Ticket): Promise<Category> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne(ticket.id, {
+        relations: ['category']
+      }).then(ticket => {
+        resolve(ticket!.category)
+      })
+    })
+  }
+
+  @FieldResolver()
+  father(@Root() ticket: Ticket): Promise<Ticket | null> {
+    return new Promise((resolve, reject) => {
+      Ticket.findOne(ticket.id, {
+        relations: ['father']
+      }).then(ticket => {
+        resolve(ticket!.father)
       })
     })
   }

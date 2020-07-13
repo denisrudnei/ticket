@@ -1,6 +1,0 @@
-type Comment {
-  id: ID
-  user: Analyst
-  content: String
-  date: Datetime
-}

@@ -1,4 +1,0 @@
-type Ref {
-  objectName: String
-  options: [String!]!
-}

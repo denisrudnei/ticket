@@ -1,5 +1,5 @@
 #import "@/graphql/fragments/categoryList.graphql"
-mutation CreateCategory($category: CategoryInput!) {
+mutation CreateCategory($category: CategoryCreateInput!) {
   CreateCategory(category: $category) {
     ...categoryList
   }

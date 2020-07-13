@@ -1,6 +1,0 @@
-type Status {
-  id: ID
-  name: String
-  allowedStatus: [Status],
-  slaRun: Boolean
-}

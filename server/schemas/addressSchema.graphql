@@ -1,9 +1,0 @@
-type Address {
-  id: ID
-  name: String
-  country: String
-  street: String
-  cep: String
-  city: String
-  state: String
-}

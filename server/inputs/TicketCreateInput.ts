@@ -8,11 +8,14 @@ import Priority from '../models/ticket/Priority'
 
 @InputType()
 class TicketCreateInput {
-  @Field(type => ID)
-  actualUser!: Analyst['id']
+  @Field(type => String)
+  public resume!: string
+
+  @Field(type => String)
+  public content!: string
 
   @Field(type => ID)
-  openedBy!: Analyst['id']
+  actualUser!: Analyst['id']
 
   @Field(type => ID)
   affectedUser!: Analyst['id']

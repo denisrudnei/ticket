@@ -1,5 +1,0 @@
-type Group {
-  id: ID
-  name: String
-  analysts: [Analyst]
-}

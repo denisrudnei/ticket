@@ -63,6 +63,28 @@ class NotificationResolver {
     return NotificationService.getWhoRead(root.id)
   }
 
+  @FieldResolver()
+  to(@Root() root: Notification): Promise<Analyst[]> {
+    return new Promise((resolve, reject) => {
+      Notification.findOne(root.id, { relations: ['to'] }).then(
+        notification => {
+          resolve(notification!.to)
+        }
+      )
+    })
+  }
+
+  @FieldResolver()
+  from(@Root() root: Notification): Promise<Analyst> {
+    return new Promise((resolve, reject) => {
+      Notification.findOne(root.id, { relations: ['from'] }).then(
+        notification => {
+          resolve(notification!.from)
+        }
+      )
+    })
+  }
+
   @Subscription({
     topics: NotificationEnum.ADD_NOTIFICATION
   })

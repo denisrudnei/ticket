@@ -56,10 +56,13 @@ export default {
         })
         .then(result => {
           this.$store.commit('auth/setUser', result.data.user)
-          this.$auth.loginWith('local', {
-            data: this.userLogin
-          })
-          this.processInfo()
+          this.$auth
+            .loginWith('local', {
+              data: this.userLogin
+            })
+            .then(() => {
+              this.processInfo()
+            })
         })
         .catch(() => {
           this.$toast.error('Falha ao logar', {

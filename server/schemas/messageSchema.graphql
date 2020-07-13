@@ -1,8 +1,0 @@
-type Message {
-  id: ID!
-  to: Analyst!
-  from: Analyst!
-  content: String
-  read: Boolean
-  date: Datetime
-}
