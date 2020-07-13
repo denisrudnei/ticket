@@ -5,7 +5,7 @@ class AddressService {
     return new Promise((resolve, reject) => {
       Address.create(address)
         .save()
-        .then(() => {
+        .then(address => {
           return resolve(address)
         })
     })

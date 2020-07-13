@@ -1,4 +1,4 @@
-mutation CreateAddress($address: AddressInput!) {
+mutation CreateAddress($address: AddressCreateInput!) {
   CreateAddress(address: $address) {
     id
   }

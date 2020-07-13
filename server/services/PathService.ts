@@ -156,6 +156,7 @@ class PathService {
   getRefs(): Promise<Ref[]> {
     return new Promise((resolve, reject) => {
       Ticket.findOne().then(ticket => {
+        if (!ticket) return resolve([])
         const result = Object.values(TicketObjects).map(property => {
           return new Ref(property, this.getOptions(ticket![property]))
         })
