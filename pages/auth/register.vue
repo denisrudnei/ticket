@@ -76,26 +76,20 @@ export default {
           mutation: ggl(register),
           variables: this.user
         })
-        .then(
-          () => {
-            this.errors = {}
-            this.$toast.show('Cadastrado com sucesso', {
-              duration: 5000,
-              icon: 'done'
-            })
-            this.$router.push('/auth/login')
-          },
-          error => {
-            if (error.response.data.errors) {
-              this.errors = error.response.data.errors
-            } else {
-              this.$toast.error('Falha ao realizar registro', {
-                icon: 'error',
-                duration: 1000
-              })
-            }
-          }
-        )
+        .then(() => {
+          this.errors = {}
+          this.$toast.show('Cadastrado com sucesso', {
+            duration: 5000,
+            icon: 'done'
+          })
+          this.$router.push('/auth/login')
+        })
+        .catch(response => {
+          this.$toast.error('Falha ao realizar registro', {
+            icon: 'error',
+            duration: 1000
+          })
+        })
     }
   }
 }

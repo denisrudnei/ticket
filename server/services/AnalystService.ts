@@ -95,9 +95,7 @@ class AnalystService {
   setSoundConfig(analystId: Analyst['id'], config: Sound[]): Promise<Analyst> {
     return new Promise((resolve, reject) => {
       Analyst.findOne(analystId, { relations: ['sounds'] }).then(analyst => {
-        config.forEach(sound => {
-          sound.save()
-        })
+        Sound.save(config)
         analyst!.sounds.push(...config)
         analyst!.save().then(analyst => {
           resolve(analyst)
