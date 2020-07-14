@@ -6,7 +6,12 @@ fragment list on Knowledge {
     id
     name
   }
+  category {
+    id
+    name
+  }
   status {
+    id
     name
   }
 }

@@ -19,7 +19,10 @@ export default {
   asyncData({ app, params }) {
     return app.$apollo
       .query({
-        query: ggl(KnowledgeList)
+        query: ggl(KnowledgeList),
+        variables: {
+          id: params.id
+        }
       })
       .then(response => {
         return {
@@ -33,7 +36,14 @@ export default {
         .mutate({
           mutation: ggl(CreateKnowledge),
           variables: {
-            knowledge
+            id: knowledge.id,
+            knowledge: {
+              name: knowledge.name,
+              description: knowledge.description,
+              group: knowledge.group.id,
+              category: knowledge.category.id,
+              status: knowledge.status.id
+            }
           }
         })
         .then(() => {

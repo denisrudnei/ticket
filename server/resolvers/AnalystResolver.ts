@@ -21,6 +21,7 @@ import AnalystService from '../services/AnalystService'
 import AnalystInput from '../inputs/AnalystInput'
 import { Role } from '../models/Role'
 import SoundInput from '../inputs/SoundInput'
+import Address from '../models/Address'
 
 @Resolver(of => Analyst)
 class AnalystResolver {
@@ -87,6 +88,15 @@ class AnalystResolver {
     return new Promise((resolve, reject) => {
       Analyst.findOne(root.id, { relations: ['chats'] }).then(analyst => {
         resolve(analyst!.chats)
+      })
+    })
+  }
+
+  @FieldResolver()
+  address(@Root() root: Analyst): Promise<Address | null> {
+    return new Promise((resolve, reject) => {
+      Analyst.findOne(root.id, { relations: ['address'] }).then(analyst => {
+        resolve(analyst!.address)
       })
     })
   }

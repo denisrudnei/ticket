@@ -1,8 +1,13 @@
 query KnowledgeById ($id: ID!) {
-  knowledge: KnowledgeById(id: $ID) {
+  knowledge: KnowledgeById(id: $id) {
     id
     name
+    description
     category {
+      id
+      name
+    }
+    status {
       id
       name
     }

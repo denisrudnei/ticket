@@ -4,6 +4,13 @@ mutation MergeUser($email: String!, $user: AnalystInput!) {
     name
     email
     contactEmail
+    address {
+      id
+      street
+      city
+      country
+      state
+    }
     color
     role {
       id
