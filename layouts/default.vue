@@ -365,6 +365,7 @@ export default {
           variables: {
             ticketId: ticket.id
           },
+          awaitRefetchQueries: true,
           refetchQueries: [
             {
               query: ggl(ticketSearch)

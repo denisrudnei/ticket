@@ -18,14 +18,14 @@ class KnowledgeInput {
   @Field(() => ID)
   public group!: Group['id']
 
-  @Field(type => ID)
+  @Field(type => ID, { nullable: true })
   public status!: KnowledgeStatus['id']
 
   @Field(type => String)
   public url: string = ''
 
   @Field(type => String)
-  public preview!: string
+  public description!: string
 
   @Field(type => [ID], { nullable: true })
   public files!: KnowledgeFile['id']

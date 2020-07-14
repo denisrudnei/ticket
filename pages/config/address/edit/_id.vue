@@ -43,6 +43,7 @@ export default {
               country: address.country
             }
           },
+          awaitRefetchQueries: true,
           refetchQueries: [{ query: ggl(list) }]
         })
         .then(() => {

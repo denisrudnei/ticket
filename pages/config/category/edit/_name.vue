@@ -44,6 +44,7 @@ export default {
               defaultPriority: newValue.defaultPriority.id
             }
           },
+          awaitRefetchQueries: true,
           refetchQueries: [
             {
               query: ggl(CategoryEditList),

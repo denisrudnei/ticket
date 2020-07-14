@@ -1,4 +1,4 @@
-mutation CreateKnowledge($knowledge: KnowledgeAttribute!) {
+mutation CreateKnowledge($knowledge: KnowledgeInput!) {
   CreateKnowledge(knowledge: $knowledge) {
     id
     name

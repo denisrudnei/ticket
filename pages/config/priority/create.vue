@@ -30,6 +30,7 @@ export default {
               weight: parseInt(this.priority.weight)
             }
           },
+          awaitRefetchQueries: true,
           refetchQueries: [{ query: ggl(listPriority) }]
         })
         .then(() => {
@@ -37,6 +38,7 @@ export default {
             duration: 1000,
             icon: 'done'
           })
+          this.$router.push('/config/priority/list')
         })
     }
   }

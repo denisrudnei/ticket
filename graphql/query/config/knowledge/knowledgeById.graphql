@@ -1,0 +1,14 @@
+query KnowledgeById ($id: ID!) {
+  knowledge: KnowledgeById(id: $ID) {
+    id
+    name
+    category {
+      id
+      name
+    }
+    group {
+      id
+      name
+    }
+  }
+}

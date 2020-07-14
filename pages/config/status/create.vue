@@ -25,6 +25,7 @@ export default {
           variables: {
             status: newStatus
           },
+          awaitRefetchQueries: true,
           refetchQueries: [{ query: ggl(list) }]
         })
         .then(() => {

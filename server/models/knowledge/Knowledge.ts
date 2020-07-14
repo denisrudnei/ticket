@@ -47,9 +47,14 @@ class Knowledge extends BaseEntity {
   @Field(type => String)
   public url: string = ''
 
+  @Field(type => String)
+  public get preview(): string {
+    return this.description.substring(0, 100)
+  }
+
   @Column()
   @Field(type => String)
-  public preview!: string
+  public description!: string
 
   @Field(type => [KnowledgeFile])
   @OneToMany(type => KnowledgeFile, KnowledgeFile => KnowledgeFile.knowledge)

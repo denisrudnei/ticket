@@ -41,6 +41,7 @@ export default {
               slaRun: status.slaRun
             }
           },
+          awaitRefetchQueries: true,
           refetchQueries: [{ query: ggl(StatusById) }, { query: ggl(list) }]
         })
         .then(() => {

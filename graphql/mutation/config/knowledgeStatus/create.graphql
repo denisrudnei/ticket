@@ -1,0 +1,7 @@
+mutation CreateKnowledgeStatus($knowledgeStatus: KnowledgeStatusCreateInput!) {
+  CreateKnowledgeStatus(knowledgeStatus: $knowledgeStatus) {
+    id
+    name
+    description
+  }
+}

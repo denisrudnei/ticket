@@ -5,6 +5,7 @@
 <script>
 import CreateGroup from '@/components/ticket/group/create'
 import create from '@/graphql/mutation/config/group/create.graphql'
+import list from '@/graphql/query/config/group/list.graphql'
 import ggl from 'graphql-tag'
 export default {
   components: {
@@ -18,7 +19,9 @@ export default {
           mutation: ggl(create),
           variables: {
             group
-          }
+          },
+          awaitRefetchQueries: true,
+          refetchQueries: [{ query: ggl(list) }]
         })
         .then(() => {
           this.$toast.show('Grupo criado', {

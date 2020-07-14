@@ -57,12 +57,13 @@ class KnowledgeService {
 
   create(knowledge: Knowledge): Promise<Knowledge> {
     return new Promise((resolve, reject) => {
-      const { name, group, preview, category } = knowledge
+      const { name, group, description, category, status } = knowledge
       Knowledge.create({
-        name: name,
-        group: group,
-        category: category,
-        preview: preview
+        name,
+        status,
+        group,
+        category,
+        description
       })
         .save()
         .then((knowledge: Knowledge) => {

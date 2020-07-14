@@ -38,6 +38,7 @@ export default {
               id: id
             }
           },
+          awaitRefetchQueries: true,
           refetchQueries: [{ query: ggl(priorityList) }]
         })
         .then(() => {

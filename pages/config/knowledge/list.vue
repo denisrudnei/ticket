@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import KnowledgeList from '@/graphql/query/knowledge/list.graphql'
-import RemoveKnowledge from '@/graphql/mutation/config/knowledge/remove.graphql'
+import list from '@/graphql/query/knowledge/list.graphql'
+import removeKnowledge from '@/graphql/mutation/config/knowledge/remove.graphql'
 import ggl from 'graphql-tag'
 export default {
   computed: {
@@ -40,7 +40,7 @@ export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(KnowledgeList)
+        query: ggl(list)
       })
       .then(response => {
         return {
@@ -52,7 +52,12 @@ export default {
     remove(item) {
       this.$apollo
         .mutate({
-          mutation: ggl(RemoveKnowledge)
+          mutation: ggl(removeKnowledge),
+          variables: {
+            id: item.id
+          },
+          awaitRefetchQueries: true,
+          refetchQueries: [{ query: ggl(list) }]
         })
         .then(() => {
           this.items = this.items.filter(i => {

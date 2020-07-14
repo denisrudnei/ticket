@@ -1,0 +1,7 @@
+query {
+  KnowledgeStatus {
+    id
+    name
+    description
+  }
+}

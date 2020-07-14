@@ -32,6 +32,9 @@
         <v-tab to="/config/knowledge/list">
           {{ $t('knowledge_base') }}
         </v-tab>
+        <v-tab to="/config/knowledgeStatus/list">
+          {{ $t('knowledge_status') }}
+        </v-tab>
         <v-tab to="/config/permissions">
           {{ $t('permissions') }}
         </v-tab>

@@ -1,12 +1,16 @@
-query KnowledgeById ($id: ID!) {
-  knowledge: KnowledgeById(id: $ID) {
+query {
+  Knowledge {
     id
     name
-    category {
+    status {
       id
       name
     }
     group {
+      id
+      name
+    }
+    category {
       id
       name
     }

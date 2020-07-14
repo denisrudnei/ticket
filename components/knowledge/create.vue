@@ -7,7 +7,16 @@
         label="Nome do documento"
       />
     </v-col>
-    <v-col cols="12" md="6" pa-3>
+    <v-col cols="12" md="4" pa-3>
+      <v-select
+        v-model="knowledge.status"
+        filled
+        :value-comparator="compare"
+        placeholder="Status do documento"
+        :items="status.map(v => ({text: v.name, value: v}))"
+      />
+    </v-col>
+    <v-col cols="12" md="4" pa-3>
       <v-select
         v-model="knowledge.category"
         filled
@@ -16,7 +25,7 @@
         :items="category.map(v => ({text: v.name, value: v}))"
       />
     </v-col>
-    <v-col cols="12" md="6" pa-3>
+    <v-col cols="12" md="4" pa-3>
       <v-select
         v-model="knowledge.group"
         filled
@@ -27,7 +36,7 @@
     </v-col>
     <v-col cols="12" pa-3>
       <client-only>
-        <ckeditor v-model="knowledge.preview" :editor="editor" @ready="configureEditor" />
+        <ckeditor v-model="knowledge.description" :editor="editor" @ready="configureEditor" />
       </client-only>
       <input ref="file" type="file" style="display: none">
       <v-btn class="primary white--text" @click="addFile()">
@@ -49,8 +58,7 @@
 <script>
 import compareObjectsWithId from '@/mixins/compareObjectsWithId'
 import ImageUploadAdapter from '@/plugins/image-upload-adapter'
-import ListCategory from '@/graphql/query/config/category/categoryList.graphql'
-import ListGroup from '@/graphql/query/config/group/list.graphql'
+import create from '@/graphql/query/config/knowledge/create.graphql'
 import ggl from 'graphql-tag'
 export default {
   mixins: [compareObjectsWithId],
@@ -59,7 +67,7 @@ export default {
       type: Object,
       default: () => ({
         name: '',
-        preview: '',
+        description: '',
         group: '',
         category: ''
       })
@@ -69,11 +77,12 @@ export default {
     return {
       editor: null,
       items: [],
+      status: [],
       category: [],
       group: [],
       knowledgeData: {
         name: '',
-        preview: '',
+        description: '',
         group: '',
         category: ''
       }
@@ -86,25 +95,25 @@ export default {
     disabled() {
       return (
         this.knowledge.name === '' ||
-        this.knowledge.preview === '' ||
+        this.knowledge.description === '' ||
         this.knowledge.category === '' ||
         this.knowledge.group === ''
       )
     }
   },
+  created() {
+    this.$apollo
+      .query({
+        query: ggl(create)
+      })
+      .then(response => {
+        this.status = response.data.status
+        this.group = response.data.group
+        this.category = response.data.category
+      })
+  },
   mounted() {
     this.editor = require('@ckeditor/ckeditor5-build-classic')
-  },
-  async created() {
-    const category = await this.$apollo.query({
-      query: ggl(ListCategory)
-    })
-    const group = await this.$apollo.query({
-      query: ggl(ListGroup)
-    })
-
-    this.category = category.Group
-    this.group = group.category
   },
   methods: {
     save() {

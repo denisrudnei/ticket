@@ -14,6 +14,7 @@ import Category from '../models/ticket/Category'
 import Group from '../models/ticket/Group'
 import KnowledgeService from '../services/knowledge/KnowledgeService'
 import KnowledgeInput from '../inputs/KnowledgeInput'
+import KnowledgeStatus from '../models/knowledge/KnowledgeStatus'
 
 @Resolver(of => Knowledge)
 class KnowledgeResolver {
@@ -47,6 +48,15 @@ class KnowledgeResolver {
   @Authorized('user')
   RemoveKnowledge(@Arg('id', () => ID) id: Knowledge['id']) {
     return KnowledgeService.remove(id)
+  }
+
+  @FieldResolver()
+  status(@Root() root: Knowledge): Promise<KnowledgeStatus> {
+    return new Promise((resolve, reject) => {
+      Knowledge.findOne(root.id, { relations: ['status'] }).then(knowledge => {
+        resolve(knowledge!.status)
+      })
+    })
   }
 
   @FieldResolver()

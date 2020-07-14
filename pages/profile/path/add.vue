@@ -74,6 +74,7 @@ export default {
               property: this.selected.property
             }
           },
+          awaitRefetchQueries: true,
           refetchQueries: [
             {
               query: ggl(list)

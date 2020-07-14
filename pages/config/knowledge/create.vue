@@ -5,6 +5,7 @@
 <script>
 import create from '@/components/knowledge/create'
 import CreateKnowledge from '@/graphql/mutation/config/knowledge/create.graphql'
+import list from '@/graphql/query/knowledge/list.graphql'
 import ggl from 'graphql-tag'
 export default {
   components: {
@@ -17,12 +18,17 @@ export default {
   },
   methods: {
     save(knowledge) {
+      knowledge.category = knowledge.category.id
+      knowledge.group = knowledge.group.id
+      knowledge.status = knowledge.status.id
       this.$apollo
         .mutate({
           mutation: ggl(CreateKnowledge),
           variables: {
             knowledge
-          }
+          },
+          awaitRefetchQueries: true,
+          refetchQueries: [{ query: ggl(list) }]
         })
         .then(response => {
           this.$toast.show('Criado documento de conhecimento', {
@@ -44,6 +50,7 @@ export default {
                 })
               })
           }
+          this.$router.push('/config/knowledge/list')
         })
     }
   }

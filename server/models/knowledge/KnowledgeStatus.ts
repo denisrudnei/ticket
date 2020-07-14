@@ -12,6 +12,7 @@ class KnowledgeStatus extends BaseEntity {
   @Field(type => String)
   public name!: string
 
+  @Field()
   @Column()
   public description!: string
 }

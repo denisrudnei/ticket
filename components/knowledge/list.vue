@@ -13,7 +13,7 @@
       {{ item.created | date }}
     </template>
     <template v-slot:item.status="{ item }">
-      {{ item.status }}
+      {{ item.status.name }}
     </template>
   </v-data-table>
 </template>

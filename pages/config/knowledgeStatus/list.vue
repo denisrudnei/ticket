@@ -1,0 +1,49 @@
+<template>
+  <v-row>
+    <v-col cols="12" class="pa-2">
+      <v-data-table :headers="headers" :items="status">
+        <template v-slot:item.name="{ item }">
+          {{ item.name }}
+        </template>
+        <template v-slot:item.description="{ item }">
+          {{ item.description }}
+        </template>
+      </v-data-table>
+    </v-col>
+  </v-row>
+</template>
+
+<script>
+import list from '@/graphql/query/config/knowledgeStatus/list.graphql'
+import ggl from 'graphql-tag'
+export default {
+  computed: {
+    headers() {
+      return [
+        {
+          text: this.$t('name'),
+          value: 'name'
+        },
+        {
+          text: this.$t('description'),
+          value: 'description'
+        }
+      ]
+    }
+  },
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(list)
+      })
+      .then(response => {
+        return {
+          status: response.data.KnowledgeStatus
+        }
+      })
+  }
+}
+</script>
+
+<style>
+</style>

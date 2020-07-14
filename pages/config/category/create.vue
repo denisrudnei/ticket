@@ -26,6 +26,7 @@ export default {
               sla: category.sla.id
             }
           },
+          awaitRefetchQueries: true,
           refetchQueries: [{ query: ggl(categoryList) }]
         })
         .then(() => {

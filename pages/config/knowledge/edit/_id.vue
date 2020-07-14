@@ -5,7 +5,7 @@
 <script>
 import create from '@/components/knowledge/create'
 import CreateKnowledge from '@/graphql/mutation/config/knowledge/create.graphql'
-import KnowledgeList from '@/graphql/query/config/knowledge/list.graphql'
+import KnowledgeList from '@/graphql/query/config/knowledge/knowledgeById.graphql'
 import ggl from 'graphql-tag'
 export default {
   components: {

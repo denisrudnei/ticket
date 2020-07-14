@@ -1,0 +1,23 @@
+#import "@/graphql/fragments/categoryList.graphql"
+query {
+  category: Category {
+    ...categoryList
+  }
+  status: KnowledgeStatus {
+    id
+    name
+  }
+  group: Group {
+    id
+    name
+    analysts {
+      id
+      name
+      picture
+    }
+  }
+  Analyst {
+    id
+    name
+  }
+}

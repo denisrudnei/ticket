@@ -74,6 +74,7 @@ export default {
             userId: this.user.id,
             path: id
           },
+          awaitRefetchQueries: true,
           refetchQueries: [
             {
               query: ggl(getTree)

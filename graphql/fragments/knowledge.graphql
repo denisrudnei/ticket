@@ -2,6 +2,10 @@ fragment list on Knowledge {
   id
   name
   created
+  group {
+    id
+    name
+  }
   status {
     name
   }

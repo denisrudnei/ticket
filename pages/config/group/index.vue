@@ -188,7 +188,9 @@ export default {
           variables: {
             groupId: group.id,
             analystId: analyst.id
-          }
+          },
+          awaitRefetchQueries: true,
+          refetchQueries: [{ query: ggl(list) }]
         })
         .then(() => {
           this.updateGroups()
@@ -204,7 +206,9 @@ export default {
           variables: {
             groupId: group.id,
             analystId: analyst.id
-          }
+          },
+          awaitRefetchQueries: true,
+          refetchQueries: [{ query: ggl(list) }]
         })
         .then(() => {
           this.updateGroups()

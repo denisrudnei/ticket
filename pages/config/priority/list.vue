@@ -89,6 +89,7 @@ export default {
           variables: {
             priorities: this.items
           },
+          awaitRefetchQueries: true,
           refetchQueries: [{ query: ggl(listPriority) }]
         })
         .then(() => {

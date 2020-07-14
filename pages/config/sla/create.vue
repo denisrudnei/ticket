@@ -26,6 +26,7 @@ export default {
               )
             }
           },
+          awaitRefetchQueries: true,
           refetchQueries: [{ query: ggl(slaList) }]
         })
         .then(() => {
