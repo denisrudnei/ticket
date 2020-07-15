@@ -11,6 +11,7 @@ import SlaSeed from './seeds/SlaSeed'
 import PrioritySeed from './seeds/PrioritySeed'
 import Seed from './seeds/Seed'
 import RoleSeed from './seeds/RoleSeed'
+import KnowledgeStatusSeed from './seeds/KnowledgeStatusSeed'
 
 class SeedExecutor {
   public data: Seed<any>[]
@@ -28,7 +29,8 @@ class SeedExecutor {
       new PathSeed(),
       new PrioritySeed(),
       new SlaSeed(),
-      new TicketSeed()
+      new TicketSeed(),
+      new KnowledgeStatusSeed()
     ]
   }
 

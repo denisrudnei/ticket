@@ -1,8 +1,9 @@
-import fileUpload from 'express-fileupload'
 import faker from 'faker'
 import AnalystService from '../../server/services/AnalystService'
 import Analyst from '../../server/models/Analyst'
+import Sound from '../../server/models/Sound'
 import Role from '~/server/models/Role'
+import SoundType from '~/server/enums/SoundTypeEnum'
 
 describe('Analyst', function() {
   this.timeout(10_000)
@@ -50,19 +51,22 @@ describe('Analyst', function() {
     await AnalystService.updateImage(analyst!.id, file)
   })
 
-  // it('Update sound config', async () => {
-  //   const analyst = await Analyst.findOne()
-  //   await AnalystService.setSoundConfig(analyst, {
-  //     chat: {
-  //       muted: false,
-  //       volume: 50
-  //     },
-  //     notification: {
-  //       muted: true,
-  //       volume: 15
-  //     }
-  //   })
-  // })
+  it('Update sound config', async () => {
+    const analyst = await Analyst.findOne()
+    const notificationSound = new Sound(SoundType.NOTIFICATION, analyst!.id)
+    notificationSound.muted = false
+    notificationSound.volume = 50
+    const chatSound = new Sound(SoundType.CHAT, analyst!.id)
+
+    chatSound.type = SoundType.NOTIFICATION
+    chatSound.muted = true
+    chatSound.volume = 15
+
+    await AnalystService.setSoundConfig(analyst!.id, [
+      notificationSound,
+      chatSound
+    ])
+  })
 
   it('Remove analyst image', async function() {
     this.timeout(5000)

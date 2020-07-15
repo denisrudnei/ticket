@@ -250,7 +250,7 @@ class KnowledgeService {
     return new Promise((resolve, reject) => {
       this.getOne(knowledgeId).then(knowledge => {
         pdf
-          .create(knowledge.preview, {
+          .create(knowledge.description, {
             format: 'A4'
           })
           .toBuffer((err: Error, result) => {

@@ -4,7 +4,7 @@ import Knowledge from '../../server/models/knowledge/Knowledge'
 import Category from '../../server/models/ticket/Category'
 import Group from '../../server/models/ticket/Group'
 import KnowledgeFile from '../../server/models/knowledge/KnowledgeFile'
-import '../../server/models/knowledge/KnowledgeStatus'
+import KnowledgeStatus from '../../server/models/knowledge/KnowledgeStatus'
 
 describe('Knowledge', function() {
   this.timeout(10_000)
@@ -19,10 +19,12 @@ describe('Knowledge', function() {
   it('Create new knowledge', async () => {
     const group = await Group.findOne()
     const category = await Category.findOne()
+    const status = await KnowledgeStatus.findOne()
     const knowledge = {
       name: 'test',
-      preview: `<span>${faker.lorem.paragraphs()}</span`,
+      description: `<span>${faker.lorem.paragraphs()}</span`,
       group: group,
+      status: status,
       category: category,
       url: ''
     } as Knowledge
@@ -42,7 +44,7 @@ describe('Knowledge', function() {
 
   it('Upload generated PDF', async () => {
     const knowledge = await Knowledge.findOne()
-    await KnowledgeService.uploadPDF(knowledge!.name, knowledge!.preview)
+    await KnowledgeService.uploadPDF(knowledge!.name, knowledge!.description)
   })
 
   it('Generate and upload PDF', async function() {

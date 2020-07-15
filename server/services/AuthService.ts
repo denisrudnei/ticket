@@ -8,9 +8,14 @@ class AuthService {
   login(email: string, password: string): Promise<Analyst> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
-        where: {
-          email: email.toLowerCase()
-        },
+        where: [
+          {
+            email: email
+          },
+          {
+            email: email.toLowerCase()
+          }
+        ],
         relations: ['role']
       }).then(user => {
         if (!user) {
@@ -27,7 +32,14 @@ class AuthService {
   register(user: Analyst): Promise<Analyst> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
-        email: user.email.toLowerCase()
+        where: [
+          {
+            email: user.email
+          },
+          {
+            email: user.email.toLowerCase()
+          }
+        ]
       }).then(async userFromDB => {
         if (userFromDB) return reject(new Error('Already registered'))
 
@@ -45,16 +57,24 @@ class AuthService {
 
   mergeUser(email: string, userBody: Analyst): Promise<Analyst> {
     return new Promise((resolve, reject) => {
-      Analyst.findOne(
-        {
-          email: email.toLowerCase()
-        },
-        { relations: ['role'] }
-      ).then(analyst => {
+      Analyst.findOne({
+        where: [
+          {
+            email: email
+          },
+          {
+            email: email.toLowerCase()
+          }
+        ],
+        relations: ['role']
+      }).then(async analyst => {
         if (!analyst) {
           Analyst.create({
             ...userBody,
-            email: email.toLowerCase()
+            email: email,
+            role: await Role.findOne({
+              name: 'user'
+            })
           })
             .save()
             .then(newAnalyst => {
@@ -74,15 +94,20 @@ class AuthService {
   generateEmailToReset(email: string, req: express.Request): Promise<string> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
-        where: {
-          email: email.toLowerCase()
-        }
+        where: [
+          {
+            email: email
+          },
+          {
+            email: email.toLowerCase()
+          }
+        ]
       }).then(analyst => {
         if (!analyst) return reject(new Error('Not found'))
         const token = jwt.sign(
           {
             id: analyst!.id,
-            email: analyst!.email.toLowerCase()
+            email: analyst!.email
           },
           process.env.JWT_TOKEN as string
         )

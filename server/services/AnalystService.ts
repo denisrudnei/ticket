@@ -4,7 +4,7 @@ import Analyst from '../../server/models/Analyst'
 import Group from '../models/ticket/Group'
 import Sound from '../models/Sound'
 import Role from '../models/Role'
-import SoundResolver from '../resolvers/SoundResolver'
+import Path from '../models/Path'
 import S3 from '~/plugins/S3'
 
 class AnalystService {
@@ -136,7 +136,15 @@ class AnalystService {
 
   remove(userId: Analyst['id']): Promise<void> {
     return new Promise((resolve, reject) => {
-      Analyst.delete(userId).then(() => {
+      Analyst.findOne(userId, {
+        relations: ['groups', 'sounds', 'paths']
+      }).then(analyst => {
+        analyst!.active = false
+        analyst!.contactEmail = ''
+        analyst!.groups = []
+        this.removeImage(userId)
+        analyst!.paths.forEach(path => Path.delete(path.id))
+        analyst!.sounds.forEach(sound => Sound.delete(sound.id))
         resolve()
       })
     })
