@@ -18,7 +18,11 @@
           {{ item.country }}
         </template>
         <template v-slot:item.edit="{ item }">
-          <v-btn class="primary white--text" icon :to="`/config/address/edit/${item.id}`">
+          <v-btn
+            class="primary white--text"
+            icon
+            :to="`/config/address/edit/${item.id}`"
+          >
             <v-icon>edit</v-icon>
           </v-btn>
         </template>
@@ -28,55 +32,55 @@
 </template>
 
 <script>
-import addressList from '@/graphql/query/address/list.graphql'
-import ggl from 'graphql-tag'
+import addressList from '@/graphql/query/address/list.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   data() {
     return {
-      addresses: []
-    }
+      addresses: [],
+    };
   },
   computed: {
     headers() {
       return [
         {
           text: this.$t('name'),
-          value: 'name'
+          value: 'name',
         },
         {
           text: this.$t('state'),
-          value: 'state'
+          value: 'state',
         },
         {
           text: this.$t('city'),
-          value: 'city'
+          value: 'city',
         },
         {
           text: this.$t('street'),
-          value: 'street'
+          value: 'street',
         },
         {
           text: this.$t('country'),
-          value: 'country'
+          value: 'country',
         },
         {
           text: this.$t('edit'),
-          value: 'edit'
-        }
-      ]
-    }
+          value: 'edit',
+        },
+      ];
+    },
   },
   created() {
     this.$apollo
       .query({
-        query: ggl(addressList)
+        query: ggl(addressList),
       })
-      .then(response => {
-        this.addresses = response.data.Address
-      })
-  }
-}
+      .then((response) => {
+        this.addresses = response.data.Address;
+      });
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

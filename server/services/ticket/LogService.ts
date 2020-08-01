@@ -1,32 +1,24 @@
-import Log from '../../models/ticket/Log'
-import Ticket from '../../models/ticket/Ticket'
-import Analyst from '../../models/Analyst'
+import Log from '../../models/ticket/Log';
+import Ticket from '../../models/ticket/Ticket';
+import Analyst from '../../models/Analyst';
 
 class LogService {
-  createTicketLog(
+  static async createTicketLog(
     actualUser: Analyst['id'],
-    ticketId: Ticket['id']
+    ticketId: Ticket['id'],
   ): Promise<void> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(actualUser).then(async analyst => {
-        const log = new Log()
-        const ticket = await Ticket.findOne(ticketId, { relations: ['logs'] })
+    const analyst = await Analyst.findOne(actualUser);
+    const log = new Log();
+    const ticket = await Ticket.findOne(ticketId, { relations: ['logs'] });
 
-        log.oldStatus = ticket!.status
-        log.date = new Date()
-        log.user = analyst!
-        log.group = ticket!.group
-        Log.create(log)
-          .save()
-          .then(log => {
-            ticket!.logs.push(log)
-            ticket!.save().then(() => {
-              resolve()
-            })
-          })
-      })
-    })
+    log.oldStatus = ticket!.status;
+    log.date = new Date();
+    log.user = analyst!;
+    log.group = ticket!.group;
+    const logSaved = await Log.create(log).save();
+    ticket!.logs.push(logSaved);
+    await ticket!.save();
   }
 }
 
-export default new LogService()
+export default LogService;

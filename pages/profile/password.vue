@@ -1,12 +1,7 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      pa-3
-    >
-      <v-form
-        ref="form"
-      >
+    <v-col cols="12" pa-3>
+      <v-form ref="form">
         <v-text-field
           v-model="user.oldPassword"
           placeholder="Senha atual"
@@ -28,14 +23,9 @@
           filled
           :rules="rules.confirm"
         />
-        <v-btn
-          class="primary white--text"
-          @click="resetPassword()"
-        >
+        <v-btn class="primary white--text" @click="resetPassword()">
           {{ $t('save') }}
-          <v-icon
-            right
-          >
+          <v-icon right>
             lock
           </v-icon>
         </v-btn>
@@ -45,28 +35,29 @@
 </template>
 
 <script>
-import resetPassword from '@/graphql/mutation/profile/resetPassword.graphql'
-import ggl from 'graphql-tag'
+import resetPassword from '@/graphql/mutation/profile/resetPassword.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   data() {
     return {
       user: {
         oldPassword: '',
         newPassword: '',
-        confirmPassword: ''
+        confirmPassword: '',
       },
       rules: {
-        old: [v => !!v || 'Preencha sua senha antiga'],
+        old: [(v) => !!v || 'Preencha sua senha antiga'],
         newPassword: [
-          v => !!v || 'Preencha a nova senha',
-          v => v === this.user.confirmPassword || 'As senhas devem ser iguais'
+          (v) => !!v || 'Preencha a nova senha',
+          (v) => v === this.user.confirmPassword || 'As senhas devem ser iguais',
         ],
         confirm: [
-          v => !!v || 'Deve haver uma senha',
-          v => v === this.user.newPassword || 'As senhas devem ser iguais'
-        ]
-      }
-    }
+          (v) => !!v || 'Deve haver uma senha',
+          (v) => v === this.user.newPassword || 'As senhas devem ser iguais',
+        ],
+      },
+    };
   },
   methods: {
     resetPassword() {
@@ -76,26 +67,25 @@ export default {
             mutation: ggl(resetPassword),
             variables: {
               oldPassword: this.user.oldPassword,
-              newPassword: this.user.newPassword
-            }
+              newPassword: this.user.newPassword,
+            },
           })
           .then(() => {
             this.$toast.show('Resetado', {
               duration: 1000,
-              icon: 'lock_open'
-            })
+              icon: 'lock_open',
+            });
           })
           .catch(() => {
             this.$toast.error('Falha ao resetar', {
               duration: 5000,
-              icon: 'error'
-            })
-          })
+              icon: 'error',
+            });
+          });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

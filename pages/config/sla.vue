@@ -5,7 +5,7 @@
         <v-tab to="/config/sla/create">
           {{ $t('create') }}
         </v-tab>
-    
+
         <v-tab to="/config/sla/list">
           Listagem
         </v-tab>
@@ -16,8 +16,7 @@
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
-<style>
-</style>
+<style></style>

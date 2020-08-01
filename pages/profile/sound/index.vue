@@ -37,79 +37,75 @@
 </template>
 
 <script>
-import sound from '@/graphql/mutation/profile/sound.graphql'
-import list from '@/graphql/query/profile/sound.graphql'
-import ggl from 'graphql-tag'
+import sound from '@/graphql/mutation/profile/sound.graphql';
+import list from '@/graphql/query/profile/sound.graphql';
+import ggl from 'graphql-tag';
+
 export default {
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(list),
+      })
+      .then((response) => ({
+        sounds: response.data.GetSounds,
+        types: response.data.soundTypes,
+      }));
+  },
   data() {
     return {
       types: [],
       audio: {
         CHAT: { volume: 0 },
-        NOTIFICATION: { volume: 0 }
-      }
-    }
-  },
-  asyncData({ app }) {
-    return app.$apollo
-      .query({
-        query: ggl(list)
-      })
-      .then(response => {
-        return {
-          sounds: response.data.GetSounds,
-          types: response.data.soundTypes
-        }
-      })
+        NOTIFICATION: { volume: 0 },
+      },
+    };
   },
   mounted() {
-    this.sounds = this.types.map(type => {
-      const exist = this.sounds.find(sound => {
-        return sound.type === type[0]
-      })
-      if (exist) return exist
+    this.sounds = this.types.map((type) => {
+      const exist = this.sounds.find((s) => s.type === type[0]);
+      if (exist) return exist;
       return {
         type: type[0],
         volume: 0,
-        muted: false
-      }
-    })
-    this.audio.CHAT = new Audio('/sounds/open-ended.ogg')
-    this.audio.NOTIFICATION = new Audio('/sounds/open-ended.ogg')
+        muted: false,
+      };
+    });
+    this.audio.CHAT = new Audio('/sounds/open-ended.ogg');
+    this.audio.NOTIFICATION = new Audio('/sounds/open-ended.ogg');
   },
   methods: {
     changeVolume(type, value) {
-      this.audio[type].volume = value / 100
-      this.$store.commit('sound/setChatVolume', value / 100)
+      this.audio[type].volume = value / 100;
+      this.$store.commit('sound/setChatVolume', value / 100);
     },
     play(type) {
-      this.audio[type].play()
+      this.audio[type].play();
     },
     save() {
       this.$apollo
         .mutate({
           mutation: ggl(sound),
           variables: {
-            config: this.sounds.map(value => {
-              const { volume, muted, type } = value
+            config: this.sounds.map((value) => {
+              const { volume, muted, type } = value;
               return {
                 volume,
                 muted,
-                type
-              }
-            })
-          }
+                type,
+              };
+            }),
+          },
         })
         .then(() => {
           this.$toast.show(this.$t('updated'), {
             duration: 1000,
-            icon: 'done'
-          })
-        })
-    }
-  }
-}
+            icon: 'done',
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

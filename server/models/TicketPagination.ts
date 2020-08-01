@@ -1,6 +1,6 @@
-import { Field, Int, ObjectType } from 'type-graphql'
+import { Field, Int, ObjectType } from 'type-graphql';
 
-import Ticket from './ticket/Ticket'
+import Ticket from './ticket/Ticket';
 
 @ObjectType()
 class TicketPagination {
@@ -9,29 +9,29 @@ class TicketPagination {
     total: number,
     page: number,
     pages: number,
-    limit: number
+    limit: number,
   ) {
-    this.docs = docs
-    this.total = total
-    this.page = page
-    this.pages = pages
-    this.limit = limit
+    this.docs = docs;
+    this.total = total;
+    this.page = page;
+    this.pages = pages;
+    this.limit = limit;
   }
 
-  @Field(type => [Ticket])
-  public docs!: Ticket[]
+  @Field((type) => [Ticket])
+  public docs!: Ticket[];
 
-  @Field(type => Int)
-  total!: number
+  @Field((type) => Int)
+  total!: number;
 
-  @Field(type => Int)
-  page!: number
+  @Field((type) => Int)
+  page!: number;
 
-  @Field(type => Int)
-  pages!: number
+  @Field((type) => Int)
+  pages!: number;
 
-  @Field(type => Int)
-  limit!: number
+  @Field((type) => Int)
+  limit!: number;
 }
 
-export default TicketPagination
+export default TicketPagination;

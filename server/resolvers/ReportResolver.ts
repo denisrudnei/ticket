@@ -1,11 +1,12 @@
-import { Arg, Authorized, Query, Resolver } from 'type-graphql'
-import ReportAttributes from '../inputs/ReportAttributes'
-import Ticket from '../models/ticket/Ticket'
-import ReportService, {
-  GroupedResult,
-  ReportByDate,
-  TicketTimeField
-} from '../services/ticket/ReportService'
+/* eslint-disable class-methods-use-this */
+import {
+  Arg, Authorized, Query, Resolver,
+} from 'type-graphql';
+import ReportAttributes from '../inputs/ReportAttributes';
+import Ticket from '../models/ticket/Ticket';
+import GroupedResult from '../services/ticket/report/GroupedResult';
+import ReportService, { TicketTimeField } from '../services/ticket/report/ReportService';
+import ReportByDate from '../services/ticket/report/ReportByDate';
 
 @Resolver()
 class ReportResolver {
@@ -13,9 +14,9 @@ class ReportResolver {
   @Authorized('user')
   TicketReport(
     @Arg('attributes', () => ReportAttributes) attributes: Ticket,
-    @Arg('field') field: TicketTimeField
+    @Arg('field') field: TicketTimeField,
   ): Promise<GroupedResult[]> {
-    return ReportService.reportGrouped(attributes, field)
+    return ReportService.reportGrouped(attributes, field);
   }
 
   @Query(() => [ReportByDate])
@@ -23,10 +24,10 @@ class ReportResolver {
   ReportByDate(
     @Arg('field') field: TicketTimeField,
     @Arg('start', () => Date, { nullable: true }) start: Date,
-    @Arg('end', { nullable: true }) end: Date
+    @Arg('end', { nullable: true }) end: Date,
   ): Promise<ReportByDate[]> {
-    return ReportService.reportByDate(field, start, end)
+    return ReportService.reportByDate(field, start, end);
   }
 }
 
-export default ReportResolver
+export default ReportResolver;

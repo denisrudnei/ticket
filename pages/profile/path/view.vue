@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import TicketTree from '@/components/ticket/tree'
+import TicketTree from '@/components/ticket/tree';
+
 export default {
   components: {
-    TicketTree
-  }
-}
+    TicketTree,
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

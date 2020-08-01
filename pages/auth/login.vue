@@ -26,23 +26,24 @@
 </template>
 
 <script>
-import afterLogin from '@/mixins/afterLogin'
-import login from '@/graphql/mutation/auth/login.graphql'
-import ggl from 'graphql-tag'
+import afterLogin from '@/mixins/afterLogin';
+import login from '@/graphql/mutation/auth/login.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   mixins: [afterLogin],
   data() {
     return {
       userLogin: {
         email: '',
-        password: ''
-      }
-    }
+        password: '',
+      },
+    };
   },
   computed: {
     onMobile() {
-      return this.$vuetify.breakpoint.xsOnly
-    }
+      return this.$vuetify.breakpoint.xsOnly;
+    },
   },
   methods: {
     localLogin() {
@@ -51,29 +52,28 @@ export default {
           mutation: ggl(login),
           variables: {
             email: this.userLogin.email,
-            password: this.userLogin.password
-          }
+            password: this.userLogin.password,
+          },
         })
-        .then(result => {
-          this.$store.commit('auth/setUser', result.data.user)
+        .then((result) => {
+          this.$store.commit('auth/setUser', result.data.user);
           this.$auth
             .loginWith('local', {
-              data: this.userLogin
+              data: this.userLogin,
             })
             .then(() => {
-              this.processInfo()
-            })
+              this.processInfo();
+            });
         })
         .catch(() => {
           this.$toast.error('Falha ao logar', {
             duration: 1000,
-            icon: 'error'
-          })
-        })
-    }
-  }
-}
+            icon: 'error',
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

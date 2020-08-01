@@ -1,9 +1,6 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      pa-3
-    >
+    <v-col cols="12" pa-3>
       <v-form>
         <v-text-field
           v-model="groupData.name"
@@ -12,10 +9,7 @@
         />
       </v-form>
     </v-col>
-    <v-col
-      cols="12"
-      pa-3
-    >
+    <v-col cols="12" pa-3>
       <v-form>
         <v-textarea
           v-model="groupData.description"
@@ -31,7 +25,11 @@
           <v-text-field v-model="search" :label="$t('search')" />
           <v-list>
             <draggable group="group" :list="analysts">
-              <v-list-item v-for="analyst in analysts" :key="analyst.id" @click="select">
+              <v-list-item
+                v-for="analyst in analysts"
+                :key="analyst.id"
+                @click="select"
+              >
                 {{ analyst.name }}
               </v-list-item>
             </draggable>
@@ -45,7 +43,11 @@
         <v-card-text>
           <v-list>
             <draggable group="group" :list="group.analysts">
-              <v-list-item v-for="analyst in group.analysts" :key="analyst.id" @click="select">
+              <v-list-item
+                v-for="analyst in group.analysts"
+                :key="analyst.id"
+                @click="select"
+              >
                 {{ analyst.name }}
               </v-list-item>
             </draggable>
@@ -57,7 +59,7 @@
       <v-btn
         :disabled="groupData.name.length === 0"
         class="primary white--text"
-        @click="save(group)"  
+        @click="save(group)"
       >
         {{ $t('save') }}
       </v-btn>
@@ -66,22 +68,21 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable'
+import draggable from 'vuedraggable';
+
 export default {
   components: {
-    draggable
+    draggable,
   },
   props: {
     value: {
       type: Object,
-      default: () => {
-        return {
-          name: '',
-          description: '',
-          analysts: []
-        }
-      }
-    }
+      default: () => ({
+        name: '',
+        description: '',
+        analysts: [],
+      }),
+    },
   },
   data() {
     return {
@@ -89,28 +90,25 @@ export default {
       groupData: {
         name: '',
         description: '',
-        analysts: []
-      }
-    }
+        analysts: [],
+      },
+    };
   },
   computed: {
     analysts() {
-      return this.$store.getters['analyst/getAnalysts'].filter(analyst => {
-        return analyst.name.toLowerCase().includes(this.search)
-      })
+      return this.$store.getters['analyst/getAnalysts'].filter((analyst) => analyst.name.toLowerCase().includes(this.search));
     },
     group() {
-      return Object.assign(this.groupData, this.value)
-    }
+      return Object.assign(this.groupData, this.value);
+    },
   },
   methods: {
     save(group) {
-      this.$emit('input', group)
+      this.$emit('input', group);
     },
-    select() {}
-  }
-}
+    select() {},
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

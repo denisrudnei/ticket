@@ -21,7 +21,11 @@
               <v-col cols="12">
                 <v-stepper v-model="step">
                   <v-stepper-header>
-                    <v-stepper-step :complete="step > 1" :step="1" @click="step = 1">
+                    <v-stepper-step
+                      :complete="step > 1"
+                      :step="1"
+                      @click="step = 1"
+                    >
                       {{ $t('search_ticket') }}
                     </v-stepper-step>
                     <v-divider />
@@ -42,17 +46,9 @@
         </v-card>
       </v-dialog>
     </v-col>
-    <v-col
-      cols="12"
-      pa-3
-    >
-      <v-data-table
-        :items="actualTicket.children"
-        :headers="headers"
-      >
-        <template
-          v-slot:item.id="{ item }"
-        >
+    <v-col cols="12" pa-3>
+      <v-data-table :items="actualTicket.children" :headers="headers">
+        <template v-slot:item.id="{ item }">
           {{ item.id }}
         </template>
         <template v-slot:item.resume="{ item }">
@@ -86,145 +82,145 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ggl from 'graphql-tag'
-import list from '@/components/ticket/children/search/list'
-import search from '@/graphql/query/search/ticket.graphql'
-import addChildren from '@/graphql/mutation/ticket/addChildren.graphql'
-import removeChildren from '@/graphql/mutation/ticket/removeChildren.graphql'
-import create from '../create'
+import { mapGetters } from 'vuex';
+import ggl from 'graphql-tag';
+import list from '@/components/ticket/children/search/list';
+import search from '@/graphql/query/search/ticket.graphql';
+import addChildren from '@/graphql/mutation/ticket/addChildren.graphql';
+import removeChildren from '@/graphql/mutation/ticket/removeChildren.graphql';
+import create from '../create';
+
 export default {
   name: 'Children',
   components: {
     list,
-    create
+    create,
   },
   data() {
     return {
       dialog: false,
       step: 1,
-      tickets: []
-    }
+      tickets: [],
+    };
   },
   computed: {
     headers() {
       return [
         {
           text: this.$t('actions'),
-          value: 'actions'
+          value: 'actions',
         },
         {
           text: this.$t('number_of_ticket'),
-          value: 'id'
+          value: 'id',
         },
         {
           text: this.$t('status'),
-          value: 'status'
+          value: 'status',
         },
         {
           text: this.$t('group'),
-          value: 'group'
+          value: 'group',
         },
         {
           text: this.$t('resume'),
-          value: 'resume'
+          value: 'resume',
         },
         {
           text: this.$t('status'),
-          value: 'status'
+          value: 'status',
         },
         {
           text: this.$t('group'),
-          value: 'group'
+          value: 'group',
         },
         {
           text: this.$t('category'),
-          value: 'category'
+          value: 'category',
         },
         {
           text: this.$t('creation_date'),
-          value: 'created'
+          value: 'created',
         },
         {
           text: this.$t('modified_date'),
-          value: 'modified'
-        }
-      ]
+          value: 'modified',
+        },
+      ];
     },
     ...mapGetters({
-      actualTicket: 'ticket/getActualTicket'
-    })
+      actualTicket: 'ticket/getActualTicket',
+    }),
   },
   created() {
-    this.$options.components.create = create
+    this.$options.components.create = create;
   },
   methods: {
     search(ticket) {
-      const newTicket = {}
-      Object.keys(ticket).forEach(k => {
+      const newTicket = {};
+      Object.keys(ticket).forEach((k) => {
         if (
-          ticket[k] !== undefined &&
-          Object.prototype.hasOwnProperty.call(ticket[k], 'id')
+          ticket[k] !== undefined
+          && Object.prototype.hasOwnProperty.call(ticket[k], 'id')
         ) {
-          newTicket[k] = ticket[k].id
+          newTicket[k] = ticket[k].id;
         }
-      })
-      const fieldsToExclude = ['CreateTicketd', 'modified', 'resume', 'content']
-      fieldsToExclude.forEach(f => {
-        delete newTicket[f]
-      })
+      });
+      const fieldsToExclude = ['CreateTicketd', 'modified', 'resume', 'content'];
+      fieldsToExclude.forEach((f) => {
+        delete newTicket[f];
+      });
       this.$apollo
         .query({
           query: ggl(search),
           variables: {
-            attributes: newTicket
-          }
+            attributes: newTicket,
+          },
         })
-        .then(response => {
-          this.tickets = response.data.Tickets.docs
-          this.step = 2
-        })
+        .then((response) => {
+          this.tickets = response.data.Tickets.docs;
+          this.step = 2;
+        });
     },
     addChildren(children) {
-      this.dialog = false
-      this.$store.commit('ticket/addChildren', children)
+      this.dialog = false;
+      this.$store.commit('ticket/addChildren', children);
       this.$apollo
         .mutate({
           mutation: ggl(addChildren),
           variables: {
             ticketId: this.actualTicket.id,
-            children: children.map(t => t.id)
-          }
+            children: children.map((t) => t.id),
+          },
         })
         .then(() => {
-          this.step = 1
+          this.step = 1;
           this.$toast.show(this.$t('children_added'), {
             duration: 1000,
-            icon: 'done'
-          })
-        })
+            icon: 'done',
+          });
+        });
     },
     removeChildren(children) {
-      this.dialog = false
-      this.$store.commit('ticket/removeChildren', children)
+      this.dialog = false;
+      this.$store.commit('ticket/removeChildren', children);
       this.$apollo
         .mutate({
           mutation: ggl(removeChildren),
           variables: {
             ticketId: this.actualTicket.id,
-            childrenId: children.id
-          }
+            childrenId: children.id,
+          },
         })
         .then(() => {
           this.$toast.show(this.$t('children_removed'), {
             duration: 1000,
-            icon: 'done'
-          })
-        })
-    }
-  }
-}
+            icon: 'done',
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

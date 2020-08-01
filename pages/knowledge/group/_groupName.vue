@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import KnowledgeList from '@/components/knowledge/list'
+import KnowledgeList from '@/components/knowledge/list';
+
 export default {
   components: {
-    KnowledgeList
-  }
-}
+    KnowledgeList,
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

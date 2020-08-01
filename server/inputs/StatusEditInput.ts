@@ -1,18 +1,18 @@
-import { InputType, Field, ID } from 'type-graphql'
-import Status from '../models/ticket/Status'
+import { InputType, Field, ID } from 'type-graphql';
+import Status from '../models/ticket/Status';
 
 @InputType()
 class StatusEditInput {
   @Field({ nullable: true })
-  public name?: string
+  public name?: string;
 
   @Field({ nullable: true })
-  public description?: string
+  public description?: string;
 
   @Field(() => [ID], { nullable: true })
-  public allowedStatus: Status['id'][] = []
+  public allowedStatus: Status['id'][] = [];
 
   @Field(() => Boolean, { nullable: true })
-  public slaRun = false
+  public slaRun = false;
 }
-export default StatusEditInput
+export default StatusEditInput;

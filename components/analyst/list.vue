@@ -5,7 +5,11 @@
     </v-card-title>
     <v-card-text>
       <v-list two-line>
-        <v-list-item v-for="analyst in analysts" :key="analyst.id" :to="`/analyst/${analyst.id}`">
+        <v-list-item
+          v-for="analyst in analysts"
+          :key="analyst.id"
+          :to="`/analyst/${analyst.id}`"
+        >
           <v-list-item-avatar>
             <v-avatar>
               <v-img :src="analyst.picture" />
@@ -19,13 +23,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
+
 export default {
   computed: mapGetters({
-    analysts: 'analyst/getSearchedAnalysts'
-  })
-}
+    analysts: 'analyst/getSearchedAnalysts',
+  }),
+};
 </script>
 
-<style>
-</style>
+<style></style>

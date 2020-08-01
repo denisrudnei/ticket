@@ -23,22 +23,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
+
 export default {
   computed: mapGetters({
     value: 'ticket/getConfirmCopy',
-    ticket: 'ticket/getTicketToCopy'
+    ticket: 'ticket/getTicketToCopy',
   }),
   methods: {
     yes() {
-      this.$emit('update', this.ticket)
+      this.$emit('update', this.ticket);
     },
     no() {
-      this.$store.commit('ticket/setConfirmCopy', false)
-    }
-  }
-}
+      this.$store.commit('ticket/setConfirmCopy', false);
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,25 +1,23 @@
 <template>
-  <ticket-create
-    v-model="ticket"
-    @input="create()"
-  />
+  <ticket-create v-model="ticket" @input="create()" />
 </template>
 
 <script>
-import TicketCreate from '@/components/ticket/create'
-import create from '@/graphql/mutation/ticket/create.graphql'
-import ggl from 'graphql-tag'
+import TicketCreate from '@/components/ticket/create';
+import create from '@/graphql/mutation/ticket/create.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   components: {
-    TicketCreate
+    TicketCreate,
   },
   data() {
     return {
-      ticket: {}
-    }
+      ticket: {},
+    };
   },
   created() {
-    this.$store.commit('ticket/resetActualTicket')
+    this.$store.commit('ticket/resetActualTicket');
   },
   methods: {
     create() {
@@ -36,22 +34,21 @@ export default {
               group: this.ticket.group.id,
               category: this.ticket.category.id,
               priority: this.ticket.priority.id,
-              status: this.ticket.status.id
-            }
-          }
+              status: this.ticket.status.id,
+            },
+          },
         })
         .then(() => {
-          this.$router.push('/')
+          this.$router.push('/');
         })
         .catch(() => {
-          this.$toast.error(`Erro ao criar ticket`, {
-            duration: 5000
-          })
-        })
-    }
-  }
-}
+          this.$toast.error('Erro ao criar ticket', {
+            duration: 5000,
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -14,36 +14,34 @@
 </template>
 
 <script>
-import list from '@/graphql/query/config/knowledgeStatus/list.graphql'
-import ggl from 'graphql-tag'
+import list from '@/graphql/query/config/knowledgeStatus/list.graphql';
+import ggl from 'graphql-tag';
+
 export default {
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(list),
+      })
+      .then((response) => ({
+        status: response.data.KnowledgeStatus,
+      }));
+  },
   computed: {
     headers() {
       return [
         {
           text: this.$t('name'),
-          value: 'name'
+          value: 'name',
         },
         {
           text: this.$t('description'),
-          value: 'description'
-        }
-      ]
-    }
+          value: 'description',
+        },
+      ];
+    },
   },
-  asyncData({ app }) {
-    return app.$apollo
-      .query({
-        query: ggl(list)
-      })
-      .then(response => {
-        return {
-          status: response.data.KnowledgeStatus
-        }
-      })
-  }
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,4 +1,5 @@
-import { Field, ID, ObjectType } from 'type-graphql'
+/* eslint-disable no-shadow */
+import { Field, ID, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -7,44 +8,44 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  PrimaryGeneratedColumn
-} from 'typeorm'
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-import Analyst from '../Analyst'
-import Chat from './Chat'
+import Analyst from '../Analyst';
+import Chat from './Chat';
 
 @Entity()
 @ObjectType()
 class Message extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field(type => ID)
-  public id!: number
+  @Field((type) => ID)
+  public id!: number;
 
-  @ManyToOne(type => Chat, Chat => Chat.messages)
+  @ManyToOne((type) => Chat, (Chat) => Chat.messages)
   @JoinColumn({ name: 'chat' })
-  public chat!: Chat
+  public chat!: Chat;
 
-  @ManyToOne(type => Analyst)
-  @Field(type => Analyst)
-  public to!: Analyst
+  @ManyToOne((type) => Analyst)
+  @Field((type) => Analyst)
+  public to!: Analyst;
 
-  @ManyToOne(type => Analyst)
+  @ManyToOne((type) => Analyst)
   @JoinColumn({ name: 'from' })
-  @Field(type => Analyst)
-  public from!: Analyst
+  @Field((type) => Analyst)
+  public from!: Analyst;
 
   @Column()
   @Field()
-  public content!: string
+  public content!: string;
 
-  @ManyToMany(type => Analyst)
+  @ManyToMany((type) => Analyst)
   @JoinTable()
-  @Field(type => [Analyst])
-  public read!: Analyst[]
+  @Field((type) => [Analyst])
+  public read!: Analyst[];
 
   @Column()
   @Field()
-  public date: Date = new Date()
+  public date: Date = new Date();
 }
 
-export default Message
+export default Message;

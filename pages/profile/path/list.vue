@@ -1,20 +1,20 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-data-table
-        :headers="headers"
-        :items="items"
-      >
-        <template
-          v-slot:item.name="{ item }"
-        >
+      <v-data-table :headers="headers" :items="items">
+        <template v-slot:item.name="{ item }">
           {{ item.name }}
         </template>
         <template v-slot:item.property="{ item }">
           {{ item.property }}
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-btn class="primary white--text" icon title="Exluir" @click="deletePath(item.id)">
+          <v-btn
+            class="primary white--text"
+            icon
+            title="Exluir"
+            @click="deletePath(item.id)"
+          >
             <v-icon>
               delete
             </v-icon>
@@ -26,44 +26,43 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ggl from 'graphql-tag'
-import remove from '@/graphql/mutation/profile/path/removePath.graphql'
-import list from '@/graphql/query/profile/path/list.graphql'
-import getTree from '@/graphql/query/profile/path/tree.graphql'
+import { mapGetters } from 'vuex';
+import ggl from 'graphql-tag';
+import remove from '@/graphql/mutation/profile/path/removePath.graphql';
+import list from '@/graphql/query/profile/path/list.graphql';
+import getTree from '@/graphql/query/profile/path/tree.graphql';
+
 export default {
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(list),
+      })
+      .then((response) => ({
+        items: response.data.path,
+      }));
+  },
   computed: {
     headers() {
       return [
         {
           text: this.$t('name'),
-          value: 'name'
+          value: 'name',
         },
         {
           text: this.$t('field'),
-          value: 'property'
+          value: 'property',
         },
         {
           text: this.$t('actions'),
-          value: 'actions'
-        }
-      ]
+          value: 'actions',
+        },
+      ];
     },
     ...mapGetters({
       user: 'auth/getUser',
-      tree: 'ticket/getTree'
-    })
-  },
-  asyncData({ app }) {
-    return app.$apollo
-      .query({
-        query: ggl(list)
-      })
-      .then(response => {
-        return {
-          items: response.data.path
-        }
-      })
+      tree: 'ticket/getTree',
+    }),
   },
   methods: {
     deletePath(id) {
@@ -72,37 +71,32 @@ export default {
           mutation: ggl(remove),
           variables: {
             userId: this.user.id,
-            path: id
+            path: id,
           },
           awaitRefetchQueries: true,
           refetchQueries: [
             {
-              query: ggl(getTree)
+              query: ggl(getTree),
             },
             {
-              query: ggl(list)
-            }
-          ]
+              query: ggl(list),
+            },
+          ],
         })
         .then(() => {
-          this.items = this.items.filter(item => {
-            return item.id !== id
-          })
+          this.items = this.items.filter((item) => item.id !== id);
           this.$store.commit(
             'ticket/setTree',
-            this.tree.filter(item => {
-              return item.id !== id
-            })
-          )
+            this.tree.filter((item) => item.id !== id),
+          );
           this.$toast.show('Removido', {
             duration: 5000,
-            icon: 'done'
-          })
-        })
-    }
-  }
-}
+            icon: 'done',
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -3,59 +3,59 @@
 </template>
 
 <script>
-import create from '@/components/knowledge/create'
-import CreateKnowledge from '@/graphql/mutation/config/knowledge/create.graphql'
-import list from '@/graphql/query/knowledge/list.graphql'
-import ggl from 'graphql-tag'
+import create from '@/components/knowledge/create';
+import CreateKnowledge from '@/graphql/mutation/config/knowledge/create.graphql';
+import list from '@/graphql/query/knowledge/list.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   components: {
-    create
+    create,
   },
   data() {
     return {
-      knowledge: null
-    }
+      knowledge: null,
+    };
   },
   methods: {
     save(knowledge) {
-      knowledge.category = knowledge.category.id
-      knowledge.group = knowledge.group.id
-      knowledge.status = knowledge.status.id
+      knowledge.category = knowledge.category.id;
+      knowledge.group = knowledge.group.id;
+      knowledge.status = knowledge.status.id;
       this.$apollo
         .mutate({
           mutation: ggl(CreateKnowledge),
           variables: {
-            knowledge
+            knowledge,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }]
+          refetchQueries: [{ query: ggl(list) }],
         })
-        .then(response => {
+        .then((response) => {
           this.$toast.show('Criado documento de conhecimento', {
             duration: 5000,
-            icon: 'done'
-          })
+            icon: 'done',
+          });
           if (this.$refs.create.$refs.file.files.length > 0) {
-            const formData = new FormData()
-            formData.append('file', this.$refs.create.$refs.file.files[0])
+            const formData = new FormData();
+            formData.append('file', this.$refs.create.$refs.file.files[0]);
             this.$axios
               .post(
                 `/knowledge/${response.data.CreateKnowledge.id}/file`,
-                formData
+                formData,
               )
               .then(() => {
                 this.$toast.show('Documento enviado com sucesso', {
                   duration: 5000,
-                  icon: 'done'
-                })
-              })
+                  icon: 'done',
+                });
+              });
           }
-          this.$router.push('/config/knowledge/list')
-        })
-    }
-  }
-}
+          this.$router.push('/config/knowledge/list');
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,5 +1,6 @@
-import NotificationService from '@/server/services/NotificationService'
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer'
+/* eslint-disable class-methods-use-this */
+import NotificationService from '@/server/services/NotificationService';
+import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import {
   Arg,
   Authorized,
@@ -13,184 +14,146 @@ import {
   Query,
   Resolver,
   Root,
-  Subscription
-} from 'type-graphql'
-import Ticket from '../../server/models/ticket/Ticket'
-import NotificationEnum from '../enums/NotificationEnum'
-import TicketEnum from '../enums/TicketEnum'
-import TicketCreateInput from '../inputs/TicketCreateInput'
-import TicketInput from '../inputs/TicketInput'
-import Comment from '../models/ticket/Comment'
-import Group from '../models/ticket/Group'
-import Log from '../models/ticket/Log'
-import Status from '../models/ticket/Status'
-import File from '../models/File'
-import LogService from '../services/ticket/LogService'
-import TicketService from '../services/ticket/TicketService'
-import Priority from '../models/ticket/Priority'
-import Analyst from '../models/Analyst'
-import Address from '../models/Address'
-import Category from '../models/ticket/Category'
+  Subscription,
+} from 'type-graphql';
+import Ticket from '../../server/models/ticket/Ticket';
+import NotificationEnum from '../enums/NotificationEnum';
+import TicketEnum from '../enums/TicketEnum';
+import TicketCreateInput from '../inputs/TicketCreateInput';
+import TicketInput from '../inputs/TicketInput';
+import Comment from '../models/ticket/Comment';
+import Group from '../models/ticket/Group';
+import Log from '../models/ticket/Log';
+import Status from '../models/ticket/Status';
+import File from '../models/File';
+import LogService from '../services/ticket/LogService';
+import TicketService from '../services/ticket/TicketService';
+import Priority from '../models/ticket/Priority';
+import Analyst from '../models/Analyst';
+import Address from '../models/Address';
+import Category from '../models/ticket/Category';
 
-@Resolver(of => Ticket)
+@Resolver((of) => Ticket)
 class TicketResolver {
   @Query(() => Ticket)
   TicketById(@Arg('id', () => ID) id: Ticket['id']) {
-    return TicketService.getOne(id)
+    return TicketService.getOne(id);
   }
   // FIXME
 
   @FieldResolver()
-  logs(@Root() ticket: Ticket): Promise<Log[]> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['logs']
-      }).then(ticket => {
-        resolve(ticket!.logs)
-      })
-    })
+  async logs(@Root() ticket: Ticket): Promise<Log[]> {
+    const { logs } = (await Ticket.findOne(ticket.id, {
+      relations: ['logs'],
+    })) as Ticket;
+    return logs!;
   }
 
   @FieldResolver()
-  comments(@Root() ticket: Ticket): Promise<Comment[]> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['comments']
-      }).then(ticket => {
-        resolve(ticket!.comments)
-      })
-    })
+  async comments(@Root() ticket: Ticket): Promise<Comment[]> {
+    const { comments } = (await Ticket.findOne(ticket.id, {
+      relations: ['comments'],
+    }) as Ticket);
+
+    return comments;
   }
 
   @FieldResolver()
-  children(@Root() ticket: Ticket): Promise<Ticket[]> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['children']
-      }).then(ticket => {
-        resolve(ticket!.children)
-      })
-    })
+  async children(@Root() ticket: Ticket): Promise<Ticket[]> {
+    const { children } = (await Ticket.findOne(ticket.id, {
+      relations: ['children'],
+    }) as Ticket);
+    return children;
   }
 
   @FieldResolver()
-  openedBy(@Root() ticket: Ticket): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['openedBy']
-      }).then(ticket => {
-        resolve(ticket!.openedBy)
-      })
-    })
+  async openedBy(@Root() ticket: Ticket): Promise<Analyst> {
+    const { openedBy } = (await Ticket.findOne(ticket.id, {
+      relations: ['openedBy'],
+    }) as Ticket);
+    return openedBy;
   }
 
   @FieldResolver()
-  actualUser(@Root() ticket: Ticket): Promise<Analyst | null> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['actualUser']
-      }).then(ticket => {
-        resolve(ticket!.actualUser)
-      })
-    })
+  async actualUser(@Root() ticket: Ticket): Promise<Ticket['actualUser']> {
+    const { actualUser } = (await Ticket.findOne(ticket.id, {
+      relations: ['actualUser'],
+    }) as Ticket);
+    return actualUser;
   }
 
   @FieldResolver()
-  affectedUser(@Root() ticket: Ticket): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['affectedUser']
-      }).then(ticket => {
-        resolve(ticket!.affectedUser)
-      })
-    })
+  async affectedUser(@Root() ticket: Ticket): Promise<Analyst> {
+    const { affectedUser } = (await Ticket.findOne(ticket.id, {
+      relations: ['affectedUser'],
+    }) as Ticket);
+    return affectedUser;
   }
 
   @FieldResolver()
-  group(@Root() ticket: Ticket): Promise<Group> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['group']
-      }).then(ticket => {
-        resolve(ticket!.group)
-      })
-    })
+  async group(@Root() ticket: Ticket): Promise<Group> {
+    const { group } = (await Ticket.findOne(ticket.id, {
+      relations: ['group'],
+    }) as Ticket);
+    return group;
   }
 
   @FieldResolver()
-  status(@Root() ticket: Ticket): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['status']
-      }).then(ticket => {
-        resolve(ticket!.status)
-      })
-    })
+  async status(@Root() ticket: Ticket): Promise<Status> {
+    const { status } = (await Ticket.findOne(ticket.id, {
+      relations: ['status'],
+    }) as Ticket);
+    return status;
   }
 
   @FieldResolver()
-  priority(@Root() ticket: Ticket): Promise<Priority> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['priority']
-      }).then(ticket => {
-        resolve(ticket!.priority)
-      })
-    })
+  async priority(@Root() ticket: Ticket): Promise<Priority> {
+    const { priority } = (await Ticket.findOne(ticket.id, {
+      relations: ['priority'],
+    }) as Ticket);
+    return priority;
   }
 
   @FieldResolver()
-  address(@Root() ticket: Ticket): Promise<Address> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['address']
-      }).then(ticket => {
-        resolve(ticket!.address)
-      })
-    })
+  async address(@Root() ticket: Ticket): Promise<Address> {
+    const { address } = (await Ticket.findOne(ticket.id, {
+      relations: ['address'],
+    }) as Ticket);
+    return address;
   }
 
   @FieldResolver()
-  category(@Root() ticket: Ticket): Promise<Category> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['category']
-      }).then(ticket => {
-        resolve(ticket!.category)
-      })
-    })
+  async category(@Root() ticket: Ticket): Promise<Category> {
+    const { category } = (await Ticket.findOne(ticket.id, {
+      relations: ['category'],
+    }) as Ticket);
+    return category;
   }
 
   @FieldResolver()
-  father(@Root() ticket: Ticket): Promise<Ticket | null> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['father']
-      }).then(ticket => {
-        resolve(ticket!.father)
-      })
-    })
+  async father(@Root() ticket: Ticket): Promise<Ticket | null> {
+    const { father } = (await Ticket.findOne(ticket.id, {
+      relations: ['father'],
+    }) as Ticket);
+    return father;
   }
 
   @FieldResolver()
-  files(@Root() ticket: Ticket): Promise<File[]> {
-    return new Promise((resolve, reject) => {
-      Ticket.findOne(ticket.id, {
-        relations: ['files']
-      }).then(ticket => {
-        resolve(ticket!.files)
-      })
-    })
+  async files(@Root() ticket: Ticket): Promise<File[]> {
+    const { files } = (await Ticket.findOne(ticket.id, {
+      relations: ['files'],
+    }) as Ticket);
+    return files;
   }
 
   @FieldResolver()
   overtakeSla(@Root() ticket: Ticket) {
-    return TicketService.overtakeSla(ticket.id)
+    return TicketService.overtakeSla(ticket.id);
   }
 
   @FieldResolver()
   slaPercentage(@Root() ticket: Ticket) {
-    return TicketService.slaPercentage(ticket.id)
+    return TicketService.slaPercentage(ticket.id);
   }
 
   @Query(() => [Ticket])
@@ -198,37 +161,37 @@ class TicketResolver {
   Tickets(
     @Arg('sortBy', () => String, {
       nullable: true,
-      defaultValue: 'id'
+      defaultValue: 'id',
     })
-    sortBy: string,
+      sortBy: string,
     @Arg('descending', { nullable: true, defaultValue: false })
-    descending: boolean,
+      descending: boolean,
     @Arg('page', () => Int, { nullable: true, defaultValue: 0 }) page: number,
-    @Arg('limit', () => Int, { nullable: true, defaultValue: 10 }) limit: number
+    @Arg('limit', () => Int, { nullable: true, defaultValue: 10 }) limit: number,
   ) {
     return TicketService.getTickets(
       {},
       {
-        [sortBy]: descending
+        [sortBy]: descending,
       },
       page,
-      limit
-    )
+      limit,
+    );
   }
 
-  @Mutation(type => Ticket)
+  @Mutation((type) => Ticket)
   @Authorized('user')
   async ChangeStatus(
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
     @Arg('statusId', () => ID) statusId: Status['id'],
     @Ctx('pubSub') pubSub: PubSubEngine,
-    @Ctx() { req }: ExpressContext
+    @Ctx() { req }: ExpressContext,
   ): Promise<Ticket> {
-    const user = req!.session!.authUser
-    const ticket = await TicketService.changeStatus(ticketId, statusId)
-    LogService.createTicketLog(user.id, ticket!.id)
-    pubSub.publish(TicketEnum.TICKET_CHANGE_STATUS, ticket)
-    return ticket
+    const user = req!.session!.authUser;
+    const ticket = await TicketService.changeStatus(ticketId, statusId);
+    LogService.createTicketLog(user.id, ticket!.id);
+    pubSub.publish(TicketEnum.TICKET_CHANGE_STATUS, ticket);
+    return ticket;
   }
 
   @Mutation(() => [Ticket])
@@ -236,23 +199,23 @@ class TicketResolver {
   TransferTickets(
     @Arg('tickets', () => [ID]) tickets: Ticket['id'][],
     @Arg('groupId', () => ID) groupId: Group['id'],
-    @PubSub() pubSub: PubSubEngine
+    @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket[]> {
-    const ticketsTransferred = TicketService.transferTickets(tickets, groupId)
-    pubSub.publish(TicketEnum.TICKETS_TRANSFER_TO_GROUP, tickets)
-    return ticketsTransferred
+    const ticketsTransferred = TicketService.transferTickets(tickets, groupId);
+    pubSub.publish(TicketEnum.TICKETS_TRANSFER_TO_GROUP, tickets);
+    return ticketsTransferred;
   }
 
   @Mutation(() => [Ticket])
   @Authorized('user')
   ChangeStatusOfTickets(
-    @Arg('tickets', type => [ID]) tickets: Ticket['id'][],
-    @Arg('statusId', type => ID) statusId: Status['id'],
-    @PubSub() pubSub: PubSubEngine
+    @Arg('tickets', (type) => [ID]) tickets: Ticket['id'][],
+    @Arg('statusId', (type) => ID) statusId: Status['id'],
+    @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket[]> {
-    const statusChanged = TicketService.changeStatusOfTickets(tickets, statusId)
-    pubSub.publish(TicketEnum.TICKETS_CHANGE_STATUS, tickets)
-    return statusChanged
+    const statusChanged = TicketService.changeStatusOfTickets(tickets, statusId);
+    pubSub.publish(TicketEnum.TICKETS_CHANGE_STATUS, tickets);
+    return statusChanged;
   }
 
   @Mutation(() => Ticket)
@@ -261,19 +224,19 @@ class TicketResolver {
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
     @Arg('groupId', () => ID) groupId: Group['id'],
     @PubSub() pubSub: PubSubEngine,
-    @Ctx() { req }: ExpressContext
+    @Ctx() { req }: ExpressContext,
   ): Promise<Ticket> {
-    const user = req!.session!.authUser
-    const ticket = await TicketService.transferToGroup(ticketId, groupId)
+    const user = req!.session!.authUser;
+    const ticket = await TicketService.transferToGroup(ticketId, groupId);
     const notification = await NotificationService.triggerForTicketTransfer(
       ticket.id,
       ticket!.group.id,
-      user.id
-    )
-    LogService.createTicketLog(user.id, ticket.id)
-    pubSub.publish(NotificationEnum.ADD_NOTIFICATION, notification)
-    pubSub.publish(TicketEnum.TICKET_TRANSFER_TO_GROUP, ticket)
-    return ticket
+      user.id,
+    );
+    LogService.createTicketLog(user.id, ticket.id);
+    pubSub.publish(NotificationEnum.ADD_NOTIFICATION, notification);
+    pubSub.publish(TicketEnum.TICKET_TRANSFER_TO_GROUP, ticket);
+    return ticket;
   }
 
   @Mutation(() => Ticket)
@@ -281,18 +244,18 @@ class TicketResolver {
   async CreateTicket(
     @Arg('ticket', () => TicketCreateInput) ticket: Ticket,
     @Ctx() { req }: ExpressContext,
-    @PubSub() pubSub: PubSubEngine
+    @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket> {
-    const newTicket = Ticket.create(ticket)
+    const newTicket = Ticket.create(ticket);
 
-    newTicket.openedBy = req!.session!.authUser
+    newTicket.openedBy = req!.session!.authUser;
 
-    const createdTicket = await TicketService.create(newTicket)
+    const createdTicket = await TicketService.create(newTicket);
     const notification = await NotificationService.triggerForTicketCreation(
-      createdTicket
-    )
-    pubSub.publish(NotificationEnum.ADD_NOTIFICATION, notification)
-    return createdTicket
+      createdTicket,
+    );
+    pubSub.publish(NotificationEnum.ADD_NOTIFICATION, notification);
+    return createdTicket;
   }
 
   @Mutation(() => Ticket)
@@ -300,25 +263,24 @@ class TicketResolver {
   EditTicket(
     @Arg('id', () => ID) id: Ticket['id'],
     @Arg('ticket', () => TicketInput) ticket: Ticket,
-    @Ctx() ExpressContext: ExpressContext,
-    @PubSub() pubSub: PubSubEngine
+    @Ctx() { req }: ExpressContext,
+    @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket> {
-    const { req } = ExpressContext
-    const userId = req!.session!.authUser.id
-    LogService.createTicketLog(userId, ticket.id)
-    const editedTicket = TicketService.updateOne(id, ticket)
-    pubSub.publish(TicketEnum.TICKET_EDIT, editedTicket)
-    return editedTicket
+    const userId = req!.session!.authUser.id;
+    LogService.createTicketLog(userId, ticket.id);
+    const editedTicket = TicketService.updateOne(id, ticket);
+    pubSub.publish(TicketEnum.TICKET_EDIT, editedTicket);
+    return editedTicket;
   }
 
   @Mutation(() => Ticket)
   @Authorized('user')
   CopyTicket(
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
-    @Ctx() { req }: ExpressContext
+    @Ctx() { req }: ExpressContext,
   ): Promise<Ticket> {
-    const userId = req!.session!.authUser.id
-    return TicketService.copyTicket(ticketId, userId)
+    const userId = req!.session!.authUser.id;
+    return TicketService.copyTicket(ticketId, userId);
   }
 
   @Mutation(() => Ticket)
@@ -326,11 +288,11 @@ class TicketResolver {
   AddChildren(
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
     @Arg('children', () => [ID]) children: Ticket[],
-    @PubSub() pubSub: PubSubEngine
+    @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket> {
-    const addChildren = TicketService.addChildren(ticketId, children)
-    pubSub.publish(TicketEnum.ADD_CHILDREN, addChildren)
-    return addChildren
+    const addChildren = TicketService.addChildren(ticketId, children);
+    pubSub.publish(TicketEnum.ADD_CHILDREN, addChildren);
+    return addChildren;
   }
 
   @Mutation(() => Ticket)
@@ -338,11 +300,11 @@ class TicketResolver {
   RemoveChildren(
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
     @Arg('childrenId', () => ID) childrenId: Ticket['id'],
-    @PubSub() pubSub: PubSubEngine
+    @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket> {
-    const removeChildren = TicketService.removeChildren(ticketId, childrenId)
-    pubSub.publish(TicketEnum.REMOVE_CHILDREN, removeChildren)
-    return removeChildren
+    const removeChildren = TicketService.removeChildren(ticketId, childrenId);
+    pubSub.publish(TicketEnum.REMOVE_CHILDREN, removeChildren);
+    return removeChildren;
   }
 
   @Mutation(() => Comment)
@@ -350,54 +312,54 @@ class TicketResolver {
   CommentOnTicket(
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
     @Arg('content') content: string,
-    @Ctx() context: ExpressContext
+    @Ctx() context: ExpressContext,
   ) {
-    const userId = context.req.session!.authUser!.id
-    return TicketService.commentOnTicket(ticketId, userId, content)
+    const userId = context.req.session!.authUser!.id;
+    return TicketService.commentOnTicket(ticketId, userId, content);
   }
 
   @Subscription({
-    topics: TicketEnum.TICKET_TRANSFER_TO_GROUP
+    topics: TicketEnum.TICKET_TRANSFER_TO_GROUP,
   })
   TransferToGroup(@Root() ticketPayload: Ticket): Ticket {
-    return ticketPayload
+    return ticketPayload;
   }
 
   @Subscription({
     name: 'ChangeStatus',
-    topics: TicketEnum.TICKET_CHANGE_STATUS
+    topics: TicketEnum.TICKET_CHANGE_STATUS,
   })
   ChangeStatusSubscription(@Root() ticketPayload: Ticket): Ticket {
-    return ticketPayload
+    return ticketPayload;
   }
 
   @Subscription({
     topics: TicketEnum.SLA_UPDATE,
     filter: ({ args, payload }) => {
-      const tickets = args.tickets as Ticket['id'][]
-      return tickets.includes(payload.id)
-    }
+      const tickets = args.tickets as Ticket['id'][];
+      return tickets.includes(payload.id);
+    },
   })
   SlaUpdate(
     @Root() ticketPayload: Ticket,
-    @Arg('tickets', () => [ID]) tickets: Ticket['id'][]
+    @Arg('tickets', () => [ID]) tickets: Ticket['id'][],
   ): Ticket {
-    return ticketPayload
+    return ticketPayload;
   }
 
   @Subscription({
     name: 'EditTicket',
     topics: TicketEnum.TICKET_EDIT,
     filter: ({ args, payload }) => {
-      const tickets = args.tickets as Ticket['id'][]
-      return tickets.includes(payload.id)
-    }
+      const tickets = args.tickets as Ticket['id'][];
+      return tickets.includes(payload.id);
+    },
   })
   EditTicketSubscription(
     @Root() ticketPayload: Ticket,
-    @Arg('tickets', () => [ID]) tickets: Ticket['id'][]
+    @Arg('tickets', () => [ID]) tickets: Ticket['id'][],
   ): Ticket {
-    return ticketPayload
+    return ticketPayload;
   }
 
   //   }
@@ -429,4 +391,4 @@ class TicketResolver {
   //   }
 }
 
-export default TicketResolver
+export default TicketResolver;

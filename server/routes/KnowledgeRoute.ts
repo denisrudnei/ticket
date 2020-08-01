@@ -1,11 +1,12 @@
-import { Router } from 'express'
-import KnowledgeController from '../controllers/KnowledgeController'
-const router = Router()
+import { Router } from 'express';
+import KnowledgeController from '../controllers/KnowledgeController';
 
-router.get('/knowledge/:id/file', KnowledgeController.getFile)
-router.get('/knowledge/:id/files', KnowledgeController.getAllFiles)
+const router = Router();
 
-router.post('/knowledge/tempFile', KnowledgeController.addTempFile)
-router.post('/knowledge/:id/file', KnowledgeController.addFile)
+router.get('/knowledge/:id/file', KnowledgeController.getFile);
+router.get('/knowledge/:id/files', KnowledgeController.getAllFiles);
 
-export default router
+router.post('/knowledge/tempFile', KnowledgeController.addTempFile);
+router.post('/knowledge/:id/file', KnowledgeController.addFile);
+
+export default router;

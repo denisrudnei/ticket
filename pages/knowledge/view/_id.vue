@@ -1,10 +1,6 @@
 <template>
   <client-only>
-    <v-dialog
-      :value="dialog"
-      scrollable
-      persistent
-    >
+    <v-dialog :value="dialog" scrollable persistent>
       <v-card>
         <v-toolbar class="primary white--text">
           <v-toolbar-title>
@@ -53,7 +49,12 @@
         </v-card-text>
         <v-divider />
         <v-card-actions>
-          <a ref="download" :href="knowledge.url" download style="display: none;" />
+          <a
+            ref="download"
+            :href="knowledge.url"
+            download
+            style="display: none;"
+          />
           <v-btn tile class="primary white--text" @click="download()">
             Baixar IT
           </v-btn>
@@ -64,69 +65,68 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag'
-import KnowledgeById from '@/graphql/query/knowledge/knowledgeById.graphql'
+import ggl from 'graphql-tag';
+import KnowledgeById from '@/graphql/query/knowledge/knowledgeById.graphql';
+
 export default {
-  data() {
-    return {
-      showModal: false,
-      dialog: true
-    }
-  },
-  head() {
-    return {
-      title: this.knowledge.name
-    }
-  },
   asyncData({ params, app }) {
     return app.$apollo
       .query({
         query: ggl(KnowledgeById),
         variables: {
-          id: params.id
-        }
+          id: params.id,
+        },
       })
-      .then(response => {
-        return {
-          knowledge: response.data.knowledge
-        }
-      })
+      .then((response) => ({
+        knowledge: response.data.knowledge,
+      }));
+  },
+  data() {
+    return {
+      showModal: false,
+      dialog: true,
+    };
   },
   mounted() {
-    const id = this.$route.params.id
+    const { id } = this.$route.params;
     this.$apollo
       .query({
         query: ggl(KnowledgeById),
         variables: {
-          id: id
-        }
+          id,
+        },
       })
-      .then(response => {
-        this.knowledge = response.data.knowledge
-      })
+      .then((response) => {
+        this.knowledge = response.data.knowledge;
+      });
   },
   methods: {
     compare(obj1, obj2) {
-      return obj1.id === obj2.id
+      return obj1.id === obj2.id;
     },
     openModal(field, value) {
-      this.showModal = true
+      this.showModal = true;
       if (Object.prototype.hasOwnProperty.call(value, 'id')) {
         this.$store.commit('ticket/setModalQuery', {
-          [field]: value.id
-        })
-        this.$store.commit('ticket/setModalList', true)
+          [field]: value.id,
+        });
+        this.$store.commit('ticket/setModalList', true);
       }
     },
     download() {
-      this.$refs.download.click()
+      this.$refs.download.click();
     },
     close() {
-      this.dialog = false
-      this.$router.back()
-    }
-  }
-}
+      this.dialog = false;
+      this.$router.back();
+    },
+  },
+  head() {
+    return {
+      title: this.knowledge.name,
+    };
+  },
+};
 </script>
 
 <style>

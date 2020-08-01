@@ -1,13 +1,7 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      pa-1
-    >
-      <v-tabs
-        slider-color="primary"
-        show-arrows
-      >
+    <v-col cols="12" pa-1>
+      <v-tabs slider-color="primary" show-arrows>
         <v-tab to="/config/analyst">
           {{ $t('analysts') }}
         </v-tab>
@@ -54,11 +48,10 @@
 export default {
   created() {
     if (this.$route.path === '/config') {
-      this.$router.push('/config/analyst')
+      this.$router.push('/config/analyst');
     }
-  }
-}
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

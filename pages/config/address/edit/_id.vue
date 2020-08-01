@@ -3,29 +3,28 @@
 </template>
 
 <script>
-import AddressCreate from '@/components/address/create'
-import AddressById from '@/graphql/query/address/addressById.graphql'
-import edit from '@/graphql/mutation/config/address/edit.graphql'
-import list from '@/graphql/query/address/list.graphql'
-import ggl from 'graphql-tag'
+import AddressCreate from '@/components/address/create';
+import AddressById from '@/graphql/query/address/addressById.graphql';
+import edit from '@/graphql/mutation/config/address/edit.graphql';
+import list from '@/graphql/query/address/list.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   components: {
-    AddressCreate
+    AddressCreate,
   },
   asyncData({ app, params }) {
-    const id = params.id
+    const { id } = params;
     return app.$apollo
       .query({
         query: ggl(AddressById),
         variables: {
-          id
-        }
+          id,
+        },
       })
-      .then(response => {
-        return {
-          address: response.data.AddressById
-        }
-      })
+      .then((response) => ({
+        address: response.data.AddressById,
+      }));
   },
   methods: {
     update(address) {
@@ -40,23 +39,22 @@ export default {
               street: address.street,
               state: address.state,
               city: address.city,
-              country: address.country
-            }
+              country: address.country,
+            },
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }]
+          refetchQueries: [{ query: ggl(list) }],
         })
         .then(() => {
           this.$toast.show(this.$t('updated'), {
             duration: 1000,
-            icon: 'done'
-          })
-          this.$router.push('/config/address/list')
-        })
-    }
-  }
-}
+            icon: 'done',
+          });
+          this.$router.push('/config/address/list');
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

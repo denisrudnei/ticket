@@ -1,22 +1,14 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-    >
+    <v-col cols="12">
       <v-tabs show-arrows>
-        <v-tab
-          to="/profile/notification/all"
-        >
+        <v-tab to="/profile/notification/all">
           {{ $t('all_notifications') }}
         </v-tab>
-        <v-tab
-          to="/profile/notification/read"
-        >
+        <v-tab to="/profile/notification/read">
           {{ $t('read') }}
         </v-tab>
-        <v-tab
-          to="/profile/notification/unread"
-        >
+        <v-tab to="/profile/notification/unread">
           {{ $t('unread') }}
         </v-tab>
       </v-tabs>
@@ -28,27 +20,27 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ggl from 'graphql-tag'
-import NotificationList from '@/graphql/query/profile/notification/list.graphql'
+import { mapGetters } from 'vuex';
+import ggl from 'graphql-tag';
+import NotificationList from '@/graphql/query/profile/notification/list.graphql';
+
 export default {
   computed: mapGetters({
-    notifications: 'notification/getNotifications'
+    notifications: 'notification/getNotifications',
   }),
   created() {
     this.$apollo
       .query({
-        query: ggl(NotificationList)
+        query: ggl(NotificationList),
       })
-      .then(response => {
+      .then((response) => {
         this.$store.commit(
           'notification/setNotifications',
-          response.data.notification
-        )
-      })
-  }
-}
+          response.data.notification,
+        );
+      });
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

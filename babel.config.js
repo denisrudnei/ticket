@@ -7,12 +7,12 @@ module.exports = {
           '@babel/preset-env',
           {
             targets: {
-              node: 'current'
-            }
-          }
+              node: 'current',
+            },
+          },
         ],
-        '@nuxt/babel-preset-app'
-      ]
+        '@nuxt/babel-preset-app',
+      ],
     },
     development: {
       presets: [
@@ -20,15 +20,15 @@ module.exports = {
           '@babel/preset-env',
           {
             targets: {
-              node: 'current'
-            }
-          }
+              node: 'current',
+            },
+          },
         ],
-        '@nuxt/babel-preset-app'
-      ]
+        '@nuxt/babel-preset-app',
+      ],
     },
     test: {
-      presets: [['@babel/preset-env']]
-    }
-  }
-}
+      presets: [['@babel/preset-env']],
+    },
+  },
+};

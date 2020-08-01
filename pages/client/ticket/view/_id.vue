@@ -1,25 +1,55 @@
 <template>
   <v-row>
     <v-col cols="12" md="4">
-      <v-text-field :value="ticket.status.name" readonly filled :label="$t('status')" />
+      <v-text-field
+        :value="ticket.status.name"
+        readonly
+        filled
+        :label="$t('status')"
+      />
     </v-col>
     <v-col cols="12" md="4">
-      <v-text-field :value="ticket.group.name" readonly filled :label="$t('actual_group')" />
+      <v-text-field
+        :value="ticket.group.name"
+        readonly
+        filled
+        :label="$t('actual_group')"
+      />
     </v-col>
     <v-col v-if="ticket.actualUser" cols="12" md="4">
-      <v-text-field :value="ticket.actualUser.name" readonly filled :label="$t('actual_user')" />
+      <v-text-field
+        :value="ticket.actualUser.name"
+        readonly
+        filled
+        :label="$t('actual_user')"
+      />
     </v-col>
     <v-col cols="12">
       <span>Prazo de atendimento</span>
-      <v-progress-linear :value="ticket.slaPercentage" color="green" striped height="15">
+      <v-progress-linear
+        :value="ticket.slaPercentage"
+        color="green"
+        striped
+        height="15"
+      >
         {{ ticket.slaPercentage | percentage }}
       </v-progress-linear>
     </v-col>
     <v-col cols="12">
-      <v-text-field :value="ticket.resume" readonly filled :label="$t('resume')" />
+      <v-text-field
+        :value="ticket.resume"
+        readonly
+        filled
+        :label="$t('resume')"
+      />
     </v-col>
     <v-col cols="12">
-      <v-textarea :value="ticket.content" readonly filled :label="$t('content')" />
+      <v-textarea
+        :value="ticket.content"
+        readonly
+        filled
+        :label="$t('content')"
+      />
     </v-col>
     <v-tabs>
       <v-tab>
@@ -33,31 +63,29 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag'
-import ticketById from '@/graphql/query/client/ticket/ticketById.graphql'
+import ggl from 'graphql-tag';
+import ticketById from '@/graphql/query/client/ticket/ticketById.graphql';
+
 export default {
   layout: 'client',
   filters: {
     percentage(value) {
-      return `${Math.round(value)} %`
-    }
+      return `${Math.round(value)} %`;
+    },
   },
   asyncData({ params, app }) {
     return app.$apollo
       .query({
         query: ggl(ticketById),
         variables: {
-          id: params.id
-        }
+          id: params.id,
+        },
       })
-      .then(response => {
-        return {
-          ticket: response.data.ticket
-        }
-      })
-  }
-}
+      .then((response) => ({
+        ticket: response.data.ticket,
+      }));
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

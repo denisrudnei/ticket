@@ -1,57 +1,45 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-shadow */
 export const state = () => ({
   analysts: [],
   searchedAnalysts: [],
   searchName: '',
-  searchAddress: ''
-})
+  searchAddress: '',
+});
 
 export const getters = {
-  getAnalysts: state => {
-    return state.analysts
-  },
-  getSearchedAnalysts: state => {
-    return state.analysts.filter(a => {
-      return (
-        a.name.toLowerCase().includes(state.searchName.toLowerCase()) &&
-        (state.searchAddress !== ''
+  getAnalysts: (state) => state.analysts,
+  getSearchedAnalysts: (state) => state.analysts.filter((a) => (
+    a.name.toLowerCase().includes(state.searchName.toLowerCase())
+        && (state.searchAddress !== ''
           ? a.address === state.searchAddress.id
           : true)
-      )
-    })
-  },
-  getSearchText: state => {
-    return state.searchName
-  },
-  getSearchAddress: state => {
-    return state.searchAddress
-  }
-}
+  )),
+  getSearchText: (state) => state.searchName,
+  getSearchAddress: (state) => state.searchAddress,
+};
 
 export const mutations = {
   insert(state, analyst) {
-    state.analysts.push(analyst)
+    state.analysts.push(analyst);
   },
   setSearchName: (state, name) => {
-    state.searchName = name
+    state.searchName = name;
   },
   setSearchAddress: (state, address) => {
-    state.searchAddress = address
+    state.searchAddress = address;
   },
   setAnalysts: (state, analysts) => {
-    state.analysts = analysts
+    state.analysts = analysts;
   },
   updateStatus(state, info) {
-    const analyst = state.analysts.find(a => {
-      return a.id === info.id
-    })
+    const analyst = state.analysts.find((a) => a.id === info.id);
     if (analyst) {
-      analyst.status = info.status
+      analyst.status = info.status;
       state.analysts = [
         analyst,
-        ...state.analysts.filter(a => {
-          return a.id !== info.id
-        })
-      ]
+        ...state.analysts.filter((a) => a.id !== info.id),
+      ];
     }
-  }
-}
+  },
+};

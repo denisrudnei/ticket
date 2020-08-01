@@ -1,15 +1,16 @@
-import { Field, InputType, ID } from 'type-graphql'
-import Analyst from '../models/Analyst'
+import { Field, InputType, ID } from 'type-graphql';
+import Analyst from '../models/Analyst';
+
 @InputType()
 class GroupCreateInput {
   @Field()
-  public name!: string
+  public name!: string;
 
   @Field()
-  public description!: string
+  public description!: string;
 
   @Field(() => [ID], { nullable: true })
-  public analysts!: Analyst['id'][]
+  public analysts!: Analyst['id'][];
 }
 
-export default GroupCreateInput
+export default GroupCreateInput;

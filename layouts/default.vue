@@ -11,10 +11,7 @@
       <v-list>
         <v-list-item @click.stop="toggleMini">
           <v-list-item-action>
-            <v-btn
-              v-if="logged"
-              icon
-            >
+            <v-btn v-if="logged" icon>
               <v-icon>
                 {{ miniVariant ? 'chevron_right' : 'chevron_left' }}
               </v-icon>
@@ -46,23 +43,14 @@
       <ticket-tree v-show="!miniVariant" />
     </v-navigation-drawer>
     <analyst-list v-if="logged" />
-    <Toolbar
-      :logged="logged"
-    />
+    <Toolbar :logged="logged" />
     <TicketDialog />
-    <v-content v-hotkey="keymap">
+    <v-main v-hotkey="keymap">
       <v-container fluid>
         <v-row no-gutters>
-          <template
-            v-if="logged"
-          >
+          <template v-if="logged">
             <v-col>
-              <v-btn
-                to="/ticket/create"
-                class="primary white--text"
-                tile
-                block
-              >
+              <v-btn to="/ticket/create" class="primary white--text" tile block>
                 {{ $t('create_ticket') }}
                 <v-icon right>
                   offline_bolt
@@ -70,12 +58,7 @@
               </v-btn>
             </v-col>
             <v-col>
-              <v-btn
-                to="/search"
-                class="primary white--text"
-                tile
-                block
-              >
+              <v-btn to="/search" class="primary white--text" tile block>
                 {{ $t('search') }}
                 <v-icon right>
                   search
@@ -83,12 +66,7 @@
               </v-btn>
             </v-col>
             <v-col>
-              <v-btn
-                class="primary white--text"
-                to="/knowledge"
-                tile
-                block
-              >
+              <v-btn class="primary white--text" to="/knowledge" tile block>
                 {{ $t('knowledge_base') }}
                 <v-icon right>
                   folder
@@ -113,14 +91,8 @@
           fixed
           direction="left"
         >
-          <template
-            v-slot:activator
-          >
-            <v-btn
-              v-model="fab"
-              fab
-              class="primary white--text"
-            >
+          <template v-slot:activator>
+            <v-btn v-model="fab" fab class="primary white--text">
               <v-icon v-if="fab">
                 close
               </v-icon>
@@ -143,38 +115,36 @@
           </v-btn>
         </v-speed-dial>
       </v-container>
-    </v-content>
-    <v-footer
-      fixed
-      app
-    >
+    </v-main>
+    <v-footer fixed app>
       <span>&copy; 2020</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ggl from 'graphql-tag'
-import afterLogin from '@/mixins/afterLogin'
-import Toolbar from '@/components/toolbar'
-import TicketDialog from '@/components/ticket/dialog'
-import Chat from '@/components/chat/chat'
-import TicketTree from '@/components/ticket/tree'
-import Logout from '@/components/logout'
-import AnalystList from '@/components/chat/analyst-list'
-import TicketModal from '@/components/ticket/ticket-modal'
-import ConfirmCopy from '@/components/ticket/confirmCopy'
-import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql'
-import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql'
-import editTicket from '@/graphql/subscription/ticket/editTicket.graphql'
-import slaUpdate from '@/graphql/subscription/ticket/slaUpdate.graphql'
-import addNotification from '@/graphql/subscription/addNotification.graphql'
-import updateNotification from '@/graphql/subscription/updateNotification.graphql'
-import notifications from '@/graphql/subscription/notifications.graphql'
-import copyTicket from '@/graphql/mutation/ticket/copyTicket.graphql'
-import ticketSearch from '@/graphql/query/search/ticket.graphql'
-import hotkeyHelp from '@/components/hotkeyHelp'
+import { mapGetters } from 'vuex';
+import ggl from 'graphql-tag';
+import afterLogin from '@/mixins/afterLogin';
+import Toolbar from '@/components/toolbar';
+import TicketDialog from '@/components/ticket/dialog';
+import Chat from '@/components/chat/chat';
+import TicketTree from '@/components/ticket/tree';
+import Logout from '@/components/logout';
+import AnalystList from '@/components/chat/analyst-list';
+import TicketModal from '@/components/ticket/ticket-modal';
+import ConfirmCopy from '@/components/ticket/confirmCopy';
+import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql';
+import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql';
+import editTicket from '@/graphql/subscription/ticket/editTicket.graphql';
+import slaUpdate from '@/graphql/subscription/ticket/slaUpdate.graphql';
+import addNotification from '@/graphql/subscription/addNotification.graphql';
+import updateNotification from '@/graphql/subscription/updateNotification.graphql';
+import notifications from '@/graphql/subscription/notifications.graphql';
+import copyTicket from '@/graphql/mutation/ticket/copyTicket.graphql';
+import ticketSearch from '@/graphql/query/search/ticket.graphql';
+import hotkeyHelp from '@/components/hotkeyHelp';
+
 export default {
   middleware: ['adminMiddleware'],
   components: {
@@ -186,7 +156,7 @@ export default {
     AnalystList,
     TicketModal,
     ConfirmCopy,
-    hotkeyHelp
+    hotkeyHelp,
   },
   mixins: [afterLogin],
   data() {
@@ -201,13 +171,13 @@ export default {
         'alt+o': () => this.$router.push('/ticket/create'),
         'alt+c': () => this.$router.push('/config'),
         'alt+enter': () => {
-          this.$store.commit('hotkeys/toggleShow')
-        }
+          this.$store.commit('hotkeys/toggleShow');
+        },
       },
       miniVariant: true,
       right: true,
-      clipped: true
-    }
+      clipped: true,
+    };
   },
   computed: {
     items() {
@@ -215,126 +185,120 @@ export default {
         {
           icon: 'bookmarks',
           title: this.$t('total_listing'),
-          to: '/'
+          to: '/',
         },
         {
           icon: 'build',
           title: this.$t('tickets_being_handled'),
-          to: '/ticket/profile/actualUser'
+          to: '/ticket/profile/actualUser',
         },
         {
           icon: 'person',
           title: this.$t('opened_by_me'),
-          to: '/ticket/profile/openedBy'
+          to: '/ticket/profile/openedBy',
         },
         {
           icon: 'insert_chart',
           title: this.$t('reports'),
-          to: '/reports'
-        }
-      ]
+          to: '/reports',
+        },
+      ];
     },
     ...mapGetters({
       tickets: 'ticket/getTickets',
       logged: 'auth/getLoggedIn',
       user: 'auth/getUser',
       groups: 'group/getGroups',
-      ticketsToEdit: 'ticket/getTicketsToEdit'
-    })
+      ticketsToEdit: 'ticket/getTicketsToEdit',
+    }),
   },
   apollo: {
     $subscribe: {
       changeStatus: {
         query: ggl(changeStatus),
         result({ data }) {
-          this.$store.commit('ticket/updateTicket', data.ChangeStatus)
-        }
+          this.$store.commit('ticket/updateTicket', data.ChangeStatus);
+        },
       },
       editTicket: {
         query: ggl(editTicket),
         variables() {
           return {
-            tickets: this.tickets.map(ticket => {
-              return ticket.id
-            })
-          }
+            tickets: this.tickets.map((ticket) => ticket.id),
+          };
         },
         result({ data }) {
-          this.$store.commit('ticket/updateTicket', data.ticket)
-        }
+          this.$store.commit('ticket/updateTicket', data.ticket);
+        },
       },
       transferToGroup: {
         query: ggl(transferToGroup),
         variables() {
           return {
-            tickets: this.tickets.map(ticket => {
-              return ticket.id
-            })
-          }
+            tickets: this.tickets.map((ticket) => ticket.id),
+          };
         },
         result({ data }) {
-          this.$store.commit('ticket/updateTicket', data.TransferToGroup)
-        }
+          this.$store.commit('ticket/updateTicket', data.TransferToGroup);
+        },
       },
       slaUpdate: {
         query: ggl(slaUpdate),
         variables() {
           return {
-            tickets: this.tickets.map(ticket => {
-              return ticket.id
-            })
-          }
+            tickets: this.tickets.map((ticket) => ticket.id),
+          };
         },
         result({ data }) {
-          this.$store.dispatch('ticket/updateSla', data.ticket)
-        }
+          this.$store.dispatch('ticket/updateSla', data.ticket);
+        },
       },
       addNotification: {
         query: ggl(addNotification),
         result({ data }) {
-          Notification.requestPermission(permission => {
+          Notification.requestPermission((permission) => {
             if (permission === 'granted') {
               const notification = new Notification('Notification', {
-                body: data.AddNotification.content
-              })
-              notification.onerror = function() {
-                this.$toast.error('Error')
-              }
+                body: data.AddNotification.content,
+              });
+              notification.onerror = function error() {
+                this.$toast.error('Error');
+              };
             }
-            this.audio.play()
-          })
+            this.audio.play();
+          });
 
           this.$store.commit(
             'notification/updateNotification',
-            data.AddNotification
-          )
-        }
+            data.AddNotification,
+          );
+        },
       },
       updateNotification: {
         query: ggl(updateNotification),
         result({ data }) {
           this.$store.commit(
             'notification/updateNotification',
-            data.UpdateNotification
-          )
-        }
+            data.UpdateNotification,
+          );
+        },
       },
       notifications: {
         query: ggl(notifications),
         result({ data }) {
-          data.Notification.forEach(notification => {
-            this.$store.commit('notification/updateNotification', notification)
-          })
-        }
-      }
-    }
+          data.Notification.forEach((notification) => {
+            this.$store.commit('notification/updateNotification', notification);
+          });
+        },
+      },
+    },
   },
   mounted() {
-    this.audio = new Audio('/sounds/open-ended.ogg')
-    const miniState = localStorage.getItem('mini')
-    if (miniState) this.miniVariant = JSON.parse(miniState)
+    this.audio = new Audio('/sounds/open-ended.ogg');
+    const miniState = localStorage.getItem('mini');
+    if (miniState) this.miniVariant = JSON.parse(miniState);
     if (this.logged) {
-      this.processInfo()
+      this.processInfo();
     }
   },
   created() {
@@ -343,44 +307,44 @@ export default {
       'ALT + B | Base de conhecimento',
       'ALT + C | Configurações',
       'ALT + N | Notificações',
-      'ALT + O | Abrir novo chamado'
-    ])
+      'ALT + O | Abrir novo chamado',
+    ]);
   },
   methods: {
     toggleMini() {
-      this.miniVariant = !this.miniVariant
-      localStorage.setItem('mini', this.miniVariant)
+      this.miniVariant = !this.miniVariant;
+      localStorage.setItem('mini', this.miniVariant);
     },
     fetchUrl(item) {
-      this.$router.push('/search/' + item.name)
+      this.$router.push(`/search/${item.name}`);
     },
     setDialog(ticket) {
-      this.$store.commit('ticket/setActualTicket', ticket)
-      this.$store.commit('ticket/setDialog', ticket.id)
+      this.$store.commit('ticket/setActualTicket', ticket);
+      this.$store.commit('ticket/setDialog', ticket.id);
     },
-    copyTicket(ticket) {
+    copyTicket(value) {
       this.$apollo
         .mutate({
           mutation: ggl(copyTicket),
           variables: {
-            ticketId: ticket.id
+            ticketId: value.id,
           },
           awaitRefetchQueries: true,
           refetchQueries: [
             {
-              query: ggl(ticketSearch)
-            }
-          ]
+              query: ggl(ticketSearch),
+            },
+          ],
         })
-        .then(response => {
-          const ticket = response.data.ticket
-          this.$store.commit('ticket/setActualTicket', ticket)
-          this.$store.commit('ticket/setDialog', ticket.id)
-          this.$store.commit('ticket/setConfirmCopy', false)
-        })
-    }
-  }
-}
+        .then((response) => {
+          const { ticket } = response.data;
+          this.$store.commit('ticket/setActualTicket', ticket);
+          this.$store.commit('ticket/setDialog', ticket.id);
+          this.$store.commit('ticket/setConfirmCopy', false);
+        });
+    },
+  },
+};
 </script>
 
 <style>

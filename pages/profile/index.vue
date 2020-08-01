@@ -1,23 +1,14 @@
 <template>
   <v-form>
     <v-row>
-      <v-col
-        cols="12"
-        md="8"
-        pa-3
-      >
+      <v-col cols="12" md="8" pa-3>
         <v-text-field
           :value="user.name"
           filled
           label="Nome para exibição"
           @change="updateName"
         />
-        <v-text-field
-          v-model="user.email"
-          filled
-          label="Email"
-          readonly
-        />
+        <v-text-field v-model="user.email" filled label="Email" readonly />
         <v-text-field
           :value="user.contactEmail"
           filled
@@ -28,15 +19,17 @@
           :value="user.address"
           filled
           label="Localização"
-          :items="addresses.map(a => ({text: `${a.name} | ${a.city}, ${a.state} - ${a.country}`, value: a}))"
+          :items="
+            addresses.map((a) => ({
+              text: `${a.name} | ${a.city}, ${a.state} - ${a.country}`,
+              value: a,
+            }))
+          "
           :value-comparator="compare"
           @change="updateAddress"
         />
       </v-col>
-      <v-col
-        cols="12"
-        md="4"
-      >
+      <v-col cols="12" md="4">
         <v-card>
           <v-card-title primary-title>
             <div class="healine text-center">
@@ -47,35 +40,23 @@
           </v-card-title>
           <v-card-text>
             <v-row>
-              <v-col
-                cols="4"
-                pa-3
-              >
+              <v-col cols="4" pa-3>
                 <v-progress-circular
-                  :value="(info.opened/info.total) * 100"
+                  :value="(info.opened / info.total) * 100"
                   :size="125"
                   width="10"
                   rotate="90"
                   color="green"
                 >
-                  <v-avatar
-                    size="110"
-                  >
-                    <v-img
-                      :src="user.picture"
-                    />
+                  <v-avatar size="110">
+                    <v-img :src="user.picture" />
                   </v-avatar>
                 </v-progress-circular>
               </v-col>
-              <v-col
-                cols="8"
-                pa-3
-              >
-                <v-card-text
-                  class="text-center"
-                >
+              <v-col cols="8" pa-3>
+                <v-card-text class="text-center">
                   {{ info.opened }} Resolvidos / {{ info.total }} Abertos
-                  <hr>
+                  <hr />
                   ({{ ((info.opened / info.total) * 100).toFixed(2) }}) %
                 </v-card-text>
               </v-col>
@@ -87,7 +68,7 @@
     <v-row>
       <v-col cols="12" pa-3>
         <v-menu :close-on-content-click="false">
-          <template v-slot:activator="{on}">
+          <template v-slot:activator="{ on }">
             <v-btn tile class="primary white--text" v-on="on">
               Cor primária
             </v-btn>
@@ -95,170 +76,166 @@
           <v-color-picker v-model="primary" mode="hexa" />
         </v-menu>
         <v-btn tile class="primary white--text" @click="openImageSelection()">
-          <v-icon
-            left
-          >
+          <v-icon left>
             image
           </v-icon>
           {{ $t('select_profile_image') }}
         </v-btn>
-        <v-btn
-          tile
-          class="primary white--text"
-          @click="removeImage()"
-        >
-          <v-icon
-            left
-          >
+        <v-btn tile class="primary white--text" @click="removeImage()">
+          <v-icon left>
             delete
           </v-icon>
           {{ $t('remove_image') }}
         </v-btn>
-        <input ref="profileImage" type="file" style="display: none" accept="image/*" @change="updateImage()">
-      </v-col>
-      <v-col cols="12" pa-3>
-        <v-switch :input-value="user.mergePictureWithExternalAccount" label="Atualizar imagem com conta externa automaticamente" @change="updatePictureMerge" />
-        <v-switch
-          color="primary"
-          :label="$t('receive_email_notification')"
+        <input
+          ref="profileImage"
+          type="file"
+          style="display: none;"
+          accept="image/*"
+          @change="updateImage()"
         />
       </v-col>
+      <v-col cols="12" pa-3>
+        <v-switch
+          :input-value="user.mergePictureWithExternalAccount"
+          label="Atualizar imagem com conta externa automaticamente"
+          @change="updatePictureMerge"
+        />
+        <v-switch color="primary" :label="$t('receive_email_notification')" />
+      </v-col>
     </v-row>
-    <v-btn
-      text
-      class="primary white--text"
-      @click="save()"
-    >
+    <v-btn text class="primary white--text" @click="save()">
       {{ $t('save_configurations') }}
     </v-btn>
   </v-form>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
-import compareObjectsWithId from '@/mixins/compareObjectsWithId'
-import ggl from 'graphql-tag'
-import AddressList from '@/graphql/query/address/list.graphql'
-import profileInfo from '@/graphql/query/profile/list.graphql'
-import update from '@/graphql/mutation/profile/analyst/update.graphql'
-import removeImage from '@/graphql/mutation/profile/analyst/removeImage.graphql'
+import { mapGetters, mapMutations } from 'vuex';
+import compareObjectsWithId from '@/mixins/compareObjectsWithId';
+import ggl from 'graphql-tag';
+import AddressList from '@/graphql/query/address/list.graphql';
+import profileInfo from '@/graphql/query/profile/list.graphql';
+import update from '@/graphql/mutation/profile/analyst/update.graphql';
+import removeImage from '@/graphql/mutation/profile/analyst/removeImage.graphql';
+
 export default {
   mixins: [compareObjectsWithId],
   data() {
     return {
       primary: '#FFFFFF',
-      info: {}
-    }
+      info: {},
+    };
   },
   computed: mapGetters({
     user: 'auth/getUser',
-    groups: 'group/getGroups'
+    groups: 'group/getGroups',
   }),
   watch: {
-    primary: function(value) {
-      this.updatePrimary()
-    }
+    primary(value) {
+      this.updatePrimary();
+    },
   },
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(AddressList)
+        query: ggl(AddressList),
       })
-      .then(response => {
-        return {
-          addresses: response.data.Address
-        }
-      })
+      .then((response) => ({
+        addresses: response.data.Address,
+      }));
   },
   created() {
     this.$apollo
       .query({
-        query: ggl(profileInfo)
+        query: ggl(profileInfo),
       })
-      .then(response => {
-        this.info = response.data.ProfileInfo
-      })
+      .then((response) => {
+        this.info = response.data.ProfileInfo;
+      });
   },
   methods: {
     ...mapMutations({
       updateName: 'auth/updateName',
       updateEmail: 'auth/updateEmail',
-      updateAddress: 'auth/updateAddress'
+      updateAddress: 'auth/updateAddress',
     }),
     updatePrimary() {
-      this.$vuetify.theme.currentTheme.primary = this.primary
-      this.$store.commit('auth/setColor', this.primary)
+      this.$vuetify.theme.currentTheme.primary = this.primary;
+      this.$store.commit('auth/setColor', this.primary);
     },
     updatePictureMerge(value) {
-      this.$store.commit('auth/updateMergePictureWithExternalAccount', value)
+      this.$store.commit('auth/updateMergePictureWithExternalAccount', value);
     },
     save() {
-      const { name, contactEmail, color, description } = this.user
+      const {
+        name, contactEmail, color, description,
+      } = this.user;
       const analyst = {
         name,
         contactEmail,
         color,
         description,
-        address: this.user.address ? this.user.address.id : null
-      }
+        address: this.user.address ? this.user.address.id : null,
+      };
       this.$apollo
         .mutate({
           mutation: ggl(update),
           variables: {
-            analyst
-          }
+            analyst,
+          },
         })
         .then(() => {
           this.$toast.show('Salvo com êxito', {
             duration: 1000,
-            icon: 'update'
-          })
-        })
+            icon: 'update',
+          });
+        });
     },
     openImageSelection() {
-      this.$refs.profileImage.click()
+      this.$refs.profileImage.click();
     },
     removeImage() {
       this.$apollo
         .mutate({
-          mutation: ggl(removeImage)
+          mutation: ggl(removeImage),
         })
         .then(
           () => {
-            this.$store.commit('auth/removeImage')
+            this.$store.commit('auth/removeImage');
             this.$toast.show('Imagem removida com sucesso', {
               duration: 5000,
-              icon: 'done'
-            })
+              icon: 'done',
+            });
           },
           () => {
-            this.$toast.error('Falha ao realizar a remoção da imagem de perfil')
-          }
-        )
+            this.$toast.error('Falha ao realizar a remoção da imagem de perfil');
+          },
+        );
     },
     updateImage() {
-      if (!this.$refs.profileImage.files[0]) return
-      const fileReader = new FileReader()
+      if (!this.$refs.profileImage.files[0]) return;
+      const fileReader = new FileReader();
       fileReader.addEventListener('loadend', () => {
-        this.$store.commit('auth/updateImage', fileReader.result)
-      })
-      fileReader.readAsDataURL(this.$refs.profileImage.files[0])
-      const formData = new FormData()
-      formData.append('image', this.$refs.profileImage.files[0])
+        this.$store.commit('auth/updateImage', fileReader.result);
+      });
+      fileReader.readAsDataURL(this.$refs.profileImage.files[0]);
+      const formData = new FormData();
+      formData.append('image', this.$refs.profileImage.files[0]);
       this.$axios.put('/analyst/image', formData).then(
         () => {
           this.$toast.show('Imagem enviada ao servidor', {
             duration: 5000,
-            icon: 'done'
-          })
+            icon: 'done',
+          });
         },
         () => {
-          this.$toast.error('Falha ao upar imagem no servidor')
-        }
-      )
-    }
-  }
-}
+          this.$toast.error('Falha ao upar imagem no servidor');
+        },
+      );
+    },
+  },
+};
 </script>
 
 <style scoped>

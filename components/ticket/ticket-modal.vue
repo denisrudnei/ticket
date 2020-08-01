@@ -1,17 +1,10 @@
 <template>
-  <v-dialog
-    v-model="showModal"
-    scrollable
-  >
+  <v-dialog v-model="showModal" scrollable>
     <v-card>
       <v-card-text>
         <v-row>
           <v-col cols="12" pa-3>
-            <ticket-list
-              v-if="showModal"
-              :url="`/search/`"
-              :modal="true"
-            />
+            <ticket-list v-if="showModal" :url="`/search/`" :modal="true" />
           </v-col>
         </v-row>
       </v-card-text>
@@ -20,23 +13,23 @@
 </template>
 
 <script>
-import TicketList from '@/components/ticket/list'
+import TicketList from '@/components/ticket/list';
+
 export default {
   components: {
-    TicketList
+    TicketList,
   },
   computed: {
     showModal: {
       get() {
-        return this.$store.getters['ticket/getModalList']
+        return this.$store.getters['ticket/getModalList'];
       },
       set(value) {
-        this.$store.commit('ticket/setModalList', value)
-      }
-    }
-  }
-}
+        this.$store.commit('ticket/setModalList', value);
+      },
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

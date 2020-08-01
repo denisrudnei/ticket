@@ -1,69 +1,48 @@
-import Group from '../../models/ticket/Group'
-import Analyst from '../../models/Analyst'
+import Group from '../../models/ticket/Group';
+import Analyst from '../../models/Analyst';
 
 class GroupService {
-  getAll(): Promise<Group[]> {
-    return new Promise((resolve, reject) => {
-      Group.find({ relations: ['analysts'] }).then(groups => {
-        return resolve(groups)
-      })
-    })
+  static async getAll(): Promise<Group[]> {
+    return Group.find({ relations: ['analysts'] });
   }
 
-  getOne(groupId: Group['id']): Promise<Group> {
-    return new Promise((resolve, reject) => {
-      Group.findOne(groupId).then(group => {
-        if (!group) return reject(new Error('No group found'))
-        return resolve(group)
-      })
-    })
+  static async getOne(groupId: Group['id']): Promise<Group> {
+    const group = await Group.findOne(groupId);
+    if (!group) throw new Error('No group found');
+    return group;
   }
 
-  create(group: Group): Promise<Group> {
-    return new Promise((resolve, reject) => {
-      resolve(Group.create(group).save())
-    })
+  static async create(group: Group): Promise<Group> {
+    return Group.create(group).save();
   }
 
-  edit(groupId: Group['id'], groupToEdit: Group): Promise<Group> {
-    return new Promise((resolve, reject) => {
-      Group.findOne(groupId, { relations: ['analysts'] }).then(group => {
-        if (!group) reject(new Error('Group not found'))
-        Object.assign(group, groupToEdit)
-        resolve(group!.save())
-      })
-    })
+  static async edit(groupId: Group['id'], groupToEdit: Group): Promise<Group> {
+    const group = await Group.findOne(groupId, { relations: ['analysts'] });
+    if (!group) throw new Error('Group not found');
+    Object.assign(group, groupToEdit);
+    return group!.save();
   }
 
-  insertAnalyst(
+  static async insertAnalyst(
     groupId: Group['id'],
-    analystId: Analyst['id']
+    analystId: Analyst['id'],
   ): Promise<Group> {
-    return new Promise((resolve, reject) => {
-      Group.findOne(groupId, { relations: ['analysts'] }).then(async group => {
-        const analyst = await Analyst.findOne(analystId)
-        group!.analysts.push(analyst!)
-        group!.save().then(group => {
-          resolve(group)
-        })
-      })
-    })
+    const group = await Group.findOne(groupId, { relations: ['analysts'] });
+
+    const analyst = await Analyst.findOne(analystId);
+    group!.analysts.push(analyst!);
+    return group!.save();
   }
 
-  removeAnalyst(
+  static async removeAnalyst(
     groupId: Group['id'],
-    analystId: Analyst['id']
+    analystId: Analyst['id'],
   ): Promise<Group> {
-    return new Promise((resolve, reject) => {
-      Group.findOne(groupId, { relations: ['analysts'] }).then(async group => {
-        const analyst = await Analyst.findOne(analystId)
-        group!.analysts.push(analyst!)
-        group!.save().then(group => {
-          resolve(group)
-        })
-      })
-    })
+    const group = await Group.findOne(groupId, { relations: ['analysts'] });
+    const analyst = await Analyst.findOne(analystId);
+    group!.analysts.push(analyst!);
+    return group!.save();
   }
 }
 
-export default new GroupService()
+export default GroupService;

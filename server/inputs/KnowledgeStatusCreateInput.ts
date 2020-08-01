@@ -1,12 +1,12 @@
-import { InputType, Field } from 'type-graphql'
+import { InputType, Field } from 'type-graphql';
 
 @InputType()
 class KnowledgeStatusCreateInput {
   @Field()
-  public name!: string
+  public name!: string;
 
   @Field()
-  public description!: string
+  public description!: string;
 }
 
-export default KnowledgeStatusCreateInput
+export default KnowledgeStatusCreateInput;

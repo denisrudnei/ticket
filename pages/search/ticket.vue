@@ -1,33 +1,37 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-    >
-      <ticket-create
-        search
-        @input="search(ticket)"  
-      />
+    <v-col cols="12">
+      <ticket-create search @input="search(ticket)" />
     </v-col>
-    <v-col
-      cols="12"
-    >
-      <ticket-list
-        :url="'/search/'"
-      />
+    <v-col cols="12">
+      <ticket-list :url="'/search/'" />
     </v-col>
   </v-row>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ggl from 'graphql-tag'
-import TicketCreate from '@/components/ticket/create'
-import TicketList from '@/components/ticket/list'
-import searchQuery from '@/graphql/query/ticket/search.graphql'
+import { mapGetters } from 'vuex';
+import ggl from 'graphql-tag';
+import TicketCreate from '@/components/ticket/create';
+import TicketList from '@/components/ticket/list';
+import searchQuery from '@/graphql/query/ticket/search.graphql';
+
 export default {
   components: {
     TicketCreate,
-    TicketList
+    TicketList,
+  },
+  fetch({ app, $store }) {
+    app.$apollo
+      .query({
+        query: ggl(searchQuery),
+      })
+      .then((response) => {
+        $store.commit('status/setStatus', response.data.status);
+        $store.commit('category/setCategories', response.data.category);
+        $store.commit('group/setGroups', response.data.group);
+        $store.commit('analyst/setAnalysts', response.data.analyst);
+      });
   },
   data() {
     return {
@@ -36,67 +40,55 @@ export default {
       headers: [
         {
           text: 'Analista',
-          value: 'analyst'
+          value: 'analyst',
         },
         {
           text: 'Grupo',
-          value: 'Group'
-        }
-      ]
-    }
+          value: 'Group',
+        },
+      ],
+    };
   },
   computed: mapGetters({
     status: 'status/getStatus',
     group: 'group/getGroups',
     category: 'category/getCategories',
     openedBy: 'analyst/getAnalysts',
-    ticket: 'ticket/getActualTicket'
+    ticket: 'ticket/getActualTicket',
   }),
   watch: {
     $route(to, from) {
-      this.data = this.$router.currentRoute.query
-    }
+      this.data = this.$router.currentRoute.query;
+    },
   },
-  fetch({ app, $store }) {
-    app.$apollo
-      .query({
-        query: ggl(searchQuery)
-      })
-      .then(response => {
-        $store.commit('status/setStatus', response.data.status)
-        $store.commit('category/setCategories', response.data.category)
-        $store.commit('group/setGroups', response.data.group)
-        $store.commit('analyst/setAnalysts', response.data.analyst)
-      })
-  },
+
   created() {
-    this.$store.commit('ticket/resetActualTicket')
+    this.$store.commit('ticket/resetActualTicket');
   },
   mounted() {
-    this.data = this.$router.currentRoute.query
+    this.data = this.$router.currentRoute.query;
   },
   methods: {
     search(ticket) {
-      const newTicket = {}
-      Object.keys(ticket).forEach(k => {
+      const newTicket = {};
+      Object.keys(ticket).forEach((k) => {
         if (
-          ticket[k] !== undefined &&
-          Object.prototype.hasOwnProperty.call(ticket[k], 'id')
+          ticket[k] !== undefined
+          && Object.prototype.hasOwnProperty.call(ticket[k], 'id')
         ) {
-          newTicket[k] = ticket[k].id
+          newTicket[k] = ticket[k].id;
         }
-      })
-      const fieldsToExclude = ['created', 'modified', 'resume', 'content']
-      fieldsToExclude.forEach(f => {
-        delete newTicket[f]
-      })
+      });
+      const fieldsToExclude = ['created', 'modified', 'resume', 'content'];
+      fieldsToExclude.forEach((f) => {
+        delete newTicket[f];
+      });
       this.$router.push({
-        query: newTicket
-      })
-    }
-  }
-}
+        query: newTicket,
+      });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

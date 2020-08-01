@@ -1,52 +1,46 @@
-import Status from '../../models/ticket/Status'
+import Status from '../../models/ticket/Status';
 
 class StatusService {
-  getStatus(): Promise<Status[]> {
+  static getStatus(): Promise<Status[]> {
     return new Promise((resolve, reject) => {
-      Status.find().then((status: Status[]) => {
-        return resolve(status)
-      })
-    })
+      Status.find().then((status: Status[]) => resolve(status));
+    });
   }
 
-  getOne(statusId: Status['id']): Promise<Status> {
+  static getOne(statusId: Status['id']): Promise<Status> {
     return new Promise((resolve, reject) => {
-      Status.findOne(statusId).then(status => {
-        return resolve(status)
-      })
-    })
+      Status.findOne(statusId).then((status) => resolve(status));
+    });
   }
 
-  create(status: Status): Promise<Status> {
+  static create(status: Status): Promise<Status> {
     return new Promise((resolve, reject) => {
-      const newStatus = new Status()
-      Object.assign(newStatus, status)
+      const newStatus = new Status();
+      Object.assign(newStatus, status);
       newStatus.save().then(() => {
-        resolve(newStatus)
-      })
-    })
+        resolve(newStatus);
+      });
+    });
   }
 
-  getAllowedStatus(id: Status['id']): Promise<Status[]> {
+  static getAllowedStatus(id: Status['id']): Promise<Status[]> {
     return new Promise((resolve, reject) => {
-      Status.findOne(id).then(result => {
-        return resolve(result!.allowedStatus)
-      })
-    })
+      Status.findOne(id).then((result) => resolve(result!.allowedStatus));
+    });
   }
 
-  edit(statusId: Status['id'], statusToEdit: Status): Promise<Status> {
+  static edit(statusId: Status['id'], statusToEdit: Status): Promise<Status> {
     return new Promise((resolve, reject) => {
-      Status.findOne(statusId).then(status => {
-        status!.name = statusToEdit.name
-        status!.allowedStatus = statusToEdit.allowedStatus
-        status!.slaRun = statusToEdit.slaRun
-        status!.save().then(updated => {
-          resolve(updated)
-        })
-      })
-    })
+      Status.findOne(statusId).then((status) => {
+        status!.name = statusToEdit.name;
+        status!.allowedStatus = statusToEdit.allowedStatus;
+        status!.slaRun = statusToEdit.slaRun;
+        status!.save().then((updated) => {
+          resolve(updated);
+        });
+      });
+    });
   }
 }
 
-export default new StatusService()
+export default StatusService;

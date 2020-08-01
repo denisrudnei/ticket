@@ -1,4 +1,4 @@
-import { DeleteResult } from 'typeorm'
+import { DeleteResult } from 'typeorm';
 
 export default interface Seed<T> {
   init(): Promise<T>

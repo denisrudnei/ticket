@@ -29,23 +29,24 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
+
 export default {
   computed: mapGetters({
-    logout: 'logout/getLogout'
+    logout: 'logout/getLogout',
   }),
   methods: {
     logoutUser() {
       this.$auth.logout().then(() => {
-        this.$router.push('/')
-        this.$store.commit('logout/setLogout', false)
-      })
+        this.$router.push('/');
+        this.$store.commit('logout/setLogout', false);
+      });
     },
     back() {
-      this.$store.commit('logout/setLogout', false)
-    }
-  }
-}
+      this.$store.commit('logout/setLogout', false);
+    },
+  },
+};
 </script>
 
 <style>

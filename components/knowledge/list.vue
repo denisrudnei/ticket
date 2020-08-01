@@ -1,9 +1,5 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="items"
-    pagination.sync="pagination"
-  >
+  <v-data-table :headers="headers" :items="items" pagination.sync="pagination">
     <template v-slot:item.name="{ item }">
       <nuxt-link :to="`/knowledge/view/${item.id}`">
         {{ item.name }}
@@ -19,32 +15,33 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag'
-import KnowledgeListByGroup from '@/graphql/query/knowledge/listByGroup.graphql'
-import KnowledgeListAll from '@/graphql/query/knowledge/list.graphql'
+import ggl from 'graphql-tag';
+import KnowledgeListByGroup from '@/graphql/query/knowledge/listByGroup.graphql';
+import KnowledgeListAll from '@/graphql/query/knowledge/list.graphql';
+
 export default {
   data() {
     return {
-      items: []
-    }
+      items: [],
+    };
   },
   computed: {
     headers() {
       return [
         {
           text: this.$t('name'),
-          value: 'name'
+          value: 'name',
         },
         {
           text: this.$t('creation_date'),
-          value: 'created'
+          value: 'created',
         },
         {
           text: this.$t('status'),
-          value: 'status'
-        }
-      ]
-    }
+          value: 'status',
+        },
+      ];
+    },
   },
   watch: {
     $route(newValue) {
@@ -53,31 +50,30 @@ export default {
           .query({
             query: ggl(KnowledgeListByGroup),
             variables: {
-              groupName: newValue.params.groupName
-            }
+              groupName: newValue.params.groupName,
+            },
           })
-          .then(response => {
-            this.items = response.data.knowledge
-          })
+          .then((response) => {
+            this.items = response.data.knowledge;
+          });
       }
-    }
+    },
   },
   mounted() {
-    const groupName = this.$route.params.groupName
-    const query = groupName ? KnowledgeListByGroup : KnowledgeListAll
+    const { groupName } = this.$route.params;
+    const query = groupName ? KnowledgeListByGroup : KnowledgeListAll;
     this.$apollo
       .query({
         query: ggl(query),
         variables: {
-          groupName: groupName
-        }
+          groupName,
+        },
       })
-      .then(response => {
-        this.items = response.data.knowledge
-      })
-  }
-}
+      .then((response) => {
+        this.items = response.data.knowledge;
+      });
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

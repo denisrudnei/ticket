@@ -1,7 +1,8 @@
-import express from 'express'
-import AnalystController from '../controllers/AnalystController'
-const router = express.Router()
+import express from 'express';
+import AnalystController from '../controllers/AnalystController';
 
-router.put('/analyst/image', AnalystController.updateImage)
+const router = express.Router();
 
-export default router
+router.put('/analyst/image', AnalystController.updateImage);
+
+export default router;

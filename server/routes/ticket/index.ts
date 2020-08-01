@@ -1,10 +1,10 @@
-import { Router } from 'express'
-import CategoryRoute from './CategoryRoute'
-import TicketRoute from './TicketRoute'
+import { Router } from 'express';
+import CategoryRoute from './CategoryRoute';
+import TicketRoute from './TicketRoute';
 
-const router = Router()
+const router = Router();
 
-router.use(CategoryRoute)
-router.use(TicketRoute)
+router.use(CategoryRoute);
+router.use(TicketRoute);
 
-export default router
+export default router;

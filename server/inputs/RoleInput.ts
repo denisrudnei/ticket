@@ -1,9 +1,9 @@
-import { InputType, Field } from 'type-graphql'
+import { InputType, Field } from 'type-graphql';
 
 @InputType()
 class RoleInput {
   @Field({ nullable: true })
-  public description!: string
+  public description!: string;
 }
 
-export default RoleInput
+export default RoleInput;

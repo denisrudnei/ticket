@@ -1,6 +1,6 @@
-import Role from './Role'
+import Role from './Role';
 
-const AclRules = require('~/nacl.json')
+const AclRules = require('~/nacl.json');
 
 interface IPermission {
   resource: string
@@ -18,20 +18,19 @@ const CheckACL = {
     AclRules.forEach((rule: IRule) => {
       Role.findOne({
         where: {
-          name: rule.group
-        }
-      }).then(result => {
+          name: rule.group,
+        },
+      }).then((result) => {
         if (!result) {
-          const role = Role.create()
-          role!.name = rule.group
-          role!.description =
-            'Gerado automaticamente com base nas regras do servidor'
-          role.save()
+          const role = Role.create();
+          role!.name = rule.group;
+          role!.description = 'Gerado automaticamente com base nas regras do servidor';
+          role.save();
         }
-      })
-    })
-    return next(null)
-  }
-}
+      });
+    });
+    return next(null);
+  },
+};
 
-export default CheckACL
+export default CheckACL;

@@ -1,152 +1,118 @@
-import jwt from 'jsonwebtoken'
-import express from 'express'
-import Analyst from '../models/Analyst'
-import Role from '../models/Role'
-import MailService from './MailService'
+import jwt from 'jsonwebtoken';
+import express from 'express';
+import Analyst from '../models/Analyst';
+import Role from '../models/Role';
+import MailService from './MailService';
 
 class AuthService {
-  login(email: string, password: string): Promise<Analyst> {
+  static login(email: string, password: string): Promise<Analyst> {
     return new Promise((resolve, reject) => {
       Analyst.findOne({
         where: [
           {
-            email: email
+            email,
           },
           {
-            email: email.toLowerCase()
-          }
+            email: email.toLowerCase(),
+          },
         ],
-        relations: ['role']
-      }).then(user => {
+        relations: ['role'],
+      }).then((user) => {
         if (!user) {
-          return reject(new Error('Username or password incorrect'))
+          return reject(new Error('Username or password incorrect'));
         }
 
-        if (!user!.verifyPassword(password))
-          return reject(new Error('Incorrect password'))
-        return resolve(user)
-      })
-    })
+        if (!user!.verifyPassword(password)) return reject(new Error('Incorrect password'));
+        return resolve(user);
+      });
+    });
   }
 
-  register(user: Analyst): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne({
-        where: [
-          {
-            email: user.email
-          },
-          {
-            email: user.email.toLowerCase()
-          }
-        ]
-      }).then(async userFromDB => {
-        if (userFromDB) return reject(new Error('Already registered'))
+  static async register(user: Analyst): Promise<Analyst> {
+    const userFromDB = await Analyst.findOne({
+      where: [
+        {
+          email: user.email,
+        },
+        {
+          email: user.email.toLowerCase(),
+        },
+      ],
+    });
+    if (userFromDB) throw new Error('Already registered');
 
-        const analyst = new Analyst()
-        Object.assign(analyst, user)
-        analyst.role = (await Role.findOne({
-          name: 'user'
-        })) as Role
-        analyst.save().then(analyst => {
-          resolve(analyst)
-        })
-      })
-    })
+    const analyst = new Analyst();
+    Object.assign(analyst, user);
+    analyst.role = (await Role.findOne({
+      name: 'user',
+    })) as Role;
+    return analyst.save();
   }
 
-  mergeUser(email: string, userBody: Analyst): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne({
-        where: [
-          {
-            email: email
-          },
-          {
-            email: email.toLowerCase()
-          }
-        ],
-        relations: ['role']
-      }).then(async analyst => {
-        if (!analyst) {
-          Analyst.create({
-            ...userBody,
-            email: email,
-            role: await Role.findOne({
-              name: 'user'
-            })
-          })
-            .save()
-            .then(newAnalyst => {
-              return resolve(newAnalyst)
-            })
-        } else {
-          if (analyst!.mergePictureWithExternalAccount) {
-            analyst!.picture = userBody.picture
-            analyst!.save()
-          }
-          return resolve(analyst)
-        }
-      })
-    })
+  static async mergeUser(email: string, userBody: Analyst): Promise<Analyst> {
+    const analyst = await Analyst.findOne({
+      where: [
+        { email },
+        { email: email.toLowerCase() },
+      ],
+      relations: ['role'],
+    });
+    if (!analyst) {
+      return Analyst.create({
+        ...userBody,
+        email,
+        role: await Role.findOne({
+          name: 'user',
+        }),
+      }).save();
+    }
+    if (analyst!.mergePictureWithExternalAccount) {
+      analyst!.picture = userBody.picture;
+      return analyst!.save();
+    }
+    return analyst;
   }
 
-  generateEmailToReset(email: string, req: express.Request): Promise<string> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne({
-        where: [
-          {
-            email: email
-          },
-          {
-            email: email.toLowerCase()
-          }
-        ]
-      }).then(analyst => {
-        if (!analyst) return reject(new Error('Not found'))
-        const token = jwt.sign(
-          {
-            id: analyst!.id,
-            email: analyst!.email
-          },
-          process.env.JWT_TOKEN as string
-        )
-        MailService.sendConfirmationEmail(analyst!, req, token).catch(reject)
-        resolve(token)
-      })
-    })
+  static async generateEmailToReset(email: string, req: express.Request): Promise<string> {
+    const analyst = await Analyst.findOne({
+      where: [
+        { email },
+        { email: email.toLowerCase() },
+      ],
+    });
+    if (!analyst) throw new Error('Not found');
+    const token = jwt.sign(
+      {
+        id: analyst!.id,
+        email: analyst!.email,
+      },
+      process.env.JWT_TOKEN as string,
+    );
+    MailService.sendConfirmationEmail(analyst!, req, token).catch((error) => { throw error; });
+    return token;
   }
 
-  resetPasswordWithToken(token: string, newPassword: string): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      const info = jwt.verify(token, process.env.JWT_TOKEN!) as Analyst
-      Analyst.findOne(info.id).then(analyst => {
-        analyst!.password = newPassword
-        analyst!.save().then(analyst => {
-          resolve(analyst)
-        })
-      })
-    })
+  static async resetPasswordWithToken(token: string, newPassword: string): Promise<Analyst> {
+    const info = jwt.verify(token, process.env.JWT_TOKEN!) as Analyst;
+    const analyst = await Analyst.findOne(info.id);
+    analyst!.password = newPassword;
+    return analyst!.save();
   }
 
-  resetPassword(
+  static async resetPassword(
     userId: Analyst['id'],
     oldPassword: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(userId).then(user => {
-        const result = user!.verifyPassword(oldPassword)
-        if (!result) {
-          return reject(new Error('incorrect old password'))
-        }
-        user!.password = newPassword
-        user!.save().then(() => {
-          return resolve(true)
-        })
-      })
-    })
+    const user = await Analyst.findOne(userId);
+    const result = user!.verifyPassword(oldPassword);
+    if (!result) {
+      throw new Error('incorrect old password');
+    }
+    user!.password = newPassword;
+    await user!.save();
+    return true;
   }
 }
 
-export default new AuthService()
+export default AuthService;

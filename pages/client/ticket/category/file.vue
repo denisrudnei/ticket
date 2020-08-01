@@ -6,9 +6,8 @@
 
 <script>
 export default {
-  layout: 'client'
-}
+  layout: 'client',
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,8 +1,9 @@
-import express from 'express'
-import CategoryController from '../../controllers/ticket/CategoryController'
-const router = express.Router()
+import express from 'express';
+import CategoryController from '../../controllers/ticket/CategoryController';
 
-router.get('/category/:id/image', CategoryController.getImage)
-router.post('/config/category/image/:id', CategoryController.setImage)
+const router = express.Router();
 
-export default router
+router.get('/category/:id/image', CategoryController.getImage);
+router.post('/config/category/image/:id', CategoryController.setImage);
+
+export default router;

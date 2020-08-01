@@ -1,49 +1,27 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      pa-3
-    >
-      <v-data-table
-        :items="groups"
-        :headers="headers"
-      >
-        <template
-          v-slot:item.name="{ item }"
-        >
+    <v-col cols="12" pa-3>
+      <v-data-table :items="groups" :headers="headers">
+        <template v-slot:item.name="{ item }">
           {{ item.name }}
         </template>
-        <template
-          v-slot:item.length="{ item }"
-        >
+        <template v-slot:item.length="{ item }">
           <v-menu
             :close-on-content-click="false"
             :close-on-click="true"
             :nudge-width="250"
             max-height="40vh"
           >
-            <template
-              v-slot:activator="{ on }"
-            >
-              <v-btn
-                tile
-                class="primary white--text"
-                v-on="on"
-              >
+            <template v-slot:activator="{ on }">
+              <v-btn tile class="primary white--text" v-on="on">
                 Listar usuários [{{ item.analysts.length }}]
               </v-btn>
             </template>
-            <v-list
-              v-if="item.analysts.length > 0"
-              two-line
-            >
-              <v-list-item
-                v-for="analyst in item.analysts"
-                :key="analyst.id"
-              >
+            <v-list v-if="item.analysts.length > 0" two-line>
+              <v-list-item v-for="analyst in item.analysts" :key="analyst.id">
                 <v-list-item-avatar>
                   <v-avatar>
-                    <img :src="analyst.picture" alt="">
+                    <img :src="analyst.picture" alt="" />
                   </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
@@ -67,18 +45,11 @@
                 </v-list-item-action>
               </v-list-item>
             </v-list>
-          </v-menu>  
+          </v-menu>
         </template>
-        <template
-          v-slot:item.actions="{ item }"
-        >
-          <v-menu
-            offset-y
-            :close-on-content-click="false"
-          >
-            <template
-              v-slot:activator="{ on }"
-            >
+        <template v-slot:item.actions="{ item }">
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on }">
               <v-btn
                 icon
                 class="primary white--text"
@@ -93,24 +64,20 @@
             <v-card>
               <v-card-text>
                 <v-row>
-                  <v-col
-                    cols="12"
-                    pa-3
-                  >
+                  <v-col cols="12" pa-3>
                     <v-autocomplete
                       v-model="currentAnalyst"
-                      :items="analystsToAdd(item).map(a => ({text: a.name, value: a}))"
+                      :items="
+                        analystsToAdd(item).map((a) => ({
+                          text: a.name,
+                          value: a,
+                        }))
+                      "
                       filled
                     />
                   </v-col>
-                  <v-col
-                    cols="12"
-                    pa-3
-                  >
-                    <v-btn
-                      icon
-                      @click="addToGroup(item, currentAnalyst)"
-                    >
+                  <v-col cols="12" pa-3>
+                    <v-btn icon @click="addToGroup(item, currentAnalyst)">
                       <v-icon>
                         send
                       </v-icon>
@@ -121,10 +88,12 @@
             </v-card>
           </v-menu>
         </template>
-        <template
-          v-slot:item.edit="{ item }"
-        >
-          <v-btn class="primary white--text" icon :to="`/config/group/edit/${item.id}`">
+        <template v-slot:item.edit="{ item }">
+          <v-btn
+            class="primary white--text"
+            icon
+            :to="`/config/group/edit/${item.id}`"
+          >
             <v-icon>
               edit
             </v-icon>
@@ -136,49 +105,48 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag'
-import list from '@/graphql/query/config/group/list.graphql'
-import insertAnalyst from '@/graphql/mutation/config/group/insertAnalyst.graphql'
-import removeAnalyst from '@/graphql/mutation/config/group/removeAnalyst.graphql'
+import ggl from 'graphql-tag';
+import list from '@/graphql/query/config/group/list.graphql';
+import insertAnalyst from '@/graphql/mutation/config/group/insertAnalyst.graphql';
+import removeAnalyst from '@/graphql/mutation/config/group/removeAnalyst.graphql';
+
 export default {
+  asyncData({ app, store }) {
+    return app.$apollo
+      .query({
+        query: ggl(list),
+      })
+      .then((response) => ({
+        analysts: response.data.Analyst,
+        groups: response.data.Group,
+      }));
+  },
   data() {
     return {
-      currentAnalyst: undefined
-    }
+      currentAnalyst: undefined,
+    };
   },
   computed: {
     headers() {
       return [
         {
           text: this.$t('name'),
-          value: 'name'
+          value: 'name',
         },
         {
           text: 'Quantidade de integrantes',
-          value: 'length'
+          value: 'length',
         },
         {
           text: this.$t('actions'),
-          value: 'actions'
+          value: 'actions',
         },
         {
           text: this.$t('edit'),
-          value: 'edit'
-        }
-      ]
-    }
-  },
-  asyncData({ app, store }) {
-    return app.$apollo
-      .query({
-        query: ggl(list)
-      })
-      .then(response => {
-        return {
-          analysts: response.data.Analyst,
-          groups: response.data.Group
-        }
-      })
+          value: 'edit',
+        },
+      ];
+    },
   },
   methods: {
     addToGroup(group, analyst) {
@@ -187,17 +155,17 @@ export default {
           mutation: ggl(insertAnalyst),
           variables: {
             groupId: group.id,
-            analystId: analyst.id
+            analystId: analyst.id,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }]
+          refetchQueries: [{ query: ggl(list) }],
         })
         .then(() => {
-          this.updateGroups()
+          this.updateGroups();
           this.$toast.show('Adicionado', {
-            duration: 1000
-          })
-        })
+            duration: 1000,
+          });
+        });
     },
     removeFromGroup(group, analyst) {
       this.$apollo
@@ -205,35 +173,32 @@ export default {
           mutation: ggl(removeAnalyst),
           variables: {
             groupId: group.id,
-            analystId: analyst.id
+            analystId: analyst.id,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }]
+          refetchQueries: [{ query: ggl(list) }],
         })
         .then(() => {
-          this.updateGroups()
+          this.updateGroups();
           this.$toast.show('Removido do grupo', {
-            duration: 1000
-          })
-        })
+            duration: 1000,
+          });
+        });
     },
     updateGroups() {
       this.$apollo
         .query({
-          query: ggl(list)
+          query: ggl(list),
         })
-        .then(response => {
-          this.$store.commit('group/setGroups', response.data.Group)
-        })
+        .then((response) => {
+          this.$store.commit('group/setGroups', response.data.Group);
+        });
     },
     analystsToAdd(group) {
-      return this.analysts.filter(a => {
-        return !group.analysts.map(ga => ga.id).includes(a.id)
-      })
-    }
-  }
-}
+      return this.analysts.filter((a) => !group.analysts.map((ga) => ga.id).includes(a.id));
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

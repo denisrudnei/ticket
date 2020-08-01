@@ -1,64 +1,68 @@
-import { Field, ID, ObjectType } from 'type-graphql'
+/* eslint-disable no-shadow */
+import { Field, ID, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn
-} from 'typeorm'
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-import Category from '../ticket/Category'
-import Group from '../ticket/Group'
-import KnowledgeFile from './KnowledgeFile'
-import KnowledgeStatus from './KnowledgeStatus'
+import Category from '../ticket/Category';
+import Group from '../ticket/Group';
+import KnowledgeFile from './KnowledgeFile';
+import KnowledgeStatus from './KnowledgeStatus';
 
 @Entity()
 @ObjectType()
 class Knowledge extends BaseEntity {
-  @Field(type => ID)
+  @Field((type) => ID)
   @PrimaryGeneratedColumn()
-  public id!: number
+  public id!: number;
 
   @Column()
-  @Field(type => String)
-  public name!: string
+  @Field((type) => String)
+  public name!: string;
 
   @Column({ nullable: true })
-  public key!: string
+  public key!: string;
 
   @Column()
-  @Field(type => Date)
-  public created: Date = new Date()
+  @Field((type) => Date)
+  public created: Date = new Date();
 
-  @ManyToOne(type => Category)
+  @ManyToOne((type) => Category)
   @Field(() => Category)
-  public category!: Category
+  public category!: Category;
 
-  @ManyToOne(type => Group)
+  @ManyToOne((type) => Group)
   @Field(() => Group)
-  public group!: Group
+  public group!: Group;
 
-  @ManyToOne(type => KnowledgeStatus)
-  @Field(type => KnowledgeStatus)
-  public status!: KnowledgeStatus
+  @ManyToOne((type) => KnowledgeStatus)
+  @Field((type) => KnowledgeStatus)
+  public status!: KnowledgeStatus;
 
   @Column()
-  @Field(type => String)
-  public url: string = ''
+  @Field((type) => String)
+  public url: string = '';
 
-  @Field(type => String)
+  @Field((type) => String)
   public get preview(): string {
-    return this.description.substring(0, 100)
+    return this.description.substring(0, 100);
   }
 
   @Column()
-  @Field(type => String)
-  public description!: string
+  @Field((type) => String)
+  public description!: string;
 
-  @Field(type => [KnowledgeFile])
-  @OneToMany(type => KnowledgeFile, KnowledgeFile => KnowledgeFile.knowledge)
-  public files!: KnowledgeFile[]
+  @Field((type) => [KnowledgeFile])
+  @OneToMany(
+    (type) => KnowledgeFile,
+    (KnowledgeFile) => KnowledgeFile.knowledge,
+  )
+  public files!: KnowledgeFile[];
 }
 
-export default Knowledge
+export default Knowledge;

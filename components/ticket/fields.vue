@@ -18,25 +18,24 @@ export default {
   props: {
     edit: {
       type: Boolean,
-      default: false
+      default: false,
     },
     value: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
-      ticketData: {}
-    }
+      ticketData: {},
+    };
   },
   computed: {
     ticket() {
-      return Object.assign(this.ticketData, this.value)
-    }
-  }
-}
+      return Object.assign(this.ticketData, this.value);
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

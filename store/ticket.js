@@ -1,5 +1,7 @@
-import actualTicket from '@/graphql/query/ticket/actualTicket.graphql'
-import ggl from 'graphql-tag'
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-shadow */
+import actualTicket from '@/graphql/query/ticket/actualTicket.graphql';
+import ggl from 'graphql-tag';
 
 export const state = () => ({
   tickets: [],
@@ -13,57 +15,57 @@ export const state = () => ({
   tree: [],
   modalList: false,
   actualTicket: {},
-  ticketsToEdit: []
-})
+  ticketsToEdit: [],
+});
 
 export const getters = {
   getConfirmCopy(state) {
-    return state.confirmCopy
+    return state.confirmCopy;
   },
   getTicketToCopy(state) {
-    return state.ticketToCopy
+    return state.ticketToCopy;
   },
   getTickets(state) {
-    return state.tickets
+    return state.tickets;
   },
   getModalTickets(state) {
-    return state.modalTickets
+    return state.modalTickets;
   },
   getQuery(state) {
-    return state.query
+    return state.query;
   },
   getModalQuery(state) {
-    return state.modalQuery
+    return state.modalQuery;
   },
   getSearch(state) {
-    return state.search
+    return state.search;
   },
   getTree(state) {
-    return state.tree
+    return state.tree;
   },
   getActualTicket(state) {
-    return state.actualTicket
+    return state.actualTicket;
   },
   getDialog(state) {
-    return state.dialog
+    return state.dialog;
   },
   getTicketsToEdit(state) {
-    return state.ticketsToEdit
+    return state.ticketsToEdit;
   },
   getModalList(state) {
-    return state.modalList
-  }
-}
+    return state.modalList;
+  },
+};
 
 export const mutations = {
   setConfirmCopy(state, confirmCopy) {
-    state.confirmCopy = confirmCopy
+    state.confirmCopy = confirmCopy;
   },
   setTicketToCopy(state, ticket) {
-    state.ticketToCopy = ticket
+    state.ticketToCopy = ticket;
   },
   setActualTicket(state, ticket) {
-    state.actualTicket = ticket
+    state.actualTicket = ticket;
   },
   resetActualTicket(state) {
     state.actualTicket = {
@@ -77,140 +79,125 @@ export const mutations = {
       address: {},
       slaCount: undefined,
       created: undefined,
-      modified: undefined
-    }
+      modified: undefined,
+    };
   },
   setFieldInActualTicket(state, props) {
-    const { field, value } = props
-    state.actualTicket[field] = value
+    const { field, value } = props;
+    state.actualTicket[field] = value;
   },
   insertTicket(state, ticket) {
-    state.tickets.push(ticket)
+    state.tickets.push(ticket);
   },
   setTickets(state, tickets) {
-    state.tickets = tickets
+    state.tickets = tickets;
   },
   setModalTickets(state, tickets) {
-    state.modalTickets = tickets
+    state.modalTickets = tickets;
   },
-  setQuery: function(state, query) {
-    state.query = query
+  setQuery(state, query) {
+    state.query = query;
     this.$router.push({
-      query: query
-    })
+      query,
+    });
   },
   addComment(state, comment) {
-    if (!Object.prototype.hasOwnProperty.call(state.actualTicket, 'comments'))
-      return
-    state.actualTicket.comments.push(comment)
+    if (!Object.prototype.hasOwnProperty.call(state.actualTicket, 'comments')) return;
+    state.actualTicket.comments.push(comment);
   },
   setModalQuery(state, modalQuery) {
-    state.modalQuery = modalQuery
+    state.modalQuery = modalQuery;
   },
   updateTicket(state, ticket) {
     if (Object.prototype.hasOwnProperty.call(state.actualTicket, 'id')) {
       if (state.actualTicket.id === ticket.id) {
-        state.actualTicket = ticket
+        state.actualTicket = ticket;
       }
     }
-    const index = state.tickets.findIndex(t => {
-      return t.id === ticket.id
-    })
+    const index = state.tickets.findIndex((t) => t.id === ticket.id);
 
     if (index !== -1) {
-      Object.assign(state.tickets[index], ticket)
+      Object.assign(state.tickets[index], ticket);
     } else {
-      state.tickets.push(ticket)
+      state.tickets.push(ticket);
     }
-    const searchIndex = state.modalTickets.findIndex(s => {
-      return s.id === ticket.id
-    })
+    const searchIndex = state.modalTickets.findIndex((s) => s.id === ticket.id);
     if (searchIndex !== -1) {
-      Object.assign(state.modalTickets[searchIndex], ticket)
+      Object.assign(state.modalTickets[searchIndex], ticket);
     } else {
-      state.modalTickets.push(ticket)
+      state.modalTickets.push(ticket);
     }
   },
   setTree(state, tree) {
-    state.tree = tree
+    state.tree = tree;
   },
   addTreeItem(state, item) {
     state.tree = [
       item,
-      ...state.tree.filter(i => {
-        return i.id !== item.id
-      })
-    ]
+      ...state.tree.filter((i) => i.id !== item.id),
+    ];
   },
   removeTreeItem(state, id) {
-    state.tree = state.tree.filter(item => {
-      return item.id !== id
-    })
+    state.tree = state.tree.filter((item) => item.id !== id);
   },
   setDialog(state, ticketId) {
-    state.dialog = ticketId
+    state.dialog = ticketId;
   },
   setSearch(state, tickets) {
-    state.search = tickets
+    state.search = tickets;
   },
   removeFromEdit(state, id) {
-    state.ticketsToEdit = state.ticketsToEdit.filter(ticket => {
-      return ticket.id !== id
-    })
+    state.ticketsToEdit = state.ticketsToEdit.filter((ticket) => ticket.id !== id);
   },
   addTicketsToEdit(state, ticket) {
     state.ticketsToEdit = [
-      ...state.ticketsToEdit.filter(t => {
-        return t.id !== ticket.id
-      }),
-      ticket
-    ]
+      ...state.ticketsToEdit.filter((t) => t.id !== ticket.id),
+      ticket,
+    ];
   },
   setModalList(state, modalList) {
-    state.modalList = modalList
+    state.modalList = modalList;
   },
   setChildren(state, children) {
-    state.actualTicket.children = children
+    state.actualTicket.children = children;
   },
   addChildren(state, children) {
-    state.actualTicket.children = state.actualTicket.children.concat(children)
+    state.actualTicket.children = state.actualTicket.children.concat(children);
   },
   removeChildren(state, children) {
-    state.actualTicket.children = state.actualTicket.children.filter(c => {
-      return c.id !== children.id
-    })
-  }
-}
+    state.actualTicket.children = state.actualTicket.children.filter((c) => c.id !== children.id);
+  },
+};
 
 export const actions = {
   insertTicket({ commit }, ticket) {
-    commit('insertTicket', ticket)
+    commit('insertTicket', ticket);
   },
   updateSla({ commit, state }, ticket) {
     if (Object.prototype.hasOwnProperty.call(state.actualTicket, 'id')) {
       if (state.actualTicket.id === ticket.id) {
         commit('setFieldInActualTicket', {
           field: 'slaCount',
-          value: ticket.slaCount
-        })
+          value: ticket.slaCount,
+        });
       }
     }
   },
-  findTicket: async function({ commit }, id) {
+  async findTicket({ commit }, id) {
     await this.app.$apollo
       .query({
         query: ggl(actualTicket),
         variables: {
-          id
-        }
+          id,
+        },
       })
-      .then(response => {
-        commit('setActualTicket', response.data.TicketById)
-      })
+      .then((response) => {
+        commit('setActualTicket', response.data.TicketById);
+      });
   },
-  updateTree: async function({ commit }) {
-    await this.$axios.get('/info/path').then(response => {
-      commit('setTree', response.data)
-    })
-  }
-}
+  async updateTree({ commit }) {
+    await this.$axios.get('/info/path').then((response) => {
+      commit('setTree', response.data);
+    });
+  },
+};

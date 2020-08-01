@@ -1,10 +1,6 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      md="8"
-      pa-5
-    >
+    <v-col cols="12" md="8" pa-5>
       <v-card>
         <v-card-text>
           <nuxt-child />
@@ -24,9 +20,7 @@
                 to="/auth/login"
               >
                 {{ $t('login') }}
-                <v-icon
-                  right
-                >
+                <v-icon right>
                   person
                 </v-icon>
               </v-btn>
@@ -81,37 +75,37 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
+
 export default {
   computed: mapGetters({
-    logged: 'auth/getLoggedIn'
+    logged: 'auth/getLoggedIn',
   }),
   watch: {
     logged() {
-      this.verifyPath()
-    }
+      this.verifyPath();
+    },
   },
   mounted() {
-    this.verifyPath()
+    this.verifyPath();
   },
   methods: {
     verifyPath() {
-      const path = /^\/auth\/+(|login|login\/)$/
+      const path = /^\/auth\/+(|login|login\/)$/;
       if (path.test(this.$router.currentRoute.path) && this.logged) {
-        this.$router.push('/')
+        this.$router.push('/');
       }
     },
     login() {
-      this.$auth.loginWith('auth0').catch(e => {
+      this.$auth.loginWith('auth0').catch((e) => {
         this.$toast.error('Falha ao logar', {
           duration: 1000,
-          icon: 'error'
-        })
-      })
-    }
-  }
-}
+          icon: 'error',
+        });
+      });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

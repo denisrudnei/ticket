@@ -9,7 +9,7 @@
           <v-row>
             <v-col cols="10">
               Email para contato {{ analyst.contactEmail }}
-              <hr>
+              <hr />
               Status: {{ analyst.status }}
             </v-col>
             <v-col cols="2">
@@ -21,7 +21,10 @@
           <v-btn class="primary white--text" @click="show('openedBy', analyst)">
             Chamados abertos
           </v-btn>
-          <v-btn class="primary white--text" @click="show('actualUser', analyst)">
+          <v-btn
+            class="primary white--text"
+            @click="show('actualUser', analyst)"
+          >
             Chamados sendo tratados
           </v-btn>
         </v-card-actions>
@@ -31,9 +34,10 @@
 </template>
 
 <script>
-import showModal from '@/mixins/showModal'
-import AnalystById from '@/graphql/query/analyst/analystById.graphql'
-import ggl from 'graphql-tag'
+import showModal from '@/mixins/showModal';
+import AnalystById from '@/graphql/query/analyst/analystById.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   mixins: [showModal],
   asyncData({ params, app }) {
@@ -41,17 +45,14 @@ export default {
       .query({
         query: ggl(AnalystById),
         variables: {
-          id: params.id
-        }
+          id: params.id,
+        },
       })
-      .then(response => {
-        return {
-          analyst: response.data.AnalystById
-        }
-      })
-  }
-}
+      .then((response) => ({
+        analyst: response.data.AnalystById,
+      }));
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

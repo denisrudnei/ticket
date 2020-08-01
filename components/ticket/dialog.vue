@@ -1,20 +1,9 @@
 <template>
-  <v-dialog
-    :value="dialog === actualTicket.id"
-    fullscreen
-    scrollable
-  >
+  <v-dialog :value="dialog === actualTicket.id" fullscreen scrollable>
     <v-card>
-      <v-toolbar
-        fixed
-        class="primary white--text"
-      >
+      <v-toolbar fixed class="primary white--text">
         <v-toolbar-items>
-          <v-btn
-            class="primary white--text"
-            icon
-            @click="setDialog('')"
-          >
+          <v-btn class="primary white--text" icon @click="setDialog('')">
             <v-icon>
               close
             </v-icon>
@@ -28,9 +17,7 @@
       </v-toolbar>
       <v-card-text>
         <v-row>
-          <v-col
-            cols="12"
-          >
+          <v-col cols="12">
             <create-ticket
               v-model="actualTicket"
               :readonly="true"
@@ -44,35 +31,36 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ggl from 'graphql-tag'
-import CreateTicket from '@/components/ticket/create'
-import ticketEdit from '@/graphql/mutation/ticket/editTicket.graphql'
+import { mapGetters } from 'vuex';
+import ggl from 'graphql-tag';
+import CreateTicket from '@/components/ticket/create';
+import ticketEdit from '@/graphql/mutation/ticket/editTicket.graphql';
+
 export default {
   name: 'TicketDialog',
   components: {
-    CreateTicket
+    CreateTicket,
   },
   computed: {
     actualTicket: {
       get() {
-        return this.$store.getters['ticket/getActualTicket']
+        return this.$store.getters['ticket/getActualTicket'];
       },
       set(value) {
-        this.$store.commit('ticket/setActualTicket', value)
-      }
+        this.$store.commit('ticket/setActualTicket', value);
+      },
     },
     ...mapGetters({
-      dialog: 'ticket/getDialog'
-    })
+      dialog: 'ticket/getDialog',
+    }),
   },
   methods: {
     setDialog() {
-      this.$store.commit('ticket/setDialog', '')
+      this.$store.commit('ticket/setDialog', '');
     },
     done(id) {
-      this.$store.commit('ticket/removeFromEdit', id)
-      this.setDialog()
+      this.$store.commit('ticket/removeFromEdit', id);
+      this.setDialog();
     },
     update() {
       this.$apollo
@@ -89,20 +77,19 @@ export default {
               category: this.actualTicket.category.id,
               priority: this.actualTicket.priority.id,
               affectedUser: this.actualTicket.affectedUser.id,
-              actualUser: this.actualTicket.actualUser.id
-            }
-          }
+              actualUser: this.actualTicket.actualUser.id,
+            },
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.$toast.show(this.$t('updated'), {
             duration: 1000,
-            icon: 'done'
-          })
-        })
-    }
-  }
-}
+            icon: 'done',
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

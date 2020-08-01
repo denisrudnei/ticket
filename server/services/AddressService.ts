@@ -1,42 +1,27 @@
-import Address from '../models/Address'
+import Address from '../models/Address';
 
 class AddressService {
-  create(address: Address): Promise<Address> {
-    return new Promise((resolve, reject) => {
-      Address.create(address)
-        .save()
-        .then(address => {
-          return resolve(address)
-        })
-    })
+  static async create(address: Address): Promise<Address> {
+    return Address.create(address).save();
   }
 
-  getAll(): Promise<Address[]> {
+  static getAll(): Promise<Address[]> {
     return new Promise((resolve, reject) => {
-      Address.find().then(addresses => {
-        return resolve(addresses)
-      })
-    })
+      Address.find().then((addresses) => resolve(addresses));
+    });
   }
 
-  getOne(addressId: Address['id']): Promise<Address> {
+  static getOne(addressId: Address['id']): Promise<Address> {
     return new Promise((resolve, reject) => {
-      Address.findOne(addressId).then(address => {
-        return resolve(address)
-      })
-    })
+      Address.findOne(addressId).then((address) => resolve(address));
+    });
   }
 
-  edit(addressId: Address['id'], addressToEdit: Address): Promise<Address> {
-    return new Promise((resolve, reject) => {
-      Address.findOne(addressId).then(address => {
-        Object.assign(address, addressToEdit)
-        address!.save().then(address => {
-          resolve(address)
-        })
-      })
-    })
+  static async edit(addressId: Address['id'], addressToEdit: Address): Promise<Address> {
+    const address = await Address.findOne(addressId);
+    Object.assign(address, addressToEdit);
+    return address!.save();
   }
 }
 
-export default new AddressService()
+export default AddressService;

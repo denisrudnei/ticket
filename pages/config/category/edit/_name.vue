@@ -5,28 +5,27 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag'
-import CategoryCreate from '@/components/ticket/category/create'
-import CategoryEditList from '@/graphql/query/config/category/edit.graphql'
-import CategoryEdit from '@/graphql/mutation/config/category/editCategory.graphql'
+import ggl from 'graphql-tag';
+import CategoryCreate from '@/components/ticket/category/create';
+import CategoryEditList from '@/graphql/query/config/category/edit.graphql';
+import CategoryEdit from '@/graphql/mutation/config/category/editCategory.graphql';
+
 export default {
   components: {
-    CategoryCreate
+    CategoryCreate,
   },
   asyncData({ params, app }) {
-    const name = params.name
+    const { name } = params;
     return app.$apollo
       .query({
         query: ggl(CategoryEditList),
         variables: {
-          name: name
-        }
+          name,
+        },
       })
-      .then(response => {
-        return {
-          category: response.data.category
-        }
-      })
+      .then((response) => ({
+        category: response.data.category,
+      }));
   },
   methods: {
     update(newValue) {
@@ -41,42 +40,41 @@ export default {
               sla: newValue.sla.id,
               defaultGroup: newValue.defaultGroup.id,
               defaultStatus: newValue.defaultStatus.id,
-              defaultPriority: newValue.defaultPriority.id
-            }
+              defaultPriority: newValue.defaultPriority.id,
+            },
           },
           awaitRefetchQueries: true,
           refetchQueries: [
             {
               query: ggl(CategoryEditList),
               variables: {
-                name: newValue.name
-              }
-            }
-          ]
+                name: newValue.name,
+              },
+            },
+          ],
         })
         .then(() => {
           this.$toast.show('Categoria atualizada', {
             duration: 5000,
-            icon: 'done'
-          })
+            icon: 'done',
+          });
           if (newValue.image) {
-            const formData = new FormData()
-            formData.append('image', newValue.image)
+            const formData = new FormData();
+            formData.append('image', newValue.image);
             this.$axios
               .post(`/config/category/image/${newValue.id}`, formData)
               .then(() => {
                 this.$toast.show('Image uploaded', {
                   duration: 5000,
-                  icon: 'done'
-                })
-              })
+                  icon: 'done',
+                });
+              });
           }
-          this.$router.push('/config/category')
-        })
-    }
-  }
-}
+          this.$router.push('/config/category');
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

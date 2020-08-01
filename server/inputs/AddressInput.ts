@@ -1,27 +1,27 @@
-import { InputType, Field, ID } from 'type-graphql'
+import { InputType, Field, ID } from 'type-graphql';
 
 @InputType()
 class AddressInput {
-  @Field(type => ID, { nullable: true })
-  public id!: number
+  @Field((type) => ID, { nullable: true })
+  public id!: number;
 
   @Field({ nullable: true })
-  public name!: string
+  public name!: string;
 
   @Field({ nullable: true })
-  public country!: string
+  public country!: string;
 
   @Field({ nullable: true })
-  public street!: string
+  public street!: string;
 
   @Field({ nullable: true })
-  public cep!: string
+  public cep!: string;
 
   @Field({ nullable: true })
-  public city!: string
+  public city!: string;
 
   @Field({ nullable: true })
-  public state!: string
+  public state!: string;
 }
 
-export default AddressInput
+export default AddressInput;

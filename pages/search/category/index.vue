@@ -7,12 +7,10 @@
         on-icon="layers"
         open-on-click
       >
-        <template
-          v-slot:prepend
-        >
+        <template v-slot:prepend>
           <v-icon>layers</v-icon>
         </template>
-        <template v-slot:label="{item}">
+        <template v-slot:label="{ item }">
           <span @click="getSub(item)">
             {{ item.name }}
           </span>
@@ -23,22 +21,19 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag'
-import category from '@/graphql/query/search/category/category.graphql'
-import getSubs from '@/graphql/query/search/category/subs.graphql'
+import ggl from 'graphql-tag';
+import category from '@/graphql/query/search/category/category.graphql';
+import getSubs from '@/graphql/query/search/category/subs.graphql';
+
 export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(category)
+        query: ggl(category),
       })
-      .then(response => {
-        return {
-          items: response.data.category.filter(c => {
-            return c.father === null
-          })
-        }
-      })
+      .then((response) => ({
+        items: response.data.category.filter((c) => c.father === null),
+      }));
   },
   methods: {
     getSub(item) {
@@ -46,16 +41,13 @@ export default {
         .query({
           query: ggl(getSubs),
           variables: {
-            categoryId: item.id
-          }
+            categoryId: item.id,
+          },
         })
-        .then(response => {
-          return response.data.category
-        })
-    }
-  }
-}
+        .then((response) => response.data.category);
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

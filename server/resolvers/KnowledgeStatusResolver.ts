@@ -1,7 +1,10 @@
-import { Resolver, Query, Authorized, Mutation, Arg } from 'type-graphql'
-import KnowledgeStatus from '../models/knowledge/KnowledgeStatus'
-import KnowledgeStatusService from '../services/knowledge/KnowledgeStatusService'
-import KnowledgeStatusCreateInput from '../inputs/KnowledgeStatusCreateInput'
+/* eslint-disable class-methods-use-this */
+import {
+  Resolver, Query, Authorized, Mutation, Arg,
+} from 'type-graphql';
+import KnowledgeStatus from '../models/knowledge/KnowledgeStatus';
+import KnowledgeStatusService from '../services/knowledge/KnowledgeStatusService';
+import KnowledgeStatusCreateInput from '../inputs/KnowledgeStatusCreateInput';
 
 @Resolver()
 class KnowledgeStatusResolver {
@@ -9,23 +12,19 @@ class KnowledgeStatusResolver {
   @Authorized('user')
   KnowledgeStatus(): Promise<KnowledgeStatus[]> {
     return new Promise((resolve, reject) => {
-      KnowledgeStatus.find().then(knowledges => {
-        resolve(knowledges)
-      })
-    })
+      KnowledgeStatus.find().then((knowledges) => {
+        resolve(knowledges);
+      });
+    });
   }
 
   @Mutation(() => KnowledgeStatus)
-  CreateKnowledgeStatus(
+  async CreateKnowledgeStatus(
     @Arg('knowledgeStatus', () => KnowledgeStatusCreateInput)
-    knowledgeStatus: KnowledgeStatus
+      knowledgeStatus: KnowledgeStatus,
   ): Promise<KnowledgeStatus> {
-    return new Promise((resolve, reject) => {
-      KnowledgeStatusService.create(knowledgeStatus).then(knowledgeStatus => {
-        resolve(knowledgeStatus)
-      })
-    })
+    return KnowledgeStatusService.create(knowledgeStatus);
   }
 }
 
-export default KnowledgeStatusResolver
+export default KnowledgeStatusResolver;

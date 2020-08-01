@@ -1,14 +1,14 @@
-import { registerEnumType } from 'type-graphql'
+import { registerEnumType } from 'type-graphql';
 
 enum StatusColor {
   ONLINE = 'green',
   OFFLINE = 'black',
   AWAY = 'yellow',
-  BUSY = 'red'
+  BUSY = 'red',
 }
 
 registerEnumType(StatusColor, {
-  name: 'StatusColor'
-})
+  name: 'StatusColor',
+});
 
-export default StatusColor
+export default StatusColor;

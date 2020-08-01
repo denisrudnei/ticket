@@ -17,7 +17,7 @@
         <template v-slot:item.actualUser="{ item }">
           <v-list-item>
             <v-list-item-avatar>
-              <img :src="item.actualUser.picture">
+              <img :src="item.actualUser.picture" />
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>
@@ -48,7 +48,11 @@
           {{ item.modified | date }}
         </template>
       </v-data-table>
-      <v-btn class="primary white--text" :disabled="selected.length === 0" @click="addChildren">
+      <v-btn
+        class="primary white--text"
+        :disabled="selected.length === 0"
+        @click="addChildren"
+      >
         <v-icon>add</v-icon>
         {{ $t('add_children') }}
       </v-btn>
@@ -62,69 +66,68 @@ export default {
   props: {
     value: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
-      selected: []
-    }
+      selected: [],
+    };
   },
   computed: {
     headers() {
       return [
         {
           text: this.$t('select'),
-          value: 'actions'
+          value: 'actions',
         },
         {
           text: this.$t('number_of_ticket'),
-          value: 'id'
+          value: 'id',
         },
         {
           text: this.$t('priority'),
-          value: 'priority'
+          value: 'priority',
         },
         {
           text: this.$t('actual_user'),
-          value: 'actualUser'
+          value: 'actualUser',
         },
         {
           text: this.$t('resume'),
-          value: 'resume'
+          value: 'resume',
         },
         {
           text: this.$t('status'),
-          value: 'status'
+          value: 'status',
         },
         {
           text: this.$t('group'),
-          value: 'group'
+          value: 'group',
         },
         {
           text: this.$t('category'),
-          value: 'category'
+          value: 'category',
         },
         {
           text: this.$t('creation_date'),
-          value: 'created'
+          value: 'created',
         },
         {
           text: this.$t('modified_date'),
-          value: 'modified'
-        }
-      ]
-    }
+          value: 'modified',
+        },
+      ];
+    },
   },
   methods: {
     addChildren() {
-      this.$emit('input', this.selected)
+      this.$emit('input', this.selected);
 
-      this.selected = []
-    }
-  }
-}
+      this.selected = [];
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,99 +1,91 @@
-import { UploadedFile } from 'express-fileupload'
-import { GetObjectOutput, ManagedUpload } from 'aws-sdk/clients/s3'
-import Category from '../../models/ticket/Category'
-import S3 from '~/plugins/S3'
+import { UploadedFile } from 'express-fileupload';
+import { GetObjectOutput } from 'aws-sdk/clients/s3';
+import Category from '../../models/ticket/Category';
+import S3 from '~/plugins/S3';
 
 class CategoryService {
-  create(category: Category): Promise<Category> {
+  static create(category: Category): Promise<Category> {
     return new Promise((resolve, reject) => {
       Category.create(category)
         .save()
-        .then(categorySaved => {
-          resolve(categorySaved)
-        })
-    })
+        .then((categorySaved) => {
+          resolve(categorySaved);
+        });
+    });
   }
 
-  getCategories() {
+  static getCategories() {
     return new Promise((resolve, reject) => {
-      Category.find({ relations: ['subs'] }).then(categories => {
-        return resolve(categories)
-      })
-    })
+      Category.find({ relations: ['subs'] }).then((categories) => resolve(categories));
+    });
   }
 
-  getOne(name: string): Promise<Category> {
+  static getOne(name: string): Promise<Category> {
     return new Promise((resolve, reject) => {
       Category.findOne({
         where: {
-          name
+          name,
         },
-        relations: ['subs']
-      }).then(result => {
-        resolve(result)
-      })
-    })
+        relations: ['subs'],
+      }).then((result) => {
+        resolve(result);
+      });
+    });
   }
 
-  getOneById(categoryId: Category['id']): Promise<Category> {
+  static getOneById(categoryId: Category['id']): Promise<Category> {
     return new Promise((resolve, reject) => {
-      Category.findOne(categoryId, { relations: ['subs'] }).then(result => {
-        return resolve(result)
-      })
-    })
+      Category.findOne(categoryId, { relations: ['subs'] }).then((result) => resolve(result));
+    });
   }
 
-  edit(
+  static edit(
     categoryId: Category['id'],
-    categoryToEdit: Category
+    categoryToEdit: Category,
   ): Promise<Category> {
     return new Promise((resolve, reject) => {
-      Category.findOne(categoryId).then(category => {
-        Object.assign(category, categoryToEdit)
+      Category.findOne(categoryId).then((category) => {
+        Object.assign(category, categoryToEdit);
         category!.save().then(() => {
-          resolve(this.getOneById(categoryId))
-        })
-      })
-    })
+          resolve(CategoryService.getOneById(categoryId));
+        });
+      });
+    });
   }
 
-  getImage(categoryId: Category['id']): Promise<Buffer> {
+  static getImage(categoryId: Category['id']): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       S3.getObject(
         {
           Bucket: process.env.BUCKET!,
-          Key: `category/${categoryId.toString()}`
+          Key: `category/${categoryId.toString()}`,
         },
         (err: Error, file: GetObjectOutput) => {
-          if (err) return reject(err)
-          if (file === null) return reject(new Error('No image found'))
-          return resolve(file.Body as Buffer)
-        }
-      )
-    })
+          if (err) return reject(err);
+          if (file === null) return reject(new Error('No image found'));
+          return resolve(file.Body as Buffer);
+        },
+      );
+    });
   }
 
-  setImage(categoryId: Category['id'], image: UploadedFile): Promise<string> {
+  static async setImage(categoryId: Category['id'], image: UploadedFile): Promise<string> {
     const params = {
       Bucket: process.env.BUCKET!,
       Key: `category/${categoryId}`,
-      Body: image.data
-    }
-    return new Promise((resolve, reject) => {
-      S3.upload(params, (err: Error, data: ManagedUpload.SendData) => {
-        if (err) return reject(err)
-        resolve(data.Location)
-      })
-    })
+      Body: image.data,
+    };
+
+    const { Location } = await S3.upload(params).promise();
+
+    return Location;
   }
 
-  getSubsForCategory(id: Category['id']): Promise<Category[]> {
+  static getSubsForCategory(id: Category['id']): Promise<Category[]> {
     return new Promise((resolve, reject) => {
-      Category.findOne(id, { relations: ['subs'] }).then(result => {
-        return resolve(result!.subs)
-      })
-    })
+      Category.findOne(id, { relations: ['subs'] }).then((result) => resolve(result!.subs));
+    });
   }
 }
 
-export default new CategoryService()
+export default CategoryService;

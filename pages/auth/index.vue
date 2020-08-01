@@ -3,13 +3,13 @@
 </template>
 
 <script>
-import Login from './login'
+import Login from './login';
+
 export default {
   components: {
-    Login
-  }
-}
+    Login,
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

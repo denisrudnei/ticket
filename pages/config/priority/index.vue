@@ -3,13 +3,13 @@
 </template>
 
 <script>
-import create from './create'
+import create from './create';
+
 export default {
   components: {
-    create
-  }
-}
+    create,
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

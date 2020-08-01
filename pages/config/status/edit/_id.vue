@@ -3,29 +3,28 @@
 </template>
 
 <script>
-import CreateStatus from '@/components/ticket/status/create'
-import StatusById from '@/graphql/query/status/statusById.graphql'
-import list from '@/graphql/query/status/list.graphql'
-import edit from '@/graphql/mutation/config/status/edit.graphql'
-import ggl from 'graphql-tag'
+import CreateStatus from '@/components/ticket/status/create';
+import StatusById from '@/graphql/query/status/statusById.graphql';
+import list from '@/graphql/query/status/list.graphql';
+import edit from '@/graphql/mutation/config/status/edit.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   components: {
-    CreateStatus
+    CreateStatus,
   },
   asyncData({ app, params }) {
-    const id = params.id
+    const { id } = params;
     return app.$apollo
       .query({
         query: ggl(StatusById),
         variables: {
-          id
-        }
+          id,
+        },
       })
-      .then(response => {
-        return {
-          status: response.data.FindStatus
-        }
-      })
+      .then((response) => ({
+        status: response.data.FindStatus,
+      }));
   },
   methods: {
     update(status) {
@@ -37,24 +36,23 @@ export default {
             status: {
               name: status.name,
               description: status.description,
-              allowedStatus: status.allowedStatus.map(status => status.id),
-              slaRun: status.slaRun
-            }
+              allowedStatus: status.allowedStatus.map((s) => s.id),
+              slaRun: status.slaRun,
+            },
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(StatusById) }, { query: ggl(list) }]
+          refetchQueries: [{ query: ggl(StatusById) }, { query: ggl(list) }],
         })
         .then(() => {
           this.$toast.show(this.$t('updated'), {
             duration: 1000,
-            icon: 'done'
-          })
-          this.$router.push('/config/status/')
-        })
-    }
-  }
-}
+            icon: 'done',
+          });
+          this.$router.push('/config/status/');
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,42 +1,44 @@
-const colors = require('vuetify/es5/util/colors').default
-const pkg = require('./package')
+const colors = require('vuetify/es5/util/colors').default;
+const pkg = require('./package');
 
 module.exports = {
   mode: 'universal',
 
+  telemetry: false,
+
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
     title: pkg.name,
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      { hid: 'description', name: 'description', content: pkg.description },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
         href:
-          'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'
-      }
-    ]
+          'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons',
+      },
+    ],
   },
 
   /*
-  ** Customize the progress-bar color
-  */
+   ** Customize the progress-bar color
+   */
   loading: { color: '#fff' },
 
   /*
-  ** Global CSS
-  */
+   ** Global CSS
+   */
   css: [],
 
   /*
-  ** Plugins to load before mounting the App
-  */
+   ** Plugins to load before mounting the App
+   */
   plugins: [
     { src: '@/plugins/dateFilter', ssr: true },
     { src: '@/plugins/apex-charts', ssr: false },
@@ -44,31 +46,31 @@ module.exports = {
     { src: '@/plugins/CKEditor', ssr: false },
     { src: '@/plugins/apolloConfig', ssr: true },
     { src: '@/plugins/vue-hotkey', ssr: false },
-    { src: '@/plugins/i18n', ssr: true }
+    { src: '@/plugins/i18n', ssr: true },
   ],
 
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/vuetify',
-    '@nuxt/typescript-build'
+    '@nuxt/typescript-build',
   ],
 
   /*
-  ** Nuxt.js modules
-  */
+   ** Nuxt.js modules
+   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/toast',
     '@nuxtjs/auth',
-    '@nuxtjs/google-analytics'
+    '@nuxtjs/google-analytics',
   ],
 
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
     proxy: true,
-    prefix: '/api'
+    prefix: '/api',
   },
 
   vuetify: {
@@ -83,7 +85,7 @@ module.exports = {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3
+          success: colors.green.accent3,
         },
         dark: {
           primary: colors.blue.darken2,
@@ -92,18 +94,18 @@ module.exports = {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
-    }
+          success: colors.green.accent3,
+        },
+      },
+    },
   },
 
   router: {
-    middleware: ['auth']
+    middleware: ['auth'],
   },
 
   toast: {
-    position: 'top-left'
+    position: 'top-left',
   },
 
   auth: {
@@ -111,7 +113,7 @@ module.exports = {
       login: '/auth/',
       logout: '/auth/logout',
       callback: '/auth/callback',
-      home: '/'
+      home: '/',
     },
     strategies: {
       local: {
@@ -119,39 +121,39 @@ module.exports = {
           login: {
             url: 'auth/login',
             method: 'post',
-            propertyName: 'user'
+            propertyName: 'user',
           },
           user: {
             url: 'auth/user',
             method: 'post',
-            propertyName: 'user'
+            propertyName: 'user',
           },
           logout: {
             url: 'auth/logout',
-            method: 'post'
-          }
-        }
+            method: 'post',
+          },
+        },
       },
       auth0: {
         domain: 'bm-dns.auth0.com',
         client_id: 'hHLA1yh4Ffvj1xyWhZzEzgk5Hz9GNHY2',
         scope: ['email', 'openid', 'name', 'profile', 'picture'],
-        userinfo_endpoint: 'https://bm-dns.auth0.com/userinfo'
-      }
-    }
+        userinfo_endpoint: 'https://bm-dns.auth0.com/userinfo',
+      },
+    },
   },
 
   googleAnalytics: {
-    id: 'UA-38858408-3'
+    id: 'UA-38858408-3',
   },
 
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   build: {
     /*
-    ** You can extend webpack config here
-    */
+     ** You can extend webpack config here
+     */
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
@@ -159,14 +161,14 @@ module.exports = {
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
+          exclude: /(node_modules)/,
+        });
       }
       config.module.rules.push({
         test: /\.graphql?$/,
         exclude: /node_modules/,
-        loader: 'webpack-graphql-loader'
-      })
-    }
-  }
-}
+        loader: 'webpack-graphql-loader',
+      });
+    },
+  },
+};

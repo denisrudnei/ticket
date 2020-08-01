@@ -1,8 +1,11 @@
-import { Arg, Authorized, Int, Query, Resolver, ID } from 'type-graphql'
-import TicketAttributes from '../inputs/TicketAttributes'
-import TicketPagination from '../models/TicketPagination'
-import SearchService from '../services/ticket/SearchService'
-import Ticket from '../models/ticket/Ticket'
+/* eslint-disable class-methods-use-this */
+import {
+  Arg, Authorized, Int, Query, Resolver, ID,
+} from 'type-graphql';
+import TicketAttributes from '../inputs/TicketAttributes';
+import TicketPagination from '../models/TicketPagination';
+import SearchService from '../services/ticket/SearchService';
+import Ticket from '../models/ticket/Ticket';
 
 @Resolver()
 class SearchResolver {
@@ -12,23 +15,23 @@ class SearchResolver {
     @Arg('page', () => Int, { nullable: true, defaultValue: 0 }) page: number,
     @Arg('limit', () => Int, { nullable: true, defaultValue: 0 }) limit: number,
     @Arg('attributes', () => TicketAttributes, { nullable: true })
-    attributes: TicketAttributes,
+      attributes: TicketAttributes,
     @Arg('descending', () => Int, { nullable: true, defaultValue: -1 })
-    descending: number,
+      descending: number,
     @Arg('sortBy', {
       nullable: true,
-      defaultValue: 'id'
+      defaultValue: 'id',
     })
-    sortBy: string
+      sortBy: string,
   ): Promise<TicketPagination> {
     return SearchService.getTickets(
       attributes,
       {
-        [sortBy]: descending
+        [sortBy]: descending,
       },
       page,
-      limit
-    )
+      limit,
+    );
   }
 
   @Query(() => TicketPagination)
@@ -38,22 +41,22 @@ class SearchResolver {
     @Arg('limit', () => Int, { nullable: true, defaultValue: 0 }) limit: number,
     @Arg('ids', () => [ID], { nullable: true }) attributes: Ticket['id'][],
     @Arg('descending', () => Int, { nullable: true, defaultValue: -1 })
-    descending: number,
+      descending: number,
     @Arg('sortBy', {
       nullable: true,
-      defaultValue: 'id'
+      defaultValue: 'id',
     })
-    sortBy: string
+      sortBy: string,
   ): Promise<TicketPagination> {
     return SearchService.getTicketsByIds(
       attributes,
       {
-        [sortBy]: descending
+        [sortBy]: descending,
       },
       page,
-      limit
-    )
+      limit,
+    );
   }
 }
 
-export default SearchResolver
+export default SearchResolver;

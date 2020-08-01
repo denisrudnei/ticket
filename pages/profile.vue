@@ -1,13 +1,8 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      pa-1
-    >
+    <v-col cols="12" pa-1>
       <v-tabs color="primary" class="white--text" show-arrows>
-        <v-tab
-          to="/profile"
-        >
+        <v-tab to="/profile">
           <v-icon left>
             person
           </v-icon>
@@ -25,17 +20,13 @@
           </v-icon>
           Listagem em árvore
         </v-tab>
-        <v-tab
-          to="/profile/notification/all"
-        >
+        <v-tab to="/profile/notification/all">
           <v-icon left>
             notification_important
           </v-icon>
           {{ $t('notifications') }}
         </v-tab>
-        <v-tab
-          to="/profile/password"
-        >
+        <v-tab to="/profile/password">
           <v-icon left>
             lock
           </v-icon>
@@ -48,31 +39,30 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import GroupList from '@/graphql/query/profile/groups.graphql'
-import ggl from 'graphql-tag'
+import { mapGetters } from 'vuex';
+import GroupList from '@/graphql/query/profile/groups.graphql';
+import ggl from 'graphql-tag';
 
 export default {
   data() {
-    return {}
+    return {};
   },
   computed: mapGetters({
-    user: 'auth/getUser'
+    user: 'auth/getUser',
   }),
   created() {
     this.$apollo
       .query({
         query: ggl(GroupList),
         variables: {
-          id: this.user.id
-        }
+          id: this.user.id,
+        },
       })
-      .then(response => {
-        this.notificationGroups = response.data.AnalystById
-      })
-  }
-}
+      .then((response) => {
+        this.notificationGroups = response.data.AnalystById;
+      });
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

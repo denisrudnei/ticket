@@ -1,12 +1,7 @@
 <template>
   <v-row>
-    <v-col
-      cols="11"
-      pa-3
-    >
-      <v-card
-        v-if="notification !== null"
-      >
+    <v-col cols="11" pa-3>
+      <v-card v-if="notification !== null">
         <v-card-title>
           {{ notification.content }}
         </v-card-title>
@@ -19,7 +14,7 @@
         </v-card-text>
         <v-card-actions>
           <v-switch
-            :input-value="notification.read.map(user => user.id.toString())"
+            :input-value="notification.read.map((user) => user.id.toString())"
             :value="user.id.toString()"
             label="Lido"
             @change="read()"
@@ -42,7 +37,7 @@
           </v-icon>
         </v-btn>
       </v-row>
-      <br>
+      <br />
       <v-row>
         <v-btn
           outlined
@@ -62,71 +57,68 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import readNotification from '@/mixins/readNotification'
-import NotificationById from '@/graphql/query/notification/getNotification.graphql'
-import ggl from 'graphql-tag'
+import { mapGetters } from 'vuex';
+import readNotification from '@/mixins/readNotification';
+import NotificationById from '@/graphql/query/notification/getNotification.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   filters: {
     numberOfPeople(notification) {
-      const size = notification.to.length
-      if (size === 1) return 'Somente você recebeu essa notificação'
-      if (size === 2)
-        return 'Você e mais uma outra pessoa receberam essa notificação'
-      if (size > 2) return `${size} pessoas receberam a notificação`
-    }
+      const size = notification.to.length;
+      if (size === 1) return 'Somente você recebeu essa notificação';
+      if (size === 2) return 'Você e mais uma outra pessoa receberam essa notificação';
+      return `${size} pessoas receberam a notificação`;
+    },
   },
   mixins: [readNotification],
   data() {
     return {
-      notification: null
-    }
+      notification: null,
+    };
   },
   computed: {
     ...mapGetters({
       user: 'auth/getUser',
-      notifications: 'notification/getNotifications'
-    })
+      notifications: 'notification/getNotifications',
+    }),
   },
   created() {
-    this.getNotification()
+    this.getNotification();
   },
   methods: {
     async getNotification() {
-      const id = this.$route.params.id
+      const { id } = this.$route.params;
       const { data } = await this.$apollo.query({
         query: ggl(NotificationById),
         variables: {
-          id
-        }
-      })
-      this.notification = data.NotificationById
+          id,
+        },
+      });
+      this.notification = data.NotificationById;
     },
     prev() {
-      if (this.notification === null) return undefined
-      const index = this.notifications.findIndex(ntf => {
-        return ntf.id === this.notification.id.toString()
-      })
-      return this.notifications[index - 1]
+      if (this.notification === null) return undefined;
+      const index = this.notifications
+        .findIndex((ntf) => ntf.id === this.notification.id.toString());
+      return this.notifications[index - 1];
     },
     next() {
-      if (this.notification === null) return undefined
-      const index = this.notifications.findIndex(ntf => {
-        return ntf.id === this.notification.id.toString()
-      })
+      if (this.notification === null) return undefined;
+      const index = this.notifications
+        .findIndex((ntf) => ntf.id === this.notification.id.toString());
 
-      return this.notifications[index + 1]
+      return this.notifications[index + 1];
     },
     goTo(notification) {
-      this.$router.push(`/profile/notification/${notification.id}`)
-      this.getNotification()
+      this.$router.push(`/profile/notification/${notification.id}`);
+      this.getNotification();
     },
     read() {
-      this.readNotification(this.notification)
-    }
-  }
-}
+      this.readNotification(this.notification);
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

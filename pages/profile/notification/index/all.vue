@@ -1,23 +1,21 @@
 <template>
   <div>
-    <NotificationList
-      :notifications="notifications"
-    />
+    <NotificationList :notifications="notifications" />
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-import NotificationList from '@/components/notification-list'
+import { mapGetters } from 'vuex';
+import NotificationList from '@/components/notification-list';
+
 export default {
   components: {
-    NotificationList
+    NotificationList,
   },
 
   computed: mapGetters({
-    notifications: 'notification/getNotifications'
-  })
-}
+    notifications: 'notification/getNotifications',
+  }),
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -28,18 +28,17 @@
 </template>
 
 <script>
-import Tiles from './tiles'
-import GroupedChart from './groupedCharts'
-import ChartsByDate from './chartsByDate'
+import Tiles from './tiles';
+import GroupedChart from './groupedCharts';
+import ChartsByDate from './chartsByDate';
 
 export default {
   components: {
     Tiles,
     GroupedChart,
-    ChartsByDate
-  }
-}
+    ChartsByDate,
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

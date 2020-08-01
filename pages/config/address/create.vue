@@ -3,12 +3,13 @@
 </template>
 
 <script>
-import AddressCreate from '@/components/address/create'
-import Create from '@/graphql/mutation/config/address/create.graphql'
-import ggl from 'graphql-tag'
+import AddressCreate from '@/components/address/create';
+import Create from '@/graphql/mutation/config/address/create.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   components: {
-    AddressCreate
+    AddressCreate,
   },
   methods: {
     save(address) {
@@ -16,28 +17,27 @@ export default {
         .mutate({
           mutation: ggl(Create),
           variables: {
-            address
-          }
+            address,
+          },
         })
         .then(
           () => {
             this.$toast.show('Criado com sucesso', {
               duration: 1000,
-              icon: 'done'
-            })
-            this.$router.push('/config/address/list')
+              icon: 'done',
+            });
+            this.$router.push('/config/address/list');
           },
           () => {
             this.$toast.error('Falha ao cadastrar/inserir', {
               duration: 1000,
-              icon: 'error'
-            })
-          }
-        )
-    }
-  }
-}
+              icon: 'error',
+            });
+          },
+        );
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -13,14 +13,18 @@
             />
           </v-col>
           <v-col cols="12" md="4" pa-3>
-            <v-text-field v-model="category.name" :placeholder="this.$t('name')" filled />
+            <v-text-field
+              v-model="category.name"
+              :placeholder="this.$t('name')"
+              filled
+            />
           </v-col>
           <v-col cols="12" md="4" pa-3>
             <v-autocomplete
               v-model="category.defaultGroup"
               placeholder="Grupo principal"
               :value-comparator="compare"
-              :items="groups.map(g => ({text: g.name, value: g}))"
+              :items="groups.map((g) => ({ text: g.name, value: g }))"
               filled
             />
           </v-col>
@@ -29,7 +33,7 @@
               v-model="category.defaultStatus"
               placeholder="Status padrão"
               :value-comparator="compare"
-              :items="status.map(s => ({text: s.name, value: s}))"
+              :items="status.map((s) => ({ text: s.name, value: s }))"
               filled
             />
           </v-col>
@@ -37,7 +41,7 @@
             <v-autocomplete
               v-model="category.sla"
               placeholder="SLA"
-              :items="sla.map(s => ({text: s.name, value: s}))"
+              :items="sla.map((s) => ({ text: s.name, value: s }))"
               :value-comparator="compare"
               filled
             />
@@ -47,12 +51,16 @@
               v-model="category.defaultPriority"
               filled
               label="Prioridade padrão"
-              :items="priority.map(p => ({text: p.name, value: p}))"
+              :items="priority.map((p) => ({ text: p.name, value: p }))"
               :value-comparator="compare"
             />
           </v-col>
           <v-col cols="12">
-            <v-textarea v-model="category.description" filled placeholder="Descrição" />
+            <v-textarea
+              v-model="category.description"
+              filled
+              placeholder="Descrição"
+            />
           </v-col>
           <v-col cols="12">
             <v-btn class="primary white--text" @click="addField()">
@@ -60,21 +68,40 @@
             </v-btn>
           </v-col>
           <v-col cols="12" pa-3>
-            <v-file-input v-model="category.image" placeholder="Arquivo" @change="updatePreview" />
+            <v-file-input
+              v-model="category.image"
+              placeholder="Arquivo"
+              @change="updatePreview"
+            />
           </v-col>
           <v-col cols="12">
             <v-row v-for="(field, index) in category.fields" :key="index">
               <v-col cols="8" pa-3>
-                <v-text-field v-model="field.text" label="Nome do campo" filled />
+                <v-text-field
+                  v-model="field.text"
+                  label="Nome do campo"
+                  filled
+                />
               </v-col>
               <v-col cols="2" pa-3>
-                <v-text-field v-model="field.min" label="Tamanho mínimo" filled />
+                <v-text-field
+                  v-model="field.min"
+                  label="Tamanho mínimo"
+                  filled
+                />
               </v-col>
               <v-col cols="2" pa-3>
-                <v-text-field v-model="field.max" label="Tamanho máximo" filled />
+                <v-text-field
+                  v-model="field.max"
+                  label="Tamanho máximo"
+                  filled
+                />
               </v-col>
               <v-col cols="12">
-                <v-checkbox v-model="field.required" label="Necessário preencher?" />
+                <v-checkbox
+                  v-model="field.required"
+                  label="Necessário preencher?"
+                />
               </v-col>
             </v-row>
           </v-col>
@@ -87,7 +114,7 @@
       </v-col>
       <v-col cols="4">
         <v-card tile class="primary">
-          <v-img :src="image" :aspect-ratio="16/9" />
+          <v-img :src="image" :aspect-ratio="16 / 9" />
           <v-card-title class="white--text">
             {{ category.name }}
           </v-card-title>
@@ -98,22 +125,21 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag'
-import create from '@/graphql/query/config/category/create.graphql'
-import compareObjectsWithId from '@/mixins/compareObjectsWithId'
+import ggl from 'graphql-tag';
+import create from '@/graphql/query/config/category/create.graphql';
+import compareObjectsWithId from '@/mixins/compareObjectsWithId';
+
 export default {
   mixins: [compareObjectsWithId],
   props: {
     value: {
       type: Object,
-      default: () => {
-        return {}
-      }
+      default: () => ({}),
     },
     editing: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -127,57 +153,56 @@ export default {
         name: '',
         father: null,
         defaultStatus: {},
-        fields: []
-      }
-    }
+        fields: [],
+      },
+    };
   },
   computed: {
     category() {
-      return Object.assign(this.categoryData, this.value)
+      return Object.assign(this.categoryData, this.value);
     },
     categoriesComputed() {
-      return this.categories.map(c => ({ text: c.fullName, value: c }))
-    }
+      return this.categories.map((c) => ({ text: c.fullName, value: c }));
+    },
   },
   mounted() {
     this.$apollo
       .query({
-        query: ggl(create)
+        query: ggl(create),
       })
-      .then(response => {
-        this.categories = response.data.category
-        this.groups = response.data.group
-        this.priority = response.data.priority
-        this.status = response.data.status
-        this.sla = response.data.sla
-      })
+      .then((response) => {
+        this.categories = response.data.category;
+        this.groups = response.data.group;
+        this.priority = response.data.priority;
+        this.status = response.data.status;
+        this.sla = response.data.sla;
+      });
     if (this.category.id) {
-      this.image = `/api/category/${this.category.id}/image`
+      this.image = `/api/category/${this.category.id}/image`;
     }
   },
   methods: {
     updatePreview(file) {
-      this.category.image = file
-      const fileReader = new FileReader()
+      this.category.image = file;
+      const fileReader = new FileReader();
       fileReader.addEventListener('loadend', () => {
-        this.image = fileReader.result
-      })
-      fileReader.readAsDataURL(file)
+        this.image = fileReader.result;
+      });
+      fileReader.readAsDataURL(file);
     },
     addField() {
       this.category.fields.push({
         text: '',
         required: false,
         min: 0,
-        max: 50
-      })
+        max: 50,
+      });
     },
     save() {
-      this.$emit('input', this.category)
-    }
-  }
-}
+      this.$emit('input', this.category);
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

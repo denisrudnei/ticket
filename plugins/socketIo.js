@@ -1,4 +1,5 @@
-import Vue from 'vue'
-const io = require('socket.io-client')
+import Vue from 'vue';
 
-Vue.prototype.$socket = io()
+const io = require('socket.io-client');
+
+Vue.prototype.$socket = io();

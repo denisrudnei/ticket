@@ -1,12 +1,12 @@
-import { registerEnumType } from 'type-graphql'
+import { registerEnumType } from 'type-graphql';
 
 enum SoundType {
   NOTIFICATION = 'NOTIFICATION',
-  CHAT = 'CHAT'
+  CHAT = 'CHAT',
 }
 
 registerEnumType(SoundType, {
-  name: 'SoundType'
-})
+  name: 'SoundType',
+});
 
-export default SoundType
+export default SoundType;

@@ -2,11 +2,15 @@
   <v-row>
     <v-col cols="12">
       <v-data-table :items="items" :headers="headers">
-        <template v-slot:item.name="{item}">
+        <template v-slot:item.name="{ item }">
           {{ item.name }}
         </template>
-        <template v-slot:item.actions="{item}">
-          <v-btn class="primary white--text" icon :to="`/config/knowledge/edit/${item.id}`">
+        <template v-slot:item.actions="{ item }">
+          <v-btn
+            class="primary white--text"
+            icon
+            :to="`/config/knowledge/edit/${item.id}`"
+          >
             <v-icon>edit</v-icon>
           </v-btn>
           <v-btn class="primary white--text" icon @click="remove(item)">
@@ -19,34 +23,33 @@
 </template>
 
 <script>
-import list from '@/graphql/query/knowledge/list.graphql'
-import removeKnowledge from '@/graphql/mutation/config/knowledge/remove.graphql'
-import ggl from 'graphql-tag'
+import list from '@/graphql/query/knowledge/list.graphql';
+import removeKnowledge from '@/graphql/mutation/config/knowledge/remove.graphql';
+import ggl from 'graphql-tag';
+
 export default {
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(list),
+      })
+      .then((response) => ({
+        items: response.data.knowledge,
+      }));
+  },
   computed: {
     headers() {
       return [
         {
           text: this.$t('name'),
-          value: 'name'
+          value: 'name',
         },
         {
           text: this.$t('actions'),
-          value: 'actions'
-        }
-      ]
-    }
-  },
-  asyncData({ app }) {
-    return app.$apollo
-      .query({
-        query: ggl(list)
-      })
-      .then(response => {
-        return {
-          items: response.data.knowledge
-        }
-      })
+          value: 'actions',
+        },
+      ];
+    },
   },
   methods: {
     remove(item) {
@@ -54,24 +57,21 @@ export default {
         .mutate({
           mutation: ggl(removeKnowledge),
           variables: {
-            id: item.id
+            id: item.id,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }]
+          refetchQueries: [{ query: ggl(list) }],
         })
         .then(() => {
-          this.items = this.items.filter(i => {
-            return i.id !== item.id
-          })
+          this.items = this.items.filter((i) => i.id !== item.id);
           this.$toast.show('Apagado', {
             duration: 5000,
-            icon: 'delete'
-          })
-        })
-    }
-  }
-}
+            icon: 'delete',
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

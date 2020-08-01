@@ -31,7 +31,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-content>
+    <v-main>
       <v-container fluid>
         <v-row no-gutters>
           <v-col cols="12">
@@ -40,29 +40,29 @@
         </v-row>
       </v-container>
       <logout v-if="logged" />
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Language from '@/components/language'
-import logout from '@/components/logout'
+import { mapGetters } from 'vuex';
+import Language from '@/components/language';
+import logout from '@/components/logout';
+
 export default {
   components: {
     Language,
-    logout
+    logout,
   },
   computed: mapGetters({
-    logged: 'auth/getLoggedIn'
+    logged: 'auth/getLoggedIn',
   }),
   methods: {
     logout() {
-      this.$store.commit('logout/setLogout', true)
-    }
-  }
-}
+      this.$store.commit('logout/setLogout', true);
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

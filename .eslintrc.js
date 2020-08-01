@@ -1,31 +1,27 @@
 module.exports = {
-  root: true,
   env: {
     browser: true,
-    node: true
-  },
-  parserOptions: {
-    parser: '@typescript-eslint/parser'
+    node: true,
   },
   extends: [
-    '@nuxtjs',
-    'plugin:prettier/recommended'
+    'plugin:vue/essential',
+    'airbnb-base',
   ],
+  parserOptions: {
+    parser: '@typescript-eslint/parser',
+  },
   plugins: [
-    'prettier',
     'vuetify',
-    '@typescript-eslint'
-  ],
-  "overrides": [
-    {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {
-        "no-unused-vars": "off"
-      }
-    }
+    '@typescript-eslint/eslint-plugin',
   ],
   rules: {
-    'vuetify/no-deprecated-classes': 'error',
-    // '@typescript-eslint/rule-name': 'error'
-  }
-}
+    'import/extensions': 'off',
+    'import/no-unresolved': 'off',
+    'no-unused-vars': 'off',
+    'import/no-extraneous-dependencies': 'off',
+    'global-require': 'off',
+    semi: ['off', 'always'],
+    '@typescript-eslint/semi': ['warn', 'always'],
+    'no-param-reassign': 'off',
+  },
+};

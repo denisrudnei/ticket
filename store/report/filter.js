@@ -1,41 +1,43 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-shadow */
 export const state = () => ({
   group: [],
   status: [],
-  openedBy: []
-})
+  openedBy: [],
+});
 
 export const getters = {
   getGroups(state) {
-    return state.groups
+    return state.groups;
   },
   getStatus(state) {
-    return state.status
+    return state.status;
   },
   getOpenedBy(state) {
-    return state.openedBy
+    return state.openedBy;
   },
   getBase(state) {
-    return state
-  }
-}
+    return state;
+  },
+};
 
 export const mutations = {
   setGroups(state, groups) {
-    state.group = groups
+    state.group = groups;
   },
   addGroup(state, group) {
-    state.group.push(group)
+    state.group.push(group);
   },
   setStatus(state, status) {
-    state.status = status
+    state.status = status;
   },
   addStatus(state, status) {
-    state.status.push(status)
+    state.status.push(status);
   },
   setOpenedBy(state, openedBy) {
-    state.openedBy = openedBy
+    state.openedBy = openedBy;
   },
   addOpenedBy(state, openedBy) {
-    state.openedBy.push(openedBy)
-  }
-}
+    state.openedBy.push(openedBy);
+  },
+};

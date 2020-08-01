@@ -2,7 +2,11 @@
   <v-row>
     <v-col cols="12" class="ma-2">
       <FilterChart />
-      <AddByType :chart-types="chartTypes" :content-type="contentType" @add="add" />
+      <AddByType
+        :chart-types="chartTypes"
+        :content-type="contentType"
+        @add="add"
+      />
     </v-col>
     <client-only>
       <v-col class="ma-3">
@@ -19,7 +23,7 @@
               <v-select
                 disabled
                 :value="chart.ln"
-                :items="Array.from({length:12}, (x, i) => i + 1)"
+                :items="Array.from({ length: 12 }, (x, i) => i + 1)"
               />
               <v-card-title>
                 <h5>{{ chart.id }}</h5>
@@ -33,11 +37,7 @@
                 />
               </v-card-text>
               <v-card-actions>
-                <v-btn
-                  icon
-                  class="red white--text"
-                  @click="removeChart(chart)"
-                >
+                <v-btn icon class="red white--text" @click="removeChart(chart)">
                   <v-icon>
                     delete
                   </v-icon>
@@ -52,13 +52,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import FilterChart from '@/components/report/chart/filterChart'
-import AddByType from '@/components/report/chart/addByType'
+import { mapGetters } from 'vuex';
+import FilterChart from '@/components/report/chart/filterChart';
+import AddByType from '@/components/report/chart/addByType';
+
 export default {
   components: {
     FilterChart,
-    AddByType
+    AddByType,
   },
   data() {
     return {
@@ -66,63 +67,62 @@ export default {
       chartTypes: [
         {
           text: 'Pizza',
-          value: 'pie'
+          value: 'pie',
         },
         {
           text: 'Barra',
-          value: 'bar'
+          value: 'bar',
         },
         {
           text: 'Line',
-          value: 'line'
-        }
+          value: 'line',
+        },
       ],
       contentType: [
         {
           text: 'Status',
           value: 'status',
-          ref: 'status'
+          ref: 'status',
         },
         {
           text: 'Analista atual',
           value: 'actualUser',
-          ref: 'analysts'
+          ref: 'analysts',
         },
         {
           text: 'Grupo',
           value: 'group',
-          ref: 'groups'
+          ref: 'groups',
         },
         {
           text: 'Categoria',
           value: 'category',
-          ref: 'categories'
-        }
+          ref: 'categories',
+        },
       ],
       base: {},
       chartOptions: {
         chart: {
-          id: 'vuechart-example'
-        }
-      }
-    }
+          id: 'vuechart-example',
+        },
+      },
+    };
   },
   computed: mapGetters({
-    charts: 'report/getGroupedCharts'
+    charts: 'report/getGroupedCharts',
   }),
   mounted() {
-    this.$store.commit('report/loadFromLocalStorage')
+    this.$store.commit('report/loadFromLocalStorage');
   },
   methods: {
     add(chart) {
-      this.charts.push(chart)
+      this.charts.push(chart);
     },
     removeChart(chart) {
-      this.$store.commit('report/removeGroupedChart', chart)
-    }
-  }
-}
+      this.$store.commit('report/removeGroupedChart', chart);
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

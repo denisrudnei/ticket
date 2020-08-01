@@ -4,7 +4,7 @@
       <v-select
         v-model="selected"
         filled
-        :items="paths.map(v => ({text: $t(v.objectName), value: v}))"
+        :items="paths.map((v) => ({ text: $t(v.objectName), value: v }))"
       />
     </v-col>
     <v-col cols="4" pa-3>
@@ -12,7 +12,7 @@
         v-model="selected.property"
         :disabled="selected.options <= 0"
         filled
-        :items="selected.options.map(v => ({text: $t(v), value: v}))"
+        :items="selected.options.map((v) => ({ text: $t(v), value: v }))"
       />
     </v-col>
     <v-col cols="4" pa-3>
@@ -24,7 +24,11 @@
       />
     </v-col>
     <v-col pa-3>
-      <v-btn class="primary white--text" :disabled="selected.name === ''" @click="save()">
+      <v-btn
+        class="primary white--text"
+        :disabled="selected.name === ''"
+        @click="save()"
+      >
         <v-icon left>
           save
         </v-icon>
@@ -35,32 +39,31 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag'
-import ref from '@/graphql/query/profile/path/ref.graphql'
-import add from '@/graphql/mutation/profile/path/add.graphql'
-import tree from '@/graphql/query/profile/path/tree.graphql'
-import list from '@/graphql/query/profile/path/list.graphql'
+import ggl from 'graphql-tag';
+import ref from '@/graphql/query/profile/path/ref.graphql';
+import add from '@/graphql/mutation/profile/path/add.graphql';
+import tree from '@/graphql/query/profile/path/tree.graphql';
+import list from '@/graphql/query/profile/path/list.graphql';
+
 export default {
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(ref),
+      })
+      .then((response) => ({
+        paths: response.data.ref,
+      }));
+  },
   data() {
     return {
       selected: {
         options: [],
         objectName: '',
         property: '',
-        name: ''
-      }
-    }
-  },
-  asyncData({ app }) {
-    return app.$apollo
-      .query({
-        query: ggl(ref)
-      })
-      .then(response => {
-        return {
-          paths: response.data.ref
-        }
-      })
+        name: '',
+      },
+    };
   },
   methods: {
     save() {
@@ -71,29 +74,28 @@ export default {
             path: {
               name: this.selected.name,
               objectName: this.selected.objectName,
-              property: this.selected.property
-            }
+              property: this.selected.property,
+            },
           },
           awaitRefetchQueries: true,
           refetchQueries: [
             {
-              query: ggl(list)
+              query: ggl(list),
             },
             {
-              query: ggl(tree)
-            }
-          ]
+              query: ggl(tree),
+            },
+          ],
         })
-        .then(response => {
-          this.$store.commit('ticket/addTreeItem', response.data.path)
+        .then((response) => {
+          this.$store.commit('ticket/addTreeItem', response.data.path);
           this.$toast.show('Cadastrado', {
-            duration: 5000
-          })
-        })
-    }
-  }
-}
+            duration: 5000,
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

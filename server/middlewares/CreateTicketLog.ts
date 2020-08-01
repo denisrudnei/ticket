@@ -1,16 +1,16 @@
-import express from 'express'
-import LogService from '../services/ticket/LogService'
-import TicketService from '../services/ticket/TicketService'
+import express from 'express';
+import LogService from '../services/ticket/LogService';
+import TicketService from '../services/ticket/TicketService';
 
 async function createTicketLog(
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction
+  next: express.NextFunction,
 ) {
-  const ticket = await TicketService.getOne(parseInt(req.params.id))
-  const user = req.session!.authUser.id
-  await LogService.createTicketLog(user, ticket.id)
-  next()
+  const ticket = await TicketService.getOne(parseInt(req.params.id, 10));
+  const user = req.session!.authUser.id;
+  await LogService.createTicketLog(user, ticket.id);
+  next();
 }
 
-export default createTicketLog
+export default createTicketLog;

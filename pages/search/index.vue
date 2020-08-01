@@ -3,13 +3,13 @@
 </template>
 
 <script>
-import TicketSearch from './ticket'
+import TicketSearch from './ticket';
+
 export default {
   components: {
-    TicketSearch
-  }
-}
+    TicketSearch,
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

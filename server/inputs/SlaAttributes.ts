@@ -1,12 +1,12 @@
-import { Field, InputType } from 'type-graphql'
+import { Field, InputType } from 'type-graphql';
 
 @InputType()
 class SlaAttributes {
   @Field()
-  public limit!: Date
+  public limit!: Date;
 
   @Field()
-  public name!: string
+  public name!: string;
 }
 
-export default SlaAttributes
+export default SlaAttributes;

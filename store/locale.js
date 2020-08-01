@@ -1,28 +1,30 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-shadow */
 export const state = () => ({
   locale: 'en',
   locales: [
     {
       text: 'English',
-      value: 'en'
+      value: 'en',
     },
     {
       text: 'Português',
-      value: 'br'
-    }
-  ]
-})
+      value: 'br',
+    },
+  ],
+});
 
 export const getters = {
   getLocale(state) {
-    return state.locale
+    return state.locale;
   },
   getLocales(state) {
-    return state.locales
-  }
-}
+    return state.locales;
+  },
+};
 
 export const mutations = {
   setLocale(state, locale) {
-    state.locale = locale
-  }
-}
+    state.locale = locale;
+  },
+};

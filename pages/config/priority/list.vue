@@ -16,7 +16,11 @@
               {{ item.name }}
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn icon class="primary white--text" :to="`/config/priority/edit/${item.id}`">
+              <v-btn
+                icon
+                class="primary white--text"
+                :to="`/config/priority/edit/${item.id}`"
+              >
                 <v-icon>
                   edit
                 </v-icon>
@@ -38,70 +42,71 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag'
-import draggable from 'vuedraggable'
-import listPriority from '@/graphql/query/config/priority/priorityList.graphql'
-import updateManyPriorities from '@/graphql/mutation/config/priority/updateManyPriorities.graphql'
+import ggl from 'graphql-tag';
+import draggable from 'vuedraggable';
+import listPriority from '@/graphql/query/config/priority/priorityList.graphql';
+import updateManyPriorities from '@/graphql/mutation/config/priority/updateManyPriorities.graphql';
+
 export default {
   components: {
-    draggable
+    draggable,
   },
   data() {
     return {
-      items: []
-    }
+      items: [],
+    };
   },
   computed: {
     priorityQuery() {
-      return ggl(listPriority)
-    }
+      return ggl(listPriority);
+    },
   },
   watch: {
     items(value) {
       this.items.forEach((item, index) => {
-        item.weight = this.items.length - index
-      })
-    }
+        item.weight = this.items.length - index;
+      });
+    },
   },
   mounted() {
     this.$apollo
       .query({
-        query: ggl(listPriority)
+        query: ggl(listPriority),
       })
-      .then(response => {
+      .then((response) => {
         this.items = response.data.priority.sort((a, b) => {
           if (a.weight < b.weight) {
-            return 1
+            return 1;
           }
-          return -1
-        })
-      })
+          return -1;
+        });
+      });
   },
   methods: {
     dummy() {},
     update() {
-      this.items.forEach(p => {
-        delete p.__typename
-      })
+      this.items.forEach((p) => {
+        // eslint-disable-next-line no-underscore-dangle
+        delete p.__typename;
+      });
       this.$apollo
         .mutate({
           mutation: ggl(updateManyPriorities),
           variables: {
-            priorities: this.items
+            priorities: this.items,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(listPriority) }]
+          refetchQueries: [{ query: ggl(listPriority) }],
         })
         .then(() => {
           this.$toast.show(this.$t('updated'), {
             duration: 1000,
-            icon: 'done'
-          })
-        })
-    }
-  }
-}
+            icon: 'done',
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

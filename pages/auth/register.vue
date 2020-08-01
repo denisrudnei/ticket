@@ -1,25 +1,11 @@
 <template>
   <v-form>
-    <v-text-field
-      v-model="user.email"
-      solo
-      :label="$t('email')"
-    />
-    <v-alert
-      v-if="errors.email"
-      v-model="errors.email"
-    >
+    <v-text-field v-model="user.email" solo :label="$t('email')" />
+    <v-alert v-if="errors.email" v-model="errors.email">
       {{ errors.email.message }}
     </v-alert>
-    <v-text-field
-      v-model="user.name"
-      solo
-      :label="$t('exhibition_name')"
-    />
-    <v-alert
-      v-if="errors.name"
-      v-model="errors.name"
-    >
+    <v-text-field v-model="user.name" solo :label="$t('exhibition_name')" />
+    <v-alert v-if="errors.name" v-model="errors.name">
       {{ errors.name.message }}
     </v-alert>
     <v-text-field
@@ -28,10 +14,7 @@
       :label="$t('password')"
       type="password"
     />
-    <v-alert
-      v-if="errors.password"
-      v-model="errors.password"
-    >
+    <v-alert v-if="errors.password" v-model="errors.password">
       {{ errors.password.message }}
     </v-alert>
     <v-btn
@@ -50,8 +33,9 @@
 </template>
 
 <script>
-import register from '@/graphql/mutation/auth/register.graphql'
-import ggl from 'graphql-tag'
+import register from '@/graphql/mutation/auth/register.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   auth: false,
   data() {
@@ -60,40 +44,39 @@ export default {
       user: {
         email: '',
         name: '',
-        password: ''
-      }
-    }
+        password: '',
+      },
+    };
   },
   computed: {
     onMobile() {
-      return this.$vuetify.breakpoint.xsOnly
-    }
+      return this.$vuetify.breakpoint.xsOnly;
+    },
   },
   methods: {
     register() {
       this.$apollo
         .mutate({
           mutation: ggl(register),
-          variables: this.user
+          variables: this.user,
         })
         .then(() => {
-          this.errors = {}
+          this.errors = {};
           this.$toast.show('Cadastrado com sucesso', {
             duration: 5000,
-            icon: 'done'
-          })
-          this.$router.push('/auth/login')
+            icon: 'done',
+          });
+          this.$router.push('/auth/login');
         })
-        .catch(response => {
+        .catch((response) => {
           this.$toast.error('Falha ao realizar registro', {
             icon: 'error',
-            duration: 1000
-          })
-        })
-    }
-  }
-}
+            duration: 1000,
+          });
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

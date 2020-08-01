@@ -3,41 +3,39 @@
 </template>
 
 <script>
-import StatusCreate from '@/components/ticket/status/create'
-import create from '@/graphql/mutation/config/status/create.graphql'
-import list from '@/graphql/query/status/list.graphql'
-import ggl from 'graphql-tag'
+import StatusCreate from '@/components/ticket/status/create';
+import create from '@/graphql/mutation/config/status/create.graphql';
+import list from '@/graphql/query/status/list.graphql';
+import ggl from 'graphql-tag';
+
 export default {
   components: {
-    StatusCreate
+    StatusCreate,
   },
   methods: {
     save(status) {
       const newStatus = {
         ...status,
-        allowedStatus: status.allowedStatus.map(status => {
-          return status.id
-        })
-      }
+        allowedStatus: status.allowedStatus.map((s) => s.id),
+      };
       this.$apollo
         .mutate({
           mutation: ggl(create),
           variables: {
-            status: newStatus
+            status: newStatus,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }]
+          refetchQueries: [{ query: ggl(list) }],
         })
         .then(() => {
           this.$toast.show('Status criado', {
-            duration: 1000
-          })
-        })
-      this.$router.push('/config/status/')
-    }
-  }
-}
+            duration: 1000,
+          });
+        });
+      this.$router.push('/config/status/');
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

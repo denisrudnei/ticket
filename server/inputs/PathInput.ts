@@ -1,15 +1,15 @@
-import { InputType, Field } from 'type-graphql'
+import { InputType, Field } from 'type-graphql';
 
 @InputType()
 class PathInput {
   @Field()
-  public name!: String
+  public name!: String;
 
   @Field()
-  public objectName!: String
+  public objectName!: String;
 
   @Field()
-  public property!: String
+  public property!: String;
 }
 
-export default PathInput
+export default PathInput;

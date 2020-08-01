@@ -16,24 +16,24 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
+
 export default {
   computed: {
     show: {
       get() {
-        return this.$store.getters['hotkeys/getShow']
+        return this.$store.getters['hotkeys/getShow'];
       },
       set(value) {
-        this.$store.commit('hotkeys/setShow', value)
-      }
+        this.$store.commit('hotkeys/setShow', value);
+      },
     },
     ...mapGetters({
-      hotkeys: 'hotkeys/getHotkeys'
-    })
+      hotkeys: 'hotkeys/getHotkeys',
+    }),
   },
-  mounted() {}
-}
+  mounted() {},
+};
 </script>
 
-<style>
-</style>
+<style></style>

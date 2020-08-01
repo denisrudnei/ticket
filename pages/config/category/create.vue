@@ -3,13 +3,14 @@
 </template>
 
 <script>
-import CategoryCreate from '@/components/ticket/category/create'
-import ggl from 'graphql-tag'
-import createCategory from '@/graphql/mutation/config/category/createCategory.graphql'
-import categoryList from '@/graphql/query/config/category/categoryList.graphql'
+import CategoryCreate from '@/components/ticket/category/create';
+import ggl from 'graphql-tag';
+import createCategory from '@/graphql/mutation/config/category/createCategory.graphql';
+import categoryList from '@/graphql/query/config/category/categoryList.graphql';
+
 export default {
   components: {
-    CategoryCreate
+    CategoryCreate,
   },
   methods: {
     save(category) {
@@ -23,34 +24,33 @@ export default {
               defaultGroup: category.defaultGroup.id,
               defaultStatus: category.defaultStatus.id,
               defaultPriority: category.defaultPriority.id,
-              sla: category.sla.id
-            }
+              sla: category.sla.id,
+            },
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(categoryList) }]
+          refetchQueries: [{ query: ggl(categoryList) }],
         })
         .then(() => {
           this.$toast.show('Categoria criada', {
-            duration: 1000
-          })
+            duration: 1000,
+          });
           if (category.image) {
-            const formData = new FormData()
-            formData.append('image', category.iamge)
+            const formData = new FormData();
+            formData.append('image', category.iamge);
             this.$axios
               .post(`/config/category/image/${category.id}`, formData)
               .then(() => {
                 this.$toast.show('Image uploaded', {
                   duration: 5000,
-                  icon: 'done'
-                })
-              })
+                  icon: 'done',
+                });
+              });
           }
-          this.$router.push('/config/category')
-        })
-    }
-  }
-}
+          this.$router.push('/config/category');
+        });
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

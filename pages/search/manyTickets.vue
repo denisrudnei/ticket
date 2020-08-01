@@ -34,7 +34,11 @@
           </template>
         </v-card-text>
         <v-card-actions>
-          <v-btn v-if="ticketsNumbers.length > 0" class="primary white--text" @click="ticketsNumbers = []">
+          <v-btn
+            v-if="ticketsNumbers.length > 0"
+            class="primary white--text"
+            @click="ticketsNumbers = []"
+          >
             {{ $t('remove_all') }}
             <v-icon right>
               remove
@@ -58,48 +62,44 @@
 </template>
 
 <script>
-import TicketList from '@/components/ticket/list'
+import TicketList from '@/components/ticket/list';
+
 export default {
   components: {
-    TicketList
+    TicketList,
   },
   data() {
     return {
       ticketsText: '',
-      ticketsNumbers: []
-    }
+      ticketsNumbers: [],
+    };
   },
   methods: {
     update(evt) {
-      this.ticketsText = this.ticketsText.replace(/[^\d|,| |\n]/g, '')
+      this.ticketsText = this.ticketsText.replace(/[^\d|,| |\n]/g, '');
       if (evt.key === 'Enter') {
         const numbers = Array.from(
           new Set(
-            this.ticketsText.split(/[^\d]/).filter(number => {
-              return !isNaN(parseInt(number))
-            })
-          )
-        )
+            this.ticketsText.split(/[^\d]/).filter((number) => !Math.isNaN(parseInt(number, 10))),
+          ),
+        );
         this.ticketsNumbers = Array.from(
-          new Set([...this.ticketsNumbers, ...numbers])
-        )
-        this.ticketsText = ''
+          new Set([...this.ticketsNumbers, ...numbers]),
+        );
+        this.ticketsText = '';
       }
     },
     search() {
       const query = {
-        id: this.ticketsNumbers.map(n => parseInt(n))
-      }
-      this.$store.commit('ticket/setQuery', query)
+        id: this.ticketsNumbers.map((n) => parseInt(n, 10)),
+      };
+      this.$store.commit('ticket/setQuery', query);
     },
     removeNumber(value) {
-      this.ticketsNumbers = this.ticketsNumbers.filter(number => {
-        return number !== value
-      })
-    }
-  }
-}
+      this.ticketsNumbers = this.ticketsNumbers.filter((number) => number !== value);
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

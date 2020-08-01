@@ -3,13 +3,13 @@
 </template>
 
 <script>
-import List from './list'
+import List from './list';
+
 export default {
   components: {
-    List
-  }
-}
+    List,
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,38 +1,38 @@
-import '~/server/models/Notification'
+import '~/server/models/Notification';
 
-import Agenda from 'agenda'
-import { PubSubEngine } from 'apollo-server-express'
-import AWS from 'aws-sdk'
-import { UploadedFile } from 'express-fileupload'
-import S3 from '~/plugins/S3'
-import Analyst from '~/server/models/Analyst'
-import File from '~/server/models/File'
-import Comment from '~/server/models/ticket/Comment'
-import Group from '~/server/models/ticket/Group'
-import Status from '~/server/models/ticket/Status'
-import Ticket from '~/server/models/ticket/Ticket'
+import Agenda from 'agenda';
+import { PubSubEngine } from 'apollo-server-express';
+import AWS from 'aws-sdk';
+import { UploadedFile } from 'express-fileupload';
+import S3 from '~/plugins/S3';
+import Analyst from '~/server/models/Analyst';
+import File from '~/server/models/File';
+import Comment from '~/server/models/ticket/Comment';
+import Group from '~/server/models/ticket/Group';
+import Status from '~/server/models/ticket/Status';
+import Ticket from '~/server/models/ticket/Ticket';
 
 class TicketService {
-  async startAgenda(pubSub: PubSubEngine): Promise<void> {
+  static async startAgenda(pubSub: PubSubEngine): Promise<void> {
     const agenda = new Agenda({
       db: {
-        address: process.env.MONGODB_URI
-      }
-    })
-    await agenda.start()
+        address: process.env.MONGODB_URI,
+      },
+    });
+    await agenda.start();
     agenda.define('check sla', async () => {
       const statusWithSlaAbleToRun = await Status.find({
-        slaRun: true
-      })
+        slaRun: true,
+      });
 
       Ticket.createQueryBuilder()
         .update(Ticket)
         .set({
-          slaCount: new Date()
+          slaCount: new Date(),
         })
         .where('status.id IN :ids', {
-          ids: statusWithSlaAbleToRun.map((status: Status) => status.id)
-        })
+          ids: statusWithSlaAbleToRun.map((status: Status) => status.id),
+        });
 
       // const tickets = await Ticket.createQueryBuilder()
       //   .where('status.id IN :ids', {
@@ -43,247 +43,229 @@ class TicketService {
       // tickets.forEach(ticket => {
       //   pubSub.publish(TicketEnum.SLA_UPDATE, ticket)
       // })
-    })
+    });
 
-    agenda.every('5 seconds', 'check sla')
+    agenda.every('5 seconds', 'check sla');
   }
 
-  getTickets(
+  static getTickets(
     filter: any,
     sortBy: any,
     page: number,
-    limit: number
+    limit: number,
   ): Promise<Ticket[]> {
     // TODO sorting not works with doc ref
     return new Promise((resolve, reject) => {
-      Ticket.find({}).then(tickets => {
-        resolve(tickets)
-      })
-    })
+      Ticket.find({}).then((tickets) => {
+        resolve(tickets);
+      });
+    });
   }
 
-  getOne(ticketId: Ticket['id']): Promise<Ticket> {
+  static getOne(ticketId: Ticket['id']): Promise<Ticket> {
     return new Promise((resolve, reject) => {
-      Ticket.findOne(ticketId).then(ticket => {
-        resolve(ticket)
-      })
-    })
+      Ticket.findOne(ticketId).then((ticket) => {
+        resolve(ticket);
+      });
+    });
   }
 
-  copyTicket(ticketId: Ticket['id'], userId: Analyst['id']): Promise<Ticket> {
+  static copyTicket(ticketId: Ticket['id'], userId: Analyst['id']): Promise<Ticket> {
     return new Promise((resolve, reject) => {
-      Ticket.findOne(ticketId).then(async ticket => {
-        const analyst = await Analyst.findOne(userId)
-        const newTicket = Ticket.create(ticket!)
-        newTicket.openedBy = analyst!
-        newTicket.actualUser = analyst!
-        resolve(this.create(newTicket))
-      })
-    })
+      Ticket.findOne(ticketId).then(async (ticket) => {
+        const analyst = await Analyst.findOne(userId);
+        const newTicket = Ticket.create(ticket!);
+        newTicket.openedBy = analyst!;
+        newTicket.actualUser = analyst!;
+        resolve(TicketService.create(newTicket));
+      });
+    });
   }
 
-  updateOne(ticketId: Ticket['id'], ticketBody: Ticket): Promise<Ticket> {
+  static updateOne(ticketId: Ticket['id'], ticketBody: Ticket): Promise<Ticket> {
     return new Promise((resolve, reject) => {
-      Ticket.findOne(ticketId).then(ticket => {
-        Object.assign(ticket, ticketBody)
+      Ticket.findOne(ticketId).then((ticket) => {
+        Object.assign(ticket, ticketBody);
         ticket!.save().then(() => {
-          resolve(this.getOne(ticketId))
-        })
-      })
-    })
+          resolve(TicketService.getOne(ticketId));
+        });
+      });
+    });
   }
 
-  create(ticket: Ticket): Promise<Ticket> {
+  static create(ticket: Ticket): Promise<Ticket> {
     return new Promise((resolve, reject) => {
-      resolve(ticket.save())
-    })
+      resolve(ticket.save());
+    });
   }
 
-  changeStatus(
+  static changeStatus(
     ticketId: Ticket['id'],
-    statusId: Status['id']
+    statusId: Status['id'],
   ): Promise<Ticket> {
     return new Promise((resolve, reject) => {
-      Ticket.findOne(ticketId).then(async ticket => {
-        const status = await Status.findOne(statusId)
-        ticket!.status = status!
+      Ticket.findOne(ticketId).then(async (ticket) => {
+        const status = await Status.findOne(statusId);
+        ticket!.status = status!;
         ticket!.save().then(() => {
-          resolve(ticket)
-        })
-      })
-    })
+          resolve(ticket);
+        });
+      });
+    });
   }
 
-  changeStatusOfTickets(
+  static changeStatusOfTickets(
     tickets: Ticket['id'][],
-    statusId: Status['id']
+    statusId: Status['id'],
   ): Promise<Ticket[]> {
-    const promises = tickets.map(ticketId => {
-      return this.changeStatus(ticketId, statusId)
-    })
-    return Promise.all(promises)
+    const promises = tickets.map((ticketId) => TicketService.changeStatus(ticketId, statusId));
+    return Promise.all(promises);
   }
 
-  transferTickets(
+  static transferTickets(
     tickets: Ticket['id'][],
-    groupId: Group['id']
+    groupId: Group['id'],
   ): Promise<Ticket[]> {
-    const promises = tickets.map(ticketId => {
-      return this.transferToGroup(ticketId, groupId)
-    })
-    return Promise.all(promises)
+    const promises = tickets.map((ticketId) => TicketService.transferToGroup(ticketId, groupId));
+    return Promise.all(promises);
   }
 
-  transferToGroup(
+  static transferToGroup(
     ticketId: Ticket['id'],
-    groupId: Group['id']
+    groupId: Group['id'],
   ): Promise<Ticket> {
     return new Promise((resolve, reject) => {
-      Ticket.findOne(ticketId).then(async ticket => {
-        const group = await Group.findOne(groupId)
-        ticket!.group = group!
-        ticket!.actualUser = null
-        ticket!.save().then(ticket => {
-          resolve(ticket)
-        })
-      })
-    })
+      Ticket.findOne(ticketId).then(async (ticket) => {
+        const group = await Group.findOne(groupId);
+        ticket!.group = group!;
+        ticket!.actualUser = null;
+        ticket!.save().then((ticketSaved) => {
+          resolve(ticketSaved);
+        });
+      });
+    });
   }
 
-  commentOnTicket(
+  static commentOnTicket(
     ticketId: Ticket['id'],
     userId: Analyst['id'],
-    content: string
+    content: string,
   ): Promise<Comment> {
     return new Promise((resolve, reject) => {
       Ticket.findOne(ticketId, {
-        relations: ['comments']
-      }).then(async ticket => {
-        const user = await Analyst.findOne(userId)
+        relations: ['comments'],
+      }).then(async (ticket) => {
+        const user = await Analyst.findOne(userId);
         Comment.create({
-          user: user,
-          content: content
+          user,
+          content,
         })
           .save()
           .then((comment: Comment) => {
-            ticket!.comments.push(comment)
+            ticket!.comments.push(comment);
             ticket!.save().then(() => {
-              resolve(comment)
-            })
-          })
-      })
-    })
+              resolve(comment);
+            });
+          });
+      });
+    });
   }
 
-  removeChildren(
+  static removeChildren(
     ticketId: Ticket['id'],
-    children: Ticket['id']
+    children: Ticket['id'],
   ): Promise<Ticket> {
     return new Promise((resolve, reject) => {
       Ticket.findOne(ticketId, {
-        relations: ['children']
-      }).then(ticket => {
-        ticket!.children = ticket!.children.filter(child => {
-          return child.id !== children
-        })
-        ticket!.save().then(() => {
-          return resolve(this.getOne(ticketId))
-        })
-      })
-    })
+        relations: ['children'],
+      }).then((ticket) => {
+        ticket!.children = ticket!.children.filter((child) => child.id !== children);
+        ticket!.save().then(() => resolve(TicketService.getOne(ticketId)));
+      });
+    });
   }
 
-  addChildren(ticketId: Ticket['id'], children: Ticket[]): Promise<Ticket> {
-    return new Promise((resolve, reject) => {
-      if (children.map(child => child.id).includes(ticketId))
-        return reject(new Error('Circular reference detected'))
-      Ticket.findOne(ticketId, {
-        relations: ['children']
-      }).then(ticket => {
-        ticket!.children.push(...children)
-        ticket!.save().then((ticket: Ticket) => {
-          resolve(ticket)
-        })
-      })
-    })
+  static async addChildren(ticketId: Ticket['id'], children: Ticket[]): Promise<Ticket> {
+    if (children.map((child) => child.id).includes(ticketId)) throw new Error('Circular reference detected');
+    const ticket = await Ticket.findOne(ticketId, {
+      relations: ['children'],
+    });
+    ticket!.children.push(...children);
+    return ticket!.save();
   }
 
-  insertFile(ticketId: Ticket['id'], files: UploadedFile[]): Promise<File[]> {
+  static insertFile(ticketId: Ticket['id'], files: UploadedFile[]): Promise<File[]> {
     return new Promise((resolve, reject) => {
       Ticket.findOne(ticketId, {
-        relations: ['files']
-      }).then(async ticket => {
-        for (let i = 0; i < files.length; i++) {
-          const f: UploadedFile = files[i]
-
-          const name = `ticket/${ticketId}/${f.name} - ${i}`
+        relations: ['files'],
+      }).then(async (ticket) => {
+        files.forEach(async (f, index) => {
+          const name = `ticket/${ticketId}/${f.name} - ${index}`;
           const params = {
             Bucket: process.env.BUCKET!,
             Key: name,
-            Body: f.data
-          }
-          const { Location } = await S3.upload(params).promise()
-          const file = File.create()
-          file.name = name
-          file.type = f.mimetype
-          file.url = Location!
-          await file.save()
-          ticket!.files.push(file)
-          await ticket!.save()
-          resolve(ticket!.files)
-        }
-      })
-    })
+            Body: f.data,
+          };
+          const { Location } = await S3.upload(params).promise();
+          const file = File.create();
+          file.name = name;
+          file.type = f.mimetype;
+          file.url = Location!;
+          await file.save();
+          ticket!.files.push(file);
+          await ticket!.save();
+          resolve(ticket!.files);
+        });
+      });
+    });
   }
 
-  getFile(fileId: string): Promise<Buffer> {
+  static getFile(fileId: string): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       S3.getObject(
         {
           Bucket: process.env.BUCKET!,
-          Key: fileId
+          Key: fileId,
         },
         (err: Error, file: AWS.S3.Types.GetObjectOutput) => {
-          if (err) reject(err)
-          return resolve(file.Body as Buffer)
-        }
-      )
-    })
+          if (err) reject(err);
+          return resolve(file.Body as Buffer);
+        },
+      );
+    });
   }
 
-  async removeFile(
+  static async removeFile(
     ticketId: Ticket['id'],
-    fileId: File['id']
+    fileId: File['id'],
   ): Promise<Ticket> {
     const ticket = await Ticket.findOne(ticketId, {
-      relations: ['files']
-    })
+      relations: ['files'],
+    });
     await S3.deleteObject({
       Bucket: process.env.BUCKET!,
-      Key: fileId.toString()
-    })
-    ticket!.files = ticket!.files.filter((f: any) => {
-      return f.name !== fileId
-    })
-    ticket!.save()
-    return ticket!
+      Key: fileId.toString(),
+    });
+    ticket!.files = ticket!.files.filter((f: any) => f.name !== fileId);
+    ticket!.save();
+    return ticket!;
   }
 
-  overtakeSla(ticketId: Ticket['id']): Promise<boolean> {
+  static overtakeSla(ticketId: Ticket['id']): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      Ticket.findOne(ticketId).then(ticket => {
-        resolve(ticket!.overtakeSla)
-      })
-    })
+      Ticket.findOne(ticketId).then((ticket) => {
+        resolve(ticket!.overtakeSla);
+      });
+    });
   }
 
-  slaPercentage(ticketId: Ticket['id']): Promise<Number> {
+  static slaPercentage(ticketId: Ticket['id']): Promise<Number> {
     return new Promise((resolve, reject) => {
-      Ticket.findOne(ticketId).then(ticket => {
-        resolve(ticket!.slaPercentage)
-      })
-    })
+      Ticket.findOne(ticketId).then((ticket) => {
+        resolve(ticket!.slaPercentage);
+      });
+    });
   }
 }
 
-export default new TicketService()
+export default TicketService;

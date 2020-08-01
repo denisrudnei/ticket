@@ -6,11 +6,7 @@
     clipped-left
     class="primary white--text"
   >
-    <v-btn
-      to="/"
-      icon
-      class="primary white--text"
-    >
+    <v-btn to="/" icon class="primary white--text">
       <v-icon>
         home
       </v-icon>
@@ -20,10 +16,10 @@
       v-if="logged"
       v-model="id"
       type="number"
-      :placeholder="$t('search')" 
+      :placeholder="$t('search')"
       prepend-icon="search"
       color="white"
-      single-line 
+      single-line
       hide-details
       append-outer-icon="clear"
       flat
@@ -43,7 +39,12 @@
         </v-card-content>
       </v-card>
     </v-dialog>
-    <v-menu v-if="logged && isMobile" :close-on-content-click="false" class=".d-flex .d-sm-none" :nudge-width="250">
+    <v-menu
+      v-if="logged && isMobile"
+      :close-on-content-click="false"
+      class=".d-flex .d-sm-none"
+      :nudge-width="250"
+    >
       <template v-slot:activator="{ on }">
         <v-btn text class="primary white--text" v-on="on">
           <v-icon>
@@ -52,7 +53,12 @@
         </v-btn>
       </template>
       <v-list>
-        <v-list-item v-for="option in options" :key="option.text" :to="option.to" exact>
+        <v-list-item
+          v-for="option in options"
+          :key="option.text"
+          :to="option.to"
+          exact
+        >
           <v-list-item-action>
             <v-icon>
               {{ option.icon }}
@@ -76,9 +82,7 @@
         <v-icon>{{ option.icon }}</v-icon>
       </v-btn>
     </template>
-    <Notification
-      v-if="logged"
-    />
+    <Notification v-if="logged" />
     <language />
     <v-btn
       v-if="logged"
@@ -96,27 +100,28 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Notification from '@/components/notification'
-import Language from '@/components/language'
-import id from '@/graphql/query/toolbar/ticketNumber.graphql'
-import ggl from 'graphql-tag'
-import addTicketsToEdit from '@/mixins/addTicketToEdit'
+import { mapGetters } from 'vuex';
+import Notification from '@/components/notification';
+import Language from '@/components/language';
+import id from '@/graphql/query/toolbar/ticketNumber.graphql';
+import ggl from 'graphql-tag';
+import addTicketsToEdit from '@/mixins/addTicketToEdit';
+
 export default {
   components: {
     Notification,
-    Language
+    Language,
   },
   mixins: [addTicketsToEdit],
   props: {
     app: {
       type: Boolean,
-      default: true
+      default: true,
     },
     logged: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -128,39 +133,39 @@ export default {
           title: 'profile',
           text: 'profile',
           icon: 'person',
-          to: '/profile'
+          to: '/profile',
         },
         {
           title: 'API',
           text: 'API',
           icon: 'format_shapes',
-          to: '/config/playground'
+          to: '/config/playground',
         },
         {
           title: 'configurations',
           text: 'configurations',
           icon: 'settings_applications',
-          to: '/config'
-        }
-      ]
-    }
+          to: '/config',
+        },
+      ],
+    };
   },
   computed: mapGetters({
-    user: 'auth/getUser'
+    user: 'auth/getUser',
   }),
   mounted() {
-    const lang = localStorage.getItem('language')
+    const lang = localStorage.getItem('language');
     if (lang) {
-      this.$store.commit('locale/setLocale', lang)
-      this.$i18n.locale = lang
+      this.$store.commit('locale/setLocale', lang);
+      this.$i18n.locale = lang;
     }
     if (typeof window !== 'undefined') {
-      window.addEventListener('resize', this.onResize, { passive: true })
+      window.addEventListener('resize', this.onResize, { passive: true });
     }
   },
   beforeDestroy() {
-    this.onResize()
-    window.removeEventListener('resize', this.onResize, { passive: true })
+    this.onResize();
+    window.removeEventListener('resize', this.onResize, { passive: true });
   },
   methods: {
     search(idToSearch) {
@@ -168,30 +173,29 @@ export default {
         .query({
           query: ggl(id),
           variables: {
-            ids: [idToSearch]
-          }
+            ids: [idToSearch],
+          },
         })
-        .then(response => {
-          const tickets = response.data.SearchByIds.docs
+        .then((response) => {
+          const tickets = response.data.SearchByIds.docs;
           if (tickets.length === 0) {
-            this.ticketNotFound = true
+            this.ticketNotFound = true;
           } else {
-            this.addTicketsToEdit(tickets[0])
+            this.addTicketsToEdit(tickets[0]);
           }
-        })
+        });
     },
     clearText() {
-      this.id = ''
+      this.id = '';
     },
     logout() {
-      this.$store.commit('logout/setLogout', true)
+      this.$store.commit('logout/setLogout', true);
     },
     onResize() {
-      this.isMobile = window.innerWidth < 600
-    }
-  }
-}
+      this.isMobile = window.innerWidth < 600;
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

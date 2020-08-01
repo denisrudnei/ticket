@@ -1,15 +1,11 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-    >
+    <v-col cols="12">
       <v-tabs show-arrows>
         <v-tab to="/config/status">
           {{ $t('list') }}
         </v-tab>
-        <v-tab
-          to="/config/status/create"
-        >
+        <v-tab to="/config/status/create">
           {{ $t('create') }}
         </v-tab>
       </v-tabs>
@@ -19,8 +15,7 @@
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
-<style>
-</style>
+<style></style>

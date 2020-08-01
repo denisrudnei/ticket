@@ -33,11 +33,7 @@
             />
           </v-card-text>
           <v-card-actions>
-            <v-btn
-              icon
-              class="red white--text"
-              @click="removeChart(chart)"
-            >
+            <v-btn icon class="red white--text" @click="removeChart(chart)">
               <v-icon>
                 delete
               </v-icon>
@@ -50,50 +46,50 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import FilterChart from '@/components/report/chart/filterChart'
-import AddByType from '@/components/report/chart/addByType'
+import { mapGetters } from 'vuex';
+import FilterChart from '@/components/report/chart/filterChart';
+import AddByType from '@/components/report/chart/addByType';
+
 export default {
   components: {
     FilterChart,
-    AddByType
+    AddByType,
   },
   data() {
     return {
       chartTypes: [
         {
           text: 'Line',
-          value: 'line'
+          value: 'line',
         },
         {
           text: 'bar',
-          value: 'bar'
-        }
+          value: 'bar',
+        },
       ],
       contentType: [
         {
           text: 'Modified',
           value: 'modified',
-          ref: 'modified'
+          ref: 'modified',
         },
         {
           text: 'created',
           value: 'created',
-          ref: 'created'
-        }
-      ]
-    }
+          ref: 'created',
+        },
+      ],
+    };
   },
   computed: mapGetters({
-    charts: 'report/getByDateCharts'
+    charts: 'report/getByDateCharts',
   }),
   methods: {
     removeChart(chart) {
-      this.$store.commit('report/removeByDateChart', chart)
-    }
-  }
-}
+      this.$store.commit('report/removeByDateChart', chart);
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

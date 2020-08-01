@@ -1,7 +1,11 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-btn v-if="selected.length > 0" class="primary white--text" @click="showUpdateMany = true">
+      <v-btn
+        v-if="selected.length > 0"
+        class="primary white--text"
+        @click="showUpdateMany = true"
+      >
         {{ $t('update_many') }}
       </v-btn>
     </v-col>
@@ -31,7 +35,12 @@
           </v-btn>
         </template>
         <template v-slot:item.copy="{ item }">
-          <v-btn class="primary white--text" icon :title="$t('copy_ticket')" @click="confirm(item)">
+          <v-btn
+            class="primary white--text"
+            icon
+            :title="$t('copy_ticket')"
+            @click="confirm(item)"
+          >
             <v-icon>
               file_copy
             </v-icon>
@@ -44,9 +53,12 @@
           {{ item.priority.name }}
         </template>
         <template v-slot:item.actualUser="{ item }">
-          <v-list-item v-if="item.actualUser" :to="`/analyst/${item.actualUser.id}`">
+          <v-list-item
+            v-if="item.actualUser"
+            :to="`/analyst/${item.actualUser.id}`"
+          >
             <v-list-item-avatar>
-              <img :src="item.actualUser.picture">
+              <img :src="item.actualUser.picture" />
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>
@@ -66,14 +78,21 @@
             {{ item.status.name }}
             <template v-slot:input>
               <v-row>
-                <v-col
-                  cols="12"
-                  pa-4
-                >
+                <v-col cols="12" pa-4>
                   <v-select
-                    v-if="status.find(s => {return s.id === item.status.id})"
+                    v-if="
+                      status.find((s) => {
+                        return s.id === item.status.id
+                      })
+                    "
                     v-model="currentStatus"
-                    :items="status.find(s => {return s.id === item.status.id}).allowedStatus.map(s => ({ text: s.name, value: s }))"
+                    :items="
+                      status
+                        .find((s) => {
+                          return s.id === item.status.id
+                        })
+                        .allowedStatus.map((s) => ({ text: s.name, value: s }))
+                    "
                     filled
                     :label="$t('status')"
                   />
@@ -86,13 +105,16 @@
           <v-edit-dialog large @save="transferToGroup(item)">
             <template v-slot:input>
               <v-row>
-                <v-col
-                  cols="12"
-                  pa-1
-                >
+                <v-col cols="12" pa-1>
                   <v-select
                     v-model="currentGroup"
-                    :items="groups.filter(g => {return g.id !== item.group.id}).map(g => ({ text: g.name, value: g }))"
+                    :items="
+                      groups
+                        .filter((g) => {
+                          return g.id !== item.group.id
+                        })
+                        .map((g) => ({ text: g.name, value: g }))
+                    "
                     filled
                     label="Para qual grupo? "
                   />
@@ -113,16 +135,32 @@
         </template>
       </v-data-table>
     </v-col>
-   
+
     <v-col v-if="selected.length > 0" cols="12">
       <v-dialog v-model="showUpdateMany" max-width="50vw">
         <v-card>
-          <v-card-title>
-            Total: {{ selected.length }}
-          </v-card-title>
+          <v-card-title> Total: {{ selected.length }} </v-card-title>
           <v-card-text>
-            <v-autocomplete v-model="selectedStatus" :items="status.map(s => {return {text: s.name, value: s}})" :label="$t('status')" filled />
-            <v-autocomplete v-model="selectedGropus" :items="groups.map(g => {return {text: g.name, value: g}})" :label="$t('group')" filled />
+            <v-autocomplete
+              v-model="selectedStatus"
+              :items="
+                status.map((s) => {
+                  return { text: s.name, value: s }
+                })
+              "
+              :label="$t('status')"
+              filled
+            />
+            <v-autocomplete
+              v-model="selectedGropus"
+              :items="
+                groups.map((g) => {
+                  return { text: g.name, value: g }
+                })
+              "
+              :label="$t('group')"
+              filled
+            />
           </v-card-text>
           <v-card-actions>
             <v-btn class="primary white--text" @click="updateMany">
@@ -136,30 +174,31 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import ggl from 'graphql-tag'
-import changeStatus from '@/graphql/mutation/ticket/changeStatus.graphql'
-import transferToGroup from '@/graphql/mutation/ticket/transferToGroup.graphql'
-import ticketSearch from '@/graphql/query/search/ticket.graphql'
-import ticketAttributes from '@/graphql/query/search/ticketAttributes.graphql'
-import changeStatusOfTickets from '@/graphql/mutation/ticket/list/changeStatusOfTickets.graphql'
-import transferTickets from '@/graphql/mutation/ticket/list/transferTickets.graphql'
-import addTicketsToEdit from '@/mixins/addTicketToEdit'
+import { mapGetters } from 'vuex';
+import ggl from 'graphql-tag';
+import changeStatus from '@/graphql/mutation/ticket/changeStatus.graphql';
+import transferToGroup from '@/graphql/mutation/ticket/transferToGroup.graphql';
+import ticketSearch from '@/graphql/query/search/ticket.graphql';
+import ticketAttributes from '@/graphql/query/search/ticketAttributes.graphql';
+import changeStatusOfTickets from '@/graphql/mutation/ticket/list/changeStatusOfTickets.graphql';
+import transferTickets from '@/graphql/mutation/ticket/list/transferTickets.graphql';
+import addTicketsToEdit from '@/mixins/addTicketToEdit';
+
 export default {
   mixins: [addTicketsToEdit],
   props: {
     url: {
       type: String,
-      default: '/ticket/'
+      default: '/ticket/',
     },
     modal: {
       type: Boolean,
-      default: false
+      default: false,
     },
     search: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
@@ -173,21 +212,21 @@ export default {
       totalItems: 0,
       footerProps: {
         itemsPerPageOptions: [10, 15, 25, 50],
-        itemsPerPage: 10
+        itemsPerPage: 10,
       },
       options: {
         sortBy: ['created'],
         descending: true,
         sortDesc: [true],
         totalItems: 0,
-        page: 1
-      }
-    }
+        page: 1,
+      },
+    };
   },
   head() {
     return {
-      title: `Page ${this.options.page}, total ${this.totalItems}`
-    }
+      title: `Page ${this.options.page}, total ${this.totalItems}`,
+    };
   },
   computed: {
     headers() {
@@ -195,126 +234,123 @@ export default {
         {
           text: this.$t('see_ticket'),
           sortable: false,
-          value: 'actions'
+          value: 'actions',
         },
         {
           text: this.$t('copy_ticket'),
           sortable: false,
-          value: 'copy'
+          value: 'copy',
         },
         {
           text: this.$t('number_of_ticket'),
-          value: 'id'
+          value: 'id',
         },
         {
           text: this.$t('priority'),
-          value: 'priority'
+          value: 'priority',
         },
         {
           text: this.$t('actual_user'),
-          value: 'actualUser'
+          value: 'actualUser',
         },
         {
           text: this.$t('resume'),
-          value: 'resume'
+          value: 'resume',
         },
         {
           text: this.$t('status'),
-          value: 'status'
+          value: 'status',
         },
         {
           text: this.$t('group'),
-          value: 'group'
+          value: 'group',
         },
         {
           text: this.$t('category'),
-          value: 'category'
+          value: 'category',
         },
         {
           text: this.$t('creation_date'),
-          value: 'created'
+          value: 'created',
         },
         {
           text: this.$t('modified_date'),
-          value: 'modified'
-        }
-      ]
+          value: 'modified',
+        },
+      ];
     },
     query: {
       get() {
-        if (this.modal) return this.$store.getters['ticket/getModalQuery']
-        return this.$store.getters['ticket/getQuery']
+        if (this.modal) return this.$store.getters['ticket/getModalQuery'];
+        return this.$store.getters['ticket/getQuery'];
       },
       set(value) {
-        this.$store.commit('ticket/setQuery', value)
-      }
+        this.$store.commit('ticket/setQuery', value);
+      },
     },
     tickets: {
       get() {
-        if (this.modal) return this.$store.getters['ticket/getModalTickets']
+        if (this.modal) return this.$store.getters['ticket/getModalTickets'];
 
-        if (this.url === '/search/')
-          return this.$store.getters['ticket/getSearch']
-        return this.$store.getters['ticket/getTickets']
+        if (this.url === '/search/') return this.$store.getters['ticket/getSearch'];
+        return this.$store.getters['ticket/getTickets'];
       },
       set(value) {
-        this.$store.commit('ticket/setTickets', value)
-      }
+        this.$store.commit('ticket/setTickets', value);
+      },
     },
     ...mapGetters({
       status: 'status/getStatus',
       groups: 'group/getGroups',
       dialog: 'ticket/getDialog',
-      actualTicket: 'ticket/getActualTicket'
-    })
+      actualTicket: 'ticket/getActualTicket',
+    }),
   },
   watch: {
-    dialog: function(value) {
-      if (this.modal) return
-      const query = Object.assign({}, this.query, {
-        ticket: value || this.query.ticket || null
-      })
+    dialog(value) {
+      if (this.modal) return;
+      const query = { ...this.query, ticket: value || this.query.ticket || null };
       this.$router.push({
-        query: query
-      })
-      this.$store.commit('ticket/setQuery', query)
+        query,
+      });
+      this.$store.commit('ticket/setQuery', query);
     },
-    $route: function(newValue) {
-      this.$store.commit('ticket/setQuery', newValue.query)
-      this.update()
+    $route(newValue) {
+      this.$store.commit('ticket/setQuery', newValue.query);
+      this.update();
     },
     options: {
       deep: true,
-      handler: function(newValue, old) {
+      handler(newValue, old) {
         if (
-          old.page === newValue.page &&
-          old.sortBy === newValue.sortBy &&
-          old.sortDesc === newValue.sortDesc &&
-          old.itemsPerPage === newValue.itemsPerPage &&
-          old.descending === newValue.descending
-        )
-          return
-        this.loading = 'primary'
+          old.page === newValue.page
+          && old.sortBy === newValue.sortBy
+          && old.sortDesc === newValue.sortDesc
+          && old.itemsPerPage === newValue.itemsPerPage
+          && old.descending === newValue.descending
+        ) return;
+        this.loading = 'primary';
 
-        const query = Object.assign({}, this.query, {
+        const query = {
+          ...this.query,
           page: newValue.page,
           limit: this.options.itemsPerPage,
           sortBy: newValue.sortBy[0],
-          descending: newValue.sortDesc[0] ? -1 : 1
-        })
+          descending: newValue.sortDesc[0] ? -1 : 1,
+        };
 
-        this.setQuery(query)
-      }
-    }
+        this.setQuery(query);
+      },
+    },
   },
   async created() {
-    const query = this.$route.query
+    const { query } = this.$route;
     if (query.ticket !== undefined && query.ticket !== null) {
-      this.$store.dispatch('ticket/findTicket', query.ticket)
-      this.addTicketsToEdit(this.actualTicket)
+      this.$store.dispatch('ticket/findTicket', query.ticket);
+      this.addTicketsToEdit(this.actualTicket);
     }
-    this.getTicketAttributes()
-    await this.update()
+    this.getTicketAttributes();
+    await this.update();
   },
   methods: {
     updateMany() {
@@ -323,46 +359,42 @@ export default {
           .mutate({
             mutation: ggl(changeStatusOfTickets),
             variables: {
-              tickets: this.selected.map(ticket => {
-                return ticket.id
-              }),
-              statusId: this.selectedStatus.id
-            }
+              tickets: this.selected.map((ticket) => ticket.id),
+              statusId: this.selectedStatus.id,
+            },
           })
           .then(() => {
-            this.showUpdateMany = false
-          })
+            this.showUpdateMany = false;
+          });
       }
       if (this.selectedGroup) {
         this.$apollo
           .mutate({
             mutation: ggl(transferTickets),
             variables: {
-              tickets: this.selected.map(ticket => {
-                return ticket.id
-              }),
-              groupId: this.selectedGroup.id
-            }
+              tickets: this.selected.map((ticket) => ticket.id),
+              groupId: this.selectedGroup.id,
+            },
           })
           .then(() => {
-            this.showUpdateMany = false
-          })
+            this.showUpdateMany = false;
+          });
       }
     },
     getTicketAttributes() {
       this.$apollo
         .query({
-          query: ggl(ticketAttributes)
+          query: ggl(ticketAttributes),
         })
-        .then(response => {
-          this.$store.commit('status/setStatus', response.data.Status)
-          this.$store.commit('category/setCategories', response.data.Category)
-          this.$store.commit('group/setGroups', response.data.Group)
-          this.$store.commit('analyst/setAnalysts', response.data.Analyst)
-        })
+        .then((response) => {
+          this.$store.commit('status/setStatus', response.data.Status);
+          this.$store.commit('category/setCategories', response.data.Category);
+          this.$store.commit('group/setGroups', response.data.Group);
+          this.$store.commit('analyst/setAnalysts', response.data.Analyst);
+        });
     },
     async update() {
-      const query = this.query
+      const { query } = this;
       const fields = [
         'category',
         'affectedUser',
@@ -373,14 +405,14 @@ export default {
         'group',
         'priority',
         'id',
-        'ids'
-      ]
-      const attributes = {}
-      Object.keys(query).forEach(key => {
+        'ids',
+      ];
+      const attributes = {};
+      Object.keys(query).forEach((key) => {
         if (fields.includes(key)) {
-          attributes[key] = query[key]
+          attributes[key] = query[key];
         }
-      })
+      });
       await this.$apollo
         .query({
           query: ggl(ticketSearch),
@@ -390,30 +422,32 @@ export default {
             page: query.page || 1,
             limit: query.limit || 10,
             descending: query.descending || -1,
-            attributes
-          }
+            attributes,
+          },
         })
-        .then(response => {
-          const { docs, total, limit, page } = response.data.Tickets
+        .then((response) => {
+          const {
+            docs, total, limit, page,
+          } = response.data.Tickets;
           if (this.modal) {
-            this.$store.commit('ticket/setModalTickets', docs)
+            this.$store.commit('ticket/setModalTickets', docs);
           } else {
-            this.$store.commit('ticket/setTickets', docs)
-            this.$store.commit('ticket/setSearch', docs)
+            this.$store.commit('ticket/setTickets', docs);
+            this.$store.commit('ticket/setSearch', docs);
           }
-          this.totalItems = parseInt(total)
-          this.options.page = parseInt(page)
-          this.options.itemsPerPage = parseInt(limit)
-          this.loading = false
-        })
+          this.totalItems = parseInt(total, 10);
+          this.options.page = parseInt(page, 10);
+          this.options.itemsPerPage = parseInt(limit, 10);
+          this.loading = false;
+        });
     },
     setQuery(query) {
       if (this.modal) {
-        this.$store.commit('ticket/setModalQuery', query)
+        this.$store.commit('ticket/setModalQuery', query);
       } else {
-        this.$store.commit('ticket/setQuery', query)
+        this.$store.commit('ticket/setQuery', query);
       }
-      this.update()
+      this.update();
     },
     modifyStatus(ticket) {
       this.$apollo
@@ -421,19 +455,19 @@ export default {
           mutation: ggl(changeStatus),
           variables: {
             ticketId: ticket.id,
-            statusId: this.currentStatus.id
-          }
+            statusId: this.currentStatus.id,
+          },
         })
-        .then(response => {
-          this.$store.commit('ticket/updateTicket', response.data.ChangeStatus)
+        .then((response) => {
+          this.$store.commit('ticket/updateTicket', response.data.ChangeStatus);
           this.$toast.show('Status alterado', {
-            duration: 5000
-          })
-        })
+            duration: 5000,
+          });
+        });
     },
     confirm(ticket) {
-      this.$store.commit('ticket/setTicketToCopy', ticket)
-      this.$store.commit('ticket/setConfirmCopy', true)
+      this.$store.commit('ticket/setTicketToCopy', ticket);
+      this.$store.commit('ticket/setConfirmCopy', true);
     },
     transferToGroup(ticket) {
       this.$apollo
@@ -441,28 +475,28 @@ export default {
           mutation: ggl(transferToGroup),
           variables: {
             ticketId: ticket.id,
-            groupId: this.currentGroup.id
-          }
+            groupId: this.currentGroup.id,
+          },
         })
-        .then(response => {
+        .then((response) => {
           this.$store.commit(
             'ticket/updateTicket',
-            response.data.TransferTicket
-          )
+            response.data.TransferTicket,
+          );
           this.$toast.show(
             `Movido com sucesso ao grupo ${this.currentGroup.name}`,
             {
-              duration: 5000
-            }
-          )
-        })
+              duration: 5000,
+            },
+          );
+        });
     },
     setDialog(id) {
-      this.$store.dispatch('ticket/findTicket', id)
-      this.$store.commit('ticket/setDialog', id)
-    }
-  }
-}
+      this.$store.dispatch('ticket/findTicket', id);
+      this.$store.commit('ticket/setDialog', id);
+    },
+  },
+};
 </script>
 <style>
 td > .v-btn--block {
