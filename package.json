@@ -11,7 +11,7 @@
     "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register server/index.ts --transpileOnly",
     "seed": "cross-env NODE_ENV=development nodemon --watch test/ --exec  \"ts-node -r tsconfig-paths/register test/seedDb.ts\" -e ts",
     "backend": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register server/onlyServer.ts",
-    "prebuild": "rm dist/ node_modules/ -rf",
+    "preinstall": "rm dist/ node_modules/ -rf",
     "build": "nuxt build && tsc -p tsconfig-build.json",
     "tsc": "tsc -p tsconfig-build.json",
     "start": "cross-env NODE_ENV=production node -r tsconfig-paths/register dist/server/index.js",
