@@ -93,7 +93,6 @@
     "pg-hstore": "^2.3.3",
     "reflect-metadata": "^0.1.13",
     "snyk": "^1.369.2",
-    "socket.io": "^2.3.0",
     "type-graphql": "^1.0.0-rc.3",
     "typeorm": "^0.2.25",
     "v-hotkey": "^0.8.0",
