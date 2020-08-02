@@ -1,9 +1,10 @@
 import TicketPagination from '@/server/models/TicketPagination';
 import Ticket from '../../models/ticket/Ticket';
+import TicketAttributes from '~/server/inputs/TicketAttributes';
 
 class SearchService {
   static async getTickets(
-    query: any = {},
+    query: Partial<TicketAttributes> = {},
     sortBy: any,
     page = 1,
     limit = 10,
@@ -11,6 +12,7 @@ class SearchService {
     const total = await Ticket.count();
     const pages = Math.ceil(total / limit);
     const result = await Ticket.find({
+      where: query,
       take: limit,
       skip: (page === 0 ? 1 : page - 1) * limit,
     });
