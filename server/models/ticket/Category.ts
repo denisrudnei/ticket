@@ -35,7 +35,7 @@ class Category extends BaseEntity {
   public name!: string;
 
   @OneToMany((type) => Category, (Category) => Category.subs)
-  @Field((type) => [Category])
+  @Field((type) => [Category], { nullable: true })
   public father!: Category;
 
   @Column()

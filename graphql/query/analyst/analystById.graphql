@@ -4,5 +4,10 @@ query AnalystById($id: ID!) {
     name
     contactEmail
     picture
+    status
+    groups {
+      id
+      name
+    }
   }
 }

@@ -11,6 +11,23 @@
               Email para contato {{ analyst.contactEmail }}
               <hr />
               Status: {{ analyst.status }}
+              <hr />
+              <v-card>
+                <v-card-title>
+                  {{$t('groups')}}
+                </v-card-title>
+                <v-card-text>
+                  <v-list two-line>
+                    <v-list-item
+                      v-for="group in analyst.groups"
+                      :key="group.id"
+                      :to="`/search/group/${group.id}`"
+                    >
+                      {{ group.name }}
+                    </v-list-item>
+                  </v-list>
+                </v-card-text>
+              </v-card>
             </v-col>
             <v-col cols="2">
               <v-img :src="analyst.picture" />

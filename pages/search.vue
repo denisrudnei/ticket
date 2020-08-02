@@ -14,6 +14,9 @@
         <v-tab to="/search/category">
           {{ $t('categories') }}
         </v-tab>
+        <v-tab to="/search/group">
+          {{ $t('groups') }}
+        </v-tab>
       </v-tabs>
       <nuxt-child />
     </v-col>
