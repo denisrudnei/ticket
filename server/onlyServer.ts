@@ -40,9 +40,7 @@ async function start() {
   server.installSubscriptionHandlers(httpServer);
   server.applyMiddleware({ app });
   await connection;
-  CheckACL.checkDb((err: Error) => {
-    if (err) consola.error(err);
-  });
+  await CheckACL.checkDb();
 
   httpServer.listen(process.env.PORT, () => {
     consola.ready({
