@@ -57,9 +57,7 @@ async function start() {
     await nuxt.ready();
   }
 
-  CheckACL.checkDb((err: Error) => {
-    if (err) consola.error(err);
-  });
+  await CheckACL.checkDb();
 
   const httpServer = http.createServer(app);
   server.installSubscriptionHandlers(httpServer);
