@@ -32,27 +32,23 @@ const email = new Email({
 });
 
 class MailService {
-  static sendConfirmationEmail(
+  static async sendConfirmationEmail(
     user: Analyst,
     req: express.Request,
     token: string,
   ): Promise<void> {
-    return new Promise((resolve, reject) => {
-      email
-        .send({
-          template: path.join(__dirname, '..', 'mails', 'reset'),
-          locals: {
-            name: user.name,
-            url: `${req.protocol}://${req.hostname}/auth/redefine-password/${token}`,
-          },
-          message: {
-            to: user.email,
-            subject: 'Password reset',
-          },
-        })
-        .then(resolve)
-        .catch(reject);
-    });
+    await email
+      .send({
+        template: path.join(__dirname, '..', 'mails', 'reset'),
+        locals: {
+          name: user.name,
+          url: `${req.protocol}://${req.hostname}/auth/redefine-password/${token}`,
+        },
+        message: {
+          to: user.email,
+          subject: 'Password reset',
+        },
+      });
   }
 }
 

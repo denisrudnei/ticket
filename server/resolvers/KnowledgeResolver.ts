@@ -52,34 +52,21 @@ class KnowledgeResolver {
   }
 
   @FieldResolver()
-  status(@Root() root: Knowledge): Promise<KnowledgeStatus> {
-    return new Promise((resolve, reject) => {
-      Knowledge.findOne(root.id, { relations: ['status'] }).then(
-        (knowledge) => {
-          resolve(knowledge!.status);
-        },
-      );
-    });
+  async status(@Root() root: Knowledge): Promise<KnowledgeStatus> {
+    const { status } = (await Knowledge.findOne(root.id, { relations: ['status'] }) as Knowledge);
+    return status;
   }
 
   @FieldResolver()
-  group(@Root() root: Knowledge): Promise<Group> {
-    return new Promise((resolve, reject) => {
-      Knowledge.findOne(root.id, { relations: ['group'] }).then((knowledge) => {
-        resolve(knowledge!.group);
-      });
-    });
+  async group(@Root() root: Knowledge): Promise<Group> {
+    const { group } = (await Knowledge.findOne(root.id, { relations: ['group'] }) as Knowledge);
+    return group;
   }
 
   @FieldResolver()
-  category(@Root() root: Knowledge): Promise<Category> {
-    return new Promise((resolve, reject) => {
-      Knowledge.findOne(root.id, { relations: ['category'] }).then(
-        (knowledge) => {
-          resolve(knowledge!.category);
-        },
-      );
-    });
+  async category(@Root() root: Knowledge): Promise<Category> {
+    const { category } = (await Knowledge.findOne(root.id, { relations: ['category'] }) as Knowledge);
+    return category;
   }
 }
 

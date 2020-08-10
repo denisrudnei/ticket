@@ -85,57 +85,39 @@ class AnalystResolver {
   }
 
   @FieldResolver()
-  chats(@Root() root: Analyst): Promise<Chat[]> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(root.id, { relations: ['chats'] }).then((analyst) => {
-        resolve(analyst!.chats);
-      });
-    });
+  async chats(@Root() root: Analyst): Promise<Chat[]> {
+    const { chats } = (await Analyst.findOne(root.id, { relations: ['chats'] }) as Analyst);
+    return chats;
   }
 
   @FieldResolver()
-  address(@Root() root: Analyst): Promise<Address | null> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(root.id, { relations: ['address'] }).then((analyst) => {
-        resolve(analyst!.address);
-      });
-    });
+  async address(@Root() root: Analyst): Promise<Analyst['address']> {
+    const { address } = (await Analyst.findOne(root.id, { relations: ['address'] }) as Analyst);
+    return address;
   }
 
   @FieldResolver()
-  groups(@Root() root: Analyst): Promise<Group[]> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(root.id, { relations: ['groups'] }).then((analyst) => {
-        resolve(analyst!.groups);
-      });
-    });
+  async groups(@Root() root: Analyst): Promise<Group[]> {
+    const { groups } = (await Analyst.findOne(root.id, { relations: ['groups'] }) as Analyst);
+    return groups;
   }
 
   @FieldResolver()
-  role(@Root() root: Analyst): Promise<Role> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(root.id, { relations: ['role'] }).then((analyst) => {
-        resolve(analyst!.role);
-      });
-    });
+  async role(@Root() root: Analyst): Promise<Role> {
+    const { role } = (await Analyst.findOne(root.id, { relations: ['role'] }) as Analyst);
+    return role;
   }
 
   @FieldResolver()
-  paths(@Root() root: Analyst): Promise<Path[]> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(root.id, { relations: ['paths'] }).then((analyst) => {
-        resolve(analyst!.paths);
-      });
-    });
+  async paths(@Root() root: Analyst): Promise<Path[]> {
+    const { paths } = (await Analyst.findOne(root.id, { relations: ['paths'] }) as Analyst);
+    return paths;
   }
 
   @FieldResolver()
-  sounds(@Root() root: Analyst): Promise<Sound[]> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(root.id, { relations: ['sounds'] }).then((analyst) => {
-        resolve(analyst!.sounds);
-      });
-    });
+  async sounds(@Root() root: Analyst): Promise<Sound[]> {
+    const { sounds } = (await Analyst.findOne(root.id, { relations: ['sounds'] }) as Analyst);
+    return sounds;
   }
 }
 

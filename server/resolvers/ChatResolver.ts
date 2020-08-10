@@ -88,21 +88,15 @@ class ChatResolver {
   }
 
   @FieldResolver()
-  participants(@Root() root: Chat): Promise<Analyst[]> {
-    return new Promise((resolve, reject) => {
-      Chat.findOne(root.id, { relations: ['participants'] }).then((chat) => {
-        resolve(chat!.participants);
-      });
-    });
+  async participants(@Root() root: Chat): Promise<Analyst[]> {
+    const { participants } = (await Chat.findOne(root.id, { relations: ['participants'] }) as Chat);
+    return participants;
   }
 
   @FieldResolver()
-  messages(@Root() root: Chat): Promise<Message[]> {
-    return new Promise((resolve, reject) => {
-      Chat.findOne(root.id, { relations: ['messages'] }).then((chat) => {
-        resolve(chat!.messages);
-      });
-    });
+  async messages(@Root() root: Chat): Promise<Message[]> {
+    const { messages } = (await Chat.findOne(root.id, { relations: ['messages'] }) as Chat);
+    return messages;
   }
 
   @Subscription({

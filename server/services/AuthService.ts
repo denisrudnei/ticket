@@ -5,27 +5,23 @@ import Role from '../models/Role';
 import MailService from './MailService';
 
 class AuthService {
-  static login(email: string, password: string): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne({
-        where: [
-          {
-            email,
-          },
-          {
-            email: email.toLowerCase(),
-          },
-        ],
-        relations: ['role'],
-      }).then((user) => {
-        if (!user) {
-          return reject(new Error('Username or password incorrect'));
-        }
-
-        if (!user!.verifyPassword(password)) return reject(new Error('Incorrect password'));
-        return resolve(user);
-      });
+  static async login(email: string, password: string): Promise<Analyst> {
+    const user = await Analyst.findOne({
+      where: [
+        {
+          email,
+        },
+        {
+          email: email.toLowerCase(),
+        },
+      ],
+      relations: ['role'],
     });
+
+    if (!user) throw new Error('Username or password incorrect');
+
+    if (!user.verifyPassword(password)) throw new Error('Incorrect password');
+    return user;
   }
 
   static async register(user: Analyst): Promise<Analyst> {

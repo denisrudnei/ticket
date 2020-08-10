@@ -117,12 +117,9 @@ class Analyst extends BaseEntity {
   @Field((type) => [Notification])
   public notificationsToMe!: Notification[];
 
-  public getGroups(): Promise<Group[]> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(this.id, { relations: ['groups'] }).then((analyst) => {
-        resolve(analyst!.groups);
-      });
-    });
+  public async getGroups(): Promise<Group[]> {
+    const { groups } = (await Analyst.findOne(this.id, { relations: ['groups'] }) as Analyst);
+    return groups;
   }
 
   @AfterLoad()

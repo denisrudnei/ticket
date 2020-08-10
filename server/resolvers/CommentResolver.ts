@@ -7,21 +7,15 @@ import Ticket from '../models/ticket/Ticket';
 @Resolver((of) => Comment)
 class CommentResolver {
   @FieldResolver(() => Analyst)
-  user(@Root() root: Comment): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      Comment.findOne(root.id, { relations: ['user'] }).then((comment) => {
-        resolve(comment!.user);
-      });
-    });
+  async user(@Root() root: Comment): Promise<Analyst> {
+    const { user } = (await Comment.findOne(root.id, { relations: ['user'] }) as Comment);
+    return user;
   }
 
   @FieldResolver(() => Ticket)
-  ticket(@Root() root: Comment): Promise<Ticket> {
-    return new Promise((resolve, reject) => {
-      Comment.findOne(root.id, { relations: ['ticket'] }).then((comment) => {
-        resolve(comment!.ticket);
-      });
-    });
+  async ticket(@Root() root: Comment): Promise<Ticket> {
+    const { ticket } = (await Comment.findOne(root.id, { relations: ['ticket'] }) as Comment);
+    return ticket;
   }
 }
 

@@ -14,13 +14,11 @@ class SoundResolver {
   }
 
   @Query(() => [Sound])
-  GetSounds(@Ctx() context: ExpressContext): Promise<Sound[]> {
+  async GetSounds(@Ctx() context: ExpressContext): Promise<Sound[]> {
     const { id } = context.req!.session!.authUser;
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(id, { relations: ['sounds'] }).then((analyst) => {
-        resolve(analyst!.sounds);
-      });
-    });
+
+    const { sounds } = (await Analyst.findOne(id, { relations: ['sounds'] }) as Analyst);
+    return sounds;
   }
 }
 

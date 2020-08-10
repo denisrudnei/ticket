@@ -10,22 +10,18 @@ import AuthService from '../services/AuthService';
 @Resolver()
 class AuthResolver {
   @Mutation(() => Analyst)
-  Login(
+  async Login(
     @Arg('email') email: string,
     @Arg('password') password: string,
     @Ctx() context: ExpressContext,
   ) {
     const { req } = context;
-    return new Promise((resolve, reject) => {
-      AuthService.login(email, password)
-        .then((logged) => {
-          req!.session!.authUser = logged;
-          resolve(logged);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    });
+
+    const logged = await AuthService.login(email, password);
+
+    req!.session!.authUser = logged;
+
+    return logged;
   }
 
   @Mutation(() => Analyst)

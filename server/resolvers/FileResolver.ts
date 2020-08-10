@@ -4,12 +4,8 @@ import File from '@/server/models/File';
 
 @Resolver((of) => File)
 class FileResolver {
-  GetAllFiles(): Promise<File[]> {
-    return new Promise((resolve, reject) => {
-      File.find().then((files) => {
-        resolve(files);
-      });
-    });
+  async GetAllFiles(): Promise<File[]> {
+    return File.find();
   }
 }
 

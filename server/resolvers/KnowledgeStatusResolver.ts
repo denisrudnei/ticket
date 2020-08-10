@@ -10,12 +10,8 @@ import KnowledgeStatusCreateInput from '../inputs/KnowledgeStatusCreateInput';
 class KnowledgeStatusResolver {
   @Query(() => [KnowledgeStatus])
   @Authorized('user')
-  KnowledgeStatus(): Promise<KnowledgeStatus[]> {
-    return new Promise((resolve, reject) => {
-      KnowledgeStatus.find().then((knowledges) => {
-        resolve(knowledges);
-      });
-    });
+  async KnowledgeStatus(): Promise<KnowledgeStatus[]> {
+    return KnowledgeStatus.find();
   }
 
   @Mutation(() => KnowledgeStatus)

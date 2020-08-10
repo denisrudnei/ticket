@@ -37,28 +37,19 @@ class GroupResolver {
   }
 
   @Mutation(() => Group)
-  EditGroup(
+  async EditGroup(
     @Arg('groupId', () => ID) groupId: Group['id'],
     @Arg('group', () => GroupEditInput) group: Group,
   ): Promise<Group> {
-    return new Promise((resolve, reject) => {
-      if (!group!.analysts) {
-        resolve(GroupService.edit(groupId, group));
-      } else {
-        const analystsUnknown: unknown = group!.analysts;
-        const analysts = analystsUnknown as Analyst['id'][];
-        Promise.all(
-          analysts.map((analyst) => Analyst.findOne(analyst)),
-        )
-          .then((result) => {
-            group!.analysts = result as Analyst[];
-            resolve(GroupService.edit(groupId, group));
-          })
-          .catch((e) => {
-            reject(e);
-          });
-      }
-    });
+    if (!group.analysts) {
+      return GroupService.edit(groupId, group);
+    }
+    const analystsUnknown: unknown = group!.analysts;
+    const analysts = analystsUnknown as Analyst['id'][];
+    const result = await Promise.all(analysts
+      .map((analyst) => (Analyst.findOne(analyst))));
+    group!.analysts = result as Analyst[];
+    return GroupService.edit(groupId, group);
   }
 
   @Mutation(() => Group)
@@ -80,12 +71,9 @@ class GroupResolver {
   }
 
   @FieldResolver()
-  analysts(@Root() root: Group): Promise<Analyst[]> {
-    return new Promise((resolve, reject) => {
-      Group.findOne(root.id, { relations: ['analysts'] }).then((group) => {
-        resolve(group!.analysts);
-      });
-    });
+  async analysts(@Root() root: Group): Promise<Analyst[]> {
+    const { analysts } = (await Group.findOne(root.id, { relations: ['analysts'] }) as Group);
+    return analysts;
   }
 }
 

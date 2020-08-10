@@ -9,12 +9,8 @@ class PriorityService {
     return newPriority;
   }
 
-  static getAll(): Promise<Priority[]> {
-    return new Promise((resolve, reject) => {
-      Priority.find().then((result) => {
-        resolve(result);
-      });
-    });
+  static async getAll(): Promise<Priority[]> {
+    return Priority.find();
   }
 
   static async getOne(id: Priority['id']): Promise<Priority> {
@@ -33,12 +29,8 @@ class PriorityService {
     return Promise.all(all);
   }
 
-  static remove(priorityId: Priority['id']): Promise<void> {
-    return new Promise((resolve, reject) => {
-      Priority.delete(priorityId).then(() => {
-        resolve();
-      });
-    });
+  static async remove(priorityId: Priority['id']): Promise<void> {
+    await Priority.delete(priorityId);
   }
 }
 
