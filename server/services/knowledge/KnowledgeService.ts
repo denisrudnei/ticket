@@ -104,6 +104,8 @@ class KnowledgeService {
             Bucket: process.env.BUCKET!,
             Key: name,
             Body: file.data,
+            ContentType: file.mimetype,
+            ACL: 'public-read',
           };
           S3.upload(
             params,
@@ -136,6 +138,8 @@ class KnowledgeService {
           Bucket: process.env.BUCKET!,
           Key: name,
           Body: file.data,
+          ContentType: file.mimetype,
+          ACL: 'public-read',
         };
         S3.upload(
           params,
@@ -224,6 +228,8 @@ class KnowledgeService {
           Bucket: process.env.BUCKET!,
           Key: name,
           Body: body,
+          ContentType: 'application/pdf',
+          ACL: 'public-read',
         };
         S3.upload(
           params,

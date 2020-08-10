@@ -74,6 +74,8 @@ class CategoryService {
       Bucket: process.env.BUCKET!,
       Key: `category/${categoryId}`,
       Body: image.data,
+      ContentType: image.mimetype,
+      ACL: 'public-read',
     };
 
     const { Location } = await S3.upload(params).promise();

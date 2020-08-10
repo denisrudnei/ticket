@@ -69,6 +69,8 @@ class AnalystService {
       Bucket: process.env.BUCKET!,
       Key: `analyst/picture/${name}`,
       Body: file.data,
+      ContentType: file.mimetype,
+      ACL: 'public-read',
     };
     const { Location } = await S3.upload(params).promise();
     analyst!.picture = Location!;
