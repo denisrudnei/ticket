@@ -37,7 +37,7 @@ class CategoryResolver {
 
   @Query(() => String)
   @Authorized('user')
-  GetCategoryImage(@Arg('id', () => ID) id: Category['id']): Promise<Buffer> {
+  GetCategoryImage(@Arg('id', () => ID) id: Category['id']): Promise<AWS.S3.Types.Body> {
     return CategoryService.getImage(id);
   }
 
