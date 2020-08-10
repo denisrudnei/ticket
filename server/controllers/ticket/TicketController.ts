@@ -4,7 +4,8 @@ import TicketService from '../../services/ticket/TicketService';
 
 export default {
   getFile: (req: express.Request, res: express.Response) => {
-    TicketService.getFile(req.params!.id)
+    const id = parseInt(req.params.id, 10);
+    TicketService.getFile(id)
       .then((result) => res.end(result))
       .catch((e: Error) => res.status(500).json(e));
   },

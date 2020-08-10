@@ -81,12 +81,12 @@ describe('Ticket', () => {
   it('Add file', async () => {
     const ticket = await Ticket.findOne();
     idWithFile = ticket!.id;
-    const files: [UploadedFile] = [
+    const files: UploadedFile[] = [
       {
         name: 'testFile.txt',
         data: Buffer.from(''),
         mimetype: 'text/*',
-      } as any,
+      } as UploadedFile,
     ];
 
     await TicketService.insertFile(ticket!.id, files);
@@ -94,7 +94,7 @@ describe('Ticket', () => {
 
   it('Get file', async () => {
     const ticket = await Ticket.findOne(idWithFile, { relations: ['files'] });
-    await TicketService.getFile(ticket!.files[0].name);
+    await TicketService.getFile(ticket!.files[0].id);
   });
 
   it('Delete file', async () => {
