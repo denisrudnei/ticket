@@ -47,6 +47,7 @@ describe('Analyst', function () {
       name: 'test.txt',
       lastModifiedDate: Date.now(),
       data: '',
+      mimetype: 'image/jpeg',
     } as any;
     await AnalystService.updateImage(analyst!.id, file);
   });
