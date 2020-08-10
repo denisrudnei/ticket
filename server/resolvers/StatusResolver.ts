@@ -37,39 +37,30 @@ class StatusResolver implements ResolverInterface<Status> {
 
   @Authorized('admin')
   @Mutation(() => Status)
-  CreateStatus(
+  async CreateStatus(
     @Arg('status', () => StatusCreateInput) status: StatusCreateInput,
   ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      const statusToSave = new Status();
-      Object.assign(statusToSave, status);
+    const statusToSave = new Status();
+    Object.assign(statusToSave, status);
 
-      Status.findByIds(status.allowedStatus).then((allowedStatus) => {
-        statusToSave.allowedStatus = allowedStatus;
-        StatusService.create(statusToSave).then((newStatus) => {
-          resolve(newStatus);
-        });
-      });
-    });
+    const allowedStatus = await Status.findByIds(status.allowedStatus);
+    statusToSave.allowedStatus = allowedStatus;
+    const newStatus = await StatusService.create(statusToSave);
+    return newStatus;
   }
 
   @Authorized('admin')
   @Mutation(() => Status)
-  UpdateStatus(
+  async UpdateStatus(
     @Arg('id', () => ID) id: Status['id'],
     @Arg('status', () => StatusEditInput) status: StatusEditInput,
   ): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      const statusToEdit = new Status();
-      Object.assign(statusToEdit, status);
-      Status.findByIds(status.allowedStatus).then((allowedStatus) => {
-        statusToEdit.allowedStatus = allowedStatus;
-        StatusService.edit(id, statusToEdit).then((newStatus) => {
-          resolve(newStatus);
-        });
-        return StatusService.edit(id, statusToEdit);
-      });
-    });
+    const statusToEdit = new Status();
+    Object.assign(statusToEdit, status);
+    const allowedStatus = await Status.findByIds(status.allowedStatus);
+    statusToEdit.allowedStatus = allowedStatus;
+    const newStatus = await StatusService.edit(id, statusToEdit);
+    return newStatus;
   }
 }
 

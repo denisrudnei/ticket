@@ -65,25 +65,15 @@ class NotificationResolver {
   }
 
   @FieldResolver()
-  to(@Root() root: Notification): Promise<Analyst[]> {
-    return new Promise((resolve, reject) => {
-      Notification.findOne(root.id, { relations: ['to'] }).then(
-        (notification) => {
-          resolve(notification!.to);
-        },
-      );
-    });
+  async to(@Root() root: Notification): Promise<Analyst[]> {
+    const { to } = (await Notification.findOne(root.id, { relations: ['to'] }) as Notification);
+    return to;
   }
 
   @FieldResolver()
-  from(@Root() root: Notification): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      Notification.findOne(root.id, { relations: ['from'] }).then(
-        (notification) => {
-          resolve(notification!.from);
-        },
-      );
-    });
+  async from(@Root() root: Notification): Promise<Analyst> {
+    const { from } = (await Notification.findOne(root.id, { relations: ['from'] }) as Notification);
+    return from;
   }
 
   @Subscription({

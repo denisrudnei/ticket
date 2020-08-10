@@ -9,48 +9,33 @@ import Ticket from '../models/ticket/Ticket';
 @Resolver((of) => Log)
 class LogResolver {
   @FieldResolver(() => Analyst)
-  user(@Root() root: Log): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      Log.findOne(root.id, { relations: ['user'] }).then((log) => {
-        resolve(log!.user);
-      });
-    });
+  async user(@Root() root: Log): Promise<Analyst> {
+    const { user } = (await Log.findOne(root.id, { relations: ['user'] }) as Log);
+    return user;
   }
 
   @FieldResolver(() => Status)
-  oldStatus(@Root() root: Log): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      Log.findOne(root.id, { relations: ['oldStatus'] }).then((log) => {
-        resolve(log!.oldStatus);
-      });
-    });
+  async oldStatus(@Root() root: Log): Promise<Status> {
+    const { oldStatus } = (await Log.findOne(root.id, { relations: ['oldStatus'] }) as Log);
+    return oldStatus;
   }
 
   @FieldResolver(() => Status)
-  newStatus(@Root() root: Log): Promise<Status> {
-    return new Promise((resolve, reject) => {
-      Log.findOne(root.id, { relations: ['newStatus'] }).then((log) => {
-        resolve(log!.newStatus);
-      });
-    });
+  async newStatus(@Root() root: Log): Promise<Status> {
+    const { newStatus } = (await Log.findOne(root.id, { relations: ['newStatus'] }) as Log);
+    return newStatus;
   }
 
   @FieldResolver(() => Group)
-  group(@Root() root: Log): Promise<Group> {
-    return new Promise((resolve, reject) => {
-      Log.findOne(root.id, { relations: ['group'] }).then((log) => {
-        resolve(log!.group);
-      });
-    });
+  async group(@Root() root: Log): Promise<Group> {
+    const { group } = (await Log.findOne(root.id, { relations: ['group'] }) as Log);
+    return group;
   }
 
   @FieldResolver(() => Ticket)
-  ticket(@Root() root: Log): Promise<Ticket> {
-    return new Promise((resolve, reject) => {
-      Log.findOne(root.id).then((log) => {
-        resolve(log!.ticket);
-      });
-    });
+  async ticket(@Root() root: Log): Promise<Ticket> {
+    const { ticket } = (await Log.findOne(root.id) as Log);
+    return ticket;
   }
 }
 
