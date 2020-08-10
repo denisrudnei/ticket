@@ -1,72 +1,54 @@
 import { UploadedFile } from 'express-fileupload';
-import { GetObjectOutput } from 'aws-sdk/clients/s3';
 import Category from '../../models/ticket/Category';
 import S3 from '~/plugins/S3';
 
 class CategoryService {
-  static create(category: Category): Promise<Category> {
-    return new Promise((resolve, reject) => {
-      Category.create(category)
-        .save()
-        .then((categorySaved) => {
-          resolve(categorySaved);
-        });
-    });
+  static async create(category: Category): Promise<Category> {
+    return Category.create(category).save();
   }
 
-  static getCategories() {
-    return new Promise((resolve, reject) => {
-      Category.find({ relations: ['subs'] }).then((categories) => resolve(categories));
-    });
+  static async getCategories() {
+    return Category.find({ relations: ['subs'] });
   }
 
-  static getOne(name: string): Promise<Category> {
-    return new Promise((resolve, reject) => {
-      Category.findOne({
-        where: {
-          name,
-        },
-        relations: ['subs'],
-      }).then((result) => {
-        resolve(result);
-      });
+  static async getOne(name: string): Promise<Category> {
+    const category = await Category.findOne({
+      where: {
+        name,
+      },
+      relations: ['subs'],
     });
+    if (!category) throw new Error('Category not found');
+    return category;
   }
 
-  static getOneById(categoryId: Category['id']): Promise<Category> {
-    return new Promise((resolve, reject) => {
-      Category.findOne(categoryId, { relations: ['subs'] }).then((result) => resolve(result));
-    });
+  static async getOneById(categoryId: Category['id']): Promise<Category> {
+    const category = await Category.findOne(categoryId, { relations: ['subs'] });
+    if (!category) throw new Error('Category not found');
+    return category;
   }
 
-  static edit(
+  static async edit(
     categoryId: Category['id'],
     categoryToEdit: Category,
   ): Promise<Category> {
-    return new Promise((resolve, reject) => {
-      Category.findOne(categoryId).then((category) => {
-        Object.assign(category, categoryToEdit);
-        category!.save().then(() => {
-          resolve(CategoryService.getOneById(categoryId));
-        });
-      });
-    });
+    const category = await Category.findOne(categoryId);
+    if (!category) throw new Error('Category not found');
+    Object.assign(category, categoryToEdit);
+    await category.save();
+    return CategoryService.getOneById(categoryId);
   }
 
-  static getImage(categoryId: Category['id']): Promise<Buffer> {
-    return new Promise((resolve, reject) => {
-      S3.getObject(
-        {
-          Bucket: process.env.BUCKET!,
-          Key: `category/${categoryId.toString()}`,
-        },
-        (err: Error, file: GetObjectOutput) => {
-          if (err) return reject(err);
-          if (file === null) return reject(new Error('No image found'));
-          return resolve(file.Body as Buffer);
-        },
-      );
-    });
+  static async getImage(categoryId: Category['id']): Promise<AWS.S3.Types.Body> {
+    const { Body } = await S3.getObject(
+      {
+        Bucket: process.env.BUCKET!,
+        Key: `category/${categoryId.toString()}`,
+      },
+    ).promise();
+    if (!Body) throw new Error('Image not found');
+
+    return Body;
   }
 
   static async setImage(categoryId: Category['id'], image: UploadedFile): Promise<string> {
@@ -83,10 +65,9 @@ class CategoryService {
     return Location;
   }
 
-  static getSubsForCategory(id: Category['id']): Promise<Category[]> {
-    return new Promise((resolve, reject) => {
-      Category.findOne(id, { relations: ['subs'] }).then((result) => resolve(result!.subs));
-    });
+  static async getSubsForCategory(id: Category['id']): Promise<Category[]> {
+    const { subs } = (await Category.findOne(id, { relations: ['subs'] }) as Category);
+    return subs;
   }
 }
 

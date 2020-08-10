@@ -3,21 +3,15 @@ import CheckACL from '~/server/models/CheckACL';
 import Role from '~/server/models/Role';
 
 class RoleService {
-  static getOne(id: Role['id']): Promise<Role> {
-    return new Promise((resolve, reject) => {
-      Role.findOne(id).then((role) => {
-        resolve(role);
-      });
-    });
+  static async getOne(id: Role['id']): Promise<Role> {
+    const role = await Role.findOne(id);
+    if (!role) throw new Error('Role not found');
+    return role;
   }
 
-  static getRoles(): Promise<Role[]> {
-    return new Promise((resolve, reject) => {
-      CheckACL.checkDb((err: Error) => {
-        if (err) reject(err);
-      });
-      Role.find().then((roles) => resolve(roles));
-    });
+  static async getRoles(): Promise<Role[]> {
+    await CheckACL.checkDb();
+    return Role.find();
   }
 
   static async updateRole(roleId: Role['id'], roleToEdit: Role): Promise<Role> {
@@ -26,19 +20,17 @@ class RoleService {
       return role!.save();
   }
 
-  static setAnalystRole(
+  static async setAnalystRole(
     analystId: Analyst['id'],
     roleId: Role['id'],
   ): Promise<Boolean> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(analystId).then(async (analyst) => {
-        const role = await Role.findOne(roleId);
-        analyst!.role = role!;
-        analyst!.save().then(() => {
-          resolve(true);
-        });
-      });
-    });
+    const analyst = await Analyst.findOne(analystId);
+    if (!analyst) throw new Error('Analyst not found');
+    const role = await Role.findOne(roleId);
+    if (!role) throw new Error('Role not found');
+    analyst.role = role;
+    await analyst.save();
+    return true;
   }
 }
 

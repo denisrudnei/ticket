@@ -1,42 +1,32 @@
 import Sla from '@/server/models/ticket/Sla';
 
 class SlaService {
-  static getAll(): Promise<Sla[]> {
-    return new Promise((resolve, reject) => {
-      Sla.find().then((results: Sla[]) => {
-        resolve(results);
-      });
-    });
+  static async getAll(): Promise<Sla[]> {
+    return Sla.find();
   }
 
-  static getOne(slaId: Sla['id']): Promise<Sla> {
-    return new Promise((resolve, reject) => {
-      Sla.findOne(slaId).then((result) => {
-        resolve(result);
-      });
-    });
+  static async getOne(slaId: Sla['id']): Promise<Sla> {
+    const sla = await Sla.findOne(slaId);
+    if (!sla) throw new Error('Sla not found');
+    return sla;
   }
 
-  static create(sla: Sla): Promise<Sla> {
-    return new Promise((resolve, reject) => {
-      const newSla = new Sla();
-      newSla!.name = sla.name;
-      newSla!.limit = sla.limit;
+  static async create(sla: Sla): Promise<Sla> {
+    const newSla = new Sla();
 
-      resolve(Sla.create(newSla).save());
-    });
+    newSla!.name = sla.name;
+    newSla!.limit = sla.limit;
+
+    return Sla.create(newSla).save();
   }
 
-  static edit(slaId: Sla['id'], slaToEdit: Sla): Promise<Sla> {
-    return new Promise((resolve, reject) => {
-      Sla.findOne(slaId).then((sla) => {
-        sla!.name = slaToEdit.name;
-        sla!.limit = slaToEdit.limit;
-        sla!.save().then(() => {
-          resolve(SlaService.getOne(slaId));
-        });
-      });
-    });
+  static async edit(slaId: Sla['id'], slaToEdit: Sla): Promise<Sla> {
+    const sla = await Sla.findOne(slaId);
+    if (!sla) throw new Error('Sla not found');
+    sla.name = slaToEdit.name;
+    sla.limit = slaToEdit.limit;
+    await sla.save();
+    return SlaService.getOne(slaId);
   }
 }
 

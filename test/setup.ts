@@ -14,9 +14,7 @@ before(async function () {
   await seed.execute();
   consola.info('Seed finished');
 
-  CheckACL.checkDb((err: Error) => {
-    if (err) throw err;
-  });
+  await CheckACL.checkDb;
 });
 
 after((done) => {

@@ -5,16 +5,14 @@ class AddressService {
     return Address.create(address).save();
   }
 
-  static getAll(): Promise<Address[]> {
-    return new Promise((resolve, reject) => {
-      Address.find().then((addresses) => resolve(addresses));
-    });
+  static async getAll(): Promise<Address[]> {
+    return Address.find();
   }
 
-  static getOne(addressId: Address['id']): Promise<Address> {
-    return new Promise((resolve, reject) => {
-      Address.findOne(addressId).then((address) => resolve(address));
-    });
+  static async getOne(addressId: Address['id']): Promise<Address> {
+    const address = await Address.findOne(addressId);
+    if (!address) throw new Error('Address not found');
+    return address;
   }
 
   static async edit(addressId: Address['id'], addressToEdit: Address): Promise<Address> {

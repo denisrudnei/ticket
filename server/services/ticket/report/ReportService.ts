@@ -12,53 +12,47 @@ export enum TicketTimeField {
 }
 
 class ReportService {
-  static reportGrouped(
+  static async reportGrouped(
     attributes: DeepPartial<Ticket>,
     field: string,
   ): Promise<GroupedResult[]> {
-    return new Promise((resolve, reject) => {
-      // attributes
-      Ticket.find({}).then((tickets) => {
-        const grouped = lodash.groupBy(tickets, `${field}.name`);
-        const result = Object.keys(grouped).map(
-          (name) => new GroupedResult(name, grouped[name].length),
-        );
-        resolve(result);
-      });
-    });
+    // attributes
+    const tickets = await Ticket.find({});
+    const grouped = lodash.groupBy(tickets, `${field}.name`);
+    const result = Object.keys(grouped).map(
+      (name) => new GroupedResult(name, grouped[name].length),
+    );
+    return result;
   }
 
-  static reportByDate(
+  static async reportByDate(
     field: TicketTimeField,
     start = new Date(),
     end = new Date(),
   ): Promise<ReportByDate[]> {
-    return new Promise((resolve, reject) => {
-      // {
-      //   where: {
-      //     [field]: MoreThanOrEqual(start),
-      //     [field]: LessThanOrEqual(end)
-      //   }
-      // }
-      Ticket.find().then((tickets) => {
-        const ticketsWithNewDates = tickets.map((ticket) => {
-          const [year, month, day] = ticket[field]
-            .toISOString()
-            .split('T')[0]
-            .split('-')
-            .map((value) => parseInt(value, 10));
-          const composedDate = new ComposedDate(day, month, year);
+    // {
+    //   where: {
+    //     [field]: MoreThanOrEqual(start),
+    //     [field]: LessThanOrEqual(end)
+    //   }
+    // }
+    const tickets = await Ticket.find();
+    const ticketsWithNewDates = tickets.map((ticket) => {
+      const [year, month, day] = ticket[field]
+        .toISOString()
+        .split('T')[0]
+        .split('-')
+        .map((value) => parseInt(value, 10));
+      const composedDate = new ComposedDate(day, month, year);
 
-          return new TicketWithComposedDate(ticket, composedDate);
-        });
-        const grouped = lodash.groupBy(ticketsWithNewDates, 'composedDate');
-        const result = Object.keys(grouped).map(
-          (name) => new ReportByDate(name, grouped[name].length),
-        );
-
-        resolve(result);
-      });
+      return new TicketWithComposedDate(ticket, composedDate);
     });
+    const grouped = lodash.groupBy(ticketsWithNewDates, 'composedDate');
+    const result = Object.keys(grouped).map(
+      (name) => new ReportByDate(name, grouped[name].length),
+    );
+
+    return result;
   }
 }
 

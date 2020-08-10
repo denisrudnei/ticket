@@ -9,81 +9,66 @@ import Group from '../models/ticket/Group';
 import TicketEnum from '../enums/TicketEnum';
 
 class NotificationService {
-  static getAll(userId: Analyst['id']): Promise<Notification[]> {
-    return new Promise((resolve, reject) => {
-      Notification.find({
-        relations: ['to'],
-      }).then((result) => {
-        const notifications = result.filter((notification) => {
-          const needToReceiveId = notification.to.map((to) => to.id);
-          return needToReceiveId.includes(userId);
-        });
-        resolve(notifications);
-      });
+  static async getAll(userId: Analyst['id']): Promise<Notification[]> {
+    const result = await Notification.find({
+      relations: ['to'],
     });
+
+    const notifications = result.filter((notification) => {
+      const needToReceiveId = notification.to.map((to) => to.id);
+      return needToReceiveId.includes(userId);
+    });
+
+    return notifications;
   }
 
-  static getOne(id: Notification['id']): Promise<Notification> {
-    return new Promise((resolve, reject) => {
-      Notification.findOne(id).then((notification) => resolve(notification));
-    });
+  static async getOne(id: Notification['id']): Promise<Notification> {
+    const notification = await Notification.findOne(id);
+    if (!notification) throw new Error('Notification not found');
+    return notification;
   }
 
-  static getWhoRead(notificationId: Notification['id']): Promise<Analyst[]> {
-    return new Promise((resolve, reject) => {
-      Notification.findOne(notificationId, { relations: ['read'] }).then(
-        (result) => {
-          resolve(result!.read);
-        },
-      );
-    });
+  static async getWhoRead(notificationId: Notification['id']): Promise<Analyst[]> {
+    const { read } = (await Notification.findOne(notificationId, { relations: ['read'] }) as Notification);
+    return read;
   }
 
-  static read(
+  static async read(
     userId: Analyst['id'],
     notificationId: Notification['id'],
   ): Promise<Notification> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(userId).then(async (analyst) => {
-        const notification = await Notification.findOne(notificationId, {
-          relations: ['read'],
-        });
-        notification!.read.push(analyst!);
-        notification!.save().then(() => {
-          resolve(notification);
-        });
-      });
+    const analyst = await Analyst.findOne(userId);
+    if (!analyst) throw new Error('Analyst not found');
+    const notification = await Notification.findOne(notificationId, {
+      relations: ['read'],
     });
+    if (!notification) throw new Error('Notification not found');
+    notification.read.push(analyst);
+    return notification.save();
   }
 
-  static unRead(
+  static async unRead(
     userId: Analyst['id'],
     notificationId: Notification['id'],
   ): Promise<Notification> {
-    return new Promise((resolve, reject) => {
-      Notification.findOne(notificationId).then((notification) => {
-        if (!notification!.read) notification!.read = [];
-        notification!.read = notification!.read.filter((analyst) => analyst.id !== userId);
-        resolve(notification);
-      });
-    });
+    const notification = await Notification.findOne(notificationId, { relations: ['read'] });
+    if (!notification) throw new Error('Notification not found');
+    if (!notification.read) notification!.read = [];
+    notification!.read = notification!.read.filter((analyst) => analyst.id !== userId);
+    return notification.save();
   }
 
-  static toggleRead(
+  static async toggleRead(
     userId: Analyst['id'],
     notificationId: Notification['id'],
   ): Promise<Notification> {
-    return new Promise((resolve, reject) => {
-      Notification.findOne(notificationId, { relations: ['read'] }).then(
-        (notification) => {
-          const read = notification!.read
-            .map((analyst) => analyst.id)
-            .includes(userId);
-          if (read) resolve(NotificationService.unRead(userId, notificationId));
-          resolve(NotificationService.read(userId, notificationId));
-        },
-      );
-    });
+    const notification = await Notification.findOne(notificationId, { relations: ['read'] });
+    if (!notification) throw new Error('Notification not found');
+    const read = notification.read
+      .map((analyst) => analyst.id)
+      .includes(userId);
+    if (read) return NotificationService.unRead(userId, notificationId);
+    return NotificationService.read(userId, notificationId);
   }
 
   static async readall(userId: Analyst['id']): Promise<Notification[]> {

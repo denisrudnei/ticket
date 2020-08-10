@@ -13,24 +13,25 @@ interface IRule {
   permissions: [IPermission]
 }
 
-const CheckACL = {
-  checkDb: (next: Function) => {
-    AclRules.forEach((rule: IRule) => {
-      Role.findOne({
+class CheckACL {
+  static async checkDb() {
+    const roles = AclRules.map(async (rule: IRule) => {
+      const result = await Role.findOne({
         where: {
           name: rule.group,
         },
-      }).then((result) => {
-        if (!result) {
-          const role = Role.create();
-          role!.name = rule.group;
-          role!.description = 'Gerado automaticamente com base nas regras do servidor';
-          role.save();
-        }
       });
+      if (!result) {
+        const role = Role.create();
+        role!.name = rule.group;
+        role!.description = 'Gerado automaticamente com base nas regras do servidor';
+        const saved = await role.save();
+        return saved;
+      }
+      return result;
     });
-    return next(null);
-  },
-};
+    return Promise.all(roles);
+  }
+}
 
 export default CheckACL;

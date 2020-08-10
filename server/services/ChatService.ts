@@ -5,15 +5,13 @@ import Chat from '../models/chat/Chat';
 import AnalystStatus from '../enums/AnalystStatus';
 
 class ChatService {
-  static getChats(fromId: Analyst['id']): Promise<Chat[]> {
-    return new Promise((resolve, reject) => {
-      Chat.find({ relations: ['participants'] }).then((result) => {
-        const chats = result.filter((chat) => chat.participants
-          .map((participant) => participant.id)
-          .includes(fromId));
-        resolve(chats);
-      });
-    });
+  static async getChats(fromId: Analyst['id']): Promise<Chat[]> {
+    const result = await Chat.find({ relations: ['participants'] });
+    const chats = result.filter((chat) => chat.participants
+      .map((participant) => participant.id)
+      .includes(fromId));
+
+    return chats;
   }
 
   static async getUnReadMessagesFromChat(
@@ -32,15 +30,11 @@ class ChatService {
     return unReadMessages;
   }
 
-  static readMessage(messageId: Message['id']): Promise<void> {
-    return new Promise((resolve, reject) => {
-      Message.findOne(messageId, { relations: ['read'] }).then((message) => {
-        message!.read = [];
-        message!.save().then(() => {
-          resolve();
-        });
-      });
-    });
+  static async readMessage(messageId: Message['id']): Promise<void> {
+    const message = await Message.findOne(messageId, { relations: ['read'] });
+    if (!message) throw new Error('Message not found');
+    message.read = [];
+    await message.save();
   }
 
   static async getOne(fromId: Analyst['id'], toId: Analyst['id']): Promise<Chat> {
@@ -66,69 +60,64 @@ class ChatService {
     return chats[0];
   }
 
-  static addMessage(
+  static async addMessage(
     fromId: Analyst['id'],
     toId: Analyst['id'],
     content: string,
   ): Promise<Message> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(fromId, { relations: ['chats'] }).then(async (from) => {
-        const to = await Analyst.findOne(toId, { relations: ['chats'] });
+    const from = await Analyst.findOne(fromId, { relations: ['chats'] });
+    const to = await Analyst.findOne(toId, { relations: ['chats'] });
 
-        const chat = await ChatService.getOne(fromId, toId);
-        from!.chats.push(chat);
-        const message = Message.create();
-        message.to = to!;
-        message.from = from!;
-        message.date = new Date();
-        message.content = content!;
-        message.save().then(() => {
-          chat.messages.push(message);
-          chat.save().then(() => {
-            resolve(message);
-          });
-        });
-      });
+    if (!from || !to) throw new Error('Analyst not found');
+
+    const chat = await ChatService.getOne(fromId, toId);
+
+    from.chats.push(chat);
+
+    const message = Message.create();
+
+    message.to = to;
+    message.from = from;
+    message.date = new Date();
+    message.content = content!;
+
+    await message.save();
+
+    chat.messages.push(message);
+    chat.save();
+
+    return message;
+  }
+
+  static async get(fromId: Analyst['id'], toId: Analyst['id']): Promise<Message[]> {
+    return Message.find({
+      where: [
+        {
+          from: fromId,
+          to: toId,
+        },
+        {
+          from: toId,
+          to: fromId,
+        },
+      ],
     });
   }
 
-  static get(fromId: Analyst['id'], toId: Analyst['id']): Promise<Message[]> {
-    return new Promise((resolve, reject) => {
-      Message.find({
-        where: [
-          {
-            from: fromId,
-            to: toId,
-          },
-          {
-            from: toId,
-            to: fromId,
-          },
-        ],
-      }).then((messages: Message[]) => resolve(messages));
-    });
+  static async changeStatus(userId: Analyst['id'], status: AnalystStatus): Promise<Analyst> {
+    const analyst = await Analyst.findOne(userId);
+    if (!analyst) throw new Error('Analyst not found');
+    analyst.status = status;
+    const savedAnalyst = await analyst.save();
+    return savedAnalyst;
   }
 
-  static changeStatus(userId: Analyst['id'], status: AnalystStatus): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(userId).then((analyst) => {
-        analyst!.status = status;
-        analyst!.save().then(() => {
-          resolve(analyst);
-        });
-      });
-    });
-  }
-
-  static updateLastActive(userId: Analyst['id']) {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(userId).then((analyst) => {
-        analyst!.lastTimeActive = new Date();
-        analyst!.save().then(() => {
-          resolve(analyst);
-        });
-      });
-    });
+  static async updateLastActive(userId: Analyst['id']) {
+    const analyst = await Analyst.findOne(userId);
+    if (!analyst) throw new Error('Analyst not found');
+    analyst.lastTimeActive = new Date();
+    const savedAnalyst = await analyst!.save();
+    return savedAnalyst;
   }
 }
 

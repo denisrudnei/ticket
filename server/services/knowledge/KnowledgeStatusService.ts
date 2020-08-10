@@ -1,20 +1,14 @@
 import KnowledgeStatus from '../../models/knowledge/KnowledgeStatus';
 
 class KnowledgeStatusService {
-  static create(status: KnowledgeStatus): Promise<KnowledgeStatus> {
-    return new Promise((resolve, reject) => {
-      KnowledgeStatus.create({
-        ...status,
-      })
-        .save()
-        .then((result: KnowledgeStatus) => resolve(result));
-    });
+  static async create(status: KnowledgeStatus): Promise<KnowledgeStatus> {
+    return KnowledgeStatus.create({
+      ...status,
+    }).save();
   }
 
-  static getAll(): Promise<KnowledgeStatus[]> {
-    return new Promise((resolve, reject) => {
-      KnowledgeStatus.find().then((result: KnowledgeStatus[]) => resolve(result));
-    });
+  static async getAll(): Promise<KnowledgeStatus[]> {
+    return KnowledgeStatus.find();
   }
 }
 export default KnowledgeStatusService;

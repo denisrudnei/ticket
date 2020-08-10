@@ -26,40 +26,27 @@ class AnalystService {
       .save();
   }
 
-  static getAnalysts(): Promise<Analyst[]> {
-    return new Promise((resolve, reject) => {
-      Analyst.find().then((analysts) => {
-        resolve(analysts);
-      });
-    });
+  static async getAnalysts(): Promise<Analyst[]> {
+    return Analyst.find();
   }
 
-  static getOne(analystId: Analyst['id']): Promise<Analyst> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOneOrFail(analystId).then((analyst) => {
-        resolve(analyst);
-      });
-    });
+  static async getOne(analystId: Analyst['id']): Promise<Analyst> {
+    const analyst = await Analyst.findOne(analystId);
+    if (!analyst) throw new Error('Analyst not found');
+    return analyst;
   }
 
-  static getConfigAnalysts(): Promise<Analyst[]> {
-    return new Promise((resolve, reject) => {
-      Analyst.find().then((analysts) => {
-        resolve(analysts);
-      });
-    });
+  static async getConfigAnalysts(): Promise<Analyst[]> {
+    return Analyst.find();
   }
 
-  static updateAnalyst(userId: Analyst['id'], analyst: Analyst): Promise<Analyst> {
-    return new Promise((resolve, reject) => [
-      Analyst.findOne(userId).then((fromDb) => {
-        analyst.role = fromDb!.role;
-        Object.assign(fromDb, analyst);
-        fromDb!.save().then((saved) => {
-          resolve(saved);
-        });
-      }),
-    ]);
+  static async updateAnalyst(userId: Analyst['id'], analyst: Analyst): Promise<Analyst> {
+    const fromDb = await Analyst.findOne(userId);
+    if (!fromDb) throw new Error('Analyst not found');
+    analyst.role = fromDb.role;
+    Object.assign(fromDb, analyst);
+    const saved = await fromDb!.save();
+    return saved;
   }
 
   static async updateImage(userId: Analyst['id'], file: UploadedFile): Promise<Analyst> {
@@ -84,14 +71,11 @@ class AnalystService {
     return analyst!.save();
   }
 
-  static getGroups(userId: Analyst['id']): Promise<Group[]> {
-    return new Promise((resolve, reject) => {
-      Analyst.findOne(userId).then((analyst) => {
-        analyst!.getGroups().then((result: Group[]) => {
-          resolve(result);
-        });
-      });
-    });
+  static async getGroups(userId: Analyst['id']): Promise<Group[]> {
+    const analyst = await Analyst.findOne(userId);
+    if (!analyst) throw new Error('Analyst not found');
+    const groups = await analyst.getGroups();
+    return groups;
   }
 
   static async removeImage(userId: Analyst['id']): Promise<Analyst> {
@@ -110,12 +94,13 @@ class AnalystService {
     const analyst = await Analyst.findOne(userId, {
       relations: ['groups', 'sounds', 'paths'],
     });
-    analyst!.active = false;
-    analyst!.contactEmail = '';
-    analyst!.groups = [];
-    AnalystService.removeImage(userId);
-    analyst!.paths.forEach((path) => Path.delete(path.id));
-    analyst!.sounds.forEach((sound) => Sound.delete(sound.id));
+    if (!analyst) throw new Error('Analyst not found');
+    analyst.active = false;
+    analyst.contactEmail = '';
+    analyst.groups = [];
+    await AnalystService.removeImage(userId);
+    analyst.paths.forEach((path) => Path.delete(path.id));
+    analyst.sounds.forEach((sound) => Sound.delete(sound.id));
     await analyst!.save();
   }
 }
