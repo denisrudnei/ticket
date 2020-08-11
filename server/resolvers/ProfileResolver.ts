@@ -1,8 +1,9 @@
 /* eslint-disable class-methods-use-this */
-import {
-  Resolver, ID, Query, Arg, Authorized, Ctx,
-} from 'type-graphql';
 import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
+import {
+  Authorized, Ctx, Query, Resolver,
+} from 'type-graphql';
+
 import PathService from '../services/path/PathService';
 import ProfileInfo from '../services/path/ProfileInfo';
 import Ref from '../services/path/Ref';

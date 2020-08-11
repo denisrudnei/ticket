@@ -2,6 +2,7 @@
 import {
   Arg, Authorized, ID, Mutation, Query, Resolver,
 } from 'type-graphql';
+
 import PriorityInput from '../inputs/PriorityInput';
 import Priority from '../models/ticket/Priority';
 import PriorityService from '../services/PriorityService';

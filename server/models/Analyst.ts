@@ -2,16 +2,16 @@
 import bcrypt from 'bcryptjs';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
+  AfterLoad,
   BaseEntity,
   BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  BeforeUpdate,
-  AfterLoad,
 } from 'typeorm';
 
 import AnalystStatus from '../enums/AnalystStatus';
@@ -19,10 +19,10 @@ import Address from './Address';
 import Chat from './chat/Chat';
 import Notification from './Notification';
 import Path from './Path';
+import Role from './Role';
 import Sound from './Sound';
 import Group from './ticket/Group';
 import Ticket from './ticket/Ticket';
-import Role from './Role';
 
 @Entity()
 @ObjectType()

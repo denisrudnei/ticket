@@ -3,6 +3,7 @@ import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import {
   Arg, Ctx, Mutation, Resolver,
 } from 'type-graphql';
+
 import AnalystInput from '../inputs/AnalystInput';
 import Analyst from '../models/Analyst';
 import AuthService from '../services/AuthService';

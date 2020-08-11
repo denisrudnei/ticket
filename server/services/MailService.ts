@@ -1,8 +1,9 @@
-import path from 'path';
 import Email from 'email-templates';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import nodeMailer from 'nodemailer';
 import express from 'express';
+import nodeMailer from 'nodemailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import path from 'path';
+
 import Analyst from '../models/Analyst';
 
 const transport = nodeMailer.createTransport(

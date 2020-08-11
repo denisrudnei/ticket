@@ -1,8 +1,8 @@
-import { InputType, Field, ID } from 'type-graphql';
-import Analyst from '../models/Analyst';
+import { Field, ID, InputType } from 'type-graphql';
+
+import AnalystStatus from '../enums/AnalystStatus';
 import Address from '../models/Address';
 import Sound from '../models/Sound';
-import AnalystStatus from '../enums/AnalystStatus';
 
 @InputType()
 class AnalystInput {

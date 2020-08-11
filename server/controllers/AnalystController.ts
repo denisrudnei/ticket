@@ -1,10 +1,6 @@
 import express from 'express';
 import { UploadedFile } from 'express-fileupload';
-import Group from '../models/ticket/Group';
-import Sound from '../models/Sound';
-import SoundType from '../enums/SoundTypeEnum';
 import AnalystService from '~/server/services/AnalystService';
-import Analyst from '~/server/models/Analyst';
 
 export default {
   updateImage: (req: express.Request, res: express.Response) => {

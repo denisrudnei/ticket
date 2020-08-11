@@ -1,17 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import {
-  Arg,
-  Authorized,
-  Ctx,
-  ID,
-  Mutation,
-  PubSub,
-  PubSubEngine,
-  Query,
-  Resolver,
-  Root,
-  Subscription,
+  Arg, Authorized, Ctx, ID, Mutation, PubSub, PubSubEngine, Query, Resolver, Root, Subscription,
 } from 'type-graphql';
 
 import PathEnum from '../enums/PathEnum';

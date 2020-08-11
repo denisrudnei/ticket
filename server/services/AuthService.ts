@@ -1,5 +1,6 @@
-import jwt from 'jsonwebtoken';
 import express from 'express';
+import jwt from 'jsonwebtoken';
+
 import Analyst from '../models/Analyst';
 import Role from '../models/Role';
 import MailService from './MailService';

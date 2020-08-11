@@ -1,4 +1,5 @@
 import Ticket from '~/server/models/ticket/Ticket';
+
 import ComposedDate from './ComposedDate';
 
 export default class TicketWithComposedDate extends Ticket {

@@ -1,13 +1,7 @@
 /* eslint-disable no-shadow */
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
+  BaseEntity, Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import Analyst from './Analyst';

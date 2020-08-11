@@ -2,14 +2,7 @@
 import { differenceInMinutes, format } from 'date-fns';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
+  BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import Address from '../Address';

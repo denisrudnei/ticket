@@ -1,12 +1,10 @@
-import { In } from 'typeorm';
-import Notification from '../models/Notification';
-import TicketService from '../services/ticket/TicketService';
-import GroupService from '../services/ticket/GroupService';
-import AnalystService from '../services/AnalystService';
-import Analyst from '../models/Analyst';
-import Ticket from '../models/ticket/Ticket';
-import Group from '../models/ticket/Group';
 import TicketEnum from '../enums/TicketEnum';
+import Analyst from '../models/Analyst';
+import Notification from '../models/Notification';
+import Group from '../models/ticket/Group';
+import Ticket from '../models/ticket/Ticket';
+import AnalystService from '../services/AnalystService';
+import TicketService from '../services/ticket/TicketService';
 
 class NotificationService {
   static async getAll(userId: Analyst['id']): Promise<Notification[]> {

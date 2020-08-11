@@ -1,19 +1,11 @@
 /* eslint-disable class-methods-use-this */
 import {
-  Arg,
-  Authorized,
-  FieldResolver,
-  ID,
-  Query,
-  Resolver,
-  ResolverInterface,
-  Root,
-  Mutation,
+  Arg, Authorized, FieldResolver, ID, Mutation, Query, Resolver, ResolverInterface, Root,
 } from 'type-graphql';
-import Status from '../models/ticket/Status';
-import StatusService from '../services/ticket/StatusService';
 import StatusCreateInput from '../inputs/StatusCreateInput';
 import StatusEditInput from '../inputs/StatusEditInput';
+import Status from '../models/ticket/Status';
+import StatusService from '../services/ticket/StatusService';
 
 @Resolver((of) => Status)
 class StatusResolver implements ResolverInterface<Status> {

@@ -1,4 +1,4 @@
-import { InputType, Int, Field } from 'type-graphql';
+import { Field, InputType, Int } from 'type-graphql';
 
 @InputType()
 class PriorityInput {

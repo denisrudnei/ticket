@@ -1,9 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import { FieldResolver, Resolver, Root } from 'type-graphql';
+
 import Analyst from '../models/Analyst';
+import Group from '../models/ticket/Group';
 import Log from '../models/ticket/Log';
 import Status from '../models/ticket/Status';
-import Group from '../models/ticket/Group';
 import Ticket from '../models/ticket/Ticket';
 
 @Resolver((of) => Log)

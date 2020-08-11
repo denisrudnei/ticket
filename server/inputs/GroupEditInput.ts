@@ -1,4 +1,5 @@
-import { InputType, Field, ID } from 'type-graphql';
+import { Field, ID, InputType } from 'type-graphql';
+
 import Analyst from '../models/Analyst';
 
 @InputType()

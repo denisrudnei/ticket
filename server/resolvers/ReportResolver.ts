@@ -2,11 +2,12 @@
 import {
   Arg, Authorized, Query, Resolver,
 } from 'type-graphql';
+
 import ReportAttributes from '../inputs/ReportAttributes';
 import Ticket from '../models/ticket/Ticket';
 import GroupedResult from '../services/ticket/report/GroupedResult';
-import ReportService, { TicketTimeField } from '../services/ticket/report/ReportService';
 import ReportByDate from '../services/ticket/report/ReportByDate';
+import ReportService, { TicketTimeField } from '../services/ticket/report/ReportService';
 
 @Resolver()
 class ReportResolver {

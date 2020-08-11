@@ -1,4 +1,5 @@
-import { InputType, Field, Float } from 'type-graphql';
+import { Field, Float, InputType } from 'type-graphql';
+
 import SoundType from '../enums/SoundTypeEnum';
 
 @InputType()

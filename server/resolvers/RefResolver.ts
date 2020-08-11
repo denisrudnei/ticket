@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { Authorized, Query, Resolver } from 'type-graphql';
+
 import PathService from '../services/path/PathService';
 import Ref from '../services/path/Ref';
 

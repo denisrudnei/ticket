@@ -1,12 +1,7 @@
 /* eslint-disable no-shadow */
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import Category from '../ticket/Category';

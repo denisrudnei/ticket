@@ -1,10 +1,11 @@
-import { InputType, Field, ID } from 'type-graphql';
-import Analyst from '../models/Analyst';
+import { Field, ID, InputType } from 'type-graphql';
+
 import Address from '../models/Address';
+import Analyst from '../models/Analyst';
 import Category from '../models/ticket/Category';
-import Status from '../models/ticket/Status';
 import Group from '../models/ticket/Group';
 import Priority from '../models/ticket/Priority';
+import Status from '../models/ticket/Status';
 import Ticket from '../models/ticket/Ticket';
 
 @InputType()

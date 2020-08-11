@@ -1,8 +1,7 @@
-import { In } from 'typeorm';
-import Message from '../models/chat/Message';
+import AnalystStatus from '../enums/AnalystStatus';
 import Analyst from '../models/Analyst';
 import Chat from '../models/chat/Chat';
-import AnalystStatus from '../enums/AnalystStatus';
+import Message from '../models/chat/Message';
 
 class ChatService {
   static async getChats(fromId: Analyst['id']): Promise<Chat[]> {

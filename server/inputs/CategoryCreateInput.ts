@@ -1,11 +1,10 @@
-import {
-  InputType, Field, Int, ID,
-} from 'type-graphql';
+import { Field, ID, InputType } from 'type-graphql';
+
+import Category from '../models/ticket/Category';
 import Group from '../models/ticket/Group';
 import Priority from '../models/ticket/Priority';
-import Status from '../models/ticket/Status';
 import Sla from '../models/ticket/Sla';
-import Category from '../models/ticket/Category';
+import Status from '../models/ticket/Status';
 
 @InputType()
 class CategoryCreateInput {

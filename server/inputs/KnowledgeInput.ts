@@ -1,8 +1,9 @@
-import { ID, Field, InputType } from 'type-graphql';
-import Category from '../models/ticket/Category';
-import KnowledgeStatus from '../models/knowledge/KnowledgeStatus';
-import Group from '../models/ticket/Group';
+import { Field, ID, InputType } from 'type-graphql';
+
 import KnowledgeFile from '../models/knowledge/KnowledgeFile';
+import KnowledgeStatus from '../models/knowledge/KnowledgeStatus';
+import Category from '../models/ticket/Category';
+import Group from '../models/ticket/Group';
 
 @InputType()
 class KnowledgeInput {

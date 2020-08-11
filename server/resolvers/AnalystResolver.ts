@@ -1,28 +1,20 @@
 /* eslint-disable class-methods-use-this */
-import {
-  Authorized,
-  FieldResolver,
-  Query,
-  Resolver,
-  Root,
-  Mutation,
-  Arg,
-  ID,
-  Ctx,
-} from 'type-graphql';
-import { GraphQLUpload } from 'graphql-upload';
-import { UploadedFile } from 'express-fileupload';
 import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
+import { UploadedFile } from 'express-fileupload';
+import { GraphQLUpload } from 'graphql-upload';
+import {
+  Arg, Authorized, Ctx, FieldResolver, ID, Mutation, Query, Resolver, Root,
+} from 'type-graphql';
+
+import AnalystInput from '../inputs/AnalystInput';
+import SoundInput from '../inputs/SoundInput';
 import Analyst from '../models/Analyst';
 import Chat from '../models/chat/Chat';
 import { Path } from '../models/Path';
+import { Role } from '../models/Role';
 import Sound from '../models/Sound';
 import Group from '../models/ticket/Group';
 import AnalystService from '../services/AnalystService';
-import AnalystInput from '../inputs/AnalystInput';
-import { Role } from '../models/Role';
-import SoundInput from '../inputs/SoundInput';
-import Address from '../models/Address';
 
 @Resolver((of) => Analyst)
 class AnalystResolver {

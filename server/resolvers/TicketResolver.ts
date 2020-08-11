@@ -16,22 +16,23 @@ import {
   Root,
   Subscription,
 } from 'type-graphql';
+
 import Ticket from '../../server/models/ticket/Ticket';
 import NotificationEnum from '../enums/NotificationEnum';
 import TicketEnum from '../enums/TicketEnum';
 import TicketCreateInput from '../inputs/TicketCreateInput';
 import TicketInput from '../inputs/TicketInput';
+import Address from '../models/Address';
+import Analyst from '../models/Analyst';
+import File from '../models/File';
+import Category from '../models/ticket/Category';
 import Comment from '../models/ticket/Comment';
 import Group from '../models/ticket/Group';
 import Log from '../models/ticket/Log';
+import Priority from '../models/ticket/Priority';
 import Status from '../models/ticket/Status';
-import File from '../models/File';
 import LogService from '../services/ticket/LogService';
 import TicketService from '../services/ticket/TicketService';
-import Priority from '../models/ticket/Priority';
-import Analyst from '../models/Analyst';
-import Address from '../models/Address';
-import Category from '../models/ticket/Category';
 
 @Resolver((of) => Ticket)
 class TicketResolver {

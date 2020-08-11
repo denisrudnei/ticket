@@ -1,7 +1,8 @@
-import { InputType, Field, ID } from 'type-graphql';
+import { Field, ID, InputType } from 'type-graphql';
+
+import Analyst from '../models/Analyst';
 import Group from '../models/ticket/Group';
 import Status from '../models/ticket/Status';
-import Analyst from '../models/Analyst';
 
 @InputType()
 class ReportAttributes {

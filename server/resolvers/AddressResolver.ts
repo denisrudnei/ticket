@@ -1,11 +1,12 @@
 /* eslint-disable class-methods-use-this */
 import {
-  Authorized, Query, Resolver, Mutation, Arg, ID,
+  Arg, Authorized, ID, Mutation, Query, Resolver,
 } from 'type-graphql';
-import Address from '../models/Address';
-import AddressService from '../services/AddressService';
+
 import AddressCreateInput from '../inputs/AddressCreateInput';
 import AddressInput from '../inputs/AddressInput';
+import Address from '../models/Address';
+import AddressService from '../services/AddressService';
 
 @Resolver()
 class AddressResolver {

@@ -3,6 +3,7 @@ import SlaService from '@/server/services/ticket/SlaService';
 import {
   Arg, Authorized, Mutation, Query, Resolver,
 } from 'type-graphql';
+
 import SlaAttributes from '../inputs/SlaAttributes';
 import Sla from '../models/ticket/Sla';
 

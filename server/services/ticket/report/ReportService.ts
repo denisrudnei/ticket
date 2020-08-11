@@ -1,10 +1,11 @@
 import Ticket from '@/server/models/ticket/Ticket';
-import { DeepPartial, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import lodash from 'lodash';
+import { DeepPartial } from 'typeorm';
+
+import ComposedDate from './ComposedDate';
 import GroupedResult from './GroupedResult';
 import ReportByDate from './ReportByDate';
 import TicketWithComposedDate from './TicketWithComposedDate';
-import ComposedDate from './ComposedDate';
 
 export enum TicketTimeField {
   created = 'created',

@@ -1,4 +1,5 @@
 import '~/server/models/Notification';
+
 import Agenda from 'agenda';
 import { PubSubEngine } from 'apollo-server-express';
 import { UploadedFile } from 'express-fileupload';

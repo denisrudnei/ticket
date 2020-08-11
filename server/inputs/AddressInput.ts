@@ -1,4 +1,4 @@
-import { InputType, Field, ID } from 'type-graphql';
+import { Field, ID, InputType } from 'type-graphql';
 
 @InputType()
 class AddressInput {

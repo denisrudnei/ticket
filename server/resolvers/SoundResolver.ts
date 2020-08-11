@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
-import { Resolver, Query, Ctx } from 'type-graphql';
-
 import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
+import { Ctx, Query, Resolver } from 'type-graphql';
+
 import SoundType from '../enums/SoundTypeEnum';
-import Sound from '../models/Sound';
 import Analyst from '../models/Analyst';
+import Sound from '../models/Sound';
 
 @Resolver()
 class SoundResolver {

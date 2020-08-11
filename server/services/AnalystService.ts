@@ -1,11 +1,11 @@
 import { UploadedFile } from 'express-fileupload';
-import AWS from 'aws-sdk';
-import Analyst from '../../server/models/Analyst';
-import Group from '../models/ticket/Group';
-import Sound from '../models/Sound';
-import Role from '../models/Role';
-import Path from '../models/Path';
 import S3 from '~/plugins/S3';
+
+import Analyst from '../../server/models/Analyst';
+import Path from '../models/Path';
+import Role from '../models/Role';
+import Sound from '../models/Sound';
+import Group from '../models/ticket/Group';
 
 class AnalystService {
   static async create(analyst: Analyst): Promise<Analyst> {

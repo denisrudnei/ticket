@@ -1,25 +1,19 @@
 /* eslint-disable class-methods-use-this */
-import {
-  Arg,
-  Authorized,
-  FieldResolver,
-  ID,
-  Mutation,
-  Query,
-  Resolver,
-  Root,
-} from 'type-graphql';
-import { GraphQLUpload } from 'graphql-upload';
 import { UploadedFile } from 'express-fileupload';
-import CategoryInput from '../inputs/CategoryInput';
+import { GraphQLUpload } from 'graphql-upload';
+import {
+  Arg, Authorized, FieldResolver, ID, Mutation, Query, Resolver, Root,
+} from 'type-graphql';
+
 import CategoryCreateInput from '../inputs/CategoryCreateInput';
+import CategoryInput from '../inputs/CategoryInput';
 import Category from '../models/ticket/Category';
 import CategoryField from '../models/ticket/CategoryField';
-import CategoryService from '../services/ticket/CategoryService';
 import Group from '../models/ticket/Group';
 import Priority from '../models/ticket/Priority';
 import Sla from '../models/ticket/Sla';
 import Status from '../models/ticket/Status';
+import CategoryService from '../services/ticket/CategoryService';
 
 @Resolver((of) => Category)
 class CategoryResolver {
