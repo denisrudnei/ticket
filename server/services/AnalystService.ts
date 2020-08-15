@@ -2,12 +2,11 @@ import { UploadedFile } from 'express-fileupload';
 import S3 from '~/plugins/S3';
 
 import Analyst from '../../server/models/Analyst';
+import AnalystInput from '../inputs/AnalystInput';
 import Path from '../models/Path';
 import Role from '../models/Role';
 import Sound from '../models/Sound';
 import Group from '../models/ticket/Group';
-import AnalystInput from '../inputs/AnalystInput';
-import Address from '../models/Address';
 
 class AnalystService {
   static async create(analyst: Analyst): Promise<Analyst> {
@@ -45,11 +44,6 @@ class AnalystService {
   static async updateAnalyst(userId: Analyst['id'], analyst: AnalystInput): Promise<Analyst> {
     const fromDb = await Analyst.findOne(userId);
     if (!fromDb) throw new Error('Analyst not found');
-    // if (analyst.address) {
-    //   const address = await Address.findOne(analyst.address);
-    //   if (!address) throw new Error('Address not found');
-    //   fromDb.address = address;
-    // }
 
     Object.assign(fromDb, analyst);
     const saved = await fromDb.save();

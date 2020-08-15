@@ -41,10 +41,15 @@ class CategoryService {
   }
 
   static async getImage(categoryId: Category['id']): Promise<AWS.S3.Types.Body> {
+    const category = await Category.findOne(categoryId, { relations: ['file'] });
+
+    if (!category) throw new Error('Category not found');
+    if (!category.file) throw new Error('Category has no image');
+
     const { Body } = await S3.getObject(
       {
         Bucket: process.env.BUCKET!,
-        Key: `category/${categoryId.toString()}`,
+        Key: category.file.name,
       },
     ).promise();
     if (!Body) throw new Error('Image not found');

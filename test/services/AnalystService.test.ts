@@ -4,6 +4,7 @@ import Analyst from '../../server/models/Analyst';
 import Sound from '../../server/models/Sound';
 import Role from '~/server/models/Role';
 import SoundType from '~/server/enums/SoundTypeEnum';
+import AnalystInput from '../../server/inputs/AnalystInput';
 
 describe('Analyst', function () {
   this.timeout(10_000);
@@ -31,8 +32,11 @@ describe('Analyst', function () {
 
   it('Update one analyst', async () => {
     const a = await Analyst.findOne();
-    a!.name = 'test';
-    AnalystService.updateAnalyst(a!.id, a!);
+
+    const edited = new AnalystInput();
+    Object.assign(edited, a);
+    edited.name = 'test';
+    AnalystService.updateAnalyst(a!.id, edited);
   });
 
   it('Get analyst groups', async () => {
