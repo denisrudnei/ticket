@@ -83,7 +83,7 @@ export default {
     getImage(categoryId) {
       const category = this.categories.find((item) => item.id === categoryId);
       if (category.file !== null) return category.file.url;
-      return 'https://picsum.photos/200/300';
+      return '/no-image.png';
     },
   },
 };

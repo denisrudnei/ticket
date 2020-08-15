@@ -1,6 +1,6 @@
 query NotificationById($id: ID!) {
   NotificationById(id: $id) {
     id
-    name
+    content
   }
 }
