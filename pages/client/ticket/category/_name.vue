@@ -7,11 +7,26 @@
       <v-col cols="12" md="4">
         <v-autocomplete
           v-model="ticket.affectedUser"
+          @change="autoUpdateAddress"
           label="Chamado para"
           :rules="[(v) => !!v || 'Necessário preencher']"
           filled
           :items="
             analysts.map((a) => {
+              return { text: a.name, value: a }
+            })
+          "
+        />
+      </v-col>
+      <v-col cols="12" md="4">
+        <v-autocomplete
+          v-model="ticket.address"
+          label="Endereço"
+          clearable
+          :rules="[(v) => !!v || 'Necessário preencher']"
+          filled
+          :items="
+            addresses.map((a) => {
               return { text: a.name, value: a }
             })
           "
@@ -72,7 +87,7 @@
         </v-tab>
         <v-tab-item>
           <v-col v-for="field in category.fields" :key="field.id" cols="12">
-            <v-text-field :placeholder="field.text" filled />
+            <v-text-field :placeholder="field.text" v-model="field.value" filled />
           </v-col>
         </v-tab-item>
         <v-tab>
@@ -93,6 +108,7 @@ import { mapGetters } from 'vuex';
 import ggl from 'graphql-tag';
 import createTicket from '@/graphql/mutation/client/ticket/createTicket.graphql';
 import category from '@/graphql/query/client/ticket/category.graphql';
+import list from '@/graphql/query/client/ticket/searchTicket.graphql';
 import file from './file';
 
 export default {
@@ -108,6 +124,9 @@ export default {
   computed: mapGetters({
     user: 'auth/getUser',
   }),
+  created() {
+    this.ticket.fields = this.category.fields;
+  },
   asyncData({ app, params }) {
     return app.$apollo
       .query({
@@ -119,18 +138,13 @@ export default {
       .then((response) => ({
         category: response.data.category,
         analysts: response.data.analyst,
+        addresses: response.data.addresses,
         ticket: {
           group: response.data.category.defaultGroup,
           status: response.data.category.defaultStatus,
           priority: response.data.category.defaultPriority,
         },
-      }))
-      .catch(() => {
-        this.$toast.error('Falha ao enviar chamado', {
-          duration: 5000,
-          icon: 'error',
-        });
-      });
+      }));
   },
   methods: {
     addFile() {},
@@ -151,6 +165,11 @@ export default {
       }
       return false;
     },
+    autoUpdateAddress() {
+      if (!this.ticket.address && this.ticket.affectedUser) {
+        this.ticket.address = this.ticket.affectedUser.address;
+      }
+    },
     save() {
       if (!this.$refs.form.validate() || this.invalid()) {
         this.$toast.show('Fonrceça as informções corretas', {
@@ -164,6 +183,11 @@ export default {
           mutation: ggl(createTicket),
           variables: {
             ticket: {
+              fields: this.ticket.fields.map((field) => {
+                const { __typename, ...rest } = field;
+                return rest;
+              }),
+              address: this.ticket.address.id,
               actualUser: this.user.id,
               group: this.ticket.group.id,
               status: this.ticket.status.id,
@@ -172,14 +196,30 @@ export default {
               resume: this.ticket.resume,
               content: this.ticket.content,
               affectedUser: this.ticket.affectedUser.id,
-              openedBy: this.user.id,
             },
           },
+          awaitRefetchQueries: true,
+          refetchQueries: [{
+            query: ggl(list),
+            variables: {
+              page: 1,
+              limit: 9,
+              attributes: {
+                openedBy: this.user.id,
+              },
+            },
+          }],
         })
         .then(() => {
           this.$toast.show('Ticket enviado', {
             duration: 1000,
             icon: 'done',
+          });
+          this.$router.push('/client');
+        }).catch(() => {
+          this.$toast.error('Falha ao enviar chamado', {
+            duration: 5000,
+            icon: 'error',
           });
         });
     },

@@ -2,6 +2,7 @@
 query TicketById($id: ID!) {
   ticket: TicketById(id: $id) {
     ...ticketList
+    content
     slaPercentage
   }
 }

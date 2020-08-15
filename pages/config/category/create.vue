@@ -19,6 +19,7 @@ export default {
           mutation: ggl(createCategory),
           variables: {
             category: {
+              fields: category.fields,
               name: category.name,
               description: category.description,
               defaultGroup: category.defaultGroup.id,

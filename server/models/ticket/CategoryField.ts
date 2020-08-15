@@ -29,10 +29,6 @@ class CategoryField extends BaseEntity {
   @Field()
   public max!: number;
 
-  @Column()
-  @Field()
-  public value!: string;
-
   @ManyToOne((type) => Category, (Category) => Category.fields)
   @Field((type) => Category)
   public category!: Category;

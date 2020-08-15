@@ -16,9 +16,22 @@ query CategoryByName($name: String!) {
       name
       weight
     }
+    fields {
+      text
+      min
+      max
+    }
+  }
+  addresses: Address {
+    id
+    name
   }
   analyst: Analyst {
     id
     name
+    address {
+      id
+      name
+    }
   }
 }

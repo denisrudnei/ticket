@@ -14,6 +14,7 @@ import Group from './Group';
 import Log from './Log';
 import Priority from './Priority';
 import Status from './Status';
+import TicketField from './TicketField';
 
 @Entity()
 @ObjectType()
@@ -24,69 +25,73 @@ class Ticket extends BaseEntity {
   }
 
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column({ nullable: false })
-  @Field((type) => String)
+  @Field(() => String)
   public resume!: string;
 
   @Column({ nullable: false })
-  @Field((type) => String)
+  @Field(() => String)
   public content!: string;
 
-  @Field((type) => Category)
-  @ManyToOne((type) => Category, { eager: true, nullable: false })
+  @Field(() => Category)
+  @ManyToOne(() => Category, { eager: true, nullable: false })
   public category!: Category;
 
-  @ManyToOne((type) => Group, { eager: true, nullable: false })
-  @Field((type) => Group)
+  @ManyToOne(() => Group, { eager: true, nullable: false })
+  @Field(() => Group)
   public group!: Group;
 
-  @ManyToOne((type) => Address, { eager: true, nullable: false })
-  @Field((type) => Address)
+  @ManyToOne(() => Address, { eager: true, nullable: false })
+  @Field(() => Address)
   public address!: Address;
 
-  @ManyToOne((type) => Status, { eager: true, nullable: false })
-  @Field((type) => Status)
+  @ManyToOne(() => Status, { eager: true, nullable: false })
+  @Field(() => Status)
   public status!: Status;
 
-  @OneToMany((type) => Comment, (Comment) => Comment.ticket)
-  @Field((type) => [Comment])
+  @OneToMany(() => Comment, (Comment) => Comment.ticket)
+  @Field(() => [Comment])
   public comments!: Comment[];
 
-  @ManyToOne((type) => Analyst, { eager: true, nullable: false })
-  @Field((type) => Analyst)
+  @ManyToOne(() => Analyst, { eager: true, nullable: false })
+  @Field(() => Analyst)
   public affectedUser!: Analyst;
 
-  @ManyToOne((type) => Analyst, { eager: true, nullable: false })
-  @Field((type) => Analyst)
+  @ManyToOne(() => Analyst, { eager: true, nullable: false })
+  @Field(() => Analyst)
   public openedBy!: Analyst;
 
-  @ManyToOne((type) => Analyst, { eager: true, nullable: true })
-  @Field((type) => Analyst, { nullable: true })
+  @ManyToOne(() => Analyst, { eager: true, nullable: true })
+  @Field(() => Analyst, { nullable: true })
   public actualUser?: Analyst | null;
 
-  @ManyToOne((type) => Priority, { eager: true, nullable: false })
-  @Field((type) => Priority)
+  @ManyToOne(() => Priority, { eager: true, nullable: false })
+  @Field(() => Priority)
   public priority!: Priority;
 
-  @OneToOne((type) => Ticket, (Ticket) => Ticket.children)
+  @OneToOne(() => Ticket, (Ticket) => Ticket.children)
   @JoinColumn({ name: 'father' })
-  @Field((type) => Ticket)
+  @Field(() => Ticket)
   public father!: Ticket;
 
-  @OneToMany((type) => Ticket, (Ticket) => Ticket.father)
-  @Field((type) => [Ticket])
+  @OneToMany(() => Ticket, (Ticket) => Ticket.father)
+  @Field(() => [Ticket])
   public children!: Ticket[];
 
-  @OneToMany((type) => File, (File) => File.ticket)
-  @Field((type) => [File])
+  @OneToMany(() => File, (File) => File.ticket)
+  @Field(() => [File])
   public files!: File[];
 
-  @OneToMany((type) => Log, (Log) => Log.ticket)
-  @Field((type) => [Log])
+  @OneToMany(() => Log, (Log) => Log.ticket)
+  @Field(() => [Log])
   public logs!: Log[];
+
+  @OneToMany(() => TicketField, (TicketField) => TicketField.ticket, { cascade: true })
+  @Field(() => [TicketField])
+  public fields!: TicketField[];
 
   @Column()
   @Field()

@@ -41,6 +41,10 @@ export default {
               defaultGroup: newValue.defaultGroup.id,
               defaultStatus: newValue.defaultStatus.id,
               defaultPriority: newValue.defaultPriority.id,
+              fields: newValue.fields.map((field) => {
+                const { __typename, ...rest } = field;
+                return rest;
+              }),
             },
           },
           awaitRefetchQueries: true,

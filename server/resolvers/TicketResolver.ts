@@ -33,6 +33,7 @@ import Priority from '../models/ticket/Priority';
 import Status from '../models/ticket/Status';
 import LogService from '../services/ticket/LogService';
 import TicketService from '../services/ticket/TicketService';
+import TicketField from '../models/ticket/TicketField';
 
 @Resolver((of) => Ticket)
 class TicketResolver {
@@ -145,6 +146,12 @@ class TicketResolver {
       relations: ['files'],
     }) as Ticket);
     return files;
+  }
+
+  @FieldResolver()
+  async fields(@Root() ticket: Ticket): Promise<TicketField[]> {
+    const { fields } = (await Ticket.findOne(ticket.id, { relations: ['fields'] }) as Ticket);
+    return fields;
   }
 
   @FieldResolver()

@@ -2,9 +2,11 @@ import { UploadedFile } from 'express-fileupload';
 import Category from '../../models/ticket/Category';
 import S3 from '~/plugins/S3';
 import File from '~/server/models/File';
+import CategoryField from '~/server/models/ticket/CategoryField';
 
 class CategoryService {
   static async create(category: Category): Promise<Category> {
+    await CategoryField.save(category.fields);
     return Category.create(category).save();
   }
 
@@ -33,8 +35,9 @@ class CategoryService {
     categoryId: Category['id'],
     categoryToEdit: Category,
   ): Promise<Category> {
-    const category = await Category.findOne(categoryId);
+    const category = await Category.findOne(categoryId, { relations: ['fields'] });
     if (!category) throw new Error('Category not found');
+    await CategoryField.save(categoryToEdit.fields);
     Object.assign(category, categoryToEdit);
     await category.save();
     return CategoryService.getOneById(categoryId);

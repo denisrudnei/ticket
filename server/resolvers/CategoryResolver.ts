@@ -14,7 +14,6 @@ import Priority from '../models/ticket/Priority';
 import Sla from '../models/ticket/Sla';
 import Status from '../models/ticket/Status';
 import CategoryService from '../services/ticket/CategoryService';
-import File from '~/server/models/File';
 
 @Resolver((of) => Category)
 class CategoryResolver {

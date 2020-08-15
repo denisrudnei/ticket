@@ -6,6 +6,7 @@ import Category from '../models/ticket/Category';
 import Group from '../models/ticket/Group';
 import Priority from '../models/ticket/Priority';
 import Status from '../models/ticket/Status';
+import TicketFieldInput from './TicketFieldInput';
 
 @InputType()
 class TicketCreateInput {
@@ -35,6 +36,9 @@ class TicketCreateInput {
 
   @Field((type) => ID)
   priority!: Priority['id'];
+
+  @Field(() => [TicketFieldInput], { nullable: true })
+  fields?: TicketFieldInput[];
 }
 
 export default TicketCreateInput;
