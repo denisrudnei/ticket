@@ -3,14 +3,15 @@ query {
     id
     name
     email
+    color
     picture
     address {
-        id
-    name
-    street
-    city
-    state
-    country
+      id
+      name
+      street
+      city
+      state
+      country
     }
   }
   address: Address {

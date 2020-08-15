@@ -27,8 +27,9 @@ class AuthResolver {
 
   @Query(() => Analyst)
   @Authorized('user')
-  GetLogged(@Ctx() { req }: ExpressContext) {
-    const logged = req.session!.authUser;
+  async GetLogged(@Ctx() { req }: ExpressContext) {
+    const { id } = req.session!.authUser;
+    const logged = await Analyst.findOne(id);
     return logged;
   }
 

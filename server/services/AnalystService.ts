@@ -6,6 +6,8 @@ import Path from '../models/Path';
 import Role from '../models/Role';
 import Sound from '../models/Sound';
 import Group from '../models/ticket/Group';
+import AnalystInput from '../inputs/AnalystInput';
+import Address from '../models/Address';
 
 class AnalystService {
   static async create(analyst: Analyst): Promise<Analyst> {
@@ -40,17 +42,23 @@ class AnalystService {
     return Analyst.find();
   }
 
-  static async updateAnalyst(userId: Analyst['id'], analyst: Analyst): Promise<Analyst> {
+  static async updateAnalyst(userId: Analyst['id'], analyst: AnalystInput): Promise<Analyst> {
     const fromDb = await Analyst.findOne(userId);
     if (!fromDb) throw new Error('Analyst not found');
-    analyst.role = fromDb.role;
+    // if (analyst.address) {
+    //   const address = await Address.findOne(analyst.address);
+    //   if (!address) throw new Error('Address not found');
+    //   fromDb.address = address;
+    // }
+
     Object.assign(fromDb, analyst);
-    const saved = await fromDb!.save();
+    const saved = await fromDb.save();
     return saved;
   }
 
   static async updateImage(userId: Analyst['id'], file: UploadedFile): Promise<Analyst> {
     const analyst = await Analyst.findOne(userId);
+    if (!analyst) throw new Error('Analyst not found');
     const name = userId;
     const params = {
       Bucket: process.env.BUCKET!,
@@ -60,8 +68,8 @@ class AnalystService {
       ACL: 'public-read',
     };
     const { Location } = await S3.upload(params).promise();
-    analyst!.picture = Location!;
-    return analyst!.save();
+    analyst.picture = Location!;
+    return analyst.save();
   }
 
   static async setSoundConfig(analystId: Analyst['id'], config: Sound[]): Promise<Analyst> {

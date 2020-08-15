@@ -37,9 +37,7 @@ class AnalystResolver {
     @Ctx() context: ExpressContext,
   ): Promise<Analyst> {
     const { id } = context.req!.session!.authUser;
-    const analystToEdit = new Analyst();
-    Object.assign(analystToEdit, analyst);
-    return AnalystService.updateAnalyst(id, analystToEdit);
+    return AnalystService.updateAnalyst(id, analyst);
   }
 
   @Mutation(() => Analyst)

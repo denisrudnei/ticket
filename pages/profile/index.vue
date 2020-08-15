@@ -16,7 +16,7 @@
           @change="updateEmail"
         />
         <v-select
-          :value="user.address"
+          v-model="user.address"
           filled
           label="Localização"
           :items="
@@ -155,6 +155,7 @@ export default {
     updatePrimary() {
       this.$vuetify.theme.currentTheme.primary = this.primary;
       this.$store.commit('auth/setColor', this.primary);
+      this.user.color = this.primary;
     },
     updatePictureMerge(value) {
       this.$store.commit('auth/updateMergePictureWithExternalAccount', value);
