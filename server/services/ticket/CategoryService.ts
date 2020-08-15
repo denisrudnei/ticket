@@ -1,6 +1,7 @@
 import { UploadedFile } from 'express-fileupload';
 import Category from '../../models/ticket/Category';
 import S3 from '~/plugins/S3';
+import File from '~/server/models/File';
 
 class CategoryService {
   static async create(category: Category): Promise<Category> {
@@ -52,15 +53,29 @@ class CategoryService {
   }
 
   static async setImage(categoryId: Category['id'], image: UploadedFile): Promise<string> {
+    const category = await Category.findOne(categoryId, { relations: ['file'] });
+    if (!category) throw new Error('Category not found');
+    const fileName = `category/${category.name}`;
     const params = {
       Bucket: process.env.BUCKET!,
-      Key: `category/${categoryId}`,
+      Key: fileName,
       Body: image.data,
       ContentType: image.mimetype,
       ACL: 'public-read',
     };
 
     const { Location } = await S3.upload(params).promise();
+
+    const file = File.create();
+    file.name = fileName;
+    file.type = image.mimetype;
+    file.url = Location;
+
+    await file.save();
+
+    category.file = file;
+
+    await category.save();
 
     return Location;
   }

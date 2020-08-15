@@ -1,9 +1,10 @@
 /* eslint-disable no-shadow */
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
-  BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn,
+  BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import Category from './ticket/Category';
 import Ticket from './ticket/Ticket';
 
 @Entity()
@@ -28,6 +29,9 @@ class File extends BaseEntity {
   @ManyToOne((type) => Ticket, (Ticket) => Ticket.files)
   @Field((type) => Ticket)
   public ticket!: Ticket;
+
+  @OneToMany(() => Category, (Category) => Category.file)
+  public categories!: Category[];
 }
 
 export default File;

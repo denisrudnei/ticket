@@ -11,7 +11,7 @@
                     :to="`/client/ticket/category/${category.name}?id=${category.id}`"
                   >
                     <v-img
-                      :src="`/api/category/${category.id}/image`"
+                      :src="getImage(category.id)"
                       :aspect-ratio="1"
                     />
                   </nuxt-link>
@@ -78,6 +78,13 @@ export default {
       .then((response) => ({
         categories: response.data.category,
       }));
+  },
+  methods: {
+    getImage(categoryId) {
+      const category = this.categories.find((item) => item.id === categoryId);
+      if (category.file !== null) return category.file.url;
+      return 'https://picsum.photos/200/300';
+    },
   },
 };
 </script>

@@ -1,4 +1,5 @@
 /* eslint-disable no-shadow */
+import File from '@/server/models/File';
 import { Field, ID, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
@@ -9,6 +10,7 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -73,6 +75,11 @@ class Category extends BaseEntity {
   })
   @Field((type) => Sla)
   public sla!: Sla;
+
+  @Field(() => File, { nullable: true })
+  @JoinColumn({ name: 'file' })
+  @OneToOne(() => File)
+  public file?: File;
 
   @Field()
   public get fullName(): string {

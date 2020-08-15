@@ -16,5 +16,8 @@ query {
       id
       name
     }
+    file {
+      url
+    }
   }
 }
