@@ -10,31 +10,31 @@ import TicketFieldInput from './TicketFieldInput';
 
 @InputType()
 class TicketCreateInput {
-  @Field((type) => String)
+  @Field(() => String)
   public resume!: string;
 
-  @Field((type) => String)
+  @Field(() => String)
   public content!: string;
 
-  @Field((type) => ID)
+  @Field(() => ID)
   actualUser!: Analyst['id'];
 
-  @Field((type) => ID)
+  @Field(() => ID)
   affectedUser!: Analyst['id'];
 
-  @Field((type) => ID)
+  @Field(() => ID)
   address!: Address['id'];
 
-  @Field((type) => ID)
+  @Field(() => ID)
   category!: Category['id'];
 
-  @Field((type) => ID)
+  @Field(() => ID)
   status!: Status['id'];
 
-  @Field((type) => ID)
+  @Field(() => ID)
   group!: Group['id'];
 
-  @Field((type) => ID)
+  @Field(() => ID)
   priority!: Priority['id'];
 
   @Field(() => [TicketFieldInput], { nullable: true })

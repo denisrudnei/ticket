@@ -16,6 +16,6 @@ export default class GroupedResult {
   @Field()
   public name!: string;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   public total!: number;
 }

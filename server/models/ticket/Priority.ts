@@ -15,7 +15,7 @@ class Priority extends BaseEntity {
   }
 
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()
@@ -26,8 +26,8 @@ class Priority extends BaseEntity {
   @Field()
   public name!: string;
 
-  @OneToMany((type) => Ticket, (Ticket) => Ticket.priority)
-  @Field((type) => [Ticket])
+  @OneToMany(() => Ticket, (Ticket) => Ticket.priority)
+  @Field(() => [Ticket])
   public tickets!: Ticket[];
 }
 

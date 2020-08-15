@@ -33,7 +33,7 @@ class Analyst extends BaseEntity {
   }
 
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column({ unique: true })
@@ -65,8 +65,8 @@ class Analyst extends BaseEntity {
 
   private tempPassword!: string;
 
-  @ManyToOne((type) => Address)
-  @Field((type) => Address, { nullable: true })
+  @ManyToOne(() => Address)
+  @Field(() => Address, { nullable: true })
   public address: Address | null = null;
 
   @Column()
@@ -89,32 +89,32 @@ class Analyst extends BaseEntity {
   @Field()
   public mergePictureWithExternalAccount: boolean = false;
 
-  @OneToMany((type) => Sound, (Sound) => Sound.analyst)
-  @Field((type) => [Sound])
+  @OneToMany(() => Sound, (Sound) => Sound.analyst)
+  @Field(() => [Sound])
   public sounds!: Sound[];
 
-  @ManyToMany((type) => Group, (Group) => Group.analysts)
-  @Field((type) => [Group])
+  @ManyToMany(() => Group, (Group) => Group.analysts)
+  @Field(() => [Group])
   public groups!: Group[];
 
-  @ManyToMany((type) => Chat, (Chat) => Chat.participants)
-  @Field((type) => [Chat])
+  @ManyToMany(() => Chat, (Chat) => Chat.participants)
+  @Field(() => [Chat])
   public chats!: Chat[];
 
-  @OneToMany((type) => Ticket, (Ticket) => Ticket.actualUser)
-  @Field((type) => [Ticket])
+  @OneToMany(() => Ticket, (Ticket) => Ticket.actualUser)
+  @Field(() => [Ticket])
   public ticketsActualUser!: Ticket[];
 
-  @OneToMany((type) => Path, (Path) => Path.user)
-  @Field((type) => [Path])
+  @OneToMany(() => Path, (Path) => Path.user)
+  @Field(() => [Path])
   public paths!: Path[];
 
-  @ManyToMany((type) => Notification, (Notification) => Notification.read)
-  @Field((type) => [Notification])
+  @ManyToMany(() => Notification, (Notification) => Notification.read)
+  @Field(() => [Notification])
   public notificationsRead!: Notification[];
 
-  @ManyToMany((type) => Notification, (Notification) => Notification.to)
-  @Field((type) => [Notification])
+  @ManyToMany(() => Notification, (Notification) => Notification.to)
+  @Field(() => [Notification])
   public notificationsToMe!: Notification[];
 
   public async getGroups(): Promise<Group[]> {

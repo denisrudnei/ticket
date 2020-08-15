@@ -14,7 +14,7 @@ class Status extends BaseEntity {
   }
 
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()
@@ -25,17 +25,17 @@ class Status extends BaseEntity {
   @Field()
   public description!: string;
 
-  @ManyToMany((type) => Status)
+  @ManyToMany(() => Status)
   @JoinTable()
-  @Field((type) => [Status])
+  @Field(() => [Status])
   public allowedStatus!: Status[];
 
   @Column()
   @Field()
   public slaRun: boolean = false;
 
-  @OneToMany((type) => Ticket, (status) => status)
-  @Field((type) => [Ticket])
+  @OneToMany(() => Ticket, (status) => status)
+  @Field(() => [Ticket])
   public tickets!: Ticket[];
 }
 

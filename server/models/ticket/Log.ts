@@ -13,36 +13,36 @@ import Ticket from './Ticket';
 @ObjectType()
 class Log extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
-  @ManyToOne((type) => Analyst)
+  @ManyToOne(() => Analyst)
   @JoinColumn({ name: 'user' })
-  @Field((type) => Analyst)
+  @Field(() => Analyst)
   public user!: Analyst;
 
   @Column()
   @Field()
   public date: Date = new Date();
 
-  @ManyToOne((type) => Status)
+  @ManyToOne(() => Status)
   @JoinColumn({ name: 'oldStatus' })
-  @Field((type) => Status)
+  @Field(() => Status)
   public oldStatus!: Status;
 
-  @ManyToOne((type) => Status)
+  @ManyToOne(() => Status)
   @JoinColumn({ name: 'newStatus' })
-  @Field((type) => Status)
+  @Field(() => Status)
   public newStatus!: Status;
 
-  @ManyToOne((type) => Group)
+  @ManyToOne(() => Group)
   @JoinColumn({ name: 'group' })
-  @Field((type) => Group)
+  @Field(() => Group)
   public group!: Group;
 
-  @ManyToOne((type) => Ticket, (Ticket) => Ticket.logs)
+  @ManyToOne(() => Ticket, (Ticket) => Ticket.logs)
   @JoinColumn()
-  @Field((type) => Ticket)
+  @Field(() => Ticket)
   public ticket!: Ticket;
 }
 

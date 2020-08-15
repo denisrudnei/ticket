@@ -18,29 +18,29 @@ import Chat from './Chat';
 @ObjectType()
 class Message extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
-  @ManyToOne((type) => Chat, (Chat) => Chat.messages)
+  @ManyToOne(() => Chat, (Chat) => Chat.messages)
   @JoinColumn({ name: 'chat' })
   public chat!: Chat;
 
-  @ManyToOne((type) => Analyst)
-  @Field((type) => Analyst)
+  @ManyToOne(() => Analyst)
+  @Field(() => Analyst)
   public to!: Analyst;
 
-  @ManyToOne((type) => Analyst)
+  @ManyToOne(() => Analyst)
   @JoinColumn({ name: 'from' })
-  @Field((type) => Analyst)
+  @Field(() => Analyst)
   public from!: Analyst;
 
   @Column()
   @Field()
   public content!: string;
 
-  @ManyToMany((type) => Analyst)
+  @ManyToMany(() => Analyst)
   @JoinTable()
-  @Field((type) => [Analyst])
+  @Field(() => [Analyst])
   public read!: Analyst[];
 
   @Column()

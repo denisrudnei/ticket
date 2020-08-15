@@ -9,7 +9,7 @@ import Analyst from './Analyst';
 @ObjectType()
 export class Path extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()
@@ -24,8 +24,8 @@ export class Path extends BaseEntity {
   @Field()
   public name!: string;
 
-  @ManyToOne((type) => Analyst)
-  @Field((type) => Analyst)
+  @ManyToOne(() => Analyst)
+  @Field(() => Analyst)
   public user!: Analyst;
 }
 

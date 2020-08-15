@@ -11,7 +11,7 @@ export default class PathTree {
   @Field()
   public url!: string;
 
-  @Field((type) => [PathTree])
+  @Field(() => [PathTree])
   children: PathTree[];
 
   constructor(name: string, url: string, children: PathTree[]) {

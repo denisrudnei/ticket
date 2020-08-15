@@ -18,19 +18,19 @@ class TicketPagination {
     this.limit = limit;
   }
 
-  @Field((type) => [Ticket])
+  @Field(() => [Ticket])
   public docs!: Ticket[];
 
-  @Field((type) => Int)
+  @Field(() => Int)
   total!: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   page!: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   pages!: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   limit!: number;
 }
 

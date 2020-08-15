@@ -11,11 +11,11 @@ import Ticket from './Ticket';
 @ObjectType()
 class Comment extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
-  @ManyToOne((type) => Analyst)
-  @Field((type) => Analyst)
+  @ManyToOne(() => Analyst)
+  @Field(() => Analyst)
   public user!: Analyst;
 
   @Column()
@@ -26,8 +26,8 @@ class Comment extends BaseEntity {
   @Field()
   public date: Date = new Date();
 
-  @ManyToOne((type) => Ticket, (Ticket) => Ticket.comments)
-  @Field((type) => Ticket)
+  @ManyToOne(() => Ticket, (Ticket) => Ticket.comments)
+  @Field(() => Ticket)
   public ticket!: Ticket;
 }
 

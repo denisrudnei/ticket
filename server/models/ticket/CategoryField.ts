@@ -10,7 +10,7 @@ import Category from './Category';
 @ObjectType()
 class CategoryField extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()
@@ -29,8 +29,8 @@ class CategoryField extends BaseEntity {
   @Field()
   public max!: number;
 
-  @ManyToOne((type) => Category, (Category) => Category.fields)
-  @Field((type) => Category)
+  @ManyToOne(() => Category, (Category) => Category.fields)
+  @Field(() => Category)
   public category!: Category;
 }
 

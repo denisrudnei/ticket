@@ -7,7 +7,7 @@ import {
 @ObjectType()
 export class Role extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()

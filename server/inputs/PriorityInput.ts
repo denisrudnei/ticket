@@ -2,7 +2,7 @@ import { Field, InputType, Int } from 'type-graphql';
 
 @InputType()
 class PriorityInput {
-  @Field((type) => Int)
+  @Field(() => Int)
   public weight!: number;
 
   @Field()

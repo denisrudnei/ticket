@@ -13,7 +13,7 @@ class GroupEditInput {
   @Field({ nullable: true })
   public description!: string;
 
-  @Field((type) => [ID], { nullable: true })
+  @Field(() => [ID], { nullable: true })
   public analysts!: Analyst['id'][];
 }
 

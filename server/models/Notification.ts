@@ -10,18 +10,18 @@ import Analyst from './Analyst';
 @ObjectType()
 class Notification extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
-  @ManyToOne((type) => Analyst, { eager: true })
-  @Field((type) => Analyst)
+  @ManyToOne(() => Analyst, { eager: true })
+  @Field(() => Analyst)
   public from!: Analyst;
 
-  @ManyToMany((type) => Analyst, (Analyst) => Analyst.notificationsToMe, {
+  @ManyToMany(() => Analyst, (Analyst) => Analyst.notificationsToMe, {
     eager: true,
   })
   @JoinTable()
-  @Field((type) => [Analyst])
+  @Field(() => [Analyst])
   public to!: Analyst[];
 
   @Column()
@@ -32,11 +32,11 @@ class Notification extends BaseEntity {
   @Field()
   public name!: string;
 
-  @ManyToMany((type) => Analyst, (Analyst) => Analyst.notificationsRead, {
+  @ManyToMany(() => Analyst, (Analyst) => Analyst.notificationsRead, {
     eager: true,
   })
   @JoinTable()
-  @Field((type) => [Analyst])
+  @Field(() => [Analyst])
   public read!: Analyst[];
 
   @Column()

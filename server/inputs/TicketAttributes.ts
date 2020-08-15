@@ -10,31 +10,31 @@ import Ticket from '../models/ticket/Ticket';
 
 @InputType()
 class TicketAttributes {
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   actualUser!: Analyst['id'];
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   openedBy!: Analyst['id'];
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   affectedUser!: Analyst['id'];
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   address!: Address['id'];
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   category!: Category['id'];
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   status!: Status['id'];
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   group!: Group['id'];
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   priority!: Priority['id'];
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   id!: Ticket['id'][];
 }
 

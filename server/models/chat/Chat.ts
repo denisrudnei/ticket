@@ -16,16 +16,16 @@ import Message from './Message';
 @ObjectType()
 class Chat extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
-  @ManyToMany((type) => Analyst, (Analyst) => Analyst.chats)
-  @Field((type) => [Analyst])
+  @ManyToMany(() => Analyst, (Analyst) => Analyst.chats)
+  @Field(() => [Analyst])
   @JoinTable()
   public participants!: Analyst[];
 
-  @OneToMany((type) => Message, (Message) => Message.chat)
-  @Field((type) => [Message])
+  @OneToMany(() => Message, (Message) => Message.chat)
+  @Field(() => [Message])
   public messages!: Message[];
 }
 

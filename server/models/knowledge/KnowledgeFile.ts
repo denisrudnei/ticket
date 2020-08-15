@@ -10,19 +10,19 @@ import Knowledge from './Knowledge';
 @ObjectType()
 class KnowledgeFile extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()
-  @Field((type) => String)
+  @Field(() => String)
   public name!: string;
 
   @Column()
-  @Field((type) => String)
+  @Field(() => String)
   public url: string = '';
 
-  @ManyToOne((type) => Knowledge, (Knowledge) => Knowledge.files)
-  @Field((type) => Knowledge)
+  @ManyToOne(() => Knowledge, (Knowledge) => Knowledge.files)
+  @Field(() => Knowledge)
   public knowledge!: Knowledge;
 }
 

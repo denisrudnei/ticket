@@ -10,7 +10,7 @@ import Category from './Category';
 @ObjectType()
 class Sla extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()
@@ -21,8 +21,8 @@ class Sla extends BaseEntity {
   @Field()
   public limit: Date = new Date();
 
-  @OneToMany((type) => Category, (Category) => Category.sla)
-  @Field((type) => [Category])
+  @OneToMany(() => Category, (Category) => Category.sla)
+  @Field(() => [Category])
   public categories!: Category[];
 }
 

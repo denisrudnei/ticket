@@ -2,7 +2,7 @@ import { Field, ID, InputType } from 'type-graphql';
 
 @InputType()
 class AddressInput {
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   public id!: number;
 
   @Field({ nullable: true })

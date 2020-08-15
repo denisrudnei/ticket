@@ -187,7 +187,7 @@ class TicketResolver {
     );
   }
 
-  @Mutation((type) => Ticket)
+  @Mutation(() => Ticket)
   @Authorized('user')
   async ChangeStatus(
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
@@ -217,8 +217,8 @@ class TicketResolver {
   @Mutation(() => [Ticket])
   @Authorized('user')
   ChangeStatusOfTickets(
-    @Arg('tickets', (type) => [ID]) tickets: Ticket['id'][],
-    @Arg('statusId', (type) => ID) statusId: Status['id'],
+    @Arg('tickets', () => [ID]) tickets: Ticket['id'][],
+    @Arg('statusId', () => ID) statusId: Status['id'],
     @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket[]> {
     const statusChanged = TicketService.changeStatusOfTickets(tickets, statusId);

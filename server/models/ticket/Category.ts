@@ -29,51 +29,51 @@ class Category extends BaseEntity {
   }
 
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()
-  @Field((type) => String)
+  @Field(() => String)
   public name!: string;
 
-  @OneToMany((type) => Category, (Category) => Category.subs)
-  @Field((type) => [Category], { nullable: true })
+  @OneToMany(() => Category, (Category) => Category.subs)
+  @Field(() => [Category], { nullable: true })
   public father!: Category;
 
   @Column()
   @Field()
   public description!: string;
 
-  @ManyToMany((type) => Category, (Category) => Category.father)
+  @ManyToMany(() => Category, (Category) => Category.father)
   @JoinTable()
-  @Field((type) => [Category])
+  @Field(() => [Category])
   public subs!: Category[];
 
-  @ManyToOne((type) => Group, { nullable: false, eager: true })
-  @Field((type) => Group)
+  @ManyToOne(() => Group, { nullable: false, eager: true })
+  @Field(() => Group)
   @JoinColumn({ name: 'defaultGroup' })
   public defaultGroup!: Group;
 
-  @ManyToOne((type) => Status, { nullable: false, eager: true })
-  @Field((type) => Status)
+  @ManyToOne(() => Status, { nullable: false, eager: true })
+  @Field(() => Status)
   @JoinColumn({ name: 'defaultStatus' })
   public defaultStatus!: Status;
 
-  @ManyToOne((type) => Priority, { nullable: false, eager: true })
-  @Field((type) => Priority)
+  @ManyToOne(() => Priority, { nullable: false, eager: true })
+  @Field(() => Priority)
   @JoinColumn({ name: 'defaultPriority' })
   public defaultPriority!: Priority;
 
-  @OneToMany((type) => CategoryField, (CategoryField) => CategoryField.category)
+  @OneToMany(() => CategoryField, (CategoryField) => CategoryField.category, { cascade: true })
   @JoinColumn({ name: 'fields' })
-  @Field((type) => [CategoryField])
+  @Field(() => [CategoryField])
   public fields!: CategoryField[];
 
-  @ManyToOne((type) => Sla, (Sla) => Sla.categories, {
+  @ManyToOne(() => Sla, (Sla) => Sla.categories, {
     nullable: false,
     eager: true,
   })
-  @Field((type) => Sla)
+  @Field(() => Sla)
   public sla!: Sla;
 
   @Field(() => File, { nullable: true })

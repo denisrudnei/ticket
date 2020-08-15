@@ -9,7 +9,7 @@ class AnalystInput {
   @Field({ nullable: true })
   name!: string;
 
-  @Field((type) => AnalystStatus, { nullable: true })
+  @Field(() => AnalystStatus, { nullable: true })
   status!: AnalystStatus;
 
   @Field({ nullable: true })
@@ -18,7 +18,7 @@ class AnalystInput {
   @Field({ nullable: true })
   color!: string;
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   address!: Address['id'];
 
   @Field({ nullable: true })
@@ -27,7 +27,7 @@ class AnalystInput {
   @Field({ nullable: true })
   picture!: string;
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   sounds!: Sound['id'];
 }
 

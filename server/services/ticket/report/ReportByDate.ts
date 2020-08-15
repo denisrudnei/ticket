@@ -16,6 +16,6 @@ export default class ReportByDate {
   @Field()
   public date!: string;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   public total!: number;
 }

@@ -12,49 +12,49 @@ import KnowledgeStatus from './KnowledgeStatus';
 @Entity()
 @ObjectType()
 class Knowledge extends BaseEntity {
-  @Field((type) => ID)
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   public id!: number;
 
   @Column()
-  @Field((type) => String)
+  @Field(() => String)
   public name!: string;
 
   @Column({ nullable: true })
   public key!: string;
 
   @Column()
-  @Field((type) => Date)
+  @Field(() => Date)
   public created: Date = new Date();
 
-  @ManyToOne((type) => Category)
+  @ManyToOne(() => Category)
   @Field(() => Category)
   public category!: Category;
 
-  @ManyToOne((type) => Group)
+  @ManyToOne(() => Group)
   @Field(() => Group)
   public group!: Group;
 
-  @ManyToOne((type) => KnowledgeStatus)
-  @Field((type) => KnowledgeStatus)
+  @ManyToOne(() => KnowledgeStatus)
+  @Field(() => KnowledgeStatus)
   public status!: KnowledgeStatus;
 
   @Column()
-  @Field((type) => String)
+  @Field(() => String)
   public url: string = '';
 
-  @Field((type) => String)
+  @Field(() => String)
   public get preview(): string {
     return this.description.substring(0, 100);
   }
 
   @Column()
-  @Field((type) => String)
+  @Field(() => String)
   public description!: string;
 
-  @Field((type) => [KnowledgeFile])
+  @Field(() => [KnowledgeFile])
   @OneToMany(
-    (type) => KnowledgeFile,
+    () => KnowledgeFile,
     (KnowledgeFile) => KnowledgeFile.knowledge,
   )
   public files!: KnowledgeFile[];

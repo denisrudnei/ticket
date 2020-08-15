@@ -7,11 +7,11 @@ import {
 @ObjectType()
 class KnowledgeStatus extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()
-  @Field((type) => String)
+  @Field(() => String)
   public name!: string;
 
   @Field()

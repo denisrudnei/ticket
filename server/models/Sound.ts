@@ -19,14 +19,14 @@ class Sound extends BaseEntity {
   }
 
   @PrimaryColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: string;
 
   @Field(() => SoundType)
   @Column()
   public type!: SoundType;
 
-  @Field((type) => Float)
+  @Field(() => Float)
   @Column()
   public volume: number = 0;
 
@@ -34,8 +34,8 @@ class Sound extends BaseEntity {
   @Column()
   public muted: boolean = false;
 
-  @ManyToOne((type) => Analyst, (Analyst) => Analyst.sounds)
-  @Field((type) => Analyst)
+  @ManyToOne(() => Analyst, (Analyst) => Analyst.sounds)
+  @Field(() => Analyst)
   public analyst!: Analyst;
 }
 

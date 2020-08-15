@@ -12,7 +12,7 @@ class Address extends BaseEntity {
   }
 
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()

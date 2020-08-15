@@ -7,10 +7,10 @@ import Group from '../models/ticket/Group';
 
 @InputType()
 class KnowledgeInput {
-  @Field((type) => String)
+  @Field(() => String)
   public name!: string;
 
-  @Field((type) => Date)
+  @Field(() => Date)
   public created: Date = new Date();
 
   @Field(() => ID)
@@ -19,16 +19,16 @@ class KnowledgeInput {
   @Field(() => ID)
   public group!: Group['id'];
 
-  @Field((type) => ID, { nullable: true })
+  @Field(() => ID, { nullable: true })
   public status!: KnowledgeStatus['id'];
 
-  @Field((type) => String)
+  @Field(() => String)
   public url: string = '';
 
-  @Field((type) => String)
+  @Field(() => String)
   public description!: string;
 
-  @Field((type) => [ID], { nullable: true })
+  @Field(() => [ID], { nullable: true })
   public files!: KnowledgeFile['id'];
 }
 

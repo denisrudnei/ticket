@@ -15,7 +15,7 @@ class Group extends BaseEntity {
   }
 
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()
@@ -26,9 +26,9 @@ class Group extends BaseEntity {
   @Field()
   public description!: string;
 
-  @ManyToMany((type) => Analyst, (Analyst) => Analyst.groups)
+  @ManyToMany(() => Analyst, (Analyst) => Analyst.groups)
   @JoinTable()
-  @Field((type) => [Analyst])
+  @Field(() => [Analyst])
   public analysts!: Analyst[];
 }
 

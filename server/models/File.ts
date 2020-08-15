@@ -11,7 +11,7 @@ import Ticket from './ticket/Ticket';
 @ObjectType()
 class File extends BaseEntity {
   @PrimaryGeneratedColumn()
-  @Field((type) => ID)
+  @Field(() => ID)
   public id!: number;
 
   @Column()
@@ -26,8 +26,8 @@ class File extends BaseEntity {
   @Column()
   public url!: String;
 
-  @ManyToOne((type) => Ticket, (Ticket) => Ticket.files)
-  @Field((type) => Ticket)
+  @ManyToOne(() => Ticket, (Ticket) => Ticket.files)
+  @Field(() => Ticket)
   public ticket!: Ticket;
 
   @OneToMany(() => Category, (Category) => Category.file)
