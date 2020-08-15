@@ -21,16 +21,16 @@ export default {
     TicketCreate,
     TicketList,
   },
-  middleware({ app, $store }) {
+  middleware({ app, store }) {
     app.$apollo
       .query({
         query: ggl(searchQuery),
       })
       .then((response) => {
-        $store.commit('status/setStatus', response.data.status);
-        $store.commit('category/setCategories', response.data.category);
-        $store.commit('group/setGroups', response.data.group);
-        $store.commit('analyst/setAnalysts', response.data.analyst);
+        store.commit('status/setStatus', response.data.status);
+        store.commit('category/setCategories', response.data.category);
+        store.commit('group/setGroups', response.data.group);
+        store.commit('analyst/setAnalysts', response.data.analyst);
       });
   },
   data() {
