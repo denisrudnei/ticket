@@ -21,7 +21,7 @@ export default {
     TicketCreate,
     TicketList,
   },
-  fetch({ app, $store }) {
+  middleware({ app, $store }) {
     app.$apollo
       .query({
         query: ggl(searchQuery),
