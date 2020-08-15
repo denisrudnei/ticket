@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import {
-  Arg, Ctx, Mutation, Resolver,
+  Arg, Authorized, Ctx, Mutation, Query, Resolver,
 } from 'type-graphql';
 
 import AnalystInput from '../inputs/AnalystInput';
@@ -22,6 +22,13 @@ class AuthResolver {
 
     req!.session!.authUser = logged;
 
+    return logged;
+  }
+
+  @Query(() => Analyst)
+  @Authorized('user')
+  GetLogged(@Ctx() { req }: ExpressContext) {
+    const logged = req.session!.authUser;
     return logged;
   }
 

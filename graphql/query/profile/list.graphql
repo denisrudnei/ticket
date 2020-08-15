@@ -1,4 +1,26 @@
 query {
+  user: GetLogged {
+    id
+    name
+    email
+    picture
+    address {
+        id
+    name
+    street
+    city
+    state
+    country
+    }
+  }
+  address: Address {
+    id
+    name
+    street
+    city
+    state
+    country
+  }
   ProfileInfo {
     opened
     total

@@ -593,6 +593,7 @@ export default {
       this.$apollo
         .query({
           query: ggl(TicketById),
+          fetchPolicy: 'no-cache',
           variables: {
             id: this.ticket.id,
           },

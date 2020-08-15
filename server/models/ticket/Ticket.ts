@@ -52,7 +52,7 @@ class Ticket extends BaseEntity {
   public status!: Status;
 
   @OneToMany((type) => Comment, (Comment) => Comment.ticket)
-  @Field((type) => Comment)
+  @Field((type) => [Comment])
   public comments!: Comment[];
 
   @ManyToOne((type) => Analyst, { eager: true, nullable: false })

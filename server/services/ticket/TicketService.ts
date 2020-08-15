@@ -59,7 +59,8 @@ class TicketService {
 
   static async getOne(ticketId: Ticket['id']): Promise<Ticket> {
     const ticket = await Ticket.findOne(ticketId);
-    return ticket!;
+    if (!ticket) throw new Error('Ticket not found');
+    return ticket;
   }
 
   static async copyTicket(ticketId: Ticket['id'], userId: Analyst['id']): Promise<Ticket> {

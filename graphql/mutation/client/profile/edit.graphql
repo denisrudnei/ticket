@@ -1,0 +1,5 @@
+mutation UpdateAnalyst($analyst: AnalystInput!) {
+  UpdateAnalyst(analyst: $analyst) {
+    id
+  }
+}

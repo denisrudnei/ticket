@@ -128,7 +128,6 @@ export default {
     };
   },
   computed: mapGetters({
-    user: 'auth/getUser',
     groups: 'group/getGroups',
   }),
   watch: {
@@ -139,20 +138,13 @@ export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(AddressList),
-      })
-      .then((response) => ({
-        addresses: response.data.Address,
-      }));
-  },
-  created() {
-    this.$apollo
-      .query({
         query: ggl(profileInfo),
       })
-      .then((response) => {
-        this.info = response.data.ProfileInfo;
-      });
+      .then((response) => ({
+        addresses: response.data.address,
+        info: response.data.ProfileInfo,
+        user: response.data.user,
+      }));
   },
   methods: {
     ...mapMutations({
@@ -200,18 +192,15 @@ export default {
         .mutate({
           mutation: ggl(removeImage),
         })
-        .then(
-          () => {
-            this.$store.commit('auth/removeImage');
-            this.$toast.show('Imagem removida com sucesso', {
-              duration: 5000,
-              icon: 'done',
-            });
-          },
-          () => {
-            this.$toast.error('Falha ao realizar a remoção da imagem de perfil');
-          },
-        );
+        .then(() => {
+          this.$store.commit('auth/removeImage');
+          this.$toast.show('Imagem removida com sucesso', {
+            duration: 5000,
+            icon: 'done',
+          });
+        }).catch(() => {
+          this.$toast.error('Falha ao realizar a remoção da imagem de perfil');
+        });
     },
     updateImage() {
       if (!this.$refs.profileImage.files[0]) return;
@@ -222,17 +211,14 @@ export default {
       fileReader.readAsDataURL(this.$refs.profileImage.files[0]);
       const formData = new FormData();
       formData.append('image', this.$refs.profileImage.files[0]);
-      this.$axios.put('/analyst/image', formData).then(
-        () => {
-          this.$toast.show('Imagem enviada ao servidor', {
-            duration: 5000,
-            icon: 'done',
-          });
-        },
-        () => {
-          this.$toast.error('Falha ao upar imagem no servidor');
-        },
-      );
+      this.$axios.put('/analyst/image', formData).then(() => {
+        this.$toast.show('Imagem enviada ao servidor', {
+          duration: 5000,
+          icon: 'done',
+        });
+      }).catch(() => {
+        this.$toast.error('Falha ao upar imagem no servidor');
+      });
     },
   },
 };
