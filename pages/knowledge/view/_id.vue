@@ -1,6 +1,10 @@
 <template>
   <client-only>
-    <v-dialog :value="dialog" scrollable persistent>
+    <v-dialog
+      :value="dialog"
+      scrollable
+      persistent
+    >
       <v-card>
         <v-toolbar class="primary white--text">
           <v-toolbar-title>
@@ -8,7 +12,11 @@
           </v-toolbar-title>
           <v-spacer />
           <v-toolbar-items>
-            <v-btn icon class="primary white--text" @click="close()">
+            <v-btn
+              icon
+              class="primary white--text"
+              @click="close()"
+            >
               <v-icon>
                 close
               </v-icon>
@@ -17,10 +25,16 @@
         </v-toolbar>
         <v-card-text>
           <v-row>
-            <v-col cols="12" pa-3>
+            <v-col
+              cols="12"
+              pa-3
+            >
               <h3>Documento criado em: {{ knowledge.created | date }}</h3>
             </v-col>
-            <v-col cols="6" pa-3>
+            <v-col
+              cols="6"
+              pa-3
+            >
               <v-text-field
                 v-model="knowledge.category.fullName"
                 label="Categoria"
@@ -31,7 +45,10 @@
                 @click:append="openModal('category', knowledge.category)"
               />
             </v-col>
-            <v-col cols="6" pa-3>
+            <v-col
+              cols="6"
+              pa-3
+            >
               <v-text-field
                 v-model="knowledge.group.name"
                 label="Grupo responsável"
@@ -42,8 +59,15 @@
                 @click:append="openModal('group', knowledge.group)"
               />
             </v-col>
-            <v-col cols="12" pa-4>
-              <div id="preview" ref="preview" v-html="knowledge.preview" />
+            <v-col
+              cols="12"
+              pa-4
+            >
+              <div
+                id="preview"
+                ref="preview"
+                v-html="knowledge.preview"
+              />
             </v-col>
           </v-row>
         </v-card-text>
@@ -55,7 +79,11 @@
             download
             style="display: none;"
           />
-          <v-btn tile class="primary white--text" @click="download()">
+          <v-btn
+            tile
+            class="primary white--text"
+            @click="download()"
+          >
             Baixar IT
           </v-btn>
         </v-card-actions>

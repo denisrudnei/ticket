@@ -7,7 +7,10 @@
       type="color"
       @change="changeColor()"
     >
-    <v-btn class="primary white--text" @click="selectColor()">
+    <v-btn
+      class="primary white--text"
+      @click="selectColor()"
+    >
       <v-icon left>
         color_lens
       </v-icon>

@@ -1,6 +1,9 @@
 <template>
   <v-row v-hotkey="keymap">
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <v-menu
         v-if="readOnlyData"
         v-model="action.active"
@@ -10,7 +13,11 @@
         max-height="45vw"
       >
         <template v-slot:activator="{ on }">
-          <v-btn tile class="primary white--text" v-on="on">
+          <v-btn
+            tile
+            class="primary white--text"
+            v-on="on"
+          >
             {{ $t('actions') }}
           </v-btn>
         </template>
@@ -24,8 +31,16 @@
                 </v-icon>
               </v-tab>
               <v-tab-item>
-                <v-textarea v-model="comment" filled :label="$t('comment')" />
-                <v-btn icon class="primary white--text" @click="addComment()">
+                <v-textarea
+                  v-model="comment"
+                  filled
+                  :label="$t('comment')"
+                />
+                <v-btn
+                  icon
+                  class="primary white--text"
+                  @click="addComment()"
+                >
                   <v-icon>
                     send
                   </v-icon>
@@ -48,15 +63,24 @@
               </v-tab>
               <v-tab-item>
                 <v-row>
-                  <v-col cols="12" pa-3>
+                  <v-col
+                    cols="12"
+                    pa-3
+                  >
                     <v-autocomplete
                       filled
                       :items="groups.map((g) => ({ text: g.name, value: g }))"
                       :label="$t('group')"
                     />
                   </v-col>
-                  <v-col cols="12" pa-3>
-                    <v-btn class="primary white--text" icon>
+                  <v-col
+                    cols="12"
+                    pa-3
+                  >
+                    <v-btn
+                      class="primary white--text"
+                      icon
+                    >
                       <v-icon>
                         send
                       </v-icon>
@@ -69,9 +93,17 @@
           </v-card-text>
         </v-card>
       </v-menu>
-      <v-form ref="form" lazy-validation>
+      <v-form
+        ref="form"
+        lazy-validation
+      >
         <v-row align="center">
-          <v-col v-if="!search" cols="12" md="1" pa-1>
+          <v-col
+            v-if="!search"
+            cols="12"
+            md="1"
+            pa-1
+          >
             <v-text-field
               :value="ticket.id"
               disabled
@@ -79,7 +111,11 @@
               :label="$t('ticket_number')"
             />
           </v-col>
-          <v-col cols="12" :md="!search ? 3 : 4" pa-1>
+          <v-col
+            cols="12"
+            :md="!search ? 3 : 4"
+            pa-1
+          >
             <v-autocomplete
               :value="ticket.openedBy"
               :rules="
@@ -101,7 +137,11 @@
               @change="setFieldInActualTicket($event, 'openedBy')"
             />
           </v-col>
-          <v-col cols="12" md="4" pa-1>
+          <v-col
+            cols="12"
+            md="4"
+            pa-1
+          >
             <v-autocomplete
               :value="ticket.affectedUser"
               :rules="
@@ -123,7 +163,11 @@
               @click:append="show('affectedUser', ticket.affectedUser)"
             />
           </v-col>
-          <v-col cols="12" md="4" pa-1>
+          <v-col
+            cols="12"
+            md="4"
+            pa-1
+          >
             <v-autocomplete
               :value="ticket.address"
               :rules="
@@ -145,7 +189,11 @@
               @click:append="show('address', ticket.address)"
             />
           </v-col>
-          <v-col cols="12" md="4" pa-1>
+          <v-col
+            cols="12"
+            md="4"
+            pa-1
+          >
             <v-autocomplete
               :value="ticket.actualUser"
               :rules="
@@ -167,7 +215,11 @@
               @change="setFieldInActualTicket($event, 'actualUser')"
             />
           </v-col>
-          <v-col cols="12" md="4" pa-1>
+          <v-col
+            cols="12"
+            md="4"
+            pa-1
+          >
             <v-autocomplete
               :value="ticket.category"
               :items="
@@ -195,7 +247,11 @@
               @click:append="show('category', ticket.category)"
             />
           </v-col>
-          <v-col cols="12" md="4" pa-1>
+          <v-col
+            cols="12"
+            md="4"
+            pa-1
+          >
             <v-autocomplete
               :value="ticket.group"
               :items="
@@ -219,7 +275,11 @@
               @click:append="show('group', ticket.group)"
             />
           </v-col>
-          <v-col cols="12" md="4" pa-1>
+          <v-col
+            cols="12"
+            md="4"
+            pa-1
+          >
             <v-autocomplete
               :value="ticket.status"
               :items="
@@ -243,7 +303,11 @@
               @change="setFieldInActualTicket($event, 'status')"
             />
           </v-col>
-          <v-col cols="12" md="4" pa-1>
+          <v-col
+            cols="12"
+            md="4"
+            pa-1
+          >
             <v-select
               :value="ticket.priority"
               :items="
@@ -265,15 +329,25 @@
               @change="setFieldInActualTicket($event, 'priority')"
             />
           </v-col>
-          <v-col v-if="!search && ticket.slaCount" cols="12" class="pa-2">
+          <v-col
+            v-if="!search && ticket.slaCount"
+            cols="12"
+            class="pa-2"
+          >
             <h3>
               {{ $t('sla_update') }}: {{ ticket.slaCount | datetime }} |
               {{ ticket.slaPercentage | percentage }}
             </h3>
           </v-col>
-          <v-col cols="12" pa-3>
+          <v-col
+            cols="12"
+            pa-3
+          >
             <v-row>
-              <v-col cols="6" pa-3>
+              <v-col
+                cols="6"
+                pa-3
+              >
                 <h3 v-if="!search && ticket.created">
                   {{ $t('creation_date') }}: {{ ticket.created | date }}
                 </h3>
@@ -295,7 +369,10 @@
                   <v-date-picker v-model="initial" />
                 </v-menu>
               </v-col>
-              <v-col cols="6" pa-3>
+              <v-col
+                cols="6"
+                pa-3
+              >
                 <h3 v-if="!search && ticket.modified">
                   {{ $t('modified_date') }}: {{ ticket.modified | datetime }}
                 </h3>
@@ -319,7 +396,11 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col v-show="!search" cols="12" pa-1>
+          <v-col
+            v-show="!search"
+            cols="12"
+            pa-1
+          >
             <v-text-field
               :value="ticket.resume"
               :rules="[(v) => !!v || 'Necessário preencher o resumo']"
@@ -330,7 +411,11 @@
               @change="setFieldInActualTicket($event, 'resume')"
             />
           </v-col>
-          <v-col v-show="!search" cols="12" pa-1>
+          <v-col
+            v-show="!search"
+            cols="12"
+            pa-1
+          >
             <v-textarea
               :value="ticket.content"
               :rules="[
@@ -344,13 +429,23 @@
             />
           </v-col>
           <v-col cols="12">
-            <v-btn v-if="!readOnlyData" class="primary" tile @click="save()">
+            <v-btn
+              v-if="!readOnlyData"
+              class="primary"
+              tile
+              @click="save()"
+            >
               {{ !search ? $t('save') : $t('search') }}
               <v-icon right>
                 save
               </v-icon>
             </v-btn>
-            <v-btn v-if="search" tile class="primary" @click="clearFields()">
+            <v-btn
+              v-if="search"
+              tile
+              class="primary"
+              @click="clearFields()"
+            >
               {{ $t('clear_fields') }}
             </v-btn>
             <v-btn
@@ -369,14 +464,23 @@
               {{ $t('cancel_edit') }}
             </v-btn>
           </v-col>
-          <v-col v-show="!search" cols="12">
-            <v-tabs icons-and-text show-arrows>
+          <v-col
+            v-show="!search"
+            cols="12"
+          >
+            <v-tabs
+              icons-and-text
+              show-arrows
+            >
               <v-tab>
                 {{ $t('fields') }}
                 <v-icon>build</v-icon>
               </v-tab>
               <v-tab-item>
-                <Fields v-model="ticket" :edit="!readOnlyData" />
+                <Fields
+                  v-model="ticket"
+                  :edit="!readOnlyData"
+                />
               </v-tab-item>
               <v-tab>
                 {{ $t('logs') }}
@@ -524,7 +628,9 @@ export default {
       if (this.search) return this.status;
       if (!this.ticket.status) return this.status;
       if (!this.editing) return this.status;
-      const statusIndex = this.status.findIndex((s) => s.id === this.ticket.status.id);
+      const statusIndex = this.status.findIndex(
+        (s) => s.id === this.ticket.status.id,
+      );
 
       const result = [this.ticket.status];
       if (statusIndex !== -1) {
@@ -542,7 +648,9 @@ export default {
       .then((response) => {
         this.analysts = response.data.Analyst;
         if (!this.search && !this.readonly) {
-          const openedBy = this.analysts.filter((a) => a.id === this.user.id.toString())[0];
+          const openedBy = this.analysts.filter(
+            (a) => a.id === this.user.id.toString(),
+          )[0];
 
           this.$store.commit('ticket/setFieldInActualTicket', {
             value: openedBy,
@@ -617,10 +725,13 @@ export default {
       this.changeValue('groups', 'group', 'defaultGroup');
       this.changeValue('status', 'status', 'defaultStatus');
       this.changeValue('priorities', 'priority', 'defaultPriority');
+      this.ticket.fields = category.fields;
     },
     changeValue(search, type, defaultAttr) {
       if (!this.ticket.category[defaultAttr]) return;
-      const index = this[search].findIndex((s) => s.id === this.ticket.category[defaultAttr].id);
+      const index = this[search].findIndex(
+        (s) => s.id === this.ticket.category[defaultAttr].id,
+      );
       if (
         this.ticket[type] === undefined
         || (Object.prototype.hasOwnProperty.call(this.ticket, type)
@@ -630,7 +741,11 @@ export default {
       }
     },
     checkFields() {
-      if (!Object.prototype.hasOwnProperty.call(this.ticket.category, 'fields')) return;
+      if (
+        !Object.prototype.hasOwnProperty.call(this.ticket.category, 'fields')
+      ) {
+        return;
+      }
       this.ticket.fields = this.ticket.category.fields;
     },
     clearFields() {

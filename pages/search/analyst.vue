@@ -1,14 +1,21 @@
 <template>
   <v-row>
     <v-col>
-      <v-text-field v-model="searchName" label="Nome" filled />
+      <v-text-field
+        v-model="searchName"
+        label="Nome"
+        filled
+      />
       <v-autocomplete
         v-model="searchAddress"
         label="Endereço"
         filled
         :items="addresses.map((a) => ({ text: a.name, value: a }))"
       />
-      <v-btn class="primary white--text" @click="reset">
+      <v-btn
+        class="primary white--text"
+        @click="reset"
+      >
         Limpar busca
       </v-btn>
     </v-col>

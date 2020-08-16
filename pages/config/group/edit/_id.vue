@@ -1,5 +1,8 @@
 <template>
-  <create-group v-model="group" @input="update" />
+  <create-group
+    v-model="group"
+    @input="update"
+  />
 </template>
 
 <script>

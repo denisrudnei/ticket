@@ -1,7 +1,13 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
-      <v-data-table :items="analysts" :headers="headers" />
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-data-table
+        :items="analysts"
+        :headers="headers"
+      />
     </v-col>
   </v-row>
 </template>

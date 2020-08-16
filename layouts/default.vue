@@ -11,7 +11,10 @@
       <v-list>
         <v-list-item @click.stop="toggleMini">
           <v-list-item-action>
-            <v-btn v-if="logged" icon>
+            <v-btn
+              v-if="logged"
+              icon
+            >
               <v-icon>
                 {{ miniVariant ? 'chevron_right' : 'chevron_left' }}
               </v-icon>
@@ -50,7 +53,12 @@
         <v-row no-gutters>
           <template v-if="logged">
             <v-col>
-              <v-btn to="/ticket/create" class="primary white--text" tile block>
+              <v-btn
+                to="/ticket/create"
+                class="primary white--text"
+                tile
+                block
+              >
                 {{ $t('create_ticket') }}
                 <v-icon right>
                   offline_bolt
@@ -58,7 +66,12 @@
               </v-btn>
             </v-col>
             <v-col>
-              <v-btn to="/search" class="primary white--text" tile block>
+              <v-btn
+                to="/search"
+                class="primary white--text"
+                tile
+                block
+              >
                 {{ $t('search') }}
                 <v-icon right>
                   search
@@ -66,7 +79,12 @@
               </v-btn>
             </v-col>
             <v-col>
-              <v-btn class="primary white--text" to="/knowledge" tile block>
+              <v-btn
+                class="primary white--text"
+                to="/knowledge"
+                tile
+                block
+              >
                 {{ $t('knowledge_base') }}
                 <v-icon right>
                   folder
@@ -92,7 +110,11 @@
           direction="left"
         >
           <template v-slot:activator>
-            <v-btn v-model="fab" fab class="primary white--text">
+            <v-btn
+              v-model="fab"
+              fab
+              class="primary white--text"
+            >
               <v-icon v-if="fab">
                 close
               </v-icon>
@@ -116,7 +138,10 @@
         </v-speed-dial>
       </v-container>
     </v-main>
-    <v-footer fixed app>
+    <v-footer
+      fixed
+      app
+    >
       <span>&copy; 2020</span>
     </v-footer>
   </v-app>

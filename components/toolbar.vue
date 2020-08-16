@@ -6,7 +6,11 @@
     clipped-left
     class="primary white--text"
   >
-    <v-btn to="/" icon class="primary white--text">
+    <v-btn
+      to="/"
+      icon
+      class="primary white--text"
+    >
       <v-icon>
         home
       </v-icon>
@@ -28,7 +32,10 @@
       @click:prepend="search(id)"
       @keypress.enter="search(id)"
     />
-    <v-dialog v-model="ticketNotFound" width="50vw">
+    <v-dialog
+      v-model="ticketNotFound"
+      width="50vw"
+    >
       <v-card>
         <v-card-content>
           <v-row>
@@ -46,7 +53,11 @@
       :nudge-width="250"
     >
       <template v-slot:activator="{ on }">
-        <v-btn text class="primary white--text" v-on="on">
+        <v-btn
+          text
+          class="primary white--text"
+          v-on="on"
+        >
           <v-icon>
             view_module
           </v-icon>

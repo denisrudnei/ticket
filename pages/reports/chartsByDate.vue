@@ -1,8 +1,14 @@
 <template>
   <v-row>
-    <v-col class="ma-2" cols="12">
+    <v-col
+      class="ma-2"
+      cols="12"
+    >
       <FilterChart />
-      <AddByType :chart-types="chartTypes" :content-type="contentType" />
+      <AddByType
+        :chart-types="chartTypes"
+        :content-type="contentType"
+      />
     </v-col>
     <client-only>
       <v-col
@@ -33,7 +39,11 @@
             />
           </v-card-text>
           <v-card-actions>
-            <v-btn icon class="red white--text" @click="removeChart(chart)">
+            <v-btn
+              icon
+              class="red white--text"
+              @click="removeChart(chart)"
+            >
               <v-icon>
                 delete
               </v-icon>

@@ -3,7 +3,12 @@
     <v-row>
       <v-col cols="8">
         <v-row>
-          <v-col v-if="!editing" cols="12" md="4" pa-3>
+          <v-col
+            v-if="!editing"
+            cols="12"
+            md="4"
+            pa-3
+          >
             <v-autocomplete
               v-model="category.father"
               :items="categoriesComputed"
@@ -12,14 +17,22 @@
               placeholder="Categoria pai"
             />
           </v-col>
-          <v-col cols="12" md="4" pa-3>
+          <v-col
+            cols="12"
+            md="4"
+            pa-3
+          >
             <v-text-field
               v-model="category.name"
               :placeholder="this.$t('name')"
               filled
             />
           </v-col>
-          <v-col cols="12" md="4" pa-3>
+          <v-col
+            cols="12"
+            md="4"
+            pa-3
+          >
             <v-autocomplete
               v-model="category.defaultGroup"
               placeholder="Grupo principal"
@@ -28,7 +41,11 @@
               filled
             />
           </v-col>
-          <v-col cols="12" md="4" pa-3>
+          <v-col
+            cols="12"
+            md="4"
+            pa-3
+          >
             <v-autocomplete
               v-model="category.defaultStatus"
               placeholder="Status padrão"
@@ -37,7 +54,11 @@
               filled
             />
           </v-col>
-          <v-col cols="12" md="4" pa-3>
+          <v-col
+            cols="12"
+            md="4"
+            pa-3
+          >
             <v-autocomplete
               v-model="category.sla"
               placeholder="SLA"
@@ -46,7 +67,11 @@
               filled
             />
           </v-col>
-          <v-col cols="12" md="4" pa-3>
+          <v-col
+            cols="12"
+            md="4"
+            pa-3
+          >
             <v-autocomplete
               v-model="category.defaultPriority"
               filled
@@ -63,11 +88,17 @@
             />
           </v-col>
           <v-col cols="12">
-            <v-btn class="primary white--text" @click="addField()">
+            <v-btn
+              class="primary white--text"
+              @click="addField()"
+            >
               {{ $t('add_field') }}
             </v-btn>
           </v-col>
-          <v-col cols="12" pa-3>
+          <v-col
+            cols="12"
+            pa-3
+          >
             <v-file-input
               v-model="category.image"
               placeholder="Arquivo"
@@ -75,22 +106,34 @@
             />
           </v-col>
           <v-col cols="12">
-            <v-row v-for="(field, index) in category.fields" :key="index">
-              <v-col cols="8" pa-3>
+            <v-row
+              v-for="(field, index) in category.fields"
+              :key="index"
+            >
+              <v-col
+                cols="8"
+                pa-3
+              >
                 <v-text-field
                   v-model="field.text"
                   label="Nome do campo"
                   filled
                 />
               </v-col>
-              <v-col cols="2" pa-3>
+              <v-col
+                cols="2"
+                pa-3
+              >
                 <v-text-field
                   v-model="field.min"
                   label="Tamanho mínimo"
                   filled
                 />
               </v-col>
-              <v-col cols="2" pa-3>
+              <v-col
+                cols="2"
+                pa-3
+              >
                 <v-text-field
                   v-model="field.max"
                   label="Tamanho máximo"
@@ -106,15 +149,24 @@
             </v-row>
           </v-col>
           <v-col pa-3>
-            <v-btn class="primary white--text" @click="save()">
+            <v-btn
+              class="primary white--text"
+              @click="save()"
+            >
               {{ $t('save') }}
             </v-btn>
           </v-col>
         </v-row>
       </v-col>
       <v-col cols="4">
-        <v-card tile class="primary">
-          <v-img :src="image" :aspect-ratio="16 / 9" />
+        <v-card
+          tile
+          class="primary"
+        >
+          <v-img
+            :src="image"
+            :aspect-ratio="16 / 9"
+          />
           <v-card-title class="white--text">
             {{ category.name }}
           </v-card-title>

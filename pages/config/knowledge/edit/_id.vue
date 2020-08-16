@@ -1,5 +1,8 @@
 <template>
-  <create v-model="knowledge" @change="update" />
+  <create
+    v-model="knowledge"
+    @change="update"
+  />
 </template>
 
 <script>

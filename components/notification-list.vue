@@ -17,7 +17,10 @@
           <v-list-item-action>
             <v-row>
               <v-col pa-1>
-                <v-btn icon :to="`/profile/notification/${notification.id}`">
+                <v-btn
+                  icon
+                  :to="`/profile/notification/${notification.id}`"
+                >
                   <v-icon>
                     info
                   </v-icon>

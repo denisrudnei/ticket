@@ -6,7 +6,11 @@
       solo
       :placeholder="$t('you_registered_email')"
     />
-    <v-btn class="primary white--text" tile @click="reset()">
+    <v-btn
+      class="primary white--text"
+      tile
+      @click="reset()"
+    >
       {{ $t('send_email') }}
       <v-icon right>
         mail

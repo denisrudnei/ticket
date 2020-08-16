@@ -6,7 +6,10 @@
       :placeholder="$t('new_password')"
       type="password"
     />
-    <v-btn class="primary white--text" @click="redefine()">
+    <v-btn
+      class="primary white--text"
+      @click="redefine()"
+    >
       {{ $t('save_new_password') }}
       <v-icon right>
         lock_open

@@ -38,6 +38,12 @@ query {
       id
       name
     }
+    fields {
+      text
+      min
+      required
+      max
+    }
     fullName
   }
   priority: Priority {

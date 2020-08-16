@@ -1,14 +1,23 @@
 <template>
-  <v-dialog v-if="chat" v-model="chat" scrollable width="75vw">
+  <v-dialog
+    v-if="chat"
+    v-model="chat"
+    scrollable
+    width="75vw"
+  >
     <v-card>
       <v-toolbar class="primary white--text">
         <v-avatar>
-          <img :src="other(chat.participants).picture" />
+          <img :src="other(chat.participants).picture">
         </v-avatar>
 
         <v-spacer />
         <v-toolbar-items>
-          <v-btn icon class="white--text" @click="hide()">
+          <v-btn
+            icon
+            class="white--text"
+            @click="hide()"
+          >
             <v-icon>
               close
             </v-icon>
@@ -16,11 +25,20 @@
         </v-toolbar-items>
       </v-toolbar>
       <v-card-text>
-        <v-timeline class="expand" dense>
-          <v-timeline-item v-for="message in messages" :key="message.id">
+        <v-timeline
+          class="expand"
+          dense
+        >
+          <v-timeline-item
+            v-for="message in messages"
+            :key="message.id"
+          >
             <template v-slot:icon>
               <v-avatar>
-                <img :src="message.from.picture" alt="" />
+                <img
+                  :src="message.from.picture"
+                  alt=""
+                >
               </v-avatar>
             </template>
             <v-card>
@@ -37,7 +55,10 @@
       </v-card-text>
       <v-card-actions>
         <v-row>
-          <v-col id="editor" cols="12">
+          <v-col
+            id="editor"
+            cols="12"
+          >
             <client-only>
               <ckeditor
                 v-model="text"
@@ -47,7 +68,10 @@
             </client-only>
           </v-col>
           <v-col cols="12">
-            <v-btn icon @click="addMessage()">
+            <v-btn
+              icon
+              @click="addMessage()"
+            >
               <v-icon>
                 send
               </v-icon>

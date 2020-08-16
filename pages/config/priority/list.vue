@@ -2,8 +2,15 @@
   <v-row>
     <v-col cols="12">
       <v-list>
-        <draggable v-model="items" :sort="true">
-          <v-list-item v-for="item in items" :key="item.id" @click="dummy">
+        <draggable
+          v-model="items"
+          :sort="true"
+        >
+          <v-list-item
+            v-for="item in items"
+            :key="item.id"
+            @click="dummy"
+          >
             <v-list-item-action>
               <v-btn class="primary white--text">
                 <v-icon left>
@@ -31,7 +38,10 @@
       </v-list>
     </v-col>
     <v-col>
-      <v-btn class="primary white--text" @click="update">
+      <v-btn
+        class="primary white--text"
+        @click="update"
+      >
         {{ $t('save') }}
         <v-icon>
           save

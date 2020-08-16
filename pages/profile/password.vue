@@ -1,6 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <v-form ref="form">
         <v-text-field
           v-model="user.oldPassword"
@@ -23,7 +26,10 @@
           filled
           :rules="rules.confirm"
         />
-        <v-btn class="primary white--text" @click="resetPassword()">
+        <v-btn
+          class="primary white--text"
+          @click="resetPassword()"
+        >
           {{ $t('save') }}
           <v-icon right>
             lock

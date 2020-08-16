@@ -1,7 +1,10 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-data-table :items="items" :headers="headers">
+      <v-data-table
+        :items="items"
+        :headers="headers"
+      >
         <template v-slot:item.name="{ item }">
           {{ item.name }}
         </template>
@@ -13,7 +16,11 @@
           >
             <v-icon>edit</v-icon>
           </v-btn>
-          <v-btn class="primary white--text" icon @click="remove(item)">
+          <v-btn
+            class="primary white--text"
+            icon
+            @click="remove(item)"
+          >
             <v-icon>delete</v-icon>
           </v-btn>
         </template>

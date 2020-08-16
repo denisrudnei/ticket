@@ -1,6 +1,10 @@
 <template>
   <div>
-    <category-create v-model="category" editing @input="update" />
+    <category-create
+      v-model="category"
+      editing
+      @input="update"
+    />
   </div>
 </template>
 

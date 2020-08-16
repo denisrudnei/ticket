@@ -1,6 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="12" md="4">
+    <v-col
+      cols="12"
+      md="4"
+    >
       <v-text-field
         :value="ticket.status.name"
         readonly
@@ -8,7 +11,10 @@
         :label="$t('status')"
       />
     </v-col>
-    <v-col cols="12" md="4">
+    <v-col
+      cols="12"
+      md="4"
+    >
       <v-text-field
         :value="ticket.group.name"
         readonly
@@ -16,7 +22,11 @@
         :label="$t('actual_group')"
       />
     </v-col>
-    <v-col v-if="ticket.actualUser" cols="12" md="4">
+    <v-col
+      v-if="ticket.actualUser"
+      cols="12"
+      md="4"
+    >
       <v-text-field
         :value="ticket.actualUser.name"
         readonly

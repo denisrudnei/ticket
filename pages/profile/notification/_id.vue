@@ -1,6 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="11" pa-3>
+    <v-col
+      cols="11"
+      pa-3
+    >
       <v-card v-if="notification !== null">
         <v-card-title>
           {{ notification.content }}
@@ -37,7 +40,7 @@
           </v-icon>
         </v-btn>
       </v-row>
-      <br />
+      <br>
       <v-row>
         <v-btn
           outlined

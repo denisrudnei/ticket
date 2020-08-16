@@ -1,12 +1,20 @@
 <template>
   <v-row>
-    <v-col v-for="category in categories" :key="category.id" cols="12" md="4">
+    <v-col
+      v-for="category in categories"
+      :key="category.id"
+      cols="12"
+      md="4"
+    >
       <v-card tile>
         <v-card-text>
           <v-row>
             <v-col cols="12">
               <v-row>
-                <v-col cols="12" md="4">
+                <v-col
+                  cols="12"
+                  md="4"
+                >
                   <nuxt-link
                     :to="`/client/ticket/category/${category.name}?id=${category.id}`"
                   >
@@ -16,7 +24,10 @@
                     />
                   </nuxt-link>
                 </v-col>
-                <v-col cols="12" md="8">
+                <v-col
+                  cols="12"
+                  md="8"
+                >
                   <nuxt-link
                     tag="span"
                     :to="`/client/ticket/category/${category.name}?id=${category.id}`"

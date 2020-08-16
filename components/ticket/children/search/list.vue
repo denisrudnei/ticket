@@ -17,7 +17,7 @@
         <template v-slot:item.actualUser="{ item }">
           <v-list-item>
             <v-list-item-avatar>
-              <img :src="item.actualUser.picture" />
+              <img :src="item.actualUser.picture">
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>

@@ -48,7 +48,10 @@
       </v-card>
     </v-col>
     <v-col cols="12">
-      <v-btn class="primary white--text" @click="search">
+      <v-btn
+        class="primary white--text"
+        @click="search"
+      >
         {{ $t('search') }}
         <v-icon right>
           search

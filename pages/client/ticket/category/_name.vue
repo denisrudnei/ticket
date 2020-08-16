@@ -4,10 +4,12 @@
       <v-col cols="12">
         <h3>Categoria selecionada: {{ category.fullName }}</h3>
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col
+        cols="12"
+        md="4"
+      >
         <v-autocomplete
           v-model="ticket.affectedUser"
-          @change="autoUpdateAddress"
           label="Chamado para"
           :rules="[(v) => !!v || 'Necessário preencher']"
           filled
@@ -16,9 +18,13 @@
               return { text: a.name, value: a }
             })
           "
+          @change="autoUpdateAddress"
         />
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col
+        cols="12"
+        md="4"
+      >
         <v-autocomplete
           v-model="ticket.address"
           label="Endereço"
@@ -32,7 +38,10 @@
           "
         />
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col
+        cols="12"
+        md="4"
+      >
         <v-text-field
           :value="category.defaultGroup.name"
           label="Grupo responsável"
@@ -40,7 +49,10 @@
           readonly
         />
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col
+        cols="12"
+        md="4"
+      >
         <v-text-field
           :value="category.defaultPriority.name"
           label="Prioridade"
@@ -48,7 +60,10 @@
           readonly
         />
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col
+        cols="12"
+        md="4"
+      >
         <v-text-field
           :value="category.defaultStatus.name"
           label="Status inicial"
@@ -86,8 +101,16 @@
           Campos
         </v-tab>
         <v-tab-item>
-          <v-col v-for="field in category.fields" :key="field.id" cols="12">
-            <v-text-field :placeholder="field.text" v-model="field.value" filled />
+          <v-col
+            v-for="field in category.fields"
+            :key="field.id"
+            cols="12"
+          >
+            <v-text-field
+              v-model="field.value"
+              :placeholder="field.text"
+              filled
+            />
           </v-col>
         </v-tab-item>
         <v-tab>
@@ -116,17 +139,6 @@ export default {
   components: {
     file,
   },
-  data() {
-    return {
-      ticket: {},
-    };
-  },
-  computed: mapGetters({
-    user: 'auth/getUser',
-  }),
-  created() {
-    this.ticket.fields = this.category.fields;
-  },
   asyncData({ app, params }) {
     return app.$apollo
       .query({
@@ -145,6 +157,17 @@ export default {
           priority: response.data.category.defaultPriority,
         },
       }));
+  },
+  data() {
+    return {
+      ticket: {},
+    };
+  },
+  computed: mapGetters({
+    user: 'auth/getUser',
+  }),
+  created() {
+    this.ticket.fields = this.category.fields;
   },
   methods: {
     addFile() {},

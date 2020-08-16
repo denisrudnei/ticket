@@ -1,7 +1,13 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
-      <v-data-table :items="groups" :headers="headers">
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-data-table
+        :items="groups"
+        :headers="headers"
+      >
         <template v-slot:item.name="{ item }">
           {{ item.name }}
         </template>
@@ -13,15 +19,28 @@
             max-height="40vh"
           >
             <template v-slot:activator="{ on }">
-              <v-btn tile class="primary white--text" v-on="on">
+              <v-btn
+                tile
+                class="primary white--text"
+                v-on="on"
+              >
                 Listar usuários [{{ item.analysts.length }}]
               </v-btn>
             </template>
-            <v-list v-if="item.analysts.length > 0" two-line>
-              <v-list-item v-for="analyst in item.analysts" :key="analyst.id">
+            <v-list
+              v-if="item.analysts.length > 0"
+              two-line
+            >
+              <v-list-item
+                v-for="analyst in item.analysts"
+                :key="analyst.id"
+              >
                 <v-list-item-avatar>
                   <v-avatar>
-                    <img :src="analyst.picture" alt="" />
+                    <img
+                      :src="analyst.picture"
+                      alt=""
+                    >
                   </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-content>
@@ -48,7 +67,10 @@
           </v-menu>
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-menu offset-y :close-on-content-click="false">
+          <v-menu
+            offset-y
+            :close-on-content-click="false"
+          >
             <template v-slot:activator="{ on }">
               <v-btn
                 icon
@@ -64,7 +86,10 @@
             <v-card>
               <v-card-text>
                 <v-row>
-                  <v-col cols="12" pa-3>
+                  <v-col
+                    cols="12"
+                    pa-3
+                  >
                     <v-autocomplete
                       v-model="currentAnalyst"
                       :items="
@@ -76,8 +101,14 @@
                       filled
                     />
                   </v-col>
-                  <v-col cols="12" pa-3>
-                    <v-btn icon @click="addToGroup(item, currentAnalyst)">
+                  <v-col
+                    cols="12"
+                    pa-3
+                  >
+                    <v-btn
+                      icon
+                      @click="addToGroup(item, currentAnalyst)"
+                    >
                       <v-icon>
                         send
                       </v-icon>

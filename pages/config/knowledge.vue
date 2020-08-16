@@ -1,7 +1,11 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-tabs show-arrows color="primary" slider-color="white">
+      <v-tabs
+        show-arrows
+        color="primary"
+        slider-color="white"
+      >
         <v-tab to="/config/knowledge/create">
           {{ $t('create') }}
         </v-tab>

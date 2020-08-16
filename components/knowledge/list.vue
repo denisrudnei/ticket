@@ -1,5 +1,9 @@
 <template>
-  <v-data-table :headers="headers" :items="items" pagination.sync="pagination">
+  <v-data-table
+    :headers="headers"
+    :items="items"
+    pagination.sync="pagination"
+  >
     <template v-slot:item.name="{ item }">
       <nuxt-link :to="`/knowledge/view/${item.id}`">
         {{ item.name }}

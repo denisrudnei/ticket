@@ -1,15 +1,25 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-btn class="primary white--text" @click="dialog = !dialog">
+      <v-btn
+        class="primary white--text"
+        @click="dialog = !dialog"
+      >
         <v-icon>add</v-icon>
         {{ $t('add_children') }}
       </v-btn>
-      <v-dialog v-model="dialog" scrollable>
+      <v-dialog
+        v-model="dialog"
+        scrollable
+      >
         <v-card>
           <v-toolbar color="primary white--text">
             <v-toolbar-items>
-              <v-btn class="primary white--text" icon @click="dialog = !dialog">
+              <v-btn
+                class="primary white--text"
+                icon
+                @click="dialog = !dialog"
+              >
                 <v-icon>
                   close
                 </v-icon>
@@ -29,15 +39,25 @@
                       {{ $t('search_ticket') }}
                     </v-stepper-step>
                     <v-divider />
-                    <v-stepper-step :step="2" :complete="step == 2">
+                    <v-stepper-step
+                      :step="2"
+                      :complete="step == 2"
+                    >
                       {{ $t('select_ticket') }}
                     </v-stepper-step>
                   </v-stepper-header>
                   <v-stepper-content step="1">
-                    <create name="TicketCreate" search @input="search" />
+                    <create
+                      name="TicketCreate"
+                      search
+                      @input="search"
+                    />
                   </v-stepper-content>
                   <v-stepper-content step="2">
-                    <list v-model="tickets" @input="addChildren" />
+                    <list
+                      v-model="tickets"
+                      @input="addChildren"
+                    />
                   </v-stepper-content>
                 </v-stepper>
               </v-col>
@@ -46,8 +66,14 @@
         </v-card>
       </v-dialog>
     </v-col>
-    <v-col cols="12" pa-3>
-      <v-data-table :items="actualTicket.children" :headers="headers">
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-data-table
+        :items="actualTicket.children"
+        :headers="headers"
+      >
         <template v-slot:item.id="{ item }">
           {{ item.id }}
         </template>
@@ -70,7 +96,11 @@
           {{ item.modified | date }}
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-btn class="red white--text" icon @click="removeChildren(item)">
+          <v-btn
+            class="red white--text"
+            icon
+            @click="removeChildren(item)"
+          >
             <v-icon>
               delete
             </v-icon>

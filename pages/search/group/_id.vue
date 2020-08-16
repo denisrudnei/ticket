@@ -6,7 +6,6 @@
           {{ group.name }}
         </v-card-title>
         <v-card-text>
-
           <v-row>
             <v-col cols="6">
               {{ group.description }}
@@ -25,7 +24,7 @@
                     >
                       <v-list-item-avatar>
                         <v-avatar>
-                          <v-img :src="analyst.picture"></v-img>
+                          <v-img :src="analyst.picture" />
                         </v-avatar>
                       </v-list-item-avatar>
                       <v-list-item-content>

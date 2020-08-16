@@ -1,11 +1,23 @@
 <template>
   <v-row>
-    <v-col cols="12" md="8" pa-3>
+    <v-col
+      cols="12"
+      md="8"
+      pa-3
+    >
       <v-row>
         <v-col cols="12">
-          <v-text-field v-model="address.name" :label="$t('name')" filled />
+          <v-text-field
+            v-model="address.name"
+            :label="$t('name')"
+            filled
+          />
         </v-col>
-        <v-col cols="12" md="4" pa-3>
+        <v-col
+          cols="12"
+          md="4"
+          pa-3
+        >
           <v-text-field
             v-model="address.cep"
             v-mask="mask"
@@ -13,23 +25,63 @@
             filled
           />
         </v-col>
-        <v-col md="4" cols="12" pa-3>
-          <v-text-field v-model="address.country" filled label="País" />
+        <v-col
+          md="4"
+          cols="12"
+          pa-3
+        >
+          <v-text-field
+            v-model="address.country"
+            filled
+            label="País"
+          />
         </v-col>
-        <v-col md="4" cols="12" pa-3>
-          <v-text-field v-model="address.state" filled label="Estado" />
+        <v-col
+          md="4"
+          cols="12"
+          pa-3
+        >
+          <v-text-field
+            v-model="address.state"
+            filled
+            label="Estado"
+          />
         </v-col>
-        <v-col md="4" cols="12" pa-3>
-          <v-text-field v-model="address.city" filled label="Cidade" />
+        <v-col
+          md="4"
+          cols="12"
+          pa-3
+        >
+          <v-text-field
+            v-model="address.city"
+            filled
+            label="Cidade"
+          />
         </v-col>
-        <v-col cols="12" md="8" pa-3>
-          <v-text-field v-model="address.street" filled label="Rua" />
+        <v-col
+          cols="12"
+          md="8"
+          pa-3
+        >
+          <v-text-field
+            v-model="address.street"
+            filled
+            label="Rua"
+          />
         </v-col>
       </v-row>
     </v-col>
-    <v-col md="4" cols="12" pa-3>
+    <v-col
+      md="4"
+      cols="12"
+      pa-3
+    >
       <gmap-autocomplete />
-      <v-btn icon class="primary white--text" @click="addMarker">
+      <v-btn
+        icon
+        class="primary white--text"
+        @click="addMarker"
+      >
         <v-icon>
           add
         </v-icon>
@@ -49,8 +101,15 @@
         />
       </gmap-map>
     </v-col>
-    <v-col cols="12" pa-3>
-      <v-btn class="primary white--text" :disabled="disabled" @click="save()">
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-btn
+        class="primary white--text"
+        :disabled="disabled"
+        @click="save()"
+      >
         <v-icon left>
           save
         </v-icon>

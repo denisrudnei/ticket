@@ -2,19 +2,29 @@
   <v-row>
     <v-col coll="12">
       <v-row>
-        <v-col cols="12" md="4">
-          <v-img :src="user.picture" alt="" ref="picture"/>
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <v-img
+            ref="picture"
+            :src="user.picture"
+            alt=""
+          />
         </v-col>
-        <v-col cols="12" md="8">
+        <v-col
+          cols="12"
+          md="8"
+        >
           <v-text-field
+            v-model="user.name"
             filled
             :label="$t('name')"
-            v-model="user.name"
           />
           <v-autocomplete
+            v-model="user.address"
             filled
             label="Local"
-            v-model="user.address"
             :value-comparator="compare"
             :items="
               addresses.map((a) => {
@@ -22,12 +32,20 @@
               })
             "
           />
-          <v-file-input filled label="Trocar imagem" v-model="image" @change="changeImage"/>
+          <v-file-input
+            v-model="image"
+            filled
+            label="Trocar imagem"
+            @change="changeImage"
+          />
         </v-col>
       </v-row>
     </v-col>
     <v-col cols="12">
-      <v-btn class="primary white--text" @click="save">
+      <v-btn
+        class="primary white--text"
+        @click="save"
+      >
         <v-icon left>
           save
         </v-icon>

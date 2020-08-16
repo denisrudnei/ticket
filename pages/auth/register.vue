@@ -1,11 +1,25 @@
 <template>
   <v-form>
-    <v-text-field v-model="user.email" solo :label="$t('email')" />
-    <v-alert v-if="errors.email" v-model="errors.email">
+    <v-text-field
+      v-model="user.email"
+      solo
+      :label="$t('email')"
+    />
+    <v-alert
+      v-if="errors.email"
+      v-model="errors.email"
+    >
       {{ errors.email.message }}
     </v-alert>
-    <v-text-field v-model="user.name" solo :label="$t('exhibition_name')" />
-    <v-alert v-if="errors.name" v-model="errors.name">
+    <v-text-field
+      v-model="user.name"
+      solo
+      :label="$t('exhibition_name')"
+    />
+    <v-alert
+      v-if="errors.name"
+      v-model="errors.name"
+    >
       {{ errors.name.message }}
     </v-alert>
     <v-text-field
@@ -14,7 +28,10 @@
       :label="$t('password')"
       type="password"
     />
-    <v-alert v-if="errors.password" v-model="errors.password">
+    <v-alert
+      v-if="errors.password"
+      v-model="errors.password"
+    >
       {{ errors.password.message }}
     </v-alert>
     <v-btn

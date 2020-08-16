@@ -6,7 +6,10 @@
       </v-card-title>
       <v-card-text>
         <v-list>
-          <v-list-item v-for="(hotkey, index) in hotkeys" :key="index">
+          <v-list-item
+            v-for="(hotkey, index) in hotkeys"
+            :key="index"
+          >
             {{ $t(hotkey) }}
           </v-list-item>
         </v-list>

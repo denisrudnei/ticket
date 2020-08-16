@@ -1,6 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="12" class="ma-2">
+    <v-col
+      cols="12"
+      class="ma-2"
+    >
       <FilterChart />
       <AddByType
         :chart-types="chartTypes"
@@ -11,10 +14,15 @@
 
     <v-col class="ma-2">
       <v-row>
-        <v-col v-for="tile in tiles" :key="tile.name" cols="12" md="4">
+        <v-col
+          v-for="tile in tiles"
+          :key="tile.name"
+          cols="12"
+          md="4"
+        >
           <v-card class="ma-2 pa-2 primary white--text">
             <v-card-title> {{ tile.title }} ({{ tile.value }}) </v-card-title>
-            <hr />
+            <hr>
             <v-card-text class="white--text">
               <v-sparkline
                 :value="

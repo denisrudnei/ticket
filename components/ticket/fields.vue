@@ -1,6 +1,10 @@
 <template>
   <v-row>
-    <v-col v-if="ticket.category" cols="12" pa-3>
+    <v-col
+      v-if="ticket.category"
+      cols="12"
+      pa-3
+    >
       <v-text-field
         v-for="field in ticket.category.fields"
         :key="field.id"

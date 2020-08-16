@@ -1,13 +1,30 @@
 <template>
   <v-app>
-    <v-app-bar app fixed clipped-left class="primary" flat>
-      <v-btn to="/client" class="primary white--text" text icon exact>
+    <v-app-bar
+      app
+      fixed
+      clipped-left
+      class="primary"
+      flat
+    >
+      <v-btn
+        to="/client"
+        class="primary white--text"
+        text
+        icon
+        exact
+      >
         <v-icon>home</v-icon>
       </v-btn>
       <v-spacer />
       <language />
     </v-app-bar>
-    <v-navigation-drawer fixed permanent app clipped>
+    <v-navigation-drawer
+      fixed
+      permanent
+      app
+      clipped
+    >
       <v-list>
         <v-list-item to="/client/ticket/open">
           <v-list-item-action>

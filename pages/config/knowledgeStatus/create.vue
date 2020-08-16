@@ -1,13 +1,19 @@
 <template>
   <v-row>
-    <v-col class="pa-2" cols="12">
+    <v-col
+      class="pa-2"
+      cols="12"
+    >
       <v-text-field
         v-model="knowledgeStatus.name"
         filled
         :placeholder="$t('name')"
       />
     </v-col>
-    <v-col class="pa-2" cols="12">
+    <v-col
+      class="pa-2"
+      cols="12"
+    >
       <v-textarea
         v-model="knowledgeStatus.description"
         filled
@@ -15,7 +21,11 @@
       />
     </v-col>
     <v-col>
-      <v-btn class="primary white--text" tile @click="save(knowledgeStatus)">
+      <v-btn
+        class="primary white--text"
+        tile
+        @click="save(knowledgeStatus)"
+      >
         {{ $t('save') }}
       </v-btn>
     </v-col>

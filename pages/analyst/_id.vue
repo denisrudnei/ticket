@@ -9,12 +9,12 @@
           <v-row>
             <v-col cols="10">
               Email para contato {{ analyst.contactEmail }}
-              <hr />
+              <hr>
               Status: {{ analyst.status }}
-              <hr />
+              <hr>
               <v-card>
                 <v-card-title>
-                  {{$t('groups')}}
+                  {{ $t('groups') }}
                 </v-card-title>
                 <v-card-text>
                   <v-list two-line>
@@ -35,7 +35,10 @@
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <v-btn class="primary white--text" @click="show('openedBy', analyst)">
+          <v-btn
+            class="primary white--text"
+            @click="show('openedBy', analyst)"
+          >
             Chamados abertos
           </v-btn>
           <v-btn

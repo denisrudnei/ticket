@@ -1,10 +1,20 @@
 <template>
-  <v-dialog v-model="showModal" scrollable>
+  <v-dialog
+    v-model="showModal"
+    scrollable
+  >
     <v-card>
       <v-card-text>
         <v-row>
-          <v-col cols="12" pa-3>
-            <ticket-list v-if="showModal" :url="`/search/`" :modal="true" />
+          <v-col
+            cols="12"
+            pa-3
+          >
+            <ticket-list
+              v-if="showModal"
+              :url="`/search/`"
+              :modal="true"
+            />
           </v-col>
         </v-row>
       </v-card-text>

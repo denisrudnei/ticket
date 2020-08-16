@@ -1,5 +1,9 @@
 <template>
-  <create ref="create" v-model="knowledge" @change="save" />
+  <create
+    ref="create"
+    v-model="knowledge"
+    @change="save"
+  />
 </template>
 
 <script>

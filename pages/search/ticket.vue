@@ -1,7 +1,10 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <ticket-create search @input="search(ticket)" />
+      <ticket-create
+        search
+        @input="search(ticket)"
+      />
     </v-col>
     <v-col cols="12">
       <ticket-list :url="'/search/'" />

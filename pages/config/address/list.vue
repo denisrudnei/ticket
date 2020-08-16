@@ -1,7 +1,10 @@
 <template>
   <v-row>
     <v-col>
-      <v-data-table :headers="headers" :items="addresses">
+      <v-data-table
+        :headers="headers"
+        :items="addresses"
+      >
         <template v-slot:item.name="{ item }">
           {{ item.name }}
         </template>

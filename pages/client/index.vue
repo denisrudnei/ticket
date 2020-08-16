@@ -10,8 +10,18 @@
     </v-col>
     <v-col cols="12">
       <v-row>
-        <v-col v-for="ticket in tickets" :key="ticket.id" cols="12" md="4">
-          <v-card tile :color="color(ticket)" class="white--text" dark>
+        <v-col
+          v-for="ticket in tickets"
+          :key="ticket.id"
+          cols="12"
+          md="4"
+        >
+          <v-card
+            tile
+            :color="color(ticket)"
+            class="white--text"
+            dark
+          >
             <v-card-text>
               <v-row>
                 <v-col cols="12">
@@ -60,7 +70,11 @@
                   />
                 </v-col>
                 <v-col cols="12">
-                  <v-btn :to="`/client/ticket/view/${ticket.id}`" block tile>
+                  <v-btn
+                    :to="`/client/ticket/view/${ticket.id}`"
+                    block
+                    tile
+                  >
                     {{ $t('see_details') }}
                     <v-icon right>
                       search

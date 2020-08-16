@@ -1,9 +1,19 @@
 <template>
   <v-row>
-    <v-col md="6" cols="12">
-      <v-text-field v-model="name" filled :label="$t('name')" />
+    <v-col
+      md="6"
+      cols="12"
+    >
+      <v-text-field
+        v-model="name"
+        filled
+        :label="$t('name')"
+      />
     </v-col>
-    <v-col md="6" cols="12">
+    <v-col
+      md="6"
+      cols="12"
+    >
       <v-text-field
         v-model="limit"
         v-mask="mask"
@@ -12,7 +22,10 @@
       />
     </v-col>
     <v-col>
-      <v-btn class="primary white--text" @click="save">
+      <v-btn
+        class="primary white--text"
+        @click="save"
+      >
         Enviar
       </v-btn>
     </v-col>

@@ -1,9 +1,16 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <h4>{{ $t('filters') }}</h4>
       <v-row>
-        <v-col cols="12" md="4" pa-3>
+        <v-col
+          cols="12"
+          md="4"
+          pa-3
+        >
           <v-autocomplete
             v-model="baseGroups"
             multiple
@@ -16,7 +23,11 @@
             "
           />
         </v-col>
-        <v-col cols="12" md="4" pa-3>
+        <v-col
+          cols="12"
+          md="4"
+          pa-3
+        >
           <v-autocomplete
             v-model="baseStatus"
             multiple
@@ -29,7 +40,11 @@
             "
           />
         </v-col>
-        <v-col cols="12" md="4" pa-3>
+        <v-col
+          cols="12"
+          md="4"
+          pa-3
+        >
           <v-autocomplete
             v-model="baseAnalysts"
             multiple

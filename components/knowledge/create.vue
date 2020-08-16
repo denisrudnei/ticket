@@ -1,13 +1,20 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <v-text-field
         v-model="knowledgeData.name"
         filled
         label="Nome do documento"
       />
     </v-col>
-    <v-col cols="12" md="4" pa-3>
+    <v-col
+      cols="12"
+      md="4"
+      pa-3
+    >
       <v-select
         v-model="knowledge.status"
         filled
@@ -16,7 +23,11 @@
         :items="status.map((v) => ({ text: v.name, value: v }))"
       />
     </v-col>
-    <v-col cols="12" md="4" pa-3>
+    <v-col
+      cols="12"
+      md="4"
+      pa-3
+    >
       <v-select
         v-model="knowledge.category"
         filled
@@ -25,7 +36,11 @@
         :items="category.map((v) => ({ text: v.name, value: v }))"
       />
     </v-col>
-    <v-col cols="12" md="4" pa-3>
+    <v-col
+      cols="12"
+      md="4"
+      pa-3
+    >
       <v-select
         v-model="knowledge.group"
         filled
@@ -34,7 +49,10 @@
         placeholder="Grupo responsável"
       />
     </v-col>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <client-only>
         <ckeditor
           v-model="knowledge.description"
@@ -42,8 +60,15 @@
           @ready="configureEditor"
         />
       </client-only>
-      <input ref="file" type="file" style="display: none;" />
-      <v-btn class="primary white--text" @click="addFile()">
+      <input
+        ref="file"
+        type="file"
+        style="display: none;"
+      >
+      <v-btn
+        class="primary white--text"
+        @click="addFile()"
+      >
         <v-icon>attach_file</v-icon>
         {{ $t('add_file') }}
       </v-btn>

@@ -1,5 +1,8 @@
 <template>
-  <create v-model="priority" @input="save" />
+  <create
+    v-model="priority"
+    @input="save"
+  />
 </template>
 
 <script>

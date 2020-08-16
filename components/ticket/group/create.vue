@@ -1,6 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <v-form>
         <v-text-field
           v-model="groupData.name"
@@ -9,7 +12,10 @@
         />
       </v-form>
     </v-col>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <v-form>
         <v-textarea
           v-model="groupData.description"
@@ -22,9 +28,15 @@
       <v-card>
         <v-card-title>Disponíveis</v-card-title>
         <v-card-text>
-          <v-text-field v-model="search" :label="$t('search')" />
+          <v-text-field
+            v-model="search"
+            :label="$t('search')"
+          />
           <v-list>
-            <draggable group="group" :list="analysts">
+            <draggable
+              group="group"
+              :list="analysts"
+            >
               <v-list-item
                 v-for="analyst in analysts"
                 :key="analyst.id"
@@ -42,7 +54,10 @@
         <v-card-title>Estão no grupo</v-card-title>
         <v-card-text>
           <v-list>
-            <draggable group="group" :list="group.analysts">
+            <draggable
+              group="group"
+              :list="group.analysts"
+            >
               <v-list-item
                 v-for="analyst in group.analysts"
                 :key="analyst.id"

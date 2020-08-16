@@ -1,13 +1,22 @@
 <template>
   <v-row>
-    <v-col cols="12" md="4" pa-3>
+    <v-col
+      cols="12"
+      md="4"
+      pa-3
+    >
       <v-menu
         v-model="startMenu"
         :close-on-content-click="false"
         min-width="290px"
       >
         <template v-slot:activator="{ on }">
-          <v-text-field label="Start" filled :value="start" v-on="on" />
+          <v-text-field
+            label="Start"
+            filled
+            :value="start"
+            v-on="on"
+          />
         </template>
         <v-date-picker
           v-model="start"
@@ -16,19 +25,36 @@
         />
       </v-menu>
     </v-col>
-    <v-col cols="12" md="4" pa-3>
+    <v-col
+      cols="12"
+      md="4"
+      pa-3
+    >
       <v-menu
         v-model="endMenu"
         :close-on-content-click="false"
         min-width="290px"
       >
         <template v-slot:activator="{ on }">
-          <v-text-field label="end" filled :value="end" v-on="on" />
+          <v-text-field
+            label="end"
+            filled
+            :value="end"
+            v-on="on"
+          />
         </template>
-        <v-date-picker v-model="end" label="end" @input="endMenu = false" />
+        <v-date-picker
+          v-model="end"
+          label="end"
+          @input="endMenu = false"
+        />
       </v-menu>
     </v-col>
-    <v-col cols="12" md="4" pa-3>
+    <v-col
+      cols="12"
+      md="4"
+      pa-3
+    >
       <v-select
         v-model="selectedChartType"
         :items="chartTypes"
@@ -36,7 +62,12 @@
         label="Tipo do gráfico"
       />
     </v-col>
-    <v-col v-if="contentType.length > 0" cols="12" md="4" pa-3>
+    <v-col
+      v-if="contentType.length > 0"
+      cols="12"
+      md="4"
+      pa-3
+    >
       <v-select
         v-model="selectedContentType"
         label="Tipo do conteúdo"
@@ -45,17 +76,35 @@
         @input="changeSelectedRef"
       />
     </v-col>
-    <v-col md="4" cols="12" pa-3>
-      <v-text-field v-model="title" filled label="Nome do gráfico" />
+    <v-col
+      md="4"
+      cols="12"
+      pa-3
+    >
+      <v-text-field
+        v-model="title"
+        filled
+        label="Nome do gráfico"
+      />
     </v-col>
-    <v-col cols="12" pa-3>
-      <v-btn :disabled="addDisabled" class="primary" @click="add()">
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-btn
+        :disabled="addDisabled"
+        class="primary"
+        @click="add()"
+      >
         {{ $t('add_chart') }}
         <v-icon right>
           add
         </v-icon>
       </v-btn>
-      <v-btn class="primary" @click="save()">
+      <v-btn
+        class="primary"
+        @click="save()"
+      >
         {{ $t('save_configurations_locally') }}
         <v-icon right>
           attach_file

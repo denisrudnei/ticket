@@ -1,7 +1,15 @@
 <template>
-  <v-menu :close-on-content-click="false" :nudge-width="250">
+  <v-menu
+    :close-on-content-click="false"
+    :nudge-width="250"
+  >
     <template v-slot:activator="{ on }">
-      <v-btn text class="primary white--text" :title="$t('language')" v-on="on">
+      <v-btn
+        text
+        class="primary white--text"
+        :title="$t('language')"
+        v-on="on"
+      >
         <v-icon>
           language
         </v-icon>

@@ -1,5 +1,8 @@
 <template>
-  <v-data-table :items="slas" :headers="headers">
+  <v-data-table
+    :items="slas"
+    :headers="headers"
+  >
     <template v-slot:item.name="{ item }">
       {{ item.name }}
     </template>

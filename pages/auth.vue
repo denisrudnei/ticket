@@ -1,17 +1,28 @@
 <template>
   <v-row>
-    <v-col cols="12" md="8" pa-5>
+    <v-col
+      cols="12"
+      md="8"
+      pa-5
+    >
       <v-card>
         <v-card-text>
           <nuxt-child />
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col cols="12" md="4" pa-3>
+    <v-col
+      cols="12"
+      md="4"
+      pa-3
+    >
       <v-card>
         <v-card-text>
           <v-row>
-            <v-col cols="12" pa-3>
+            <v-col
+              cols="12"
+              pa-3
+            >
               <v-btn
                 large
                 block
@@ -25,7 +36,10 @@
                 </v-icon>
               </v-btn>
             </v-col>
-            <v-col cols="12" pa-3>
+            <v-col
+              cols="12"
+              pa-3
+            >
               <v-btn
                 large
                 block
@@ -39,7 +53,10 @@
                 </v-icon>
               </v-btn>
             </v-col>
-            <v-col cols="12" pa-3>
+            <v-col
+              cols="12"
+              pa-3
+            >
               <v-btn
                 large
                 block
@@ -53,7 +70,10 @@
                 </v-icon>
               </v-btn>
             </v-col>
-            <v-col cols="12" pa-3>
+            <v-col
+              cols="12"
+              pa-3
+            >
               <v-btn
                 large
                 block

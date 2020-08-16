@@ -1,7 +1,10 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <v-tabs color="primary white--text" show-arrows>
+      <v-tabs
+        color="primary white--text"
+        show-arrows
+      >
         <v-tab
           v-for="group in groups"
           :key="group.id"

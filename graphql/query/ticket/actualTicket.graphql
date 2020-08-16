@@ -9,7 +9,6 @@ query GetTicket($id: ID!) {
         text
         min
         max
-        value
       }
     }
     logs {

@@ -1,5 +1,9 @@
 <template>
-  <v-dialog :value="logout" max-width="50vw" persistent>
+  <v-dialog
+    :value="logout"
+    max-width="50vw"
+    persistent
+  >
     <v-card>
       <v-card-title class="headline">
         {{ $t('do_you_want_logout') }}
@@ -7,7 +11,12 @@
       <v-card-actions>
         <v-row>
           <v-col>
-            <v-btn tile block class="primary white--text" @click="logoutUser()">
+            <v-btn
+              tile
+              block
+              class="primary white--text"
+              @click="logoutUser()"
+            >
               <v-icon left>
                 done
               </v-icon>
@@ -15,7 +24,12 @@
             </v-btn>
           </v-col>
           <v-col>
-            <v-btn tile block class="primary white--text" @click="back()">
+            <v-btn
+              tile
+              block
+              class="primary white--text"
+              @click="back()"
+            >
               <v-icon left>
                 cancel
               </v-icon>

@@ -1,14 +1,29 @@
 <template>
-  <v-dialog :value="dialog === actualTicket.id" fullscreen scrollable>
+  <v-dialog
+    :value="dialog === actualTicket.id"
+    fullscreen
+    scrollable
+  >
     <v-card>
-      <v-toolbar fixed class="primary white--text">
+      <v-toolbar
+        fixed
+        class="primary white--text"
+      >
         <v-toolbar-items>
-          <v-btn class="primary white--text" icon @click="setDialog('')">
+          <v-btn
+            class="primary white--text"
+            icon
+            @click="setDialog('')"
+          >
             <v-icon>
               close
             </v-icon>
           </v-btn>
-          <v-btn class="primary white--text" icon @click="done(dialog)">
+          <v-btn
+            class="primary white--text"
+            icon
+            @click="done(dialog)"
+          >
             <v-icon>
               done
             </v-icon>

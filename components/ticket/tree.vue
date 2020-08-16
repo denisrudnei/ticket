@@ -15,7 +15,10 @@
         </template>
         <template v-slot:label="{ item }">
           <span v-if="item.children.length > 0">{{ item.name }}</span>
-          <nuxt-link v-if="item.children.length === 0" :to="item.url">
+          <nuxt-link
+            v-if="item.children.length === 0"
+            :to="item.url"
+          >
             {{ item.name }}
           </nuxt-link>
         </template>

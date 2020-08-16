@@ -10,7 +10,11 @@
     class="white"
   >
     <template v-slot:activator="{ on }">
-      <v-btn icon text v-on="on">
+      <v-btn
+        icon
+        text
+        v-on="on"
+      >
         <v-badge>
           <template v-slot:badge>
             <span>{{ notifications.length }}</span>
@@ -32,13 +36,19 @@
           <v-card v-if="notifications.length === 0">
             <v-card-text>
               <v-row>
-                <v-col cols="12" pa-3>
+                <v-col
+                  cols="12"
+                  pa-3
+                >
                   Nenhuma notificação
                 </v-col>
               </v-row>
             </v-card-text>
           </v-card>
-          <v-list v-if="notifications.length > 0" two-line>
+          <v-list
+            v-if="notifications.length > 0"
+            two-line
+          >
             <v-list-item
               v-for="notification in notifications"
               :key="notification.id"
@@ -96,13 +106,23 @@
           @click="readAllNotifications()"
         >
           Marcar todas como lidas
-          <v-icon right class="primary--text">
+          <v-icon
+            right
+            class="primary--text"
+          >
             details
           </v-icon>
         </v-btn>
-        <v-btn tile block to="/profile/notification/all">
+        <v-btn
+          tile
+          block
+          to="/profile/notification/all"
+        >
           {{ $t('see_all_notifications') }}
-          <v-icon right class="primary--text">
+          <v-icon
+            right
+            class="primary--text"
+          >
             search
           </v-icon>
         </v-btn>

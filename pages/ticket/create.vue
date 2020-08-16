@@ -1,5 +1,8 @@
 <template>
-  <ticket-create v-model="ticket" @input="create()" />
+  <ticket-create
+    v-model="ticket"
+    @input="create()"
+  />
 </template>
 
 <script>

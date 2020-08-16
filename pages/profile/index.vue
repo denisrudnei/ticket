@@ -1,14 +1,23 @@
 <template>
   <v-form>
     <v-row>
-      <v-col cols="12" md="8" pa-3>
+      <v-col
+        cols="12"
+        md="8"
+        pa-3
+      >
         <v-text-field
           :value="user.name"
           filled
           label="Nome para exibição"
           @change="updateName"
         />
-        <v-text-field v-model="user.email" filled label="Email" readonly />
+        <v-text-field
+          v-model="user.email"
+          filled
+          label="Email"
+          readonly
+        />
         <v-text-field
           :value="user.contactEmail"
           filled
@@ -29,7 +38,10 @@
           @change="updateAddress"
         />
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col
+        cols="12"
+        md="4"
+      >
         <v-card>
           <v-card-title primary-title>
             <div class="healine text-center">
@@ -40,7 +52,10 @@
           </v-card-title>
           <v-card-text>
             <v-row>
-              <v-col cols="4" pa-3>
+              <v-col
+                cols="4"
+                pa-3
+              >
                 <v-progress-circular
                   :value="(info.opened / info.total) * 100"
                   :size="125"
@@ -53,10 +68,13 @@
                   </v-avatar>
                 </v-progress-circular>
               </v-col>
-              <v-col cols="8" pa-3>
+              <v-col
+                cols="8"
+                pa-3
+              >
                 <v-card-text class="text-center">
                   {{ info.opened }} Resolvidos / {{ info.total }} Abertos
-                  <hr />
+                  <hr>
                   ({{ ((info.opened / info.total) * 100).toFixed(2) }}) %
                 </v-card-text>
               </v-col>
@@ -66,22 +84,40 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" pa-3>
+      <v-col
+        cols="12"
+        pa-3
+      >
         <v-menu :close-on-content-click="false">
           <template v-slot:activator="{ on }">
-            <v-btn tile class="primary white--text" v-on="on">
+            <v-btn
+              tile
+              class="primary white--text"
+              v-on="on"
+            >
               Cor primária
             </v-btn>
           </template>
-          <v-color-picker v-model="primary" mode="hexa" />
+          <v-color-picker
+            v-model="primary"
+            mode="hexa"
+          />
         </v-menu>
-        <v-btn tile class="primary white--text" @click="openImageSelection()">
+        <v-btn
+          tile
+          class="primary white--text"
+          @click="openImageSelection()"
+        >
           <v-icon left>
             image
           </v-icon>
           {{ $t('select_profile_image') }}
         </v-btn>
-        <v-btn tile class="primary white--text" @click="removeImage()">
+        <v-btn
+          tile
+          class="primary white--text"
+          @click="removeImage()"
+        >
           <v-icon left>
             delete
           </v-icon>
@@ -93,18 +129,28 @@
           style="display: none;"
           accept="image/*"
           @change="updateImage()"
-        />
+        >
       </v-col>
-      <v-col cols="12" pa-3>
+      <v-col
+        cols="12"
+        pa-3
+      >
         <v-switch
           :input-value="user.mergePictureWithExternalAccount"
           label="Atualizar imagem com conta externa automaticamente"
           @change="updatePictureMerge"
         />
-        <v-switch color="primary" :label="$t('receive_email_notification')" />
+        <v-switch
+          color="primary"
+          :label="$t('receive_email_notification')"
+        />
       </v-col>
     </v-row>
-    <v-btn text class="primary white--text" @click="save()">
+    <v-btn
+      text
+      class="primary white--text"
+      @click="save()"
+    >
       {{ $t('save_configurations') }}
     </v-btn>
   </v-form>
@@ -121,6 +167,17 @@ import removeImage from '@/graphql/mutation/profile/analyst/removeImage.graphql'
 
 export default {
   mixins: [compareObjectsWithId],
+  asyncData({ app }) {
+    return app.$apollo
+      .query({
+        query: ggl(profileInfo),
+      })
+      .then((response) => ({
+        addresses: response.data.address,
+        info: response.data.ProfileInfo,
+        user: response.data.user,
+      }));
+  },
   data() {
     return {
       primary: '#FFFFFF',
@@ -134,17 +191,6 @@ export default {
     primary(value) {
       this.updatePrimary();
     },
-  },
-  asyncData({ app }) {
-    return app.$apollo
-      .query({
-        query: ggl(profileInfo),
-      })
-      .then((response) => ({
-        addresses: response.data.address,
-        info: response.data.ProfileInfo,
-        user: response.data.user,
-      }));
   },
   methods: {
     ...mapMutations({

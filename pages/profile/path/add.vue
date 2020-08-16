@@ -1,13 +1,19 @@
 <template>
   <v-row>
-    <v-col cols="4" pa-3>
+    <v-col
+      cols="4"
+      pa-3
+    >
       <v-select
         v-model="selected"
         filled
         :items="paths.map((v) => ({ text: $t(v.objectName), value: v }))"
       />
     </v-col>
-    <v-col cols="4" pa-3>
+    <v-col
+      cols="4"
+      pa-3
+    >
       <v-select
         v-model="selected.property"
         :disabled="selected.options <= 0"
@@ -15,7 +21,10 @@
         :items="selected.options.map((v) => ({ text: $t(v), value: v }))"
       />
     </v-col>
-    <v-col cols="4" pa-3>
+    <v-col
+      cols="4"
+      pa-3
+    >
       <v-text-field
         v-model="selected.name"
         :disabled="selected.objectName === ''"

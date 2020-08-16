@@ -1,6 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <v-timeline align-top>
         <v-timeline-item
           v-for="(log, index) in ticket.logs"
@@ -13,7 +16,7 @@
           </template>
           <template v-slot:icon>
             <v-avatar>
-              <img :src="log.user.picture" />
+              <img :src="log.user.picture">
             </v-avatar>
           </template>
 
@@ -23,7 +26,7 @@
             </v-card-title>
             <v-card-text>
               Status: {{ log.oldStatus.name }}
-              <hr />
+              <hr>
               Atualizado por: {{ log.user.name }} em {{ log.date | date }}
             </v-card-text>
           </v-card>

@@ -1,10 +1,21 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
-      <v-btn class="primary white--text" large @click="logout()">
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-btn
+        class="primary white--text"
+        large
+        @click="logout()"
+      >
         Deslogar?
       </v-btn>
-      <v-btn class="primary white--text" large @click="back()">
+      <v-btn
+        class="primary white--text"
+        large
+        @click="back()"
+      >
         Voltar
       </v-btn>
     </v-col>

@@ -1,7 +1,13 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
-      <v-data-table :items="roles" :headers="headers">
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-data-table
+        :items="roles"
+        :headers="headers"
+      >
         <template v-slot:item.name="{ item }">
           {{ item.name }}
         </template>

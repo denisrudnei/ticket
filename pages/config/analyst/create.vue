@@ -1,8 +1,15 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <v-form>
-        <v-text-field v-model="analyst.name" :placeholder="$t('name')" filled />
+        <v-text-field
+          v-model="analyst.name"
+          :placeholder="$t('name')"
+          filled
+        />
         <v-text-field
           v-model="analyst.email"
           :placeholder="$t('email')"
@@ -19,7 +26,10 @@
           filled
           :label="$t('group')"
         />
-        <v-btn class="primary white--text" @click="save">
+        <v-btn
+          class="primary white--text"
+          @click="save"
+        >
           {{ $t('create') }}
         </v-btn>
       </v-form>

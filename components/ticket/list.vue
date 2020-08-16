@@ -58,7 +58,7 @@
             :to="`/analyst/${item.actualUser.id}`"
           >
             <v-list-item-avatar>
-              <img :src="item.actualUser.picture" />
+              <img :src="item.actualUser.picture">
             </v-list-item-avatar>
             <v-list-item-content>
               <v-list-item-title>
@@ -74,11 +74,17 @@
           {{ item.resume }}
         </template>
         <template v-slot:item.status="{ item }">
-          <v-edit-dialog large @save="modifyStatus(item)">
+          <v-edit-dialog
+            large
+            @save="modifyStatus(item)"
+          >
             {{ item.status.name }}
             <template v-slot:input>
               <v-row>
-                <v-col cols="12" pa-4>
+                <v-col
+                  cols="12"
+                  pa-4
+                >
                   <v-select
                     v-if="
                       status.find((s) => {
@@ -102,10 +108,16 @@
           </v-edit-dialog>
         </template>
         <template v-slot:item.group="{ item }">
-          <v-edit-dialog large @save="transferToGroup(item)">
+          <v-edit-dialog
+            large
+            @save="transferToGroup(item)"
+          >
             <template v-slot:input>
               <v-row>
-                <v-col cols="12" pa-1>
+                <v-col
+                  cols="12"
+                  pa-1
+                >
                   <v-select
                     v-model="currentGroup"
                     :items="
@@ -136,8 +148,14 @@
       </v-data-table>
     </v-col>
 
-    <v-col v-if="selected.length > 0" cols="12">
-      <v-dialog v-model="showUpdateMany" max-width="50vw">
+    <v-col
+      v-if="selected.length > 0"
+      cols="12"
+    >
+      <v-dialog
+        v-model="showUpdateMany"
+        max-width="50vw"
+      >
         <v-card>
           <v-card-title> Total: {{ selected.length }} </v-card-title>
           <v-card-text>
@@ -163,7 +181,10 @@
             />
           </v-card-text>
           <v-card-actions>
-            <v-btn class="primary white--text" @click="updateMany">
+            <v-btn
+              class="primary white--text"
+              @click="updateMany"
+            >
               {{ $t('update') }}
             </v-btn>
           </v-card-actions>
@@ -221,11 +242,6 @@ export default {
         totalItems: 0,
         page: 1,
       },
-    };
-  },
-  head() {
-    return {
-      title: `Page ${this.options.page}, total ${this.totalItems}`,
     };
   },
   computed: {
@@ -495,6 +511,11 @@ export default {
       this.$store.dispatch('ticket/findTicket', id);
       this.$store.commit('ticket/setDialog', id);
     },
+  },
+  head() {
+    return {
+      title: `Page ${this.options.page}, total ${this.totalItems}`,
+    };
   },
 };
 </script>

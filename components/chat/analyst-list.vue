@@ -1,9 +1,17 @@
 <template>
-  <v-navigation-drawer app right clipped :mini-variant="mini">
+  <v-navigation-drawer
+    app
+    right
+    clipped
+    :mini-variant="mini"
+  >
     <v-list two-line>
       <v-list-item @click="mini = !mini">
         <v-list-item-action>
-          <v-btn icon class="primary white--text">
+          <v-btn
+            icon
+            class="primary white--text"
+          >
             <v-icon>chat</v-icon>
           </v-btn>
         </v-list-item-action>
@@ -13,9 +21,17 @@
       </v-list-item>
       <v-list-item>
         <v-list-item-action>
-          <v-menu left :close-on-content-click="false" :nudge-width="350">
+          <v-menu
+            left
+            :close-on-content-click="false"
+            :nudge-width="350"
+          >
             <template v-slot:activator="{ on }">
-              <v-btn icon class="primary white--text" v-on="on">
+              <v-btn
+                icon
+                class="primary white--text"
+                v-on="on"
+              >
                 <v-icon>search</v-icon>
               </v-btn>
             </template>
@@ -34,9 +50,17 @@
       </v-list-item>
       <v-list-item>
         <v-list-item-action>
-          <v-menu left :close-on-content-click="false" :nudge-width="350">
+          <v-menu
+            left
+            :close-on-content-click="false"
+            :nudge-width="350"
+          >
             <template v-slot:activator="{ on }">
-              <v-btn icon class="primary white--text" v-on="on">
+              <v-btn
+                icon
+                class="primary white--text"
+                v-on="on"
+              >
                 <v-icon>build</v-icon>
               </v-btn>
             </template>

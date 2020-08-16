@@ -1,7 +1,14 @@
 <template>
   <v-row>
-    <v-col pa-3 cols="12">
-      <v-text-field v-model="actual.name" :placeholder="$t('name')" filled />
+    <v-col
+      pa-3
+      cols="12"
+    >
+      <v-text-field
+        v-model="actual.name"
+        :placeholder="$t('name')"
+        filled
+      />
     </v-col>
     <v-col cols="12">
       <v-textarea
@@ -11,7 +18,10 @@
       />
     </v-col>
     <v-col cols="12">
-      <v-switch v-model="actual.slaRun" :label="$t('sla_able_to_run')" />
+      <v-switch
+        v-model="actual.slaRun"
+        :label="$t('sla_able_to_run')"
+      />
     </v-col>
     <v-col cols="6">
       <v-card>
@@ -20,8 +30,15 @@
         </v-card-title>
         <v-card-text>
           <v-list>
-            <draggable group="status" :list="status">
-              <v-list-item v-for="s in status" :key="s.id" @click="select">
+            <draggable
+              group="status"
+              :list="status"
+            >
+              <v-list-item
+                v-for="s in status"
+                :key="s.id"
+                @click="select"
+              >
                 <v-list-item-content>
                   {{ s.name }}
                 </v-list-item-content>
@@ -38,7 +55,10 @@
         </v-card-title>
         <v-card-text>
           <v-list>
-            <draggable group="status" :list="actual.allowedStatus">
+            <draggable
+              group="status"
+              :list="actual.allowedStatus"
+            >
               <v-list-item
                 v-for="s in actual.allowedStatus"
                 :key="s.id"

@@ -1,5 +1,9 @@
 <template>
-  <v-dialog :value="value" max-width="50vw" persistent>
+  <v-dialog
+    :value="value"
+    max-width="50vw"
+    persistent
+  >
     <v-card>
       <v-card-title>
         {{ $t('confirm_copy') }}
@@ -7,12 +11,22 @@
       <v-card-actions>
         <v-row>
           <v-col>
-            <v-btn tile block class="primary white--text" @click="yes">
+            <v-btn
+              tile
+              block
+              class="primary white--text"
+              @click="yes"
+            >
               {{ $t('yes') }}
             </v-btn>
           </v-col>
           <v-col>
-            <v-btn tile block class="primary white--text" @click="no">
+            <v-btn
+              tile
+              block
+              class="primary white--text"
+              @click="no"
+            >
               {{ $t('no') }}
             </v-btn>
           </v-col>

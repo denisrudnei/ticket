@@ -1,6 +1,12 @@
 <template>
   <v-row>
-    <v-col v-for="sound in sounds" :key="sound.id" cols="12" md="6" pa-3>
+    <v-col
+      v-for="sound in sounds"
+      :key="sound.id"
+      cols="12"
+      md="6"
+      pa-3
+    >
       <v-subheader>
         <!-- Som de notificação do chat -->
         {{ sound.type }}
@@ -15,9 +21,18 @@
         prepend-icon="volume_down"
         @input="changeVolume(sound.type, sound.volume)"
       />
-      <v-col cols="12" pa-3>
-        <v-checkbox v-model="sound.muted" :label="$t('mute')" />
-        <v-btn class="primary white--text" @click="play(sound.type)">
+      <v-col
+        cols="12"
+        pa-3
+      >
+        <v-checkbox
+          v-model="sound.muted"
+          :label="$t('mute')"
+        />
+        <v-btn
+          class="primary white--text"
+          @click="play(sound.type)"
+        >
           {{ $t('test') }}
           <v-icon>
             play_arrow
@@ -25,8 +40,14 @@
         </v-btn>
       </v-col>
     </v-col>
-    <v-col cols="12" pa-3>
-      <v-btn class="primary" @click="save()">
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-btn
+        class="primary"
+        @click="save()"
+      >
         {{ $t('save') }}
         <v-icon right>
           save

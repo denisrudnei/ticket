@@ -1,5 +1,8 @@
 <template>
-  <address-create v-model="address" @input="update" />
+  <address-create
+    v-model="address"
+    @input="update"
+  />
 </template>
 
 <script>

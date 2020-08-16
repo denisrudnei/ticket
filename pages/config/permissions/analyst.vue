@@ -1,6 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <v-data-table
         :items="
           analysts.filter((a) => {
@@ -18,7 +21,11 @@
         <template v-slot:item.actions="{ item }">
           <v-menu :close-on-content-click="false">
             <template v-slot:activator="{ on }">
-              <v-btn class="primary white--text" icon v-on="on">
+              <v-btn
+                class="primary white--text"
+                icon
+                v-on="on"
+              >
                 <v-icon>
                   edit
                 </v-icon>
@@ -27,7 +34,10 @@
             <v-card>
               <v-card-text>
                 <v-row>
-                  <v-col cols="12" pa-3>
+                  <v-col
+                    cols="12"
+                    pa-3
+                  >
                     <v-select
                       v-model="selected"
                       filled
@@ -38,7 +48,10 @@
                       "
                     />
                   </v-col>
-                  <v-col cols="12" pa-3>
+                  <v-col
+                    cols="12"
+                    pa-3
+                  >
                     <v-btn
                       class="primary white--text"
                       icon

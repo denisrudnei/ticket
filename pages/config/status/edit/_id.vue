@@ -1,5 +1,8 @@
 <template>
-  <create-status v-model="status" @input="update" />
+  <create-status
+    v-model="status"
+    @input="update"
+  />
 </template>
 
 <script>

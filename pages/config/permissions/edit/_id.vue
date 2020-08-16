@@ -1,6 +1,9 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <v-text-field
         v-model="role.name"
         label="Nome [não pode ser alterado]"
@@ -9,7 +12,10 @@
         readonly
       />
     </v-col>
-    <v-col cols="12" pa-3>
+    <v-col
+      cols="12"
+      pa-3
+    >
       <v-text-field
         v-model="role.description"
         :label="$t('description')"
@@ -17,8 +23,14 @@
         placeholder="Descrição"
       />
     </v-col>
-    <v-col cols="12" pa-3>
-      <v-btn class="primary white--text" @click="save()">
+    <v-col
+      cols="12"
+      pa-3
+    >
+      <v-btn
+        class="primary white--text"
+        @click="save()"
+      >
         {{ $t('save') }}
         <v-icon right>
           save

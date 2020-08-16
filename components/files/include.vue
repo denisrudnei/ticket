@@ -7,8 +7,14 @@
       @change="selectFile"
     />
     <v-row>
-      <v-col cols="12" pa-3>
-        <v-data-table :items="filePreview" :headers="headers">
+      <v-col
+        cols="12"
+        pa-3
+      >
+        <v-data-table
+          :items="filePreview"
+          :headers="headers"
+        >
           <template v-slot:item.preview="{ item }">
             <v-img
               :src="item.data || item.url"
@@ -22,7 +28,10 @@
           </template>
           <template v-slot:item.old="{ item }">
             <td v-if="item.old">
-              <nuxt-link target="_blank" :to="`/api/ticket/${item.name}/file`">
+              <nuxt-link
+                target="_blank"
+                :to="`/api/ticket/${item.name}/file`"
+              >
                 {{ item.name }}
               </nuxt-link>
             </td>
@@ -31,13 +40,20 @@
             {{ item.name }}
           </template>
           <template v-slot:item.old="{ item }">
-            <v-checkbox v-model="item.old" readonly />
+            <v-checkbox
+              v-model="item.old"
+              readonly
+            />
           </template>
           <template v-slot:item.type="{ item }">
             {{ item.type }}
           </template>
           <template v-slot:item.remove="{ item }">
-            <v-btn icon class="red white--text" @click="removeFile(item)">
+            <v-btn
+              icon
+              class="red white--text"
+              @click="removeFile(item)"
+            >
               <v-icon>
                 delete
               </v-icon>
@@ -45,7 +61,10 @@
           </template>
         </v-data-table>
       </v-col>
-      <v-col cols="12" pa-3>
+      <v-col
+        cols="12"
+        pa-3
+      >
         <v-btn
           tile
           :disabled="files.length === 0"
@@ -59,11 +78,20 @@
         </v-btn>
       </v-col>
     </v-row>
-    <v-dialog v-model="active" scrollable>
+    <v-dialog
+      v-model="active"
+      scrollable
+    >
       <v-card>
-        <v-toolbar color="primary white--text" dark>
+        <v-toolbar
+          color="primary white--text"
+          dark
+        >
           <v-toolbar-items>
-            <v-btn icon @click="setActivePreview('')">
+            <v-btn
+              icon
+              @click="setActivePreview('')"
+            >
               <v-icon>
                 close
               </v-icon>
@@ -71,8 +99,15 @@
           </v-toolbar-items>
         </v-toolbar>
         <v-card-title>
-          <nuxt-link target="_blank" :to="`/api/ticket/${activeName}/file`">
-            <img :src="activeName" width="100%" style="max-height: 100%;" />
+          <nuxt-link
+            target="_blank"
+            :to="`/api/ticket/${activeName}/file`"
+          >
+            <img
+              :src="activeName"
+              width="100%"
+              style="max-height: 100%;"
+            >
           </nuxt-link>
         </v-card-title>
       </v-card>

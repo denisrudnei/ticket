@@ -1,7 +1,13 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-1>
-      <v-tabs slider-color="primary" show-arrows>
+    <v-col
+      cols="12"
+      pa-1
+    >
+      <v-tabs
+        slider-color="primary"
+        show-arrows
+      >
         <v-tab to="/config/analyst">
           {{ $t('analysts') }}
         </v-tab>

@@ -1,7 +1,11 @@
 <template>
   <v-row>
     <v-col cols="6">
-      <v-text-field v-model="priority.name" label="Texto" filled />
+      <v-text-field
+        v-model="priority.name"
+        label="Texto"
+        filled
+      />
     </v-col>
     <v-col cols="6">
       <v-text-field
@@ -12,7 +16,10 @@
       />
     </v-col>
     <v-col>
-      <v-btn class="primary white--text" @click="save">
+      <v-btn
+        class="primary white--text"
+        @click="save"
+      >
         {{ $t('save') }}
         <v-icon>
           save

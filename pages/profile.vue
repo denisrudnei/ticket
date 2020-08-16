@@ -1,7 +1,14 @@
 <template>
   <v-row>
-    <v-col cols="12" pa-1>
-      <v-tabs color="primary" class="white--text" show-arrows>
+    <v-col
+      cols="12"
+      pa-1
+    >
+      <v-tabs
+        color="primary"
+        class="white--text"
+        show-arrows
+      >
         <v-tab to="/profile">
           <v-icon left>
             person

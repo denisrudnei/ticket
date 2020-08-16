@@ -1,6 +1,10 @@
 <template>
   <v-row>
-    <v-col cols="8" offset="2" pa-3>
+    <v-col
+      cols="8"
+      offset="2"
+      pa-3
+    >
       <h2>Processando login...</h2>
     </v-col>
   </v-row>
