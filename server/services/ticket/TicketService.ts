@@ -11,6 +11,11 @@ import Group from '~/server/models/ticket/Group';
 import Status from '~/server/models/ticket/Status';
 import Ticket from '~/server/models/ticket/Ticket';
 
+type sortOrder = {
+  sortBy: string;
+  descending: number;
+};
+
 class TicketService {
   static async startAgenda(pubSub: PubSubEngine): Promise<void> {
     const agenda = new Agenda({
@@ -49,12 +54,16 @@ class TicketService {
 
   static async getTickets(
     filter: any,
-    sortBy: any,
+    sortInfo: sortOrder,
     page: number,
     limit: number,
   ): Promise<Ticket[]> {
     // TODO sorting not works with doc ref
-    return Ticket.find({});
+    return Ticket.find({
+      order: {
+        [sortInfo.sortBy]: sortInfo.descending,
+      },
+    });
   }
 
   static async getOne(ticketId: Ticket['id']): Promise<Ticket> {

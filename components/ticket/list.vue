@@ -236,7 +236,7 @@ export default {
         itemsPerPage: 10,
       },
       options: {
-        sortBy: ['created'],
+        sortBy: ['id'],
         descending: true,
         sortDesc: [true],
         totalItems: 0,
@@ -434,7 +434,7 @@ export default {
           query: ggl(ticketSearch),
           fetchPolicy: 'network-only',
           variables: {
-            sortBy: query.sortBy || 'created',
+            sortBy: query.sortBy || 'id',
             page: query.page || 1,
             limit: query.limit || 10,
             descending: query.descending || -1,

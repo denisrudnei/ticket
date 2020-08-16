@@ -27,7 +27,8 @@ class SearchResolver {
     return SearchService.getTickets(
       attributes,
       {
-        [sortBy]: descending,
+        sortBy,
+        descending,
       },
       page,
       limit,
@@ -51,7 +52,8 @@ class SearchResolver {
     return SearchService.getTicketsByIds(
       attributes,
       {
-        [sortBy]: descending,
+        sortBy,
+        descending,
       },
       page,
       limit,

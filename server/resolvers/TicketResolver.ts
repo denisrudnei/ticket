@@ -172,15 +172,16 @@ class TicketResolver {
       defaultValue: 'id',
     })
       sortBy: string,
-    @Arg('descending', { nullable: true, defaultValue: false })
-      descending: boolean,
+    @Arg('descending', { nullable: true, defaultValue: -1 })
+      descending: number,
     @Arg('page', () => Int, { nullable: true, defaultValue: 0 }) page: number,
     @Arg('limit', () => Int, { nullable: true, defaultValue: 10 }) limit: number,
   ) {
     return TicketService.getTickets(
       {},
       {
-        [sortBy]: descending,
+        sortBy,
+        descending,
       },
       page,
       limit,

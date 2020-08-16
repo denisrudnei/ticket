@@ -2,10 +2,15 @@ import TicketPagination from '@/server/models/TicketPagination';
 import Ticket from '../../models/ticket/Ticket';
 import TicketAttributes from '~/server/inputs/TicketAttributes';
 
+type sortInfo = {
+  sortBy: string,
+  descending: number
+};
+
 class SearchService {
   static async getTickets(
     query: Partial<TicketAttributes> = {},
-    sortBy: any,
+    sort: sortInfo,
     page = 1,
     limit = 10,
   ): Promise<TicketPagination> {
@@ -15,21 +20,25 @@ class SearchService {
       where: query,
       take: limit,
       skip: (page === 0 ? 1 : page - 1) * limit,
+      order: {
+        [sort.sortBy]: sort.descending,
+      },
     });
-
-    // TODO
     return new TicketPagination(result, total, page, pages, limit);
   }
 
   static async getTicketsByIds(
     query: Ticket['id'][],
-    sortBy: any,
+    sort: sortInfo,
     page = 1,
     limit = 10,
   ): Promise<TicketPagination> {
     const result = await Ticket.findByIds(query, {
       take: limit,
       skip: (page === 0 ? 1 : page - 1) * limit,
+      order: {
+        [sort.sortBy]: sort.descending,
+      },
     });
     const total = result.length;
     const pages = Math.ceil(total / limit);
