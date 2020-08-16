@@ -92,9 +92,6 @@ export const actions = {
           to: message.to,
           message: message.content,
         },
-      })
-      .then((response) => {
-        commit('addMessage', response.data.message);
       });
   },
 };

@@ -43,7 +43,8 @@ describe('Ticket', () => {
 
   it('Get All tickets', async () => {
     const sort = {
-      category: -1,
+      sortBy: 'category',
+      descending: -1,
     };
     await TicketService.getTickets({}, sort, 1, 10);
   });

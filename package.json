@@ -8,7 +8,7 @@
     "node": ">=13.x"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register server/index.ts --transpileOnly",
+    "dev": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register server/index.ts --transpileOnly --respawn",
     "seed": "cross-env NODE_ENV=development nodemon --watch test/ --exec  \"ts-node -r tsconfig-paths/register test/seedDb.ts\" -e ts",
     "backend": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register server/onlyServer.ts",
     "preinstall": "rm dist/ node_modules/ -rf",

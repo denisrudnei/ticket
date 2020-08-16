@@ -10,6 +10,7 @@ import Comment from '~/server/models/ticket/Comment';
 import Group from '~/server/models/ticket/Group';
 import Status from '~/server/models/ticket/Status';
 import Ticket from '~/server/models/ticket/Ticket';
+import TicketAttributes from '~/server/inputs/TicketAttributes';
 
 type sortOrder = {
   sortBy: string;
@@ -53,13 +54,15 @@ class TicketService {
   }
 
   static async getTickets(
-    filter: any,
+    filter: Partial<TicketAttributes>,
     sortInfo: sortOrder,
     page: number,
     limit: number,
   ): Promise<Ticket[]> {
-    // TODO sorting not works with doc ref
     return Ticket.find({
+      take: limit,
+      skip: (page === 0 ? 1 : page - 1) * limit,
+      where: filter,
       order: {
         [sortInfo.sortBy]: sortInfo.descending,
       },
