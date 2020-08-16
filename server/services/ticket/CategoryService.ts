@@ -1,8 +1,8 @@
 import { UploadedFile } from 'express-fileupload';
-import Category from '../../models/ticket/Category';
 import S3 from '~/plugins/S3';
 import File from '~/server/models/File';
-import CategoryField from '~/server/models/ticket/CategoryField';
+
+import Category from '../../models/ticket/Category';
 
 class CategoryService {
   static async create(category: Category): Promise<Category> {
