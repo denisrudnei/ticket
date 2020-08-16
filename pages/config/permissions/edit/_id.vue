@@ -47,14 +47,6 @@ import edit from '@/graphql/mutation/config/role/edit.graphql';
 import ggl from 'graphql-tag';
 
 export default {
-  data() {
-    return {
-      role: null,
-    };
-  },
-  computed: mapGetters({
-    roles: 'role/getRoles',
-  }),
   asyncData({ app, params }) {
     return app.$apollo
       .query({
@@ -67,6 +59,14 @@ export default {
         role: response.data.RoleById,
       }));
   },
+  data() {
+    return {
+      role: null,
+    };
+  },
+  computed: mapGetters({
+    roles: 'role/getRoles',
+  }),
   methods: {
     save() {
       this.$apollo

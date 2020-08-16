@@ -30,14 +30,15 @@ export default {
   },
   methods: {
     save() {
-      const { id } = this.$route.params;
+      const { idToEdit } = this.$route.params;
+      const { id, ...priority } = this.priority;
       this.$apollo
         .mutate({
           mutation: ggl(updatePriority),
           variables: {
             priority: {
-              ...this.priority,
-              id,
+              ...priority,
+              id: idToEdit,
             },
           },
           awaitRefetchQueries: true,

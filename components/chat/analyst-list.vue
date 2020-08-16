@@ -110,11 +110,22 @@
 import { mapGetters } from 'vuex';
 import ggl from 'graphql-tag';
 import analystList from '@/graphql/query/chat/analyst-list.graphql';
+import changeStatus from '@/graphql/subscription/chat/changeStatus.graphql';
 import AnalystStatus from './status';
 
 export default {
   components: {
     AnalystStatus,
+  },
+  apollo: {
+    $subscribe: {
+      changeStatus: {
+        query: ggl(changeStatus),
+        result({ data }) {
+          this.updateAnalystStatus(data.ChangeAnalystStatus);
+        },
+      },
+    },
   },
   data() {
     return {
@@ -160,6 +171,15 @@ export default {
       const result = this.colors.find((s) => s.status === status);
       if (result) return result.color;
       return 'black';
+    },
+    updateAnalystStatus(analyst) {
+      const analystToUpdate = this.analysts.find((a) => a.id === analyst.id);
+      if (!analystToUpdate) return;
+      analystToUpdate.status = analyst.status;
+      this.$store.commit('analyst/setAnalysts', [
+        ...this.analysts.filter((a) => a.id !== analyst.id),
+        analystToUpdate,
+      ]);
     },
     viewRecents(id) {
       this.showModal = true;

@@ -47,9 +47,12 @@ class ChatResolver {
   ChangeChatStatus(
     @Arg('status', () => AnalystStatus) status: AnalystStatus,
     @Ctx() context: ExpressContext,
+    @PubSub() pubSub: PubSubEngine,
   ) {
     const userId = context.req.session!.authUser!.id;
-    return ChatService.changeStatus(userId, status);
+    const changeStatus = ChatService.changeStatus(userId, status);
+    pubSub.publish(ChatEnum.CHANGE_STATUS, changeStatus);
+    return changeStatus;
   }
 
   @Query(() => [Message])
@@ -108,6 +111,14 @@ class ChatResolver {
     @Arg('to', () => ID) to: Analyst['id'],
   ): Message {
     return messagePayload;
+  }
+
+  @Subscription({
+    topics: ChatEnum.CHANGE_STATUS,
+    name: 'ChangeAnalystStatus',
+  })
+  ChangeStatusSubscription(@Root() payload: Analyst): Analyst {
+    return payload;
   }
 }
 export default ChatResolver;

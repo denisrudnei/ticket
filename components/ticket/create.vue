@@ -603,13 +603,6 @@ export default {
       },
     };
   },
-  head() {
-    if (!this.ticket.id || !this.ticketsToEdit.length) return;
-    // eslint-disable-next-line consistent-return
-    return {
-      title: `[${this.ticket.id}] - [${this.ticketsToEdit.length}] ${this.ticket.resume}`,
-    };
-  },
   computed: {
     ticket: {
       get() {
@@ -752,6 +745,13 @@ export default {
       this.$store.commit('ticket/resetActualTicket');
       this.value = this.$store.getters['ticket/getActualTicket'];
     },
+  },
+  head() {
+    if (!this.ticket.id || !this.ticketsToEdit.length) return;
+    // eslint-disable-next-line consistent-return
+    return {
+      title: `[${this.ticket.id}] - [${this.ticketsToEdit.length}] ${this.ticket.resume}`,
+    };
   },
 };
 </script>

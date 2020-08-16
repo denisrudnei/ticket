@@ -1,3 +1,5 @@
 mutation UpdatePriority($priority: PriorityInput!) {
-  UpdatePriority(priority: $priority)
+  UpdatePriority(priority: $priority) {
+    id
+  }
 }
