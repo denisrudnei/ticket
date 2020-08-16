@@ -9,6 +9,7 @@ export const state = () => ({
   active: '',
   visible: false,
   messages: [],
+  colors: [],
 });
 
 export const getters = {
@@ -23,6 +24,9 @@ export const getters = {
   },
   getVisible(state) {
     return state.visible;
+  },
+  getColors(state) {
+    return state.colors;
   },
 };
 
@@ -65,6 +69,9 @@ export const mutations = {
   },
   setMessages(state, messages) {
     state.messages = messages;
+  },
+  setColors(state, colors) {
+    state.colors = colors;
   },
 };
 

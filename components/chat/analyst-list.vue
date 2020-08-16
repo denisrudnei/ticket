@@ -77,7 +77,7 @@
         :key="analyst.id"
         @click="openChat(analyst)"
       >
-        <v-list-item-avatar>
+        <v-list-item-action>
           <v-badge
             overlap
             :color="getStatus(analyst.status)"
@@ -92,7 +92,7 @@
               <v-img :src="analyst.picture" />
             </v-avatar>
           </v-badge>
-        </v-list-item-avatar>
+        </v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>
             {{ analyst.name }}
@@ -127,6 +127,7 @@ export default {
     ...mapGetters({
       user: 'auth/getUser',
       chats: 'chat/getChats',
+      colors: 'chat/getColors',
     }),
     analysts() {
       return this.$store.getters['analyst/getAnalysts']
@@ -136,7 +137,7 @@ export default {
           .includes(this.searchAnalyst.toLowerCase()));
     },
   },
-  mounted() {
+  created() {
     this.$apollo
       .query({
         query: ggl(analystList),
@@ -144,10 +145,11 @@ export default {
       .then((response) => {
         this.$store.commit('analyst/setAnalysts', response.data.analyst);
         this.$store.commit('chat/setChats', response.data.chat);
-        this.colors = response.data.colors.map((color) => ({
+        const colors = response.data.colors.map((color) => ({
           status: color[0],
           color: color[1],
         }));
+        this.$store.commit('chat/setColors', colors);
       });
   },
   methods: {
@@ -155,8 +157,7 @@ export default {
       this.$store.dispatch('chat/getOneChat', analyst.id);
     },
     getStatus(status) {
-      const colors = [];
-      const result = colors.find((s) => s.status === status);
+      const result = this.colors.find((s) => s.status === status);
       if (result) return result.color;
       return 'black';
     },

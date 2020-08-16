@@ -3,6 +3,7 @@ query {
     id
     name
     picture
+    status
   }
   chat: Chat {
     id
@@ -12,5 +13,5 @@ query {
       picture
     }
   }
-  colors:  StatusColor
+  colors: StatusColor
 }
