@@ -1,4 +1,4 @@
-mutation ChangeStatus($status: String!) {
+mutation ChangeStatus($status: AnalystStatus!) {
   ChangeChatStatus(status: $status) {
     id
   }
