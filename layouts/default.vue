@@ -281,22 +281,24 @@ export default {
       addNotification: {
         query: ggl(addNotification),
         result({ data }) {
-          Notification.requestPermission((permission) => {
-            if (permission === 'granted') {
-              const notification = new Notification('Notification', {
-                body: data.AddNotification.content,
-              });
-              notification.onerror = function error() {
-                this.$toast.error('Error');
-              };
-            }
-            this.audio.play();
-          });
+          if (data.AddNotification.to.map((to) => to.id).includes(this.user.id)) {
+            Notification.requestPermission((permission) => {
+              if (permission === 'granted') {
+                const notification = new Notification('Notification', {
+                  body: data.AddNotification.content,
+                });
+                notification.onerror = function error() {
+                  this.$toast.error('Error');
+                };
+              }
+              this.audio.play();
+            });
 
-          this.$store.commit(
-            'notification/updateNotification',
-            data.AddNotification,
-          );
+            this.$store.commit(
+              'notification/updateNotification',
+              data.AddNotification,
+            );
+          }
         },
       },
       updateNotification: {
