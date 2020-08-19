@@ -32,6 +32,7 @@
       @click:prepend="search(id)"
       @keypress.enter="search(id)"
     />
+    <v-spacer />
     <v-dialog
       v-model="ticketNotFound"
       width="50vw"
