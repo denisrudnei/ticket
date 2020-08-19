@@ -91,6 +91,19 @@
                 </v-icon>
               </v-btn>
             </v-col>
+            <v-col>
+              <v-btn
+                class="primary white--text"
+                to="/reports"
+                tile
+                block
+              >
+                {{ $t('reports') }}
+                <v-icon right>
+                  insert_chart
+                </v-icon>
+              </v-btn>
+            </v-col>
           </template>
         </v-row>
         <nuxt />

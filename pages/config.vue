@@ -38,6 +38,9 @@
         <v-tab to="/config/permissions">
           {{ $t('permissions') }}
         </v-tab>
+        <v-tab to="/config/stats">
+          {{ $t('stats') }}
+        </v-tab>
         <v-tab to="/config/playground">
           <v-icon left>
             format_shapes
