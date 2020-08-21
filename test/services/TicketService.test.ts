@@ -81,7 +81,7 @@ describe('Ticket', () => {
 
   it('Add file', async () => {
     const ticket = await Ticket.findOne();
-    idWithFile = ticket!.id;
+    idWithFile = ticket!.id!;
     const files: UploadedFile[] = [
       {
         name: 'testFile.txt',

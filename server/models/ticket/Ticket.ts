@@ -26,7 +26,7 @@ class Ticket extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   @Field(() => ID)
-  public id!: number;
+  public id?: number;
 
   @Column({ nullable: false })
   @Field(() => String)

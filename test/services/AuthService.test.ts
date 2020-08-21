@@ -65,21 +65,9 @@ describe('Auth', () => {
 
   it('Merge with external picture', async () => {
     const analyst = await Analyst.findOne();
-
-    // await Analyst.update(
-    //   {
-    //     mergePictureWithExternalAccount: true
-    //   },
-    //   {
-    //     where: {
-    //       id: analyst.id
-    //     }
-    //   }
-    // )
-    const needMerge = analyst;
-    delete needMerge!.id;
-    needMerge!.name = '0000';
-    await AuthService.mergeUser(analyst!.email, needMerge!);
+    analyst!.name = '0000';
+    analyst!.mergePictureWithExternalAccount = true;
+    const mergedUser = await AuthService.mergeUser(analyst!.email, analyst!);
   });
 
   it('Reset password', async () => {
