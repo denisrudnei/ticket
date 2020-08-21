@@ -30,10 +30,7 @@ export default {
       },
     );
 
-    this.$axios.post('/auth/mergeUser', data).then(() => {
-      this.$store.commit('auth/mergeUser', data);
-      this.processInfo();
-    });
+    this.processInfo();
   },
 };
 </script>

@@ -12,10 +12,10 @@ export default {
     },
     processInfo() {
       const {
-        name, status, contactEmail, description,
+        email, name, status, contactEmail, description,
       } = this.user;
       const user = {
-        name, status, contactEmail, description,
+        email, name, status, contactEmail, description,
       };
       this.$apollo
         .mutate({

@@ -4,9 +4,10 @@ import {
   Arg, Authorized, Ctx, Mutation, Query, Resolver,
 } from 'type-graphql';
 
-import AnalystInput from '../inputs/AnalystInput';
+import AnalystMergeInput from '../inputs/AnalystMergeInput';
 import Analyst from '../models/Analyst';
 import AuthService from '../services/AuthService';
+import { ILike } from '../db/FindOperator';
 
 @Resolver()
 class AuthResolver {
@@ -14,10 +15,8 @@ class AuthResolver {
   async Login(
     @Arg('email') email: string,
     @Arg('password') password: string,
-    @Ctx() context: ExpressContext,
+    @Ctx() { req }: ExpressContext,
   ) {
-    const { req } = context;
-
     const logged = await AuthService.login(email, password);
 
     req!.session!.authUser = logged;
@@ -33,11 +32,21 @@ class AuthResolver {
     return logged;
   }
 
+  // FIXME
   @Mutation(() => Analyst)
-  MergeUser(
+  @Authorized('user')
+  async MergeUser(
     @Arg('email') email: string,
-    @Arg('user', () => AnalystInput) user: Analyst,
+    @Arg('user', () => AnalystMergeInput) user: Analyst,
+    @Ctx() { req }: ExpressContext,
   ) {
+    req!.session!.authUser = await Analyst.findOne({
+      where: {
+        email: ILike(email),
+      },
+      relations: ['role'],
+    });
+
     return AuthService.mergeUser(email, user);
   }
 

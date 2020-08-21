@@ -7,10 +7,9 @@
         pa-3
       >
         <v-text-field
-          :value="user.name"
+          v-model="user.name"
           filled
           label="Nome para exibição"
-          @change="updateName"
         />
         <v-text-field
           v-model="user.email"
@@ -194,7 +193,6 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateName: 'auth/updateName',
       updateEmail: 'auth/updateEmail',
       updateAddress: 'auth/updateAddress',
     }),
@@ -253,7 +251,7 @@ export default {
       if (!this.$refs.profileImage.files[0]) return;
       const fileReader = new FileReader();
       fileReader.addEventListener('loadend', () => {
-        this.$store.commit('auth/updateImage', fileReader.result);
+        this.user.picture = fileReader.result;
       });
       fileReader.readAsDataURL(this.$refs.profileImage.files[0]);
       const formData = new FormData();

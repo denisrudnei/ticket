@@ -1,4 +1,4 @@
-mutation MergeUser($email: String!, $user: AnalystInput!) {
+mutation MergeUser($email: String!, $user: AnalystMergeInput!) {
   MergeUser(email: $email, user: $user) {
     id
     name

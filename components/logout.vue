@@ -44,17 +44,25 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import ggl from 'graphql-tag';
 
 export default {
   computed: mapGetters({
     logout: 'logout/getLogout',
   }),
   methods: {
-    logoutUser() {
-      this.$auth.logout().then(() => {
-        this.$router.push('/');
-        this.$store.commit('logout/setLogout', false);
+    async logoutUser() {
+      await this.$auth.logout();
+      await this.$apollo.mutate({
+        mutation: ggl`
+          mutation {
+            Logout
+          }
+        `,
       });
+
+      this.$router.push('/auth/');
+      this.$store.commit('logout/setLogout', false);
     },
     back() {
       this.$store.commit('logout/setLogout', false);

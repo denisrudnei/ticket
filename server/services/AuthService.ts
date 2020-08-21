@@ -1,6 +1,9 @@
+import bcrypt from 'bcryptjs';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 
+import { ILike } from '../db/FindOperator';
+import AnalystMergeInput from '../inputs/AnalystMergeInput';
 import Analyst from '../models/Analyst';
 import Role from '../models/Role';
 import MailService from './MailService';
@@ -8,14 +11,7 @@ import MailService from './MailService';
 class AuthService {
   static async login(email: string, password: string): Promise<Analyst> {
     const user = await Analyst.findOne({
-      where: [
-        {
-          email,
-        },
-        {
-          email: email.toLowerCase(),
-        },
-      ],
+      where: { email: ILike(email) },
       relations: ['role'],
     });
 
@@ -27,14 +23,9 @@ class AuthService {
 
   static async register(user: Analyst): Promise<Analyst> {
     const userFromDB = await Analyst.findOne({
-      where: [
-        {
-          email: user.email,
-        },
-        {
-          email: user.email.toLowerCase(),
-        },
-      ],
+      where: {
+        email: ILike(user.email),
+      },
     });
     if (userFromDB) throw new Error('Already registered');
 
@@ -46,36 +37,38 @@ class AuthService {
     return analyst.save();
   }
 
-  static async mergeUser(email: string, userBody: Analyst): Promise<Analyst> {
+  static async mergeUser(email: string, userBody: AnalystMergeInput): Promise<Analyst> {
     const analyst = await Analyst.findOne({
-      where: [
-        { email },
-        { email: email.toLowerCase() },
-      ],
+      where: {
+        email: ILike(email),
+      },
       relations: ['role'],
     });
     if (!analyst) {
       return Analyst.create({
         ...userBody,
         email,
+        password: bcrypt.hashSync(new Date().toString()),
         role: await Role.findOne({
           name: 'user',
         }),
       }).save();
     }
-    if (analyst!.mergePictureWithExternalAccount) {
-      analyst!.picture = userBody.picture;
-      return analyst!.save();
+    if (analyst.mergePictureWithExternalAccount) {
+      analyst.picture = userBody.picture;
+      return analyst.save();
     }
-    return analyst;
+
+    Object.assign(analyst, userBody);
+
+    return analyst.save();
   }
 
   static async generateEmailToReset(email: string, req: express.Request): Promise<string> {
     const analyst = await Analyst.findOne({
-      where: [
-        { email },
-        { email: email.toLowerCase() },
-      ],
+      where: {
+        email: ILike(email),
+      },
     });
     if (!analyst) throw new Error('Not found');
     const token = jwt.sign(

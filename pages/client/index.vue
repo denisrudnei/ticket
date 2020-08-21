@@ -144,7 +144,7 @@ export default {
         .query({
           query: ggl(listTicket),
           variables: {
-            page: page || 1,
+            page: parseInt(page, 10) || 1,
             limit: 9,
             attributes: {
               openedBy: this.user.id,
