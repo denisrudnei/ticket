@@ -1,0 +1,7 @@
+#import "@/graphql/fragments/ticketList.graphql"
+subscription {
+  ticket: CopyTicket {
+    ...ticketList
+    content
+  }
+}

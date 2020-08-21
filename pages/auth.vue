@@ -113,7 +113,11 @@ export default {
     verifyPath() {
       const path = /^\/auth\/+(|login|login\/)$/;
       if (path.test(this.$router.currentRoute.path) && this.logged) {
-        this.$router.push('/');
+        const { query } = this.$route;
+        this.$router.push({
+          path: '/',
+          query,
+        });
       }
     },
     login() {

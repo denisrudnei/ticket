@@ -86,11 +86,9 @@
                   pa-4
                 >
                   <v-select
-                    v-if="
-                      status.find((s) => {
-                        return s.id === item.status.id
-                      })
-                    "
+                    v-if="status.find((s) => {
+                      return s.id === item.status.id
+                    })"
                     v-model="currentStatus"
                     :items="
                       status
@@ -240,6 +238,7 @@ export default {
         descending: true,
         sortDesc: [true],
         totalItems: 0,
+        itemsPerPage: 10,
         page: 1,
       },
     };
@@ -325,15 +324,12 @@ export default {
   watch: {
     dialog(value) {
       if (this.modal) return;
-      const query = { ...this.query, ticket: value || this.query.ticket || null };
-      this.$router.push({
-        query,
-      });
+      const { query } = this;
+      if (value || this.query.ticket) {
+        query.ticket = value || this.query.ticket;
+      }
+
       this.$store.commit('ticket/setQuery', query);
-    },
-    $route(newValue) {
-      this.$store.commit('ticket/setQuery', newValue.query);
-      this.update();
     },
     options: {
       deep: true,
@@ -345,24 +341,19 @@ export default {
           && old.itemsPerPage === newValue.itemsPerPage
           && old.descending === newValue.descending
         ) return;
+
         this.loading = 'primary';
-
-        const query = {
-          ...this.query,
-          page: newValue.page,
-          limit: this.options.itemsPerPage,
-          sortBy: newValue.sortBy[0],
-          descending: newValue.sortDesc[0] ? -1 : 1,
-        };
-
-        this.setQuery(query);
+        this.updateOptions(newValue);
       },
     },
   },
-  async created() {
+  async mounted() {
     const { query } = this.$route;
+
+    this.setQuery(query);
+    this.options.page = query.page || 1;
     if (query.ticket !== undefined && query.ticket !== null) {
-      this.$store.dispatch('ticket/findTicket', query.ticket);
+      await this.$store.dispatch('ticket/findTicket', query.ticket);
       this.addTicketsToEdit(this.actualTicket);
     }
     this.getTicketAttributes();
@@ -396,6 +387,18 @@ export default {
             this.showUpdateMany = false;
           });
       }
+    },
+    updateOptions(value) {
+      const sortBy = Array.isArray(value.sortBy) ? value.sortBy[0] : value.sortBy;
+
+      const query = {
+        ...this.query,
+        page: value.page,
+        limit: this.options.itemsPerPage,
+        sortBy,
+        descending: value.sortDesc[0] ? -1 : 1,
+      };
+      this.setQuery(query);
     },
     getTicketAttributes() {
       this.$apollo
@@ -435,9 +438,9 @@ export default {
           fetchPolicy: 'network-only',
           variables: {
             sortBy: query.sortBy || 'id',
-            page: query.page || 1,
-            limit: query.limit || 10,
-            descending: query.descending || -1,
+            page: parseInt(query.page, 10) || 1,
+            limit: parseInt(query.limit, 10) || 10,
+            descending: parseInt(query.descending, 10) || -1,
             attributes,
           },
         })
@@ -507,8 +510,8 @@ export default {
           );
         });
     },
-    setDialog(id) {
-      this.$store.dispatch('ticket/findTicket', id);
+    async setDialog(id) {
+      await this.$store.dispatch('ticket/findTicket', id);
       this.$store.commit('ticket/setDialog', id);
     },
   },

@@ -79,6 +79,7 @@ class TicketService {
     const ticket = await Ticket.findOne(ticketId);
     if (!ticket) throw new Error('Ticket not found');
     const analyst = await Analyst.findOne(userId);
+    delete ticket.id;
     const newTicket = Ticket.create(ticket);
     if (!analyst) throw new Error('Analyst not found');
     newTicket.openedBy = analyst;

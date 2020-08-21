@@ -287,9 +287,12 @@ class TicketResolver {
   CopyTicket(
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
     @Ctx() { req }: ExpressContext,
+    @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket> {
     const userId = req!.session!.authUser.id;
-    return TicketService.copyTicket(ticketId, userId);
+    const ticket = TicketService.copyTicket(ticketId, userId);
+    pubSub.publish(TicketEnum.TICKET_COPY, ticket);
+    return ticket;
   }
 
   @Mutation(() => Ticket)
@@ -368,6 +371,14 @@ class TicketResolver {
     @Root() ticketPayload: Ticket,
     @Arg('tickets', () => [ID]) tickets: Ticket['id'][],
   ): Ticket {
+    return ticketPayload;
+  }
+
+  @Subscription({
+    name: 'CopyTicket',
+    topics: TicketEnum.TICKET_COPY,
+  })
+  CopyTicketSubscription(@Root() ticketPayload: Ticket): Ticket {
     return ticketPayload;
   }
 

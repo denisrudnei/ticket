@@ -175,6 +175,7 @@ import ConfirmCopy from '@/components/ticket/confirmCopy';
 import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql';
 import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql';
 import editTicket from '@/graphql/subscription/ticket/editTicket.graphql';
+import copyTicketSubscription from '@/graphql/subscription/ticket/copyTicket.graphql';
 import slaUpdate from '@/graphql/subscription/ticket/slaUpdate.graphql';
 import addNotification from '@/graphql/subscription/addNotification.graphql';
 import updateNotification from '@/graphql/subscription/updateNotification.graphql';
@@ -248,6 +249,7 @@ export default {
       user: 'auth/getUser',
       groups: 'group/getGroups',
       ticketsToEdit: 'ticket/getTicketsToEdit',
+      query: 'ticket/getQuery',
     }),
   },
   apollo: {
@@ -323,6 +325,12 @@ export default {
           );
         },
       },
+      copyTicket: {
+        query: ggl(copyTicketSubscription),
+        result({ data }) {
+          this.$store.commit('ticket/insertTicket', data.ticket);
+        },
+      },
       notifications: {
         query: ggl(notifications),
         result({ data }) {
@@ -373,6 +381,12 @@ export default {
           refetchQueries: [
             {
               query: ggl(ticketSearch),
+              variables: {
+                page: parseInt(this.query.page || 1, 10),
+                limit: parseInt(this.query.limit || 10, 10),
+                descending: parseInt(this.query.descending || -1, 10),
+                attributes: {},
+              },
             },
           ],
         })

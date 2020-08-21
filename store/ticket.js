@@ -184,16 +184,14 @@ export const actions = {
     }
   },
   async findTicket({ commit }, id) {
-    await this.app.$apollo
+    const { data } = await this.app.$apollo
       .query({
         query: ggl(actualTicket),
         variables: {
           id,
         },
-      })
-      .then((response) => {
-        commit('setActualTicket', response.data.TicketById);
       });
+    commit('setActualTicket', data.TicketById);
   },
   async updateTree({ commit }) {
     await this.$axios.get('/info/path').then((response) => {

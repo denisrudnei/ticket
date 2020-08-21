@@ -196,9 +196,6 @@
           >
             <v-autocomplete
               :value="ticket.actualUser"
-              :rules="
-                !search ? [(v) => !!v || 'Necessário preencher'] : undefined
-              "
               :items="
                 analysts.map((u) => {
                   return { text: u.name, value: u }

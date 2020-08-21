@@ -12,9 +12,9 @@ class SearchResolver {
   @Query(() => TicketPagination)
   @Authorized('user')
   SearchTicket(
-    @Arg('page', () => Int, { nullable: true, defaultValue: 0 }) page: number,
-    @Arg('limit', () => Int, { nullable: true, defaultValue: 0 }) limit: number,
-    @Arg('attributes', () => TicketAttributes, { nullable: true })
+    @Arg('page', () => Int, { nullable: true, defaultValue: 1 }) page: number,
+    @Arg('limit', () => Int, { nullable: true, defaultValue: 10 }) limit: number,
+    @Arg('attributes', () => TicketAttributes, { nullable: true, defaultValue: {} })
       attributes: TicketAttributes,
     @Arg('descending', () => Int, { nullable: true, defaultValue: -1 })
       descending: number,

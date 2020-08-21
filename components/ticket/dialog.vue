@@ -13,7 +13,7 @@
           <v-btn
             class="primary white--text"
             icon
-            @click="setDialog('')"
+            @click="$store.commit('ticket/setDialog', '')"
           >
             <v-icon>
               close
@@ -67,15 +67,16 @@ export default {
     },
     ...mapGetters({
       dialog: 'ticket/getDialog',
+      query: 'ticket/getQuery',
     }),
   },
   methods: {
-    setDialog() {
-      this.$store.commit('ticket/setDialog', '');
-    },
     done(id) {
       this.$store.commit('ticket/removeFromEdit', id);
-      this.setDialog();
+      this.$store.commit('ticket/setDialog', '');
+      const { query } = this;
+      delete query.ticket;
+      this.$store.commit('ticket/setQuery', query);
     },
     update() {
       this.$apollo
