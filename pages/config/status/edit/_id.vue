@@ -44,7 +44,9 @@ export default {
             },
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(StatusById) }, { query: ggl(list) }],
+          refetchQueries: [
+            { query: ggl(StatusById), variables: { id: status.id } }, { query: ggl(list) },
+          ],
         })
         .then(() => {
           this.$toast.show(this.$t('updated'), {
