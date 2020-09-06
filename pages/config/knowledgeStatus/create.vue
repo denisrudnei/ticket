@@ -33,9 +33,8 @@
 </template>
 
 <script>
-import create from '@/graphql/mutation/config/knowledgeStatus/create.graphql';
-import list from '@/graphql/query/config/knowledgeStatus/list.graphql';
-import ggl from 'graphql-tag';
+import create from '@/graphql/mutation/config/knowledgeStatus/create';
+import list from '@/graphql/query/config/knowledgeStatus/list';
 
 export default {
   data() {
@@ -50,12 +49,12 @@ export default {
     save(knowledgeStatus) {
       this.$apollo
         .mutate({
-          mutation: ggl(create),
+          mutation: create,
           variables: {
             knowledgeStatus,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }],
+          refetchQueries: [{ query: list }],
         })
         .then(() => {
           this.$toast.show('Criado', {

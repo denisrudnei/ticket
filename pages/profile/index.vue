@@ -158,18 +158,18 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import compareObjectsWithId from '@/mixins/compareObjectsWithId';
-import ggl from 'graphql-tag';
-import AddressList from '@/graphql/query/address/list.graphql';
-import profileInfo from '@/graphql/query/profile/list.graphql';
-import update from '@/graphql/mutation/profile/analyst/update.graphql';
-import removeImage from '@/graphql/mutation/profile/analyst/removeImage.graphql';
+
+import AddressList from '@/graphql/query/address/list';
+import profileInfo from '@/graphql/query/profile/list';
+import update from '@/graphql/mutation/profile/analyst/update';
+import removeImage from '@/graphql/mutation/profile/analyst/removeImage';
 
 export default {
   mixins: [compareObjectsWithId],
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(profileInfo),
+        query: profileInfo,
       })
       .then((response) => ({
         addresses: response.data.address,
@@ -217,7 +217,7 @@ export default {
       };
       this.$apollo
         .mutate({
-          mutation: ggl(update),
+          mutation: update,
           variables: {
             analyst,
           },
@@ -235,7 +235,7 @@ export default {
     removeImage() {
       this.$apollo
         .mutate({
-          mutation: ggl(removeImage),
+          mutation: removeImage,
         })
         .then(() => {
           this.$store.commit('auth/removeImage');

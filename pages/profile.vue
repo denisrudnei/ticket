@@ -47,14 +47,13 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import GroupList from '@/graphql/query/profile/groups.graphql';
-import list from '@/graphql/query/profile/list.graphql';
-import ggl from 'graphql-tag';
+import GroupList from '@/graphql/query/profile/groups';
+import list from '@/graphql/query/profile/list';
 
 export default {
   asyncData({ params, app }) {
     return app.$apollo.query({
-      query: ggl(list),
+      query: list,
     }).then((response) => ({
       user: response.data.user,
     }));
@@ -62,7 +61,7 @@ export default {
   created() {
     this.$apollo
       .query({
-        query: ggl(GroupList),
+        query: GroupList,
         variables: {
           id: this.user.id,
         },

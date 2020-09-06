@@ -20,8 +20,7 @@
 </template>
 
 <script>
-import sendEmailToReset from '@/graphql/mutation/auth/sendEmailToReset.graphql';
-import ggl from 'graphql-tag';
+import sendEmailToReset from '@/graphql/mutation/auth/sendEmailToReset';
 
 export default {
   auth: false,
@@ -34,7 +33,7 @@ export default {
     reset() {
       this.$apollo
         .mutate({
-          mutation: ggl(sendEmailToReset),
+          mutation: sendEmailToReset,
           variables: {
             email: this.email,
           },

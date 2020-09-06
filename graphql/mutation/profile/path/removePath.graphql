@@ -1,5 +1,0 @@
-mutation($userId: ID!, $path: ID!) {
-  path: RemovePath(userId: $userId, path: $path) {
-    id
-  }
-}

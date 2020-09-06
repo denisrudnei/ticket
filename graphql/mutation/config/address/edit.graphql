@@ -1,5 +1,0 @@
-mutation EditAddress ($id: ID!, $address: AddressInput!) {
-  EditAddress(id: $id, address: $address) {
-    id
-  }
-}

@@ -38,9 +38,8 @@
 </template>
 
 <script>
-import GroupList from '@/graphql/query/group/list.graphql';
-import CreateAnalyst from '@/graphql/mutation/config/analyst/create.graphql';
-import ggl from 'graphql-tag';
+import GroupList from '@/graphql/query/group/list';
+import CreateAnalyst from '@/graphql/mutation/config/analyst/create';
 
 export default {
   data() {
@@ -56,7 +55,7 @@ export default {
   created() {
     this.$apollo
       .query({
-        query: ggl(GroupList),
+        query: GroupList,
       })
       .then((result) => {
         this.groups = result.data.Group;
@@ -66,7 +65,7 @@ export default {
     save() {
       this.$apollo
         .mutate({
-          mutation: ggl(CreateAnalyst),
+          mutation: CreateAnalyst,
           variables: {
             analyst: this.analyst,
           },

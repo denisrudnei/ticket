@@ -20,14 +20,13 @@
 </template>
 
 <script>
-import list from '@/graphql/query/config/knowledgeStatus/list.graphql';
-import ggl from 'graphql-tag';
+import list from '@/graphql/query/config/knowledgeStatus/list';
 
 export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(list),
+        query: list,
       })
       .then((response) => ({
         status: response.data.KnowledgeStatus,

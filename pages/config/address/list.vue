@@ -35,8 +35,7 @@
 </template>
 
 <script>
-import addressList from '@/graphql/query/address/list.graphql';
-import ggl from 'graphql-tag';
+import addressList from '@/graphql/query/address/list';
 
 export default {
   data() {
@@ -77,7 +76,7 @@ export default {
   created() {
     this.$apollo
       .query({
-        query: ggl(addressList),
+        query: addressList,
       })
       .then((response) => {
         this.addresses = response.data.Address;

@@ -27,8 +27,7 @@
 
 <script>
 import afterLogin from '@/mixins/afterLogin';
-import login from '@/graphql/mutation/auth/login.graphql';
-import ggl from 'graphql-tag';
+import login from '@/graphql/mutation/auth/login';
 
 export default {
   mixins: [afterLogin],
@@ -49,7 +48,7 @@ export default {
     localLogin() {
       this.$apollo
         .mutate({
-          mutation: ggl(login),
+          mutation: login,
           variables: {
             email: this.userLogin.email,
             password: this.userLogin.password,

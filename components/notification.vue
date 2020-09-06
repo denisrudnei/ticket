@@ -133,9 +133,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import notificationList from '@/graphql/query/profile/notification/list.graphql';
-import readAllNotifications from '@/graphql/mutation/profile/notification/readAll.graphql';
+
+import notificationList from '@/graphql/query/profile/notification/list';
+import readAllNotifications from '@/graphql/mutation/profile/notification/readAll';
 
 export default {
   computed: {
@@ -164,7 +164,7 @@ export default {
     if (this.user !== undefined && this.user.id !== undefined) {
       this.$apollo
         .query({
-          query: ggl(notificationList),
+          query: notificationList,
         })
         .then((response) => {
           this.$store.commit(
@@ -178,7 +178,7 @@ export default {
     readAllNotifications() {
       this.$apollo
         .mutate({
-          mutation: ggl(readAllNotifications),
+          mutation: readAllNotifications,
         })
         .then((response) => {
           this.$store.commit(

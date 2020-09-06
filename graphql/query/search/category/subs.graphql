@@ -1,9 +1,0 @@
-query GetSubs($categoryId: ID){
-  category: GetSubs (categoryId: $categoryId) {
-    id
-    name
-    subs {
-      name
-    }
-  }
-}

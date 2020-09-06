@@ -1,5 +1,4 @@
-import ggl from 'graphql-tag';
-import read from '@/graphql/mutation/profile/notification/read.graphql';
+import read from '~/graphql/mutation/profile/notification/read.ts';
 
 export default {
   methods: {
@@ -7,7 +6,7 @@ export default {
       const { id } = notification;
       this.$apollo
         .mutate({
-          mutation: ggl(read),
+          mutation: read,
           variables: {
             id,
           },

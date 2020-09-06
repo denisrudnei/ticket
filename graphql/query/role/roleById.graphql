@@ -1,7 +1,0 @@
-query RoleById($id: ID!) {
-  RoleById(id: $id) {
-    id
-    name
-    description
-  }
-}

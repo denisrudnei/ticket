@@ -43,13 +43,13 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import getOneGroup from '@/graphql/query/config/group/getGroup.graphql';
+
+import getOneGroup from '@/graphql/query/config/group/getGroup';
 
 export default {
   asyncData({ app, params }) {
     return app.$apollo.query({
-      query: ggl(getOneGroup),
+      query: getOneGroup,
       variables: {
         id: params.id,
       },

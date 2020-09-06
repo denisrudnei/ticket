@@ -12,9 +12,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ChangeStatus from '@/graphql/mutation/chat/changeStatus.graphql';
-import status from '@/graphql/query/chat/status.graphql';
-import ggl from 'graphql-tag';
+import ChangeStatus from '@/graphql/mutation/chat/changeStatus';
+import status from '@/graphql/query/chat/status';
 
 export default {
   data() {
@@ -28,7 +27,7 @@ export default {
   created() {
     this.$apollo
       .query({
-        query: ggl(status),
+        query: status,
       })
       .then((response) => {
         this.status = response.data.AnalystStatus.map((s) => ({
@@ -41,7 +40,7 @@ export default {
     changeStatus(value) {
       this.$apollo
         .mutate({
-          mutation: ggl(ChangeStatus),
+          mutation: ChangeStatus,
           variables: {
             status: value,
           },

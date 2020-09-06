@@ -1,5 +1,0 @@
-fragment participantInfo on Analyst {
-  id
-  name
-  picture
-}

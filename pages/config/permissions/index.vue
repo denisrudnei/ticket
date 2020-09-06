@@ -31,14 +31,14 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import RoleList from '@/graphql/query/role/list.graphql';
+
+import RoleList from '@/graphql/query/role/list';
 
 export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(RoleList),
+        query: RoleList,
       })
       .then((response) => ({
         roles: response.data.roles,

@@ -1,6 +1,0 @@
-#import "@/graphql/fragments/ticketList.graphql"
-mutation ChangeStatus($ticketId: ID!, $statusId: ID!) {
-  ChangeStatus(ticketId: $ticketId, statusId: $statusId) {
-    ...ticketList
-  }
-}

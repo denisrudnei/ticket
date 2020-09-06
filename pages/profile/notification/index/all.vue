@@ -6,8 +6,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import NotificationList from '@/components/notification-list';
-import list from '@/graphql/query/profile/notification/list.graphql';
-import ggl from 'graphql-tag';
+import list from '@/graphql/query/profile/notification/list';
 
 export default {
   components: {
@@ -19,7 +18,7 @@ export default {
   middleware({ app, store }) {
     app.$apollo.query({
       fetchPolicy: 'no-cache',
-      query: ggl(list),
+      query: list,
     }).then((response) => {
       store.commit('notification/setNotifications', response.data.notification);
     });

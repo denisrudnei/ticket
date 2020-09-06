@@ -1,6 +1,0 @@
-#import "@/graphql/fragments/ticketList.graphql"
-subscription {
-  TransferToGroup {
-    ...ticketList
-  }
-}

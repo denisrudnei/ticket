@@ -7,9 +7,8 @@
 
 <script>
 import create from '@/components/knowledge/create';
-import CreateKnowledge from '@/graphql/mutation/config/knowledge/create.graphql';
-import KnowledgeList from '@/graphql/query/config/knowledge/knowledgeById.graphql';
-import ggl from 'graphql-tag';
+import CreateKnowledge from '@/graphql/mutation/config/knowledge/create';
+import KnowledgeList from '@/graphql/query/config/knowledge/knowledgeById';
 
 export default {
   components: {
@@ -18,7 +17,7 @@ export default {
   asyncData({ app, params }) {
     return app.$apollo
       .query({
-        query: ggl(KnowledgeList),
+        query: KnowledgeList,
         variables: {
           id: params.id,
         },
@@ -36,7 +35,7 @@ export default {
     update(knowledge) {
       this.$apollo
         .mutate({
-          mutation: ggl(CreateKnowledge),
+          mutation: CreateKnowledge,
           variables: {
             id: knowledge.id,
             knowledge: {

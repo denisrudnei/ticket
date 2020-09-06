@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-shadow */
-import actualTicket from '@/graphql/query/ticket/actualTicket.graphql';
-import ggl from 'graphql-tag';
+import actualTicket from '@/graphql/query/ticket/actualTicket';
 
 export const state = () => ({
   tickets: [],
@@ -186,7 +185,7 @@ export const actions = {
   async findTicket({ commit }, id) {
     const { data } = await this.app.$apollo
       .query({
-        query: ggl(actualTicket),
+        query: actualTicket,
         variables: {
           id,
         },

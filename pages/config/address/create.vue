@@ -4,8 +4,7 @@
 
 <script>
 import AddressCreate from '@/components/address/create';
-import Create from '@/graphql/mutation/config/address/create.graphql';
-import ggl from 'graphql-tag';
+import Create from '@/graphql/mutation/config/address/create';
 
 export default {
   components: {
@@ -15,7 +14,7 @@ export default {
     save(address) {
       this.$apollo
         .mutate({
-          mutation: ggl(Create),
+          mutation: Create,
           variables: {
             address,
           },

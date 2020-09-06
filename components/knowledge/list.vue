@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import KnowledgeListByGroup from '@/graphql/query/knowledge/listByGroup.graphql';
-import KnowledgeListAll from '@/graphql/query/knowledge/list.graphql';
+
+import KnowledgeListByGroup from '@/graphql/query/knowledge/listByGroup';
+import KnowledgeListAll from '@/graphql/query/knowledge/list';
 
 export default {
   data() {
@@ -52,7 +52,7 @@ export default {
       if (newValue.params.groupName) {
         this.$apollo
           .query({
-            query: ggl(KnowledgeListByGroup),
+            query: KnowledgeListByGroup,
             variables: {
               groupName: newValue.params.groupName,
             },
@@ -68,7 +68,7 @@ export default {
     const query = groupName ? KnowledgeListByGroup : KnowledgeListAll;
     this.$apollo
       .query({
-        query: ggl(query),
+        query,
         variables: {
           groupName,
         },

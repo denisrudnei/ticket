@@ -1,5 +1,0 @@
-mutation CreateAnalyst($analyst: AnalystInput!) {
-  CreateAnalyst(analyst: $analyst) {
-    id
-  }
-}

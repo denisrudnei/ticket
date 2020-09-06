@@ -6,11 +6,11 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
+
 import create from '@/components/ticket/priority/create';
-import priorityEdit from '@/graphql/query/config/priority/priorityEdit.graphql';
-import updatePriority from '@/graphql/mutation/config/priority/updatePriority.graphql';
-import priorityList from '@/graphql/query/config/priority/priorityList.graphql';
+import priorityEdit from '@/graphql/query/config/priority/priorityEdit';
+import updatePriority from '@/graphql/mutation/config/priority/updatePriority';
+import priorityList from '@/graphql/query/config/priority/priorityList';
 
 export default {
   components: {
@@ -19,7 +19,7 @@ export default {
   asyncData({ app, params }) {
     return app.$apollo
       .query({
-        query: ggl(priorityEdit),
+        query: priorityEdit,
         variables: {
           id: params.id,
         },
@@ -34,7 +34,7 @@ export default {
       const { id, ...priority } = this.priority;
       this.$apollo
         .mutate({
-          mutation: ggl(updatePriority),
+          mutation: updatePriority,
           variables: {
             priority: {
               ...priority,
@@ -42,7 +42,7 @@ export default {
             },
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(priorityList) }],
+          refetchQueries: [{ query: priorityList }],
         })
         .then(() => {
           this.$toast.show('Prioridade atualizada', {

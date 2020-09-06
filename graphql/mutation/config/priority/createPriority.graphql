@@ -1,5 +1,0 @@
-mutation CreatePriority($priority: PriorityInput!) {
-  CreatePriority(priority: $priority) {
-    id
-  }
-}

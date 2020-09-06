@@ -108,9 +108,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import analystList from '@/graphql/query/chat/analyst-list.graphql';
-import changeStatus from '@/graphql/subscription/chat/changeStatus.graphql';
+
+import analystList from '@/graphql/query/chat/analyst-list';
+import changeStatus from '@/graphql/subscription/chat/changeStatus';
 import AnalystStatus from './status';
 
 export default {
@@ -120,7 +120,7 @@ export default {
   apollo: {
     $subscribe: {
       changeStatus: {
-        query: ggl(changeStatus),
+        query: changeStatus,
         result({ data }) {
           this.updateAnalystStatus(data.ChangeAnalystStatus);
         },
@@ -151,7 +151,7 @@ export default {
   created() {
     this.$apollo
       .query({
-        query: ggl(analystList),
+        query: analystList,
       })
       .then((response) => {
         this.$store.commit('analyst/setAnalysts', response.data.analyst);

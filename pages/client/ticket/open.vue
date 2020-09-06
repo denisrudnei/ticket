@@ -76,15 +76,15 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import categoryList from '@/graphql/query/client/ticket/categoryList.graphql';
+
+import categoryList from '@/graphql/query/client/ticket/categoryList';
 
 export default {
   layout: 'client',
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(categoryList),
+        query: categoryList,
       })
       .then((response) => ({
         categories: response.data.category,

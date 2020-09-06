@@ -29,15 +29,15 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import tree from '@/graphql/query/profile/path/tree.graphql';
-import removePath from '@/graphql/subscription/path/removePath.graphql';
-import add from '@/graphql/subscription/path/add.graphql';
+
+import tree from '@/graphql/query/profile/path/tree';
+import removePath from '@/graphql/subscription/path/removePath';
+import add from '@/graphql/subscription/path/add';
 
 export default {
   computed: {
     treeQuery() {
-      return ggl(tree);
+      return tree;
     },
     ...mapGetters({
       user: 'auth/getUser',
@@ -46,7 +46,7 @@ export default {
   apollo: {
     $subscribe: {
       RemovePath: {
-        query: ggl(removePath),
+        query: removePath,
         variables() {
           return {
             userId: this.user.id,
@@ -57,7 +57,7 @@ export default {
         },
       },
       NewPath: {
-        query: ggl(add),
+        query: add,
         variables() {
           return {
             userId: this.user.id,

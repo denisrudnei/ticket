@@ -58,15 +58,14 @@
 </template>
 
 <script>
-import sound from '@/graphql/mutation/profile/sound.graphql';
-import list from '@/graphql/query/profile/sound.graphql';
-import ggl from 'graphql-tag';
+import sound from '@/graphql/mutation/profile/sound';
+import list from '@/graphql/query/profile/sound';
 
 export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(list),
+        query: list,
       })
       .then((response) => ({
         sounds: response.data.GetSounds,
@@ -106,7 +105,7 @@ export default {
     save() {
       this.$apollo
         .mutate({
-          mutation: ggl(sound),
+          mutation: sound,
           variables: {
             config: this.sounds.map((value) => {
               const { volume, muted, type } = value;

@@ -525,7 +525,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
+
 import Fields from '@/components/ticket/fields';
 import FileInclude from '@/components/files/include';
 import Logs from '@/components/ticket/logs';
@@ -533,9 +533,9 @@ import Comments from '@/components/ticket/comments';
 import Children from '@/components/ticket/children/index';
 import compareObjectsWithId from '@/mixins/compareObjectsWithId';
 import showModal from '@/mixins/showModal';
-import create from '@/graphql/query/ticket/create.graphql';
-import CommentOnTicket from '@/graphql/mutation/ticket/commentOnTicket.graphql';
-import TicketById from '@/graphql/query/ticket/actualTicket.graphql';
+import create from '@/graphql/query/ticket/create';
+import CommentOnTicket from '@/graphql/mutation/ticket/commentOnTicket';
+import TicketById from '@/graphql/query/ticket/actualTicket';
 
 export default {
   name: 'TicketCreate',
@@ -633,7 +633,7 @@ export default {
     this.readOnlyData = this.readonly;
     this.$apollo
       .query({
-        query: ggl(create),
+        query: create,
       })
       .then((response) => {
         this.analysts = response.data.Analyst;
@@ -661,7 +661,7 @@ export default {
     addComment() {
       this.$apollo
         .mutate({
-          mutation: ggl(CommentOnTicket),
+          mutation: CommentOnTicket,
           variables: {
             ticketId: this.ticket.id,
             content: this.comment,
@@ -690,7 +690,7 @@ export default {
       this.readOnlyData = true;
       this.$apollo
         .query({
-          query: ggl(TicketById),
+          query: TicketById,
           fetchPolicy: 'no-cache',
           variables: {
             id: this.ticket.id,

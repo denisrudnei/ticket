@@ -177,8 +177,8 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import create from '@/graphql/query/config/category/create.graphql';
+
+import create from '@/graphql/query/config/category/create';
 import compareObjectsWithId from '@/mixins/compareObjectsWithId';
 
 export default {
@@ -220,7 +220,7 @@ export default {
   mounted() {
     this.$apollo
       .query({
-        query: ggl(create),
+        query: create,
       })
       .then((response) => {
         this.categories = response.data.category;

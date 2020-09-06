@@ -1,6 +1,0 @@
-#import "@/graphql/fragments/notificationList.graphql"
-subscription {
-  UpdateNotification {
-    ...notificationList
-  }
-}

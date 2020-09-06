@@ -1,7 +1,0 @@
-query {
-  priority: Priority {
-    id
-    name
-    weight
-  }
-}

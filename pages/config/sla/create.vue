@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
+
 import create from '@/components/ticket/sla/create';
-import createSla from '@/graphql/mutation/config/sla/createSla.graphql';
-import slaList from '@/graphql/query/config/sla/slaList.graphql';
+import createSla from '@/graphql/mutation/config/sla/createSla';
+import slaList from '@/graphql/query/config/sla/slaList';
 
 export default {
   components: {
@@ -18,7 +18,7 @@ export default {
 
       this.$apollo
         .mutate({
-          mutation: ggl(createSla),
+          mutation: createSla,
           variables: {
             sla: {
               name: sla.name,
@@ -28,7 +28,7 @@ export default {
             },
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(slaList) }],
+          refetchQueries: [{ query: slaList }],
         })
         .then(() => {
           this.$toast.show('Cadastrado com sucesso', {

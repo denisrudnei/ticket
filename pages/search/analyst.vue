@@ -27,8 +27,7 @@
 
 <script>
 import AnalystList from '@/components/analyst/list';
-import AddressList from '@/graphql/query/address/list.graphql';
-import ggl from 'graphql-tag';
+import AddressList from '@/graphql/query/address/list';
 
 export default {
   components: {
@@ -60,7 +59,7 @@ export default {
   created() {
     this.$apollo
       .query({
-        query: ggl(AddressList),
+        query: AddressList,
       })
       .then((response) => {
         this.addresses = response.data.Address;

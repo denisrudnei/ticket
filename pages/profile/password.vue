@@ -41,8 +41,7 @@
 </template>
 
 <script>
-import resetPassword from '@/graphql/mutation/profile/resetPassword.graphql';
-import ggl from 'graphql-tag';
+import resetPassword from '@/graphql/mutation/profile/resetPassword';
 
 export default {
   data() {
@@ -70,7 +69,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.$apollo
           .mutate({
-            mutation: ggl(resetPassword),
+            mutation: resetPassword,
             variables: {
               oldPassword: this.user.oldPassword,
               newPassword: this.user.newPassword,

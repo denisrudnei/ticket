@@ -1,8 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-shadow */
-import ggl from 'graphql-tag';
-import getOneChat from '@/graphql/query/chat/getOneChat.graphql';
-import sendMessage from '@/graphql/mutation/chat/sendMessage.graphql';
+import getOneChat from '@/graphql/query/chat/getOneChat';
+import sendMessage from '~/graphql/mutation/chat/sendMessage.ts';
 
 export const state = () => ({
   chats: [],
@@ -79,7 +78,7 @@ export const actions = {
   async getOneChat({ commit }, to) {
     await this.app.$apollo
       .query({
-        query: ggl(getOneChat),
+        query: getOneChat,
         variables: {
           to,
         },
@@ -94,7 +93,7 @@ export const actions = {
   send({ commit }, message) {
     this.app.$apollo
       .mutate({
-        mutation: ggl(sendMessage),
+        mutation: sendMessage,
         variables: {
           to: message.to,
           message: message.content,

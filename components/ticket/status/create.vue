@@ -85,8 +85,7 @@
 
 <script>
 import draggable from 'vuedraggable';
-import statusList from '@/graphql/query/status/list.graphql';
-import ggl from 'graphql-tag';
+import statusList from '@/graphql/query/status/list';
 
 export default {
   components: {
@@ -121,7 +120,7 @@ export default {
   created() {
     this.$apollo
       .query({
-        query: ggl(statusList),
+        query: statusList,
       })
       .then((response) => {
         this.status = response.data.Status;

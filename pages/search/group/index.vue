@@ -22,13 +22,13 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import list from '@/graphql/query/group/list.graphql';
+
+import list from '@/graphql/query/group/list';
 
 export default {
   asyncData({ app }) {
     return app.$apollo.query({
-      query: ggl(list),
+      query: list,
     }).then((response) => ({
       groups: response.data.Group,
     }));

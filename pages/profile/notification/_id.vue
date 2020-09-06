@@ -62,8 +62,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import readNotification from '@/mixins/readNotification';
-import NotificationById from '@/graphql/query/notification/getNotification.graphql';
-import ggl from 'graphql-tag';
+import NotificationById from '@/graphql/query/notification/getNotification';
 
 export default {
   filters: {
@@ -93,7 +92,7 @@ export default {
     async getNotification() {
       const { id } = this.$route.params;
       const { data } = await this.$apollo.query({
-        query: ggl(NotificationById),
+        query: NotificationById,
         variables: {
           id,
         },

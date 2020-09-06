@@ -1,6 +1,0 @@
-#import "@/graphql/fragments/ticketList.graphql"
-mutation CreateTicket($ticket: TicketCreateInput!) {
-  CreateTicket(ticket: $ticket) {
-    ...ticketList
-  }
-}

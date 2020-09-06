@@ -93,14 +93,14 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import KnowledgeById from '@/graphql/query/knowledge/knowledgeById.graphql';
+
+import KnowledgeById from '@/graphql/query/knowledge/knowledgeById';
 
 export default {
   asyncData({ params, app }) {
     return app.$apollo
       .query({
-        query: ggl(KnowledgeById),
+        query: KnowledgeById,
         variables: {
           id: params.id,
         },
@@ -119,7 +119,7 @@ export default {
     const { id } = this.$route.params;
     this.$apollo
       .query({
-        query: ggl(KnowledgeById),
+        query: KnowledgeById,
         variables: {
           id,
         },

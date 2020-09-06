@@ -4,9 +4,8 @@
 
 <script>
 import StatusCreate from '@/components/ticket/status/create';
-import create from '@/graphql/mutation/config/status/create.graphql';
-import list from '@/graphql/query/status/list.graphql';
-import ggl from 'graphql-tag';
+import create from '@/graphql/mutation/config/status/create';
+import list from '@/graphql/query/status/list';
 
 export default {
   components: {
@@ -20,12 +19,12 @@ export default {
       };
       this.$apollo
         .mutate({
-          mutation: ggl(create),
+          mutation: create,
           variables: {
             status: newStatus,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }],
+          refetchQueries: [{ query: list }],
         })
         .then(() => {
           this.$toast.show('Status criado', {

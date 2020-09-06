@@ -14,10 +14,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
+
 import TicketCreate from '@/components/ticket/create';
 import TicketList from '@/components/ticket/list';
-import searchQuery from '@/graphql/query/ticket/search.graphql';
+import searchQuery from '@/graphql/query/ticket/search';
 
 export default {
   components: {
@@ -27,7 +27,7 @@ export default {
   middleware({ app, store }) {
     app.$apollo
       .query({
-        query: ggl(searchQuery),
+        query: searchQuery,
       })
       .then((response) => {
         store.commit('status/setStatus', response.data.status);

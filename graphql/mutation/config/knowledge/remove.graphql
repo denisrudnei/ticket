@@ -1,3 +1,0 @@
-mutation RemoveKnowledge($id: ID!) {
-  RemoveKnowledge(id: $id)
-}

@@ -1,6 +1,0 @@
-query {
-  slas: Sla {
-    name
-    limit
-  }
-}

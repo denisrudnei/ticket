@@ -1,9 +1,0 @@
-#import "@/graphql/fragments/ticketList.graphql"
-query TicketNumber($ids: [ID!]!) {
-  SearchByIds(ids: $ids) {
-    docs {
-      ...ticketList
-      content
-    }
-  }
-}

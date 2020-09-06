@@ -1,6 +1,0 @@
-#import "@/graphql/fragments/knowledge.graphql"
-query {
-  knowledge: Knowledge {
-    ...list
-  }
-}

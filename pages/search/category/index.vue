@@ -21,15 +21,15 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import category from '@/graphql/query/search/category/category.graphql';
-import getSubs from '@/graphql/query/search/category/subs.graphql';
+
+import category from '@/graphql/query/search/category/category';
+import getSubs from '@/graphql/query/search/category/subs';
 
 export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(category),
+        query: category,
       })
       .then((response) => ({
         items: response.data.category.filter((c) => c.father === null),
@@ -39,7 +39,7 @@ export default {
     getSub(item) {
       this.$apollo
         .query({
-          query: ggl(getSubs),
+          query: getSubs,
           variables: {
             categoryId: item.id,
           },

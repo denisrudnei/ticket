@@ -4,9 +4,9 @@
 
 <script>
 import CategoryCreate from '@/components/ticket/category/create';
-import ggl from 'graphql-tag';
-import createCategory from '@/graphql/mutation/config/category/createCategory.graphql';
-import categoryList from '@/graphql/query/config/category/categoryList.graphql';
+
+import createCategory from '@/graphql/mutation/config/category/createCategory';
+import categoryList from '@/graphql/query/config/category/categoryList';
 
 export default {
   components: {
@@ -16,7 +16,7 @@ export default {
     save(category) {
       this.$apollo
         .mutate({
-          mutation: ggl(createCategory),
+          mutation: createCategory,
           variables: {
             category: {
               fields: category.fields,
@@ -29,7 +29,7 @@ export default {
             },
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(categoryList) }],
+          refetchQueries: [{ query: categoryList }],
         })
         .then(() => {
           this.$toast.show('Categoria criada', {

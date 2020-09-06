@@ -7,8 +7,7 @@
 
 <script>
 import TicketCreate from '@/components/ticket/create';
-import create from '@/graphql/mutation/ticket/create.graphql';
-import ggl from 'graphql-tag';
+import create from '@/graphql/mutation/ticket/create';
 
 export default {
   components: {
@@ -26,7 +25,7 @@ export default {
     create() {
       this.$apollo
         .mutate({
-          mutation: ggl(create),
+          mutation: create,
           variables: {
             ticket: {
               actualUser: this.ticket.actualUser.id,

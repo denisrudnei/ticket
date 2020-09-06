@@ -1,6 +1,5 @@
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import mergeUser from '@/graphql/mutation/auth/mergeUser.graphql';
+import mergeUser from '~/graphql/mutation/auth/mergeUser.ts';
 
 export default {
   computed: mapGetters({
@@ -19,7 +18,7 @@ export default {
       };
       this.$apollo
         .mutate({
-          mutation: ggl(mergeUser),
+          mutation: mergeUser,
           variables: {
             email: this.user.email,
             user,

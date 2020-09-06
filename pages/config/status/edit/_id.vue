@@ -7,10 +7,9 @@
 
 <script>
 import CreateStatus from '@/components/ticket/status/create';
-import StatusById from '@/graphql/query/status/statusById.graphql';
-import list from '@/graphql/query/status/list.graphql';
-import edit from '@/graphql/mutation/config/status/edit.graphql';
-import ggl from 'graphql-tag';
+import StatusById from '@/graphql/query/status/statusById';
+import list from '@/graphql/query/status/list';
+import edit from '@/graphql/mutation/config/status/edit';
 
 export default {
   components: {
@@ -20,7 +19,7 @@ export default {
     const { id } = params;
     return app.$apollo
       .query({
-        query: ggl(StatusById),
+        query: StatusById,
         variables: {
           id,
         },
@@ -33,7 +32,7 @@ export default {
     update(status) {
       this.$apollo
         .mutate({
-          mutation: ggl(edit),
+          mutation: edit,
           variables: {
             id: status.id,
             status: {
@@ -45,7 +44,7 @@ export default {
           },
           awaitRefetchQueries: true,
           refetchQueries: [
-            { query: ggl(StatusById), variables: { id: status.id } }, { query: ggl(list) },
+            { query: StatusById, variables: { id: status.id } }, { query: list },
           ],
         })
         .then(() => {

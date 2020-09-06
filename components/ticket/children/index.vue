@@ -113,11 +113,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
+
 import list from '@/components/ticket/children/search/list';
-import search from '@/graphql/query/search/ticket.graphql';
-import addChildren from '@/graphql/mutation/ticket/addChildren.graphql';
-import removeChildren from '@/graphql/mutation/ticket/removeChildren.graphql';
+import search from '@/graphql/query/search/ticket';
+import addChildren from '@/graphql/mutation/ticket/addChildren';
+import removeChildren from '@/graphql/mutation/ticket/removeChildren';
 import create from '../create';
 
 export default {
@@ -202,7 +202,7 @@ export default {
       });
       this.$apollo
         .query({
-          query: ggl(search),
+          query: search,
           variables: {
             attributes: newTicket,
           },
@@ -217,7 +217,7 @@ export default {
       this.$store.commit('ticket/addChildren', children);
       this.$apollo
         .mutate({
-          mutation: ggl(addChildren),
+          mutation: addChildren,
           variables: {
             ticketId: this.actualTicket.id,
             children: children.map((t) => t.id),
@@ -236,7 +236,7 @@ export default {
       this.$store.commit('ticket/removeChildren', children);
       this.$apollo
         .mutate({
-          mutation: ggl(removeChildren),
+          mutation: removeChildren,
           variables: {
             ticketId: this.actualTicket.id,
             childrenId: children.id,

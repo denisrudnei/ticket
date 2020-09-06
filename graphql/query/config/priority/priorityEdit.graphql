@@ -1,7 +1,0 @@
-query PriorityById($id: ID!){
-  priority: PriorityById(id: $id) {
-    id
-    name
-    weight
-  }
-}

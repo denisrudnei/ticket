@@ -162,7 +162,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
 import afterLogin from '@/mixins/afterLogin';
 import Toolbar from '@/components/toolbar';
 import TicketDialog from '@/components/ticket/dialog';
@@ -172,16 +171,16 @@ import Logout from '@/components/logout';
 import AnalystList from '@/components/chat/analyst-list';
 import TicketModal from '@/components/ticket/ticket-modal';
 import ConfirmCopy from '@/components/ticket/confirmCopy';
-import changeStatus from '@/graphql/subscription/ticket/changeStatus.graphql';
-import transferToGroup from '@/graphql/subscription/ticket/transferToGroup.graphql';
-import editTicket from '@/graphql/subscription/ticket/editTicket.graphql';
-import copyTicketSubscription from '@/graphql/subscription/ticket/copyTicket.graphql';
-import slaUpdate from '@/graphql/subscription/ticket/slaUpdate.graphql';
-import addNotification from '@/graphql/subscription/addNotification.graphql';
-import updateNotification from '@/graphql/subscription/updateNotification.graphql';
-import notifications from '@/graphql/subscription/notifications.graphql';
-import copyTicket from '@/graphql/mutation/ticket/copyTicket.graphql';
-import ticketSearch from '@/graphql/query/search/ticket.graphql';
+import changeStatus from '@/graphql/subscription/ticket/changeStatus';
+import transferToGroup from '@/graphql/subscription/ticket/transferToGroup';
+import editTicket from '@/graphql/subscription/ticket/editTicket';
+import copyTicketSubscription from '@/graphql/subscription/ticket/copyTicket';
+import slaUpdate from '@/graphql/subscription/ticket/slaUpdate';
+import addNotification from '@/graphql/subscription/addNotification';
+import updateNotification from '@/graphql/subscription/updateNotification';
+import notifications from '@/graphql/subscription/notifications';
+import copyTicket from '@/graphql/mutation/ticket/copyTicket';
+import ticketSearch from '@/graphql/query/search/ticket';
 import hotkeyHelp from '@/components/hotkeyHelp';
 
 export default {
@@ -255,13 +254,13 @@ export default {
   apollo: {
     $subscribe: {
       changeStatus: {
-        query: ggl(changeStatus),
+        query: changeStatus,
         result({ data }) {
           this.$store.commit('ticket/updateTicket', data.ChangeStatus);
         },
       },
       editTicket: {
-        query: ggl(editTicket),
+        query: editTicket,
         variables() {
           return {
             tickets: this.tickets.map((ticket) => ticket.id),
@@ -272,7 +271,7 @@ export default {
         },
       },
       transferToGroup: {
-        query: ggl(transferToGroup),
+        query: transferToGroup,
         variables() {
           return {
             tickets: this.tickets.map((ticket) => ticket.id),
@@ -283,7 +282,7 @@ export default {
         },
       },
       slaUpdate: {
-        query: ggl(slaUpdate),
+        query: slaUpdate,
         variables() {
           return {
             tickets: this.tickets.map((ticket) => ticket.id),
@@ -294,7 +293,7 @@ export default {
         },
       },
       addNotification: {
-        query: ggl(addNotification),
+        query: addNotification,
         result({ data }) {
           if (data.AddNotification.to.map((to) => to.id).includes(this.user.id)) {
             Notification.requestPermission((permission) => {
@@ -317,7 +316,7 @@ export default {
         },
       },
       updateNotification: {
-        query: ggl(updateNotification),
+        query: updateNotification,
         result({ data }) {
           this.$store.commit(
             'notification/updateNotification',
@@ -326,13 +325,13 @@ export default {
         },
       },
       copyTicket: {
-        query: ggl(copyTicketSubscription),
+        query: copyTicketSubscription,
         result({ data }) {
           this.$store.commit('ticket/insertTicket', data.ticket);
         },
       },
       notifications: {
-        query: ggl(notifications),
+        query: notifications,
         result({ data }) {
           data.Notification.forEach((notification) => {
             this.$store.commit('notification/updateNotification', notification);
@@ -373,14 +372,14 @@ export default {
     copyTicket(value) {
       this.$apollo
         .mutate({
-          mutation: ggl(copyTicket),
+          mutation: copyTicket,
           variables: {
             ticketId: value.id,
           },
           awaitRefetchQueries: true,
           refetchQueries: [
             {
-              query: ggl(ticketSearch),
+              query: ticketSearch,
               variables: {
                 page: parseInt(this.query.page || 1, 10),
                 limit: parseInt(this.query.limit || 10, 10),

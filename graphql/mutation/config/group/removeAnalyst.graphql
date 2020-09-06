@@ -1,5 +1,0 @@
-mutation RemoveAnalyst($groupId: ID!, $analystId: ID!) {
-  RemoveAnalyst(groupId: $groupId, analystId: $analystId) {
-    id
-  }
-}

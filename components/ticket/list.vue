@@ -194,13 +194,13 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import changeStatus from '@/graphql/mutation/ticket/changeStatus.graphql';
-import transferToGroup from '@/graphql/mutation/ticket/transferToGroup.graphql';
-import ticketSearch from '@/graphql/query/search/ticket.graphql';
-import ticketAttributes from '@/graphql/query/search/ticketAttributes.graphql';
-import changeStatusOfTickets from '@/graphql/mutation/ticket/list/changeStatusOfTickets.graphql';
-import transferTickets from '@/graphql/mutation/ticket/list/transferTickets.graphql';
+
+import changeStatus from '@/graphql/mutation/ticket/changeStatus';
+import transferToGroup from '@/graphql/mutation/ticket/transferToGroup';
+import ticketSearch from '@/graphql/query/search/ticket';
+import ticketAttributes from '@/graphql/query/search/ticketAttributes';
+import changeStatusOfTickets from '@/graphql/mutation/ticket/list/changeStatusOfTickets';
+import transferTickets from '@/graphql/mutation/ticket/list/transferTickets';
 import addTicketsToEdit from '@/mixins/addTicketToEdit';
 
 export default {
@@ -364,7 +364,7 @@ export default {
       if (this.selectedStatus) {
         this.$apollo
           .mutate({
-            mutation: ggl(changeStatusOfTickets),
+            mutation: changeStatusOfTickets,
             variables: {
               tickets: this.selected.map((ticket) => ticket.id),
               statusId: this.selectedStatus.id,
@@ -377,7 +377,7 @@ export default {
       if (this.selectedGroup) {
         this.$apollo
           .mutate({
-            mutation: ggl(transferTickets),
+            mutation: transferTickets,
             variables: {
               tickets: this.selected.map((ticket) => ticket.id),
               groupId: this.selectedGroup.id,
@@ -403,7 +403,7 @@ export default {
     getTicketAttributes() {
       this.$apollo
         .query({
-          query: ggl(ticketAttributes),
+          query: ticketAttributes,
         })
         .then((response) => {
           this.$store.commit('status/setStatus', response.data.Status);
@@ -434,7 +434,7 @@ export default {
       });
       await this.$apollo
         .query({
-          query: ggl(ticketSearch),
+          query: ticketSearch,
           fetchPolicy: 'network-only',
           variables: {
             sortBy: query.sortBy || 'id',
@@ -471,7 +471,7 @@ export default {
     modifyStatus(ticket) {
       this.$apollo
         .mutate({
-          mutation: ggl(changeStatus),
+          mutation: changeStatus,
           variables: {
             ticketId: ticket.id,
             statusId: this.currentStatus.id,
@@ -491,7 +491,7 @@ export default {
     transferToGroup(ticket) {
       this.$apollo
         .mutate({
-          mutation: ggl(transferToGroup),
+          mutation: transferToGroup,
           variables: {
             ticketId: ticket.id,
             groupId: this.currentGroup.id,

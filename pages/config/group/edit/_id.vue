@@ -7,9 +7,8 @@
 
 <script>
 import CreateGroup from '@/components/ticket/group/create';
-import GetGroup from '@/graphql/query/config/group/getGroup.graphql';
-import EditGroup from '@/graphql/mutation/config/group/editGroup.graphql';
-import ggl from 'graphql-tag';
+import GetGroup from '@/graphql/query/config/group/getGroup';
+import EditGroup from '@/graphql/mutation/config/group/editGroup';
 
 export default {
   components: {
@@ -20,7 +19,7 @@ export default {
 
     return app.$apollo
       .query({
-        query: ggl(GetGroup),
+        query: GetGroup,
         variables: {
           id,
         },
@@ -33,8 +32,7 @@ export default {
     update(group) {
       this.$apollo
         .mutate({
-          mutation: ggl(EditGroup),
-
+          mutation: EditGroup,
           variables: {
             groupId: group.id,
             group: {

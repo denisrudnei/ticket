@@ -8,8 +8,7 @@
 
 <script>
 import KnowledgeList from '@/components/knowledge/list';
-import List from '@/graphql/query/knowledge/list.graphql';
-import ggl from 'graphql-tag';
+import List from '@/graphql/query/knowledge/list';
 
 export default {
   components: {
@@ -18,7 +17,7 @@ export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(List),
+        query: List,
       })
       .then((response) => ({
         items: response.data,

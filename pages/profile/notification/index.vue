@@ -21,8 +21,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import NotificationList from '@/graphql/query/profile/notification/list.graphql';
+
+import NotificationList from '@/graphql/query/profile/notification/list';
 
 export default {
   computed: mapGetters({
@@ -31,7 +31,7 @@ export default {
   created() {
     this.$apollo
       .query({
-        query: ggl(NotificationList),
+        query: NotificationList,
       })
       .then((response) => {
         this.$store.commit(

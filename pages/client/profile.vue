@@ -57,10 +57,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import list from '@/graphql/query/client/profile/list.graphql';
+
+import list from '@/graphql/query/client/profile/list';
 import compareObjectsWithId from '@/mixins/compareObjectsWithId';
-import edit from '@/graphql/mutation/client/profile/edit.graphql';
+import edit from '@/graphql/mutation/client/profile/edit';
 
 export default {
   layout: 'client',
@@ -68,7 +68,7 @@ export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(list),
+        query: list,
       })
       .then((response) => ({
         addresses: response.data.address,
@@ -94,7 +94,7 @@ export default {
         name: this.user.name,
       };
       this.$apollo.mutate({
-        mutation: ggl(edit),
+        mutation: edit,
         variables: {
           analyst: toSave,
         },

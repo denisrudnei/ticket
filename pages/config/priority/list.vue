@@ -52,10 +52,10 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
+
 import draggable from 'vuedraggable';
-import listPriority from '@/graphql/query/config/priority/priorityList.graphql';
-import updateManyPriorities from '@/graphql/mutation/config/priority/updateManyPriorities.graphql';
+import listPriority from '@/graphql/query/config/priority/priorityList';
+import updateManyPriorities from '@/graphql/mutation/config/priority/updateManyPriorities';
 
 export default {
   components: {
@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     priorityQuery() {
-      return ggl(listPriority);
+      return listPriority;
     },
   },
   watch: {
@@ -81,7 +81,7 @@ export default {
   mounted() {
     this.$apollo
       .query({
-        query: ggl(listPriority),
+        query: listPriority,
       })
       .then((response) => {
         this.items = response.data.priority.sort((a, b) => {
@@ -101,12 +101,12 @@ export default {
       });
       this.$apollo
         .mutate({
-          mutation: ggl(updateManyPriorities),
+          mutation: updateManyPriorities,
           variables: {
             priorities: this.items,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(listPriority) }],
+          refetchQueries: [{ query: listPriority }],
         })
         .then(() => {
           this.$toast.show(this.$t('updated'), {

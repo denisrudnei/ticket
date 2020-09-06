@@ -28,21 +28,12 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
+import statsList from '@/graphql/query/config/stats/list';
 
 export default {
   asyncData({ app }) {
     return app.$apollo.query({
-      query: ggl`query {
-        databaseItemsCount: DatabaseItemsCount {
-          ticket
-          status
-          group
-          analyst
-          category
-          priority
-        }
-      }`,
+      query: statsList,
     }).then((response) => {
       const databaseItemsCount = Object.entries(response.data.databaseItemsCount).map((value) => {
         const [name, total] = value;

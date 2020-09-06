@@ -36,14 +36,14 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import categoryList from '@/graphql/query/config/category/categoryList.graphql';
+
+import categoryList from '@/graphql/query/config/category/categoryList';
 
 export default {
   asyncData({ params, app }) {
     return app.$apollo
       .query({
-        query: ggl(categoryList),
+        query: categoryList,
         variables: {
           name: params.name,
         },

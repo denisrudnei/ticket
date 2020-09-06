@@ -1,3 +1,0 @@
-mutation GenerateEmailToReset($email: String!) {
-  GenerateEmailToReset(email: $email)
-}

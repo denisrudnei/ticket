@@ -116,9 +116,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import getGrouped from '@/graphql/query/report/getGrouped.graphql';
-import getByDate from '@/graphql/query/report/getByDate.graphql';
+
+import getGrouped from '@/graphql/query/report/getGrouped';
+import getByDate from '@/graphql/query/report/getByDate';
 
 export default {
   props: {
@@ -189,7 +189,7 @@ export default {
     async queryFiltred() {
       await this.$apollo
         .query({
-          query: ggl(getGrouped),
+          query: getGrouped,
           variables: {
             attributes: this.base,
             field: this.selectedContentType,
@@ -203,7 +203,7 @@ export default {
     addAreaChart(title) {
       this.$apollo
         .query({
-          query: ggl(getByDate),
+          query: getByDate,
           variables: {
             field: this.selectedContentType,
             start: this.start,

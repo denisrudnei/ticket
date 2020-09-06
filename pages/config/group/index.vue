@@ -136,16 +136,16 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import list from '@/graphql/query/config/group/list.graphql';
-import insertAnalyst from '@/graphql/mutation/config/group/insertAnalyst.graphql';
-import removeAnalyst from '@/graphql/mutation/config/group/removeAnalyst.graphql';
+
+import list from '@/graphql/query/config/group/list';
+import insertAnalyst from '@/graphql/mutation/config/group/insertAnalyst';
+import removeAnalyst from '@/graphql/mutation/config/group/removeAnalyst';
 
 export default {
   asyncData({ app, store }) {
     return app.$apollo
       .query({
-        query: ggl(list),
+        query: list,
       })
       .then((response) => ({
         analysts: response.data.Analyst,
@@ -183,13 +183,13 @@ export default {
     addToGroup(group, analyst) {
       this.$apollo
         .mutate({
-          mutation: ggl(insertAnalyst),
+          mutation: insertAnalyst,
           variables: {
             groupId: group.id,
             analystId: analyst.id,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }],
+          refetchQueries: [{ query: list }],
         })
         .then(() => {
           this.updateGroups();
@@ -201,13 +201,13 @@ export default {
     removeFromGroup(group, analyst) {
       this.$apollo
         .mutate({
-          mutation: ggl(removeAnalyst),
+          mutation: removeAnalyst,
           variables: {
             groupId: group.id,
             analystId: analyst.id,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }],
+          refetchQueries: [{ query: list }],
         })
         .then(() => {
           this.updateGroups();
@@ -219,7 +219,7 @@ export default {
     updateGroups() {
       this.$apollo
         .query({
-          query: ggl(list),
+          query: list,
         })
         .then((response) => {
           this.$store.commit('group/setGroups', response.data.Group);

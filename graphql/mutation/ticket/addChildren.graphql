@@ -1,6 +1,0 @@
-mutation AddChildren($ticketId: ID!, $children: [ID!]!) {
-  AddChildren(ticketId: $ticketId, children: $children) {
-    id
-    resume
-  }
-}

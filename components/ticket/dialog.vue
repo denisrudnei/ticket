@@ -47,9 +47,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
+
 import CreateTicket from '@/components/ticket/create';
-import ticketEdit from '@/graphql/mutation/ticket/editTicket.graphql';
+import ticketEdit from '@/graphql/mutation/ticket/editTicket';
 
 export default {
   name: 'TicketDialog',
@@ -81,7 +81,7 @@ export default {
     update() {
       this.$apollo
         .mutate({
-          mutation: ggl(ticketEdit),
+          mutation: ticketEdit,
           variables: {
             id: this.actualTicket.id,
             ticket: {

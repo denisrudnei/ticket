@@ -19,8 +19,7 @@
 </template>
 
 <script>
-import resetPasswordWithToken from '@/graphql/mutation/auth/resetPasswordWithToken.graphql';
-import ggl from 'graphql-tag';
+import resetPasswordWithToken from '@/graphql/mutation/auth/resetPasswordWithToken';
 
 export default {
   auth: false,
@@ -34,7 +33,7 @@ export default {
       const { token } = this.$route.params;
       this.$apollo
         .mutate({
-          mutation: ggl(resetPasswordWithToken),
+          mutation: resetPasswordWithToken,
           variables: {
             token,
             newPassword: this.password,

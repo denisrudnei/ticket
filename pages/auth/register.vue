@@ -50,8 +50,7 @@
 </template>
 
 <script>
-import register from '@/graphql/mutation/auth/register.graphql';
-import ggl from 'graphql-tag';
+import register from '@/graphql/mutation/auth/register';
 
 export default {
   auth: false,
@@ -74,7 +73,7 @@ export default {
     register() {
       this.$apollo
         .mutate({
-          mutation: ggl(register),
+          mutation: register,
           variables: this.user,
         })
         .then(() => {

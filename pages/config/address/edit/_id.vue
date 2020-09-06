@@ -7,10 +7,9 @@
 
 <script>
 import AddressCreate from '@/components/address/create';
-import AddressById from '@/graphql/query/address/addressById.graphql';
-import edit from '@/graphql/mutation/config/address/edit.graphql';
-import list from '@/graphql/query/address/list.graphql';
-import ggl from 'graphql-tag';
+import AddressById from '@/graphql/query/address/addressById';
+import edit from '@/graphql/mutation/config/address/edit';
+import list from '@/graphql/query/address/list';
 
 export default {
   components: {
@@ -20,7 +19,7 @@ export default {
     const { id } = params;
     return app.$apollo
       .query({
-        query: ggl(AddressById),
+        query: AddressById,
         variables: {
           id,
         },
@@ -33,7 +32,7 @@ export default {
     update(address) {
       this.$apollo
         .mutate({
-          mutation: ggl(edit),
+          mutation: edit,
           variables: {
             id: address.id,
             address: {
@@ -46,7 +45,7 @@ export default {
             },
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }],
+          refetchQueries: [{ query: list }],
         })
         .then(() => {
           this.$toast.show(this.$t('updated'), {

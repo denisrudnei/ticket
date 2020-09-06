@@ -128,10 +128,10 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import createTicket from '@/graphql/mutation/client/ticket/createTicket.graphql';
-import category from '@/graphql/query/client/ticket/category.graphql';
-import list from '@/graphql/query/client/ticket/searchTicket.graphql';
+
+import createTicket from '@/graphql/mutation/client/ticket/createTicket';
+import category from '@/graphql/query/client/ticket/category';
+import list from '@/graphql/query/client/ticket/searchTicket';
 import file from './file';
 
 export default {
@@ -142,7 +142,7 @@ export default {
   asyncData({ app, params }) {
     return app.$apollo
       .query({
-        query: ggl(category),
+        query: category,
         variables: {
           name: params.name,
         },
@@ -203,7 +203,7 @@ export default {
       }
       this.$apollo
         .mutate({
-          mutation: ggl(createTicket),
+          mutation: createTicket,
           variables: {
             ticket: {
               fields: this.ticket.fields.map((field) => {
@@ -223,7 +223,7 @@ export default {
           },
           awaitRefetchQueries: true,
           refetchQueries: [{
-            query: ggl(list),
+            query: list,
             variables: {
               page: 1,
               limit: 9,

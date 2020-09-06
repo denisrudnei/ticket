@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
+
 import CategoryCreate from '@/components/ticket/category/create';
-import CategoryEditList from '@/graphql/query/config/category/edit.graphql';
-import CategoryEdit from '@/graphql/mutation/config/category/editCategory.graphql';
+import CategoryEditList from '@/graphql/query/config/category/edit';
+import CategoryEdit from '@/graphql/mutation/config/category/editCategory';
 
 export default {
   components: {
@@ -22,7 +22,7 @@ export default {
     const { name } = params;
     return app.$apollo
       .query({
-        query: ggl(CategoryEditList),
+        query: CategoryEditList,
         variables: {
           name,
         },
@@ -35,7 +35,7 @@ export default {
     update(newValue) {
       this.$apollo
         .mutate({
-          mutation: ggl(CategoryEdit),
+          mutation: CategoryEdit,
           variables: {
             categoryId: newValue.id,
             category: {
@@ -54,7 +54,7 @@ export default {
           awaitRefetchQueries: true,
           refetchQueries: [
             {
-              query: ggl(CategoryEditList),
+              query: CategoryEditList,
               variables: {
                 name: newValue.name,
               },

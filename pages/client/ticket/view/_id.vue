@@ -73,8 +73,8 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import ticketById from '@/graphql/query/client/ticket/ticketById.graphql';
+
+import ticketById from '@/graphql/query/client/ticket/ticketById';
 
 export default {
   layout: 'client',
@@ -86,7 +86,7 @@ export default {
   asyncData({ params, app }) {
     return app.$apollo
       .query({
-        query: ggl(ticketById),
+        query: ticketById,
         variables: {
           id: params.id,
         },

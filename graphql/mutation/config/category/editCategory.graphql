@@ -1,6 +1,0 @@
-#import "@/graphql/fragments/categoryList.graphql"
-mutation EditCategory($categoryId: ID!, $category: CategoryInput!) {
-  EditCategory(categoryId: $categoryId, category: $category) {
-    ...categoryList
-  }
-}

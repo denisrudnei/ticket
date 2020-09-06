@@ -1,8 +1,0 @@
-#import "@/graphql/fragments/ticketList.graphql"
-query TicketById($id: ID!) {
-  ticket: TicketById(id: $id) {
-    ...ticketList
-    content
-    slaPercentage
-  }
-}

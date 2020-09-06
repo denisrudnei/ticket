@@ -20,14 +20,13 @@
 
 <script>
 import _ from 'lodash';
-import knowledgeList from '@/graphql/query/knowledge/list.graphql';
-import ggl from 'graphql-tag';
+import knowledgeList from '@/graphql/query/knowledge/list';
 
 export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(knowledgeList),
+        query: knowledgeList,
       })
       .then((response) => {
         const g = _(response.data.knowledge).groupBy('group.name').value();

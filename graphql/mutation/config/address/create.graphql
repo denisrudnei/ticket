@@ -1,5 +1,0 @@
-mutation CreateAddress($address: AddressCreateInput!) {
-  CreateAddress(address: $address) {
-    id
-  }
-}

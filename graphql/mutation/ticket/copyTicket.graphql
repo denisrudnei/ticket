@@ -1,7 +1,0 @@
-#import "@/graphql/fragments/ticketList.graphql"
-mutation CopyTicket ($ticketId: ID!) {
-  ticket: CopyTicket(ticketId: $ticketId) {
-    ...ticketList
-    content
-  }
-}

@@ -8,9 +8,8 @@
 
 <script>
 import create from '@/components/knowledge/create';
-import CreateKnowledge from '@/graphql/mutation/config/knowledge/create.graphql';
-import list from '@/graphql/query/knowledge/list.graphql';
-import ggl from 'graphql-tag';
+import CreateKnowledge from '@/graphql/mutation/config/knowledge/create';
+import list from '@/graphql/query/knowledge/list';
 
 export default {
   components: {
@@ -28,12 +27,12 @@ export default {
       knowledge.status = knowledge.status.id;
       this.$apollo
         .mutate({
-          mutation: ggl(CreateKnowledge),
+          mutation: CreateKnowledge,
           variables: {
             knowledge,
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(list) }],
+          refetchQueries: [{ query: list }],
         })
         .then((response) => {
           this.$toast.show('Criado documento de conhecimento', {

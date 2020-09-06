@@ -115,8 +115,8 @@
 import { mapGetters } from 'vuex';
 import Notification from '@/components/notification';
 import Language from '@/components/language';
-import id from '@/graphql/query/toolbar/ticketNumber.graphql';
-import ggl from 'graphql-tag';
+import id from '@/graphql/query/toolbar/ticketNumber';
+
 import addTicketsToEdit from '@/mixins/addTicketToEdit';
 
 export default {
@@ -183,7 +183,7 @@ export default {
     search(idToSearch) {
       this.$apollo
         .query({
-          query: ggl(id),
+          query: id,
           variables: {
             ids: [idToSearch],
           },

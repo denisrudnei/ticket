@@ -1,7 +1,0 @@
-query {
-  roles: Role {
-    id
-    name
-    description
-  }
-}

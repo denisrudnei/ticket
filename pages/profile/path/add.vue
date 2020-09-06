@@ -48,17 +48,17 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import ref from '@/graphql/query/profile/path/ref.graphql';
-import add from '@/graphql/mutation/profile/path/add.graphql';
-import tree from '@/graphql/query/profile/path/tree.graphql';
-import list from '@/graphql/query/profile/path/list.graphql';
+
+import ref from '@/graphql/query/profile/path/ref';
+import add from '@/graphql/mutation/profile/path/add';
+import tree from '@/graphql/query/profile/path/tree';
+import list from '@/graphql/query/profile/path/list';
 
 export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(ref),
+        query: ref,
       })
       .then((response) => ({
         paths: response.data.ref,
@@ -78,7 +78,7 @@ export default {
     save() {
       this.$apollo
         .mutate({
-          mutation: ggl(add),
+          mutation: add,
           variables: {
             path: {
               name: this.selected.name,
@@ -89,10 +89,10 @@ export default {
           awaitRefetchQueries: true,
           refetchQueries: [
             {
-              query: ggl(list),
+              query: list,
             },
             {
-              query: ggl(tree),
+              query: tree,
             },
           ],
         })

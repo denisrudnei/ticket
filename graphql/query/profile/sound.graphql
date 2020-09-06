@@ -1,9 +1,0 @@
-query {
-  GetSounds {
-    id
-    type
-    muted
-    volume
-  }
-  soundTypes
-}

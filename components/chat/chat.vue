@@ -85,9 +85,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import Chat from '@/graphql/query/chat/chat.graphql';
-import newMessage from '@/graphql/subscription/chat/newMessage.graphql';
+
+import Chat from '@/graphql/query/chat/chat';
+import newMessage from '@/graphql/subscription/chat/newMessage';
 import ImageUploadAdapter from '@/plugins/image-upload-adapter';
 
 export default {
@@ -109,7 +109,7 @@ export default {
   apollo: {
     $subscribe: {
       newMessage: {
-        query: ggl(newMessage),
+        query: newMessage,
         variables() {
           return { to: this.user.id };
         },
@@ -129,7 +129,7 @@ export default {
   created() {
     this.$apollo
       .query({
-        query: ggl(Chat),
+        query: Chat,
       })
       .then((response) => {
         this.$store.commit('chat/setChats', response.data.chat);

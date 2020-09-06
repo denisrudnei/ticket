@@ -30,16 +30,16 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import remove from '@/graphql/mutation/profile/path/removePath.graphql';
-import list from '@/graphql/query/profile/path/list.graphql';
-import getTree from '@/graphql/query/profile/path/tree.graphql';
+
+import remove from '@/graphql/mutation/profile/path/removePath';
+import list from '@/graphql/query/profile/path/list';
+import getTree from '@/graphql/query/profile/path/tree';
 
 export default {
   asyncData({ app }) {
     return app.$apollo
       .query({
-        query: ggl(list),
+        query: list,
       })
       .then((response) => ({
         items: response.data.path,
@@ -71,7 +71,7 @@ export default {
     deletePath(id) {
       this.$apollo
         .mutate({
-          mutation: ggl(remove),
+          mutation: remove,
           variables: {
             userId: this.user.id,
             path: id,
@@ -79,10 +79,10 @@ export default {
           awaitRefetchQueries: true,
           refetchQueries: [
             {
-              query: ggl(getTree),
+              query: getTree,
             },
             {
-              query: ggl(list),
+              query: list,
             },
           ],
         })

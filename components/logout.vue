@@ -44,7 +44,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
+import logout from '@/graphql/mutation/auth/logout';
 
 export default {
   computed: mapGetters({
@@ -54,11 +54,7 @@ export default {
     async logoutUser() {
       await this.$auth.logout();
       await this.$apollo.mutate({
-        mutation: ggl`
-          mutation {
-            Logout
-          }
-        `,
+        mutation: logout,
       });
 
       this.$router.push('/auth/');

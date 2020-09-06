@@ -42,15 +42,14 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import RoleById from '@/graphql/query/role/roleById.graphql';
-import edit from '@/graphql/mutation/config/role/edit.graphql';
-import ggl from 'graphql-tag';
+import RoleById from '@/graphql/query/role/roleById';
+import edit from '@/graphql/mutation/config/role/edit';
 
 export default {
   asyncData({ app, params }) {
     return app.$apollo
       .query({
-        query: ggl(RoleById),
+        query: RoleById,
         variables: {
           id: params.id,
         },
@@ -71,7 +70,7 @@ export default {
     save() {
       this.$apollo
         .mutate({
-          mutation: ggl(edit),
+          mutation: edit,
           variables: {
             roleId: this.role.id,
             role: {

@@ -1,6 +1,0 @@
-#import '@/graphql/fragments/ticketPagination.graphql'
-query Tickets ($page: Int, $limit: Int, $descending: Int, $sortBy: String, $attributes: TicketAttributes) {
-  Tickets: SearchTicket (page: $page, limit: $limit, descending: $descending, sortBy: $sortBy, attributes: $attributes) {
-    ...ticketPagination
-  }
-}

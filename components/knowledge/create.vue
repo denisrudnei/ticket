@@ -87,8 +87,7 @@
 <script>
 import compareObjectsWithId from '@/mixins/compareObjectsWithId';
 import ImageUploadAdapter from '@/plugins/image-upload-adapter';
-import create from '@/graphql/query/config/knowledge/create.graphql';
-import ggl from 'graphql-tag';
+import create from '@/graphql/query/config/knowledge/create';
 
 export default {
   mixins: [compareObjectsWithId],
@@ -134,7 +133,7 @@ export default {
   created() {
     this.$apollo
       .query({
-        query: ggl(create),
+        query: create,
       })
       .then((response) => {
         this.status = response.data.status;

@@ -1,9 +1,0 @@
-query AnalystById($id: ID!) {
-  AnalystById(id: $id) {
-    name
-    groups {
-      id
-      name
-    }
-  }
-}

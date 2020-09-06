@@ -55,15 +55,14 @@
 
 <script>
 import showModal from '@/mixins/showModal';
-import AnalystById from '@/graphql/query/analyst/analystById.graphql';
-import ggl from 'graphql-tag';
+import AnalystById from '@/graphql/query/analyst/analystById';
 
 export default {
   mixins: [showModal],
   asyncData({ params, app }) {
     return app.$apollo
       .query({
-        query: ggl(AnalystById),
+        query: AnalystById,
         variables: {
           id: params.id,
         },

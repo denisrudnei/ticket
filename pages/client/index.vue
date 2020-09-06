@@ -98,8 +98,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import ggl from 'graphql-tag';
-import listTicket from '@/graphql/query/client/ticket/searchTicket.graphql';
+
+import listTicket from '@/graphql/query/client/ticket/searchTicket';
 
 export default {
   layout: 'client',
@@ -142,7 +142,7 @@ export default {
     getTickets(page) {
       this.$apollo
         .query({
-          query: ggl(listTicket),
+          query: listTicket,
           variables: {
             page: parseInt(page, 10) || 1,
             limit: 9,

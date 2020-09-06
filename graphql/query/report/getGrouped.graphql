@@ -1,6 +1,0 @@
-query TicketReport($attributes: ReportAttributes!, $field: String!) {
-  TicketReport(attributes: $attributes, field: $field) {
-    total
-    name
-  }
-}

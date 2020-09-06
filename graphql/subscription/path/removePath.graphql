@@ -1,5 +1,0 @@
-subscription($userId: ID!) {
-  path: RemovePath(userId: $userId) {
-    id
-  }
-}

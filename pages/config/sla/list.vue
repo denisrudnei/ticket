@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import slaList from '@/graphql/query/config/sla/slaList.graphql';
+
+import slaList from '@/graphql/query/config/sla/slaList';
 import { format } from 'date-fns';
 
 export default {
@@ -46,7 +46,7 @@ export default {
   mounted() {
     this.$apollo
       .query({
-        query: ggl(slaList),
+        query: slaList,
       })
       .then((response) => {
         this.slas = response.data.slas;

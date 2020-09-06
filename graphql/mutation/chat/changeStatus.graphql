@@ -1,5 +1,0 @@
-mutation ChangeStatus($status: AnalystStatus!) {
-  ChangeChatStatus(status: $status) {
-    id
-  }
-}

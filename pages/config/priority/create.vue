@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import ggl from 'graphql-tag';
-import createPriority from '@/graphql/mutation/config/priority/createPriority.graphql';
-import listPriority from '@/graphql/query/config/priority/priorityList.graphql';
+
+import createPriority from '@/graphql/mutation/config/priority/createPriority';
+import listPriority from '@/graphql/query/config/priority/priorityList';
 import create from '@/components/ticket/priority/create';
 
 export default {
@@ -27,7 +27,7 @@ export default {
     save(priority) {
       this.$apollo
         .mutate({
-          mutation: ggl(createPriority),
+          mutation: createPriority,
           variables: {
             priority: {
               name: this.priority.name,
@@ -35,7 +35,7 @@ export default {
             },
           },
           awaitRefetchQueries: true,
-          refetchQueries: [{ query: ggl(listPriority) }],
+          refetchQueries: [{ query: listPriority }],
         })
         .then(() => {
           this.$toast.show('Cadastrado', {
