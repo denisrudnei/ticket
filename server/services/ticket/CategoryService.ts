@@ -1,7 +1,7 @@
 import { UploadedFile } from 'express-fileupload';
+import AWS from 'aws-sdk';
 import S3 from '~/plugins/S3';
 import File from '~/server/models/File';
-
 import Category from '../../models/ticket/Category';
 
 class CategoryService {

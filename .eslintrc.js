@@ -26,5 +26,7 @@ module.exports = {
     semi: ['off', 'always'],
     '@typescript-eslint/semi': ['warn', 'always'],
     'no-param-reassign': 'off',
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'off',
   },
 };

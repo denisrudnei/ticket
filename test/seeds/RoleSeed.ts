@@ -1,3 +1,4 @@
+import { DeleteResult } from 'typeorm';
 import Role from '../../server/models/Role';
 import Seed from './Seed';
 import Generate from './Generate';
@@ -14,7 +15,7 @@ class RoleSeed implements Seed<Role> {
     return Generate.many<RoleSeed>(new RoleSeed(), number);
   }
 
-  destroy(): Promise<import('typeorm').DeleteResult> {
+  destroy(): Promise<DeleteResult> {
     return Role.delete({});
   }
 }

@@ -5,6 +5,7 @@ import {
   Arg, Authorized, FieldResolver, ID, Mutation, Query, Resolver, Root,
 } from 'type-graphql';
 
+import AWS from 'aws-sdk';
 import CategoryCreateInput from '../inputs/CategoryCreateInput';
 import CategoryInput from '../inputs/CategoryInput';
 import Category from '../models/ticket/Category';

@@ -1,5 +1,6 @@
 import '~/server/models/Notification';
 
+import AWS from 'aws-sdk';
 import Agenda from 'agenda';
 import { PubSubEngine } from 'apollo-server-express';
 import { UploadedFile } from 'express-fileupload';
