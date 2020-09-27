@@ -89,8 +89,8 @@ export default {
     this.getNotification();
   },
   methods: {
-    async getNotification() {
-      const { id } = this.$route.params;
+    async getNotification(notificationId) {
+      const id = notificationId !== undefined ? notificationId : this.$route.params.id;
       const { data } = await this.$apollo.query({
         query: NotificationById,
         variables: {
@@ -112,9 +112,9 @@ export default {
 
       return this.notifications[index + 1];
     },
-    goTo(notification) {
+    async goTo(notification) {
       this.$router.push(`/profile/notification/${notification.id}`);
-      this.getNotification();
+      await this.getNotification(notification.id);
     },
     read() {
       this.readNotification(this.notification);
