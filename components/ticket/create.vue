@@ -577,6 +577,7 @@ export default {
   },
   data() {
     return {
+      ticketData: {},
       action: {
         active: false,
       },
@@ -604,7 +605,7 @@ export default {
     ticket: {
       get() {
         if (!this.search) return this.$store.getters['ticket/getActualTicket'];
-        return this.value;
+        return Object.assign(this.ticketData, this.value);
       },
       set(value) {
         this.$store.commit('ticket/setActualTicket', value);
@@ -657,6 +658,7 @@ export default {
   methods: {
     setFieldInActualTicket(value, field) {
       this.$store.commit('ticket/setFieldInActualTicket', { field, value });
+      if (this.search) this.ticketData[field] = value;
     },
     addComment() {
       this.$apollo
@@ -740,7 +742,7 @@ export default {
     },
     clearFields() {
       this.$store.commit('ticket/resetActualTicket');
-      this.value = this.$store.getters['ticket/getActualTicket'];
+      Object.assign(this.value, this.$store.getters['ticket/getDefaultValue']);
     },
   },
   head() {

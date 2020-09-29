@@ -346,6 +346,10 @@ export default {
         this.updateOptions(newValue);
       },
     },
+    async $route(value) {
+      this.query = value.query;
+      await this.update();
+    },
   },
   async mounted() {
     const { query } = this.$route;

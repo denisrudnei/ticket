@@ -15,7 +15,7 @@
           {{ item.priority.name }}
         </template>
         <template v-slot:item.actualUser="{ item }">
-          <v-list-item>
+          <v-list-item v-if="item.actualUser">
             <v-list-item-avatar>
               <img :src="item.actualUser.picture">
             </v-list-item-avatar>

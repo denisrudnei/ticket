@@ -64,7 +64,6 @@ export default {
       this.data = this.$router.currentRoute.query;
     },
   },
-
   created() {
     this.$store.commit('ticket/resetActualTicket');
   },

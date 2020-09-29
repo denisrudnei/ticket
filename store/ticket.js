@@ -54,6 +54,21 @@ export const getters = {
   getModalList(state) {
     return state.modalList;
   },
+  getDefaultValue() {
+    return {
+      group: {},
+      category: {},
+      priority: {},
+      status: {},
+      openedBy: {},
+      actualUser: {},
+      affectedUser: {},
+      address: {},
+      slaCount: undefined,
+      created: undefined,
+      modified: undefined,
+    };
+  },
 };
 
 export const mutations = {

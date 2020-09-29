@@ -113,7 +113,6 @@
 
 <script>
 import { mapGetters } from 'vuex';
-
 import list from '@/components/ticket/children/search/list';
 import search from '@/graphql/query/search/ticket';
 import addChildren from '@/graphql/mutation/ticket/addChildren';
