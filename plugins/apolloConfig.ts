@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueApollo from 'vue-apollo';
 import { ApolloClient } from 'apollo-client';
 import { createUploadLink } from 'apollo-upload-client';
-import { split } from 'apollo-link';
+import { ApolloLink, split } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { getMainDefinition } from 'apollo-utilities';
@@ -22,7 +22,7 @@ export default ({ app, req }: any, inject: any) => {
     credentials: 'include',
     uri: `${url.protocol}://${url.host}/graphql`,
     ...(process.server ? { headers: req.headers } : undefined),
-  });
+  }) as unknown;
 
   const wsOrWss = url.protocol.includes('https') ? 'wss://' : 'ws://';
 
@@ -43,7 +43,7 @@ export default ({ app, req }: any, inject: any) => {
       );
     },
     wsLink,
-    httpLink,
+    httpLink as ApolloLink,
   );
 
   const cache = new InMemoryCache();
