@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import { Raw } from 'typeorm';
 
-import { ILike } from '../db/FindOperator';
 import AnalystMergeInput from '../inputs/AnalystMergeInput';
 import Analyst from '../models/Analyst';
 import Role from '../models/Role';
@@ -11,7 +11,7 @@ import MailService from './MailService';
 class AuthService {
   static async login(email: string, password: string): Promise<Analyst> {
     const user = await Analyst.findOne({
-      where: { email: ILike(email) },
+      where: { email: Raw((alias) => `${alias} ILIKE '%${email}%'`) },
       relations: ['role'],
     });
 
@@ -24,7 +24,7 @@ class AuthService {
   static async register(user: Analyst): Promise<Analyst> {
     const userFromDB = await Analyst.findOne({
       where: {
-        email: ILike(user.email),
+        email: Raw((alias) => `${alias} ILIKE '%${user.email}%'`),
       },
     });
     if (userFromDB) throw new Error('Already registered');
@@ -40,7 +40,7 @@ class AuthService {
   static async mergeUser(email: string, userBody: AnalystMergeInput): Promise<Analyst> {
     const analyst = await Analyst.findOne({
       where: {
-        email: ILike(email),
+        email: Raw((alias) => `${alias} ILIKE '%${email}%'`),
       },
       relations: ['role'],
     });
@@ -67,7 +67,7 @@ class AuthService {
   static async generateEmailToReset(email: string, req: express.Request): Promise<string> {
     const analyst = await Analyst.findOne({
       where: {
-        email: ILike(email),
+        email: Raw((alias) => `${alias} ILIKE '%${email}%'`),
       },
     });
     if (!analyst) throw new Error('Not found');

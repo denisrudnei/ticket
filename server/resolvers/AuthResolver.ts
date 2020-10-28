@@ -4,10 +4,10 @@ import {
   Arg, Authorized, Ctx, Mutation, Query, Resolver,
 } from 'type-graphql';
 
+import { Raw } from 'typeorm';
 import AnalystMergeInput from '../inputs/AnalystMergeInput';
 import Analyst from '../models/Analyst';
 import AuthService from '../services/AuthService';
-import { ILike } from '../db/FindOperator';
 
 @Resolver()
 class AuthResolver {
@@ -42,7 +42,7 @@ class AuthResolver {
   ) {
     req!.session!.authUser = await Analyst.findOne({
       where: {
-        email: ILike(email),
+        email: Raw((alias) => `${alias} ILIKE '%${email}%'`),
       },
       relations: ['role'],
     });
