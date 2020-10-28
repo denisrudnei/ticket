@@ -41,8 +41,3 @@ export const mutations = {
     state.user.picture = '/user.svg';
   },
 };
-
-export default {
-  getters,
-  mutations,
-};
