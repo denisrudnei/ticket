@@ -3,7 +3,8 @@
     <v-col
       v-for="stat in databaseItemsCount"
       :key="stat.name"
-      cols="3"
+      cols="12"
+      md="3"
     >
       <v-card
         class="primary white--text"
