@@ -101,7 +101,7 @@
     "vue-the-mask": "^0.11.1",
     "vue2-google-maps": "^0.10.7",
     "vuedraggable": "^2.24.3",
-    "webpack-graphql-loader": "^1.0.2",
+    "webpack-graphql-loader": "^0.1.2",
     "ws": "^7.3.1"
   },
   "devDependencies": {
@@ -149,7 +149,7 @@
     "mocha": "^8.2.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.6",
-    "npm": "^6.14.8",
+    "npm": "^7.0.6",
     "nyc": "^15.1.0",
     "prettier": "2.1.2",
     "sass": "^1.27.0",
