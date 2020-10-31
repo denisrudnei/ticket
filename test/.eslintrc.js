@@ -10,7 +10,7 @@ module.exports = {
     parser: '@typescript-eslint/parser',
   },
   extends: ['@nuxtjs', 'airbnb-base'],
-  plugins: ['vuetify', '@typescript-eslint'],
+  plugins: ['@typescript-eslint'],
   overrides: [
     {
       files: ['*.ts', '*.tsx'],
