@@ -26,7 +26,7 @@
             :close-on-content-click="false"
             :nudge-width="350"
           >
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-btn
                 icon
                 class="primary white--text"
@@ -55,7 +55,7 @@
             :close-on-content-click="false"
             :nudge-width="350"
           >
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-btn
                 icon
                 class="primary white--text"
@@ -83,7 +83,7 @@
             :color="getStatus(analyst.status)"
             class="white--text"
           >
-            <template v-slot:badge>
+            <template #badge>
               <v-icon class="white--text">
                 chat
               </v-icon>

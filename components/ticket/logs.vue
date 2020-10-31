@@ -11,10 +11,10 @@
           :right="sameGroup(index, log.group)"
           small
         >
-          <template v-slot:opposite>
+          <template #opposite>
             <span>{{ log.oldStatus.name }}</span>
           </template>
-          <template v-slot:icon>
+          <template #icon>
             <v-avatar>
               <img :src="log.user.picture">
             </v-avatar>

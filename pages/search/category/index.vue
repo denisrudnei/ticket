@@ -7,10 +7,10 @@
         on-icon="layers"
         open-on-click
       >
-        <template v-slot:prepend>
+        <template #prepend>
           <v-icon>layers</v-icon>
         </template>
-        <template v-slot:label="{ item }">
+        <template #label="{ item }">
           <span @click="getSub(item)">
             {{ item.name }}
           </span>

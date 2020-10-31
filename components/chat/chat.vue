@@ -33,7 +33,7 @@
             v-for="message in messages"
             :key="message.id"
           >
-            <template v-slot:icon>
+            <template #icon>
               <v-avatar>
                 <img
                   :src="message.from.picture"

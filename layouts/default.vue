@@ -122,7 +122,7 @@
           fixed
           direction="left"
         >
-          <template v-slot:activator>
+          <template #activator>
             <v-btn
               v-model="fab"
               fab
@@ -184,7 +184,6 @@ import ticketSearch from '@/graphql/query/search/ticket';
 import hotkeyHelp from '@/components/hotkeyHelp';
 
 export default {
-  middleware: ['adminMiddleware'],
   components: {
     Toolbar,
     TicketDialog,
@@ -197,6 +196,7 @@ export default {
     hotkeyHelp,
   },
   mixins: [afterLogin],
+  middleware: ['adminMiddleware'],
   data() {
     return {
       fab: true,

@@ -28,5 +28,8 @@ module.exports = {
     'no-param-reassign': 'off',
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'off',
+    'vue/valid-v-slot': ['error', {
+      allowModifiers: true,
+    }],
   },
 };

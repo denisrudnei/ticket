@@ -135,10 +135,10 @@ import list from '@/graphql/query/client/ticket/searchTicket';
 import file from './file';
 
 export default {
-  layout: 'client',
   components: {
     file,
   },
+  layout: 'client',
   asyncData({ app, params }) {
     return app.apolloProvider.defaultClient
       .query({

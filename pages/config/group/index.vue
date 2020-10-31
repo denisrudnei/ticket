@@ -8,17 +8,17 @@
         :items="groups"
         :headers="headers"
       >
-        <template v-slot:item.name="{ item }">
+        <template #item.name="{ item }">
           {{ item.name }}
         </template>
-        <template v-slot:item.length="{ item }">
+        <template #item.length="{ item }">
           <v-menu
             :close-on-content-click="false"
             :close-on-click="true"
             :nudge-width="250"
             max-height="40vh"
           >
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-btn
                 tile
                 class="primary white--text"
@@ -66,12 +66,12 @@
             </v-list>
           </v-menu>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template #item.actions="{ item }">
           <v-menu
             offset-y
             :close-on-content-click="false"
           >
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-btn
                 icon
                 class="primary white--text"
@@ -119,7 +119,7 @@
             </v-card>
           </v-menu>
         </template>
-        <template v-slot:item.edit="{ item }">
+        <template #item.edit="{ item }">
           <v-btn
             class="primary white--text"
             icon

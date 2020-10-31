@@ -8,10 +8,10 @@
         :headers="headers"
         :items="status"
       >
-        <template v-slot:item.name="{ item }">
+        <template #item.name="{ item }">
           {{ item.name }}
         </template>
-        <template v-slot:item.description="{ item }">
+        <template #item.description="{ item }">
           {{ item.description }}
         </template>
       </v-data-table>

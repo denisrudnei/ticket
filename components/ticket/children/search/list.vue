@@ -8,13 +8,13 @@
         show-select
         item-key="id"
       >
-        <template v-slot:item.id="{ item }">
+        <template #item.id="{ item }">
           {{ item.id }}
         </template>
-        <template v-slot:item.priority="{ item }">
+        <template #item.priority="{ item }">
           {{ item.priority.name }}
         </template>
-        <template v-slot:item.actualUser="{ item }">
+        <template #item.actualUser="{ item }">
           <v-list-item v-if="item.actualUser">
             <v-list-item-avatar>
               <img :src="item.actualUser.picture">
@@ -29,22 +29,22 @@
             </v-list-item-content>
           </v-list-item>
         </template>
-        <template v-slot:item.resume="{ item }">
+        <template #item.resume="{ item }">
           {{ item.resume }}
         </template>
-        <template v-slot:item.status="{ item }">
+        <template #item.status="{ item }">
           {{ item.status.name }}
         </template>
-        <template v-slot:item.group="{ item }">
+        <template #item.group="{ item }">
           {{ item.group.name }}
         </template>
-        <template v-slot:item.category="{ item }">
+        <template #item.category="{ item }">
           {{ item.category.fullName }}
         </template>
-        <template v-slot:item.created="{ item }">
+        <template #item.created="{ item }">
           {{ item.created | date }}
         </template>
-        <template v-slot:item.modified="{ item }">
+        <template #item.modified="{ item }">
           {{ item.modified | date }}
         </template>
       </v-data-table>

@@ -5,23 +5,23 @@
         :headers="headers"
         :items="items"
       >
-        <template v-slot:item.name="{ item }">
+        <template #item.name="{ item }">
           {{ item.fullName }}
         </template>
-        <template v-slot:item.father="{ item }">
+        <template #item.father="{ item }">
           {{
             item.father !== undefined && item.father !== null
               ? item.father.fullName
               : 'orfão'
           }}
         </template>
-        <template v-slot:item.group="{ item }">
+        <template #item.group="{ item }">
           {{ !item.defaultGroup ? '' : item.defaultGroup.name }}
         </template>
-        <template v-slot:item.children="{ item }">
+        <template #item.children="{ item }">
           {{ item.subs !== undefined ? item.subs.length : 0 }}
         </template>
-        <template v-slot:item.edit="{ item }">
+        <template #item.edit="{ item }">
           <v-btn
             icon
             class="primary white--text"

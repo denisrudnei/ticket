@@ -74,28 +74,28 @@
         :items="actualTicket.children"
         :headers="headers"
       >
-        <template v-slot:item.id="{ item }">
+        <template #item.id="{ item }">
           {{ item.id }}
         </template>
-        <template v-slot:item.resume="{ item }">
+        <template #item.resume="{ item }">
           {{ item.resume }}
         </template>
-        <template v-slot:item.status="{ item }">
+        <template #item.status="{ item }">
           {{ item.status.name }}
         </template>
-        <template v-slot:item.group="{ item }">
+        <template #item.group="{ item }">
           {{ item.group.name }}
         </template>
-        <template v-slot:item.category="{ item }">
+        <template #item.category="{ item }">
           {{ item.category.fullName }}
         </template>
-        <template v-slot:item.created="{ item }">
+        <template #item.created="{ item }">
           {{ item.created | date }}
         </template>
-        <template v-slot:item.modified="{ item }">
+        <template #item.modified="{ item }">
           {{ item.modified | date }}
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template #item.actions="{ item }">
           <v-btn
             class="red white--text"
             icon

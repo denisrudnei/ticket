@@ -63,8 +63,8 @@ import compareObjectsWithId from '@/mixins/compareObjectsWithId';
 import edit from '@/graphql/mutation/client/profile/edit';
 
 export default {
-  layout: 'client',
   mixins: [compareObjectsWithId],
+  layout: 'client',
   asyncData({ app }) {
     return app.apolloProvider.defaultClient
       .query({

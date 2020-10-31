@@ -9,14 +9,14 @@
     top
     class="white"
   >
-    <template v-slot:activator="{ on }">
+    <template #activator="{ on }">
       <v-btn
         icon
         text
         v-on="on"
       >
         <v-badge>
-          <template v-slot:badge>
+          <template #badge>
             <span>{{ notifications.length }}</span>
           </template>
           <v-icon class="white--text">

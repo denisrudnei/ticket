@@ -5,22 +5,22 @@
         :headers="headers"
         :items="addresses"
       >
-        <template v-slot:item.name="{ item }">
+        <template #item.name="{ item }">
           {{ item.name }}
         </template>
-        <template v-slot:item.street="{ item }">
+        <template #item.street="{ item }">
           {{ item.street }}
         </template>
-        <template v-slot:item.state="{ item }">
+        <template #item.state="{ item }">
           {{ item.state }}
         </template>
-        <template v-slot:item.city="{ item }">
+        <template #item.city="{ item }">
           {{ item.city }}
         </template>
-        <template v-slot:item.country="{ item }">
+        <template #item.country="{ item }">
           {{ item.country }}
         </template>
-        <template v-slot:item.edit="{ item }">
+        <template #item.edit="{ item }">
           <v-btn
             class="primary white--text"
             icon

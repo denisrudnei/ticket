@@ -5,10 +5,10 @@
         :items="status"
         :headers="headers"
       >
-        <template v-slot:item.name="{ item }">
+        <template #item.name="{ item }">
           {{ item.name }}
         </template>
-        <template v-slot:item.edit="{ item }">
+        <template #item.edit="{ item }">
           <v-btn
             icon
             class="primary white--text"

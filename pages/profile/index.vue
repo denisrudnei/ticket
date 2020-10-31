@@ -88,7 +88,7 @@
         pa-3
       >
         <v-menu :close-on-content-click="false">
-          <template v-slot:activator="{ on }">
+          <template #activator="{ on }">
             <v-btn
               tile
               class="primary white--text"

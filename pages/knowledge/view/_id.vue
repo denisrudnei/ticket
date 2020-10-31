@@ -115,6 +115,11 @@ export default {
       dialog: true,
     };
   },
+  head() {
+    return {
+      title: this.knowledge.name,
+    };
+  },
   mounted() {
     const { id } = this.$route.params;
     this.$apollo
@@ -148,11 +153,6 @@ export default {
       this.dialog = false;
       this.$router.back();
     },
-  },
-  head() {
-    return {
-      title: this.knowledge.name,
-    };
   },
 };
 </script>

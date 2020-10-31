@@ -12,7 +12,7 @@
         :nudge-width="500"
         max-height="45vw"
       >
-        <template v-slot:activator="{ on }">
+        <template #activator="{ on }">
           <v-btn
             tile
             class="primary white--text"
@@ -354,7 +354,7 @@
                   max-width="290"
                   :close-on-content-click="false"
                 >
-                  <template v-slot:activator="{ on }">
+                  <template #activator="{ on }">
                     <v-text-field
                       :value="initial | date"
                       filled
@@ -379,7 +379,7 @@
                   max-width="290"
                   :close-on-content-click="false"
                 >
-                  <template v-slot:activator="{ on }">
+                  <template #activator="{ on }">
                     <v-text-field
                       :value="final | date"
                       filled

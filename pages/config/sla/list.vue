@@ -3,10 +3,10 @@
     :items="slas"
     :headers="headers"
   >
-    <template v-slot:item.name="{ item }">
+    <template #item.name="{ item }">
       {{ item.name }}
     </template>
-    <template v-slot:item.limit="{ item }">
+    <template #item.limit="{ item }">
       {{ item.limit | toSla }}
     </template>
   </v-data-table>

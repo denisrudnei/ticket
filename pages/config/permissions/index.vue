@@ -8,13 +8,13 @@
         :items="roles"
         :headers="headers"
       >
-        <template v-slot:item.name="{ item }">
+        <template #item.name="{ item }">
           {{ item.name }}
         </template>
-        <template v-slot:item.description="{ item }">
+        <template #item.description="{ item }">
           {{ item.description }}
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template #item.actions="{ item }">
           <v-btn
             class="primary white--text"
             icon

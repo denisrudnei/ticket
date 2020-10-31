@@ -8,13 +8,13 @@
         :items="actualTicket.comments"
         :headers="headers"
       >
-        <template v-slot:item.user="{ item }">
+        <template #item.user="{ item }">
           {{ item.user.name }}
         </template>
-        <template v-slot:item.date="{ item }">
+        <template #item.date="{ item }">
           {{ item.date | date }}
         </template>
-        <template v-slot:item.content="{ item }">
+        <template #item.content="{ item }">
           {{ item.content }}
         </template>
       </v-data-table>

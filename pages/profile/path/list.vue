@@ -5,13 +5,13 @@
         :headers="headers"
         :items="items"
       >
-        <template v-slot:item.name="{ item }">
+        <template #item.name="{ item }">
           {{ item.name }}
         </template>
-        <template v-slot:item.property="{ item }">
+        <template #item.property="{ item }">
           {{ item.property }}
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template #item.actions="{ item }">
           <v-btn
             class="primary white--text"
             icon

@@ -12,15 +12,15 @@
         "
         :headers="headers"
       >
-        <template v-slot:item.name="{ item }">
+        <template #item.name="{ item }">
           {{ item.name }}
         </template>
-        <template v-slot:item.role="{ item }">
+        <template #item.role="{ item }">
           {{ item.role.name }}
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template #item.actions="{ item }">
           <v-menu :close-on-content-click="false">
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-btn
                 class="primary white--text"
                 icon

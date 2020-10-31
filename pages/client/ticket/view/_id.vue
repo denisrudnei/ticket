@@ -77,12 +77,12 @@
 import ticketById from '@/graphql/query/client/ticket/ticketById';
 
 export default {
-  layout: 'client',
   filters: {
     percentage(value) {
       return `${Math.round(value)} %`;
     },
   },
+  layout: 'client',
   asyncData({ params, app }) {
     return app.apolloProvider.defaultClient
       .query({

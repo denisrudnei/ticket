@@ -4,15 +4,15 @@
     :items="items"
     pagination.sync="pagination"
   >
-    <template v-slot:item.name="{ item }">
+    <template #item.name="{ item }">
       <nuxt-link :to="`/knowledge/view/${item.id}`">
         {{ item.name }}
       </nuxt-link>
     </template>
-    <template v-slot:item.created="{ item }">
+    <template #item.created="{ item }">
       {{ item.created | date }}
     </template>
-    <template v-slot:item.status="{ item }">
+    <template #item.status="{ item }">
       {{ item.status.name }}
     </template>
   </v-data-table>

@@ -10,7 +10,7 @@
         :close-on-content-click="false"
         min-width="290px"
       >
-        <template v-slot:activator="{ on }">
+        <template #activator="{ on }">
           <v-text-field
             label="Start"
             filled
@@ -35,7 +35,7 @@
         :close-on-content-click="false"
         min-width="290px"
       >
-        <template v-slot:activator="{ on }">
+        <template #activator="{ on }">
           <v-text-field
             label="end"
             filled

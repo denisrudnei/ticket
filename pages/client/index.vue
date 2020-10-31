@@ -102,12 +102,12 @@ import { mapGetters } from 'vuex';
 import listTicket from '@/graphql/query/client/ticket/searchTicket';
 
 export default {
-  layout: 'client',
   filters: {
     limit(value) {
       return value.substr(0, 100);
     },
   },
+  layout: 'client',
   data() {
     return {
       search: '',

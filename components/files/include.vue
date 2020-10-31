@@ -15,7 +15,7 @@
           :items="filePreview"
           :headers="headers"
         >
-          <template v-slot:item.preview="{ item }">
+          <template #item.preview="{ item }">
             <v-img
               :src="item.data || item.url"
               @click="setActivePreview(item.data || item.url)"
@@ -26,7 +26,7 @@
               controls
             />
           </template>
-          <template v-slot:item.old="{ item }">
+          <template #item.link="{ item }">
             <td v-if="item.old">
               <nuxt-link
                 target="_blank"
@@ -36,19 +36,19 @@
               </nuxt-link>
             </td>
           </template>
-          <template v-slot:item.name="{ item }">
+          <template #item.name="{ item }">
             {{ item.name }}
           </template>
-          <template v-slot:item.old="{ item }">
+          <template #item.old="{ item }">
             <v-checkbox
               v-model="item.old"
               readonly
             />
           </template>
-          <template v-slot:item.type="{ item }">
+          <template #item.type="{ item }">
             {{ item.type }}
           </template>
-          <template v-slot:item.remove="{ item }">
+          <template #item.remove="{ item }">
             <v-btn
               icon
               class="red white--text"
@@ -132,6 +132,10 @@ export default {
         {
           text: 'Preview',
           value: 'preview',
+        },
+        {
+          text: 'Link',
+          value: 'link',
         },
         {
           text: this.$t('name'),

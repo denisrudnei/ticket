@@ -53,7 +53,7 @@
       class=".d-flex .d-sm-none"
       :nudge-width="250"
     >
-      <template v-slot:activator="{ on }">
+      <template #activator="{ on }">
         <v-btn
           text
           class="primary white--text"
