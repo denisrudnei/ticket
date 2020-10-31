@@ -20,7 +20,7 @@ type sortOrder = {
 
 class TicketService {
   static async startBull(pubSub: PubSubEngine): Promise<void> {
-    const queue = new Bull<null>('sla check');
+    const queue = new Bull<null>('sla check', process.env.REDIS_URL || 'redis://127.0.0.1:6379');
     queue.process(async () => {
       const statusWithSlaAbleToRun = await Status.find({
         slaRun: true,

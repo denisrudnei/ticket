@@ -26,6 +26,10 @@ Environment variables
             <td>JWT secret</td>
         </tr>
         <tr>
+            <td>REDIS_URL</td>
+            <td>Url for redis</td>
+        </tr>
+        <tr>
             <td>MAIL_HOST</td>
             <td>Host address to mail server</td>
         </tr>
