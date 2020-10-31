@@ -196,7 +196,7 @@ export default {
     hotkeyHelp,
   },
   mixins: [afterLogin],
-  middleware: ['adminMiddleware'],
+  middleware: ['AdminMiddleware'],
   data() {
     return {
       fab: true,

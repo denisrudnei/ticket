@@ -1,5 +1,5 @@
 import { mapGetters } from 'vuex';
-import mergeUser from '~/graphql/mutation/auth/mergeUser.ts';
+import mergeUser from '~/graphql/mutation/auth/mergeUser';
 
 export default {
   computed: mapGetters({

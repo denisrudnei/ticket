@@ -154,11 +154,13 @@
     "sass-loader": "^10.0.4",
     "stylus": "^0.54.8",
     "stylus-loader": "^4.1.1",
+    "ts-loader": "^8.0.7",
     "ts-mocha": "^8.0.0",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.0.5"
+    "typescript": "^4.0.5",
+    "vuetify-loader": "^1.6.0"
   },
   "snyk": true
 }

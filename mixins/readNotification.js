@@ -1,4 +1,4 @@
-import read from '~/graphql/mutation/profile/notification/read.ts';
+import read from '~/graphql/mutation/profile/notification/read';
 
 export default {
   methods: {

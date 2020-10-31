@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-shadow */
 import getOneChat from '@/graphql/query/chat/getOneChat';
-import sendMessage from '~/graphql/mutation/chat/sendMessage.ts';
+import sendMessage from '~/graphql/mutation/chat/sendMessage';
 
 export const state = () => ({
   chats: [],
