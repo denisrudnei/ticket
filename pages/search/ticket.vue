@@ -25,7 +25,7 @@ export default {
     TicketList,
   },
   middleware({ app, store }) {
-    app.$apollo
+    app.apolloProvider.defaultClient
       .query({
         query: searchQuery,
       })

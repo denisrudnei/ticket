@@ -66,7 +66,7 @@ export default {
   layout: 'client',
   mixins: [compareObjectsWithId],
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: list,
       })

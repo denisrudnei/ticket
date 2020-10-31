@@ -82,7 +82,7 @@ import categoryList from '@/graphql/query/client/ticket/categoryList';
 export default {
   layout: 'client',
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: categoryList,
       })

@@ -140,7 +140,7 @@ export default {
     file,
   },
   asyncData({ app, params }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: category,
         variables: {

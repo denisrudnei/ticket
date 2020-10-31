@@ -24,7 +24,7 @@ import knowledgeList from '@/graphql/query/knowledge/list';
 
 export default {
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: knowledgeList,
       })

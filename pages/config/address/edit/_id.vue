@@ -17,7 +17,7 @@ export default {
   },
   asyncData({ app, params }) {
     const { id } = params;
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: AddressById,
         variables: {

@@ -48,7 +48,7 @@ import getOneGroup from '@/graphql/query/config/group/getGroup';
 
 export default {
   asyncData({ app, params }) {
-    return app.$apollo.query({
+    return app.apolloProvider.defaultClient.query({
       query: getOneGroup,
       variables: {
         id: params.id,

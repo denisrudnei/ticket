@@ -84,7 +84,7 @@ export default {
     },
   },
   asyncData({ params, app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: ticketById,
         variables: {

@@ -37,7 +37,7 @@ import getTree from '@/graphql/query/profile/path/tree';
 
 export default {
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: list,
       })

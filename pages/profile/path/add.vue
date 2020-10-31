@@ -56,7 +56,7 @@ import list from '@/graphql/query/profile/path/list';
 
 export default {
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: ref,
       })

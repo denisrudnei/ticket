@@ -33,7 +33,7 @@ import statsList from '@/graphql/query/config/stats/list';
 
 export default {
   asyncData({ app }) {
-    return app.$apollo.query({
+    return app.apolloProvider.defaultClient.query({
       query: statsList,
     }).then((response) => {
       const databaseItemsCount = Object.entries(response.data.databaseItemsCount).map((value) => {

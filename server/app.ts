@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import acl from 'express-acl';
 import fileUploader from 'express-fileupload';
+import cors from 'cors';
 import routes from '~/server/routes/index';
 
 class AppController {
@@ -17,6 +18,7 @@ class AppController {
   }
 
   middlewares() {
+    this.express.use(cors());
     this.express.use(bodyParser.json());
     this.express.use(compression());
     this.express.use(
@@ -26,12 +28,14 @@ class AppController {
         saveUninitialized: false,
       }),
     );
+
     acl.config({
       baseUrl: '',
       filename: 'nacl.json',
       roleSearchPath: 'session.authUser.role.name',
     });
-    this.express.use('/api', acl.authorize);
+
+    this.express.use('/api/', acl.authorize);
     this.express.use(
       fileUploader({
         limits: {
@@ -42,7 +46,7 @@ class AppController {
   }
 
   routes() {
-    this.express.use('/api', routes);
+    this.express.use(routes);
     this.express.use(
       (
         err: Error,

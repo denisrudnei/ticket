@@ -63,7 +63,7 @@ import list from '@/graphql/query/profile/sound';
 
 export default {
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: list,
       })

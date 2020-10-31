@@ -15,7 +15,7 @@ export default {
     KnowledgeList,
   },
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: List,
       })

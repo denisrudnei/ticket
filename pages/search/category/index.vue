@@ -27,7 +27,7 @@ import getSubs from '@/graphql/query/search/category/subs';
 
 export default {
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: category,
       })

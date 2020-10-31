@@ -198,7 +198,7 @@ export const actions = {
     }
   },
   async findTicket({ commit }, id) {
-    const { data } = await this.app.$apollo
+    const { data } = await this.app.apolloProvider.defaultClient
       .query({
         query: actualTicket,
         variables: {

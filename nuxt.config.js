@@ -44,7 +44,6 @@ module.exports = {
     { src: '@/plugins/apex-charts', ssr: false },
     { src: '@/plugins/google-maps', ssr: false },
     { src: '@/plugins/CKEditor', ssr: false },
-    { src: '@/plugins/apolloConfig', ssr: true },
     { src: '@/plugins/vue-hotkey', ssr: false },
     { src: '@/plugins/i18n', ssr: true },
   ],
@@ -63,14 +62,14 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/toast',
+    '@nuxtjs/apollo',
     '@nuxtjs/auth',
     '@nuxtjs/google-analytics',
   ],
 
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    proxy: true,
-    prefix: '/api',
+    baseURL: process.env.API,
   },
 
   vuetify: {
@@ -145,6 +144,16 @@ module.exports = {
 
   googleAnalytics: {
     id: 'UA-38858408-3',
+  },
+
+  apollo: {
+    clientConfigs: {
+      default: {
+        httpEndpoint: process.env.GRAPHQL || 'http://localhost:3000/graphql',
+      },
+    },
+    tokenName: 'auth._token.local',
+    authenticationType: 'Bearer',
   },
 
   /*

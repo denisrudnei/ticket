@@ -29,7 +29,7 @@
       <v-row>
         <v-btn
           outlined
-          :disabled="prev() === undefined"
+          :disabled="!prev()"
           fab
           color="primary"
           icon
@@ -44,7 +44,7 @@
       <v-row>
         <v-btn
           outlined
-          :disabled="next() === undefined"
+          :disabled="!next()"
           fab
           color="primary"
           icon
@@ -100,13 +100,13 @@ export default {
       this.notification = data.NotificationById;
     },
     prev() {
-      if (this.notification === null) return undefined;
+      if (this.notification === null) return false;
       const index = this.notifications
         .findIndex((ntf) => ntf.id === this.notification.id.toString());
       return this.notifications[index - 1];
     },
     next() {
-      if (this.notification === null) return undefined;
+      if (this.notification === null) return false;
       const index = this.notifications
         .findIndex((ntf) => ntf.id === this.notification.id.toString());
 

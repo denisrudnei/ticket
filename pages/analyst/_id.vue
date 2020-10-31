@@ -60,7 +60,7 @@ import AnalystById from '@/graphql/query/analyst/analystById';
 export default {
   mixins: [showModal],
   asyncData({ params, app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: AnalystById,
         variables: {

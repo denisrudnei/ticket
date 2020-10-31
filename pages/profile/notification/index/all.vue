@@ -16,7 +16,7 @@ export default {
     notifications: 'notification/getNotifications',
   }),
   middleware({ app, store }) {
-    app.$apollo.query({
+    app.apolloProvider.defaultClient.query({
       fetchPolicy: 'no-cache',
       query: list,
     }).then((response) => {

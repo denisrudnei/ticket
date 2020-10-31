@@ -27,7 +27,7 @@ import StatusList from '@/graphql/query/status/list';
 
 export default {
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: StatusList,
       })

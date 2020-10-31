@@ -76,7 +76,7 @@ export const mutations = {
 
 export const actions = {
   async getOneChat({ commit }, to) {
-    await this.app.$apollo
+    await this.app.apolloProvider.defaultClient
       .query({
         query: getOneChat,
         variables: {
@@ -91,7 +91,7 @@ export const actions = {
       });
   },
   send({ commit }, message) {
-    this.app.$apollo
+    this.app.apolloProvider.defaultClient
       .mutate({
         mutation: sendMessage,
         variables: {

@@ -6,7 +6,7 @@ const AdminMiddleware: Middleware = async ({ app, store, redirect }) => {
     if (!store.state.auth.user.role) {
       const { email, picture, name } = store.state.auth.user;
 
-      const { data } = await app.$apollo.mutate({
+      const { data } = await app.apolloProvider.defaultClient.mutate({
         mutation: mergeUser,
         variables: {
           email: store.state.auth.user.email,

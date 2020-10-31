@@ -79,7 +79,7 @@ import UpdateRole from '@/graphql/mutation/config/permissions/edit';
 
 export default {
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: list,
       })

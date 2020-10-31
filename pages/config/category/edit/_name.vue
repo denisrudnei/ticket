@@ -20,7 +20,7 @@ export default {
   },
   asyncData({ params, app }) {
     const { name } = params;
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: CategoryEditList,
         variables: {

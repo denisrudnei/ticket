@@ -27,7 +27,7 @@ import list from '@/graphql/query/group/list';
 
 export default {
   asyncData({ app }) {
-    return app.$apollo.query({
+    return app.apolloProvider.defaultClient.query({
       query: list,
     }).then((response) => ({
       groups: response.data.Group,

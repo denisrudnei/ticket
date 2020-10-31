@@ -47,7 +47,7 @@ import edit from '@/graphql/mutation/config/role/edit';
 
 export default {
   asyncData({ app, params }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: RoleById,
         variables: {

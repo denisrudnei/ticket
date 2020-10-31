@@ -167,7 +167,7 @@ import removeImage from '@/graphql/mutation/profile/analyst/removeImage';
 export default {
   mixins: [compareObjectsWithId],
   asyncData({ app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: profileInfo,
       })

@@ -20,9 +20,15 @@ export default {
   },
 
   getUser: (req: express.Request, res: express.Response) => {
-    res.json({
-      user: req.session!.authUser,
-    });
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.replace('Bearer ', '');
+      const user = (jsonwebtoken.decode(token) as Analyst);
+      res.json({
+        user,
+      });
+    } else {
+      res.sendStatus(401);
+    }
   },
 
   logout: (req: express.Request, res: express.Response) => {

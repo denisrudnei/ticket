@@ -98,7 +98,7 @@ import KnowledgeById from '@/graphql/query/knowledge/knowledgeById';
 
 export default {
   asyncData({ params, app }) {
-    return app.$apollo
+    return app.apolloProvider.defaultClient
       .query({
         query: KnowledgeById,
         variables: {

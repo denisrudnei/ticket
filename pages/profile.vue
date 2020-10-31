@@ -52,7 +52,7 @@ import list from '@/graphql/query/profile/list';
 
 export default {
   asyncData({ params, app }) {
-    return app.$apollo.query({
+    return app.apolloProvider.defaultClient.query({
       query: list,
     }).then((response) => ({
       user: response.data.user,

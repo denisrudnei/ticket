@@ -1,6 +1,8 @@
 /* eslint-disable class-methods-use-this */
 import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
-import { Ctx, Query, Resolver } from 'type-graphql';
+import {
+  Ctx, Query, Resolver, Authorized,
+} from 'type-graphql';
 
 import SoundType from '../enums/SoundTypeEnum';
 import Analyst from '../models/Analyst';
@@ -14,6 +16,7 @@ class SoundResolver {
   }
 
   @Query(() => [Sound])
+  @Authorized('user')
   async GetSounds(@Ctx() context: ExpressContext): Promise<Sound[]> {
     const { id } = context.req!.session!.authUser;
 
