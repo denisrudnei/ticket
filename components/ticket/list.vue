@@ -243,6 +243,11 @@ export default {
       },
     };
   },
+  head() {
+    return {
+      title: `Page ${this.options.page}, total ${this.totalItems}`,
+    };
+  },
   computed: {
     headers() {
       return [
@@ -519,11 +524,7 @@ export default {
       this.$store.commit('ticket/setDialog', id);
     },
   },
-  head() {
-    return {
-      title: `Page ${this.options.page}, total ${this.totalItems}`,
-    };
-  },
+
 };
 </script>
 <style>

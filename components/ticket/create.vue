@@ -601,6 +601,13 @@ export default {
       },
     };
   },
+  head() {
+    if (!this.ticket.id || !this.ticketsToEdit.length) return;
+    // eslint-disable-next-line consistent-return
+    return {
+      title: `[${this.ticket.id}] - [${this.ticketsToEdit.length}] ${this.ticket.resume}`,
+    };
+  },
   computed: {
     ticket: {
       get() {
@@ -745,12 +752,6 @@ export default {
       Object.assign(this.value, this.$store.getters['ticket/getDefaultValue']);
     },
   },
-  head() {
-    if (!this.ticket.id || !this.ticketsToEdit.length) return;
-    // eslint-disable-next-line consistent-return
-    return {
-      title: `[${this.ticket.id}] - [${this.ticketsToEdit.length}] ${this.ticket.resume}`,
-    };
-  },
+
 };
 </script>

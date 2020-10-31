@@ -12,9 +12,6 @@ export default {
   components: {
     NotificationList,
   },
-  computed: mapGetters({
-    notifications: 'notification/getNotifications',
-  }),
   middleware({ app, store }) {
     app.apolloProvider.defaultClient.query({
       fetchPolicy: 'no-cache',
@@ -23,7 +20,9 @@ export default {
       store.commit('notification/setNotifications', response.data.notification);
     });
   },
-
+  computed: mapGetters({
+    notifications: 'notification/getNotifications',
+  }),
 };
 </script>
 
