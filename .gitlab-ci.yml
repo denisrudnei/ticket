@@ -1,7 +1,6 @@
 image: node:latest
 
 services:
-  - mongo:latest
   - postgres:latest
 
 variables:

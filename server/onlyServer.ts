@@ -49,6 +49,6 @@ async function start() {
     });
   });
 
-  TicketService.startAgenda(pubSub);
+  TicketService.startBull(pubSub);
 }
 start();

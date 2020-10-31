@@ -1,17 +1,17 @@
 import '~/server/models/Notification';
 
-import AWS from 'aws-sdk';
-import Agenda from 'agenda';
 import { PubSubEngine } from 'apollo-server-express';
+import AWS from 'aws-sdk';
+import Bull from 'bull';
 import { UploadedFile } from 'express-fileupload';
 import S3 from '~/plugins/S3';
+import TicketAttributes from '~/server/inputs/TicketAttributes';
 import Analyst from '~/server/models/Analyst';
 import File from '~/server/models/File';
 import Comment from '~/server/models/ticket/Comment';
 import Group from '~/server/models/ticket/Group';
 import Status from '~/server/models/ticket/Status';
 import Ticket from '~/server/models/ticket/Ticket';
-import TicketAttributes from '~/server/inputs/TicketAttributes';
 
 type sortOrder = {
   sortBy: string;
@@ -19,14 +19,9 @@ type sortOrder = {
 };
 
 class TicketService {
-  static async startAgenda(pubSub: PubSubEngine): Promise<void> {
-    const agenda = new Agenda({
-      db: {
-        address: process.env.MONGODB_URI,
-      },
-    });
-    await agenda.start();
-    agenda.define('check sla', async () => {
+  static async startBull(pubSub: PubSubEngine): Promise<void> {
+    const queue = new Bull<null>('sla check');
+    queue.process(async () => {
       const statusWithSlaAbleToRun = await Status.find({
         slaRun: true,
       });
@@ -51,7 +46,11 @@ class TicketService {
       // })
     });
 
-    agenda.every('5 seconds', 'check sla');
+    queue.add(null, {
+      repeat: {
+        cron: '* * * * *',
+      },
+    });
   }
 
   static async getTickets(

@@ -46,10 +46,6 @@ Environment variables
             <td>Email in mail server</td>
         </tr>
         <tr>
-            <td>MONGODB_URI</td>
-            <td>URL to mongodb, will be removed</td>
-        </tr>
-        <tr>
             <td>DB_HOST</td>
             <td>Database host</td>
         </tr>
