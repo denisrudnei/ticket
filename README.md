@@ -2,24 +2,101 @@
 
 Environment variables
 
-- BUCKET
-- HOST
-- JWT_TOKEN
-- MAIL_HOST
-- MAIL_PASSWORD
-- MAIL_PORT
-- MAIL_PROTOCOL
-- MAIL_USER
-- MONGODB_URI
-- DB_HOST
-- DB_PORT
-- DB_USERNAME
-- DATABASE
-- PASSWORD
-- URL
-- S3_KEY
-- S3_SECRET
-- SESSION_KEY
+
+---
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>BUCKET</td>
+            <td>Amazon bucket name</td>
+        </tr>
+        <tr>
+            <td>HOST</td>
+            <td>Server host</td>
+        </tr>
+        <tr>
+            <td>JWT_TOKEN</td>
+            <td>JWT secret</td>
+        </tr>
+        <tr>
+            <td>MAIL_HOST</td>
+            <td>Host address to mail server</td>
+        </tr>
+        <tr>
+            <td>MAIL_PASSWORD</td>
+            <td>Password for mail account</td>
+        </tr>
+        <tr>
+            <td>MAIL_PORT</td>
+            <td>Port for mail server</td>
+        </tr>
+        <tr>
+            <td>MAIL_PROTOCOL</td>
+            <td>Protocol used in mail server</td>
+        </tr>
+        <tr>
+            <td>MAIL_USER</td>
+            <td>Email in mail server</td>
+        </tr>
+        <tr>
+            <td>MONGODB_URI</td>
+            <td>URL to mongodb, will be removed</td>
+        </tr>
+        <tr>
+            <td>DB_HOST</td>
+            <td>Database host</td>
+        </tr>
+        <tr>
+            <td>DB_PORT</td>
+            <td>Database port</td>
+        </tr>
+        <tr>
+            <td>DB_USERNAME</td>
+            <td>Database username</td>
+        </tr>
+        <tr>
+            <td>DATABASE</td>
+            <td>Database name</td>
+        </tr>
+        <tr>
+            <td>PASSWORD</td>
+            <td>Database password</td>
+        </tr>
+        <tr>
+            <td>URL</td>
+            <td>Server url</td>
+        </tr>
+        <tr>
+            <td>S3_KEY</td>
+            <td>Amazon S3 key</td>
+        </tr>
+        <tr>
+            <td>S3_SECRET</td>
+            <td>Amazon S3 secret</td>
+        </tr>
+        <tr>
+            <td>SESSION_KEY</td>
+            <td>Secret value for session</td>
+        </tr>
+        <tr>
+            <td>API</td>
+            <td>Server url for front-side</td>
+        </tr>
+        <tr>
+            <td>GRAPHQL</td>
+            <td>Graphql address</td>
+        </tr>
+    </tbody>
+</table>
+
+---
 
 ## Images
 
