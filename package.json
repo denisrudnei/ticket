@@ -4,9 +4,6 @@
   "description": "Ticket management system",
   "author": "Denis Rudnei de Souza",
   "private": true,
-  "engines": {
-    "node": ">=13.0.0"
-  },
   "scripts": {
     "dev:server": "cross-env NODE_ENV=development ts-node-dev -r tsconfig-paths/register server/index.ts --transpileOnly --respawn",
     "dev:client": "nuxt-ts dev",
