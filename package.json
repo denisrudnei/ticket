@@ -100,6 +100,7 @@
     "vue-the-mask": "^0.11.1",
     "vue2-google-maps": "^0.10.7",
     "vuedraggable": "^2.24.3",
+    "webpack": "^4.44.2",
     "webpack-graphql-loader": "^0.1.2",
     "ws": "^7.3.1"
   },
