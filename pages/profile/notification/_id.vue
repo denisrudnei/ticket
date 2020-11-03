@@ -89,15 +89,16 @@ export default {
     this.getNotification();
   },
   methods: {
-    async getNotification(notificationId) {
+    getNotification(notificationId) {
       const id = notificationId !== undefined ? notificationId : this.$route.params.id;
-      const { data } = await this.$apollo.query({
+      this.$apollo.query({
         query: NotificationById,
         variables: {
           id,
         },
+      }).then((response) => {
+        this.notification = response.data.NotificationById;
       });
-      this.notification = data.NotificationById;
     },
     prev() {
       if (this.notification === null) return false;
