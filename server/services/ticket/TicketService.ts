@@ -5,6 +5,7 @@ import AWS from 'aws-sdk';
 import Bull from 'bull';
 import { UploadedFile } from 'express-fileupload';
 import S3 from '~/plugins/S3';
+import TicketEnum from '~/server/enums/TicketEnum';
 import TicketAttributes from '~/server/inputs/TicketAttributes';
 import Analyst from '~/server/models/Analyst';
 import File from '~/server/models/File';
@@ -21,29 +22,32 @@ type sortOrder = {
 class TicketService {
   static async startBull(pubSub: PubSubEngine): Promise<void> {
     const queue = new Bull<null>('sla check', process.env.REDIS_URL || 'redis://127.0.0.1:6379');
+    // eslint-disable-next-line consistent-return
     queue.process(async () => {
       const statusWithSlaAbleToRun = await Status.find({
         slaRun: true,
       });
+
+      if (statusWithSlaAbleToRun.length === 0) { return Promise.resolve(); }
 
       Ticket.createQueryBuilder()
         .update(Ticket)
         .set({
           slaCount: new Date(),
         })
-        .where('status.id IN :ids', {
+        .where('"statusId" IN (:...ids)', {
           ids: statusWithSlaAbleToRun.map((status: Status) => status.id),
         });
 
-      // const tickets = await Ticket.createQueryBuilder()
-      //   .where('status.id IN :ids', {
-      //     ids: statusWithSlaAbleToRun.map((status: Status) => status.id)
-      //   })
-      //   .getMany()
+      const tickets = await Ticket.createQueryBuilder()
+        .where('"statusId" IN (:...ids)', {
+          ids: statusWithSlaAbleToRun.map((status: Status) => status.id),
+        })
+        .getMany();
 
-      // tickets.forEach(ticket => {
-      //   pubSub.publish(TicketEnum.SLA_UPDATE, ticket)
-      // })
+      tickets.forEach((ticket) => {
+        pubSub.publish(TicketEnum.SLA_UPDATE, ticket);
+      });
     });
 
     queue.add(null, {

@@ -31,9 +31,9 @@ import Group from '../models/ticket/Group';
 import Log from '../models/ticket/Log';
 import Priority from '../models/ticket/Priority';
 import Status from '../models/ticket/Status';
+import TicketField from '../models/ticket/TicketField';
 import LogService from '../services/ticket/LogService';
 import TicketService from '../services/ticket/TicketService';
-import TicketField from '../models/ticket/TicketField';
 
 @Resolver((of) => Ticket)
 class TicketResolver {
