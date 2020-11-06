@@ -4,6 +4,8 @@ const pkg = require('./package');
 module.exports = {
   telemetry: false,
 
+  target: 'static',
+
   /*
    ** Headers of the page
    */
