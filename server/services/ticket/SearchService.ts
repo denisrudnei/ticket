@@ -14,7 +14,7 @@ class SearchService {
     page = 1,
     limit = 10,
   ): Promise<TicketPagination> {
-    const total = await Ticket.count();
+    const total = await Ticket.count({ where: query });
     const pages = Math.ceil(total / limit);
     const result = await Ticket.find({
       where: query,
