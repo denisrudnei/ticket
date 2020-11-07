@@ -88,7 +88,10 @@
         />
       </v-col>
       <v-col cols="12">
-        <v-btn @click="save">
+        <v-btn
+          class="primary white--text"
+          @click="save"
+        >
           Enviar
           <v-icon>
             save
@@ -117,7 +120,7 @@
           {{ $t('add_file') }}
         </v-tab>
         <v-tab-item>
-          <file />
+          <file-include />
         </v-tab-item>
       </v-tabs>
     </v-row>
@@ -132,11 +135,11 @@ import { mapGetters } from 'vuex';
 import createTicket from '@/graphql/mutation/client/ticket/createTicket';
 import category from '@/graphql/query/client/ticket/category';
 import list from '@/graphql/query/client/ticket/searchTicket';
-import file from './file';
+import fileInclude from '@/components/files/include';
 
 export default {
   components: {
-    file,
+    fileInclude,
   },
   layout: 'client',
   asyncData({ app, params }) {
