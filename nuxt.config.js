@@ -6,6 +6,10 @@ module.exports = {
 
   target: 'static',
 
+  generate: {
+    fallback: true,
+  },
+
   /*
    ** Headers of the page
    */
