@@ -4,17 +4,24 @@
       <v-row>
         <v-col
           cols="12"
-          md="4"
+          sm="4"
+          md="2"
         >
-          <v-img
-            ref="picture"
-            :src="user.picture"
-            alt=""
-          />
+          <v-avatar
+            width="100%"
+            height="auto"
+          >
+            <v-img
+              ref="picture"
+              :src="user.picture"
+              alt=""
+            />
+          </v-avatar>
         </v-col>
         <v-col
           cols="12"
-          md="8"
+          sm="8"
+          md="10"
         >
           <v-text-field
             v-model="user.name"
