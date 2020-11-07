@@ -166,19 +166,10 @@ import removeImage from '@/graphql/mutation/profile/analyst/removeImage';
 
 export default {
   mixins: [compareObjectsWithId],
-  asyncData({ app }) {
-    return app.apolloProvider.defaultClient
-      .query({
-        query: profileInfo,
-      })
-      .then((response) => ({
-        addresses: response.data.address,
-        info: response.data.ProfileInfo,
-        user: response.data.user,
-      }));
-  },
   data() {
     return {
+      addresses: [],
+      user: {},
       primary: '#FFFFFF',
       info: {},
     };
@@ -190,6 +181,16 @@ export default {
     primary(value) {
       this.updatePrimary();
     },
+  },
+  created() {
+    this.$apollo.query({
+      query: profileInfo,
+    })
+      .then((response) => {
+        this.addresses = response.data.address;
+        this.info = response.data.ProfileInfo;
+        this.user = response.data.user;
+      });
   },
   methods: {
     ...mapMutations({
