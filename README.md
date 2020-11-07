@@ -93,6 +93,10 @@ Environment variables
             <td>GRAPHQL</td>
             <td>Graphql address</td>
         </tr>
+        <tr>
+            <td>SUBSCRIPTIONS</td>
+            <td>Graphql subscriptions path</td>
+        </tr>
     </tbody>
 </table>
 

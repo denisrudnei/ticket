@@ -154,6 +154,7 @@ module.exports = {
     clientConfigs: {
       default: {
         httpEndpoint: process.env.GRAPHQL || 'http://localhost:3000/graphql',
+        wsEndpoint: process.env.SUBSCRIPTIONS || 'ws://localhost:3000/subscriptions',
       },
     },
     tokenName: 'auth._token.local',
