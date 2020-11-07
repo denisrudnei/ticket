@@ -1,11 +1,11 @@
 /* eslint-disable class-methods-use-this */
 import { UploadedFile } from 'express-fileupload';
-import { GraphQLUpload } from 'graphql-upload';
 import {
   Arg, Authorized, FieldResolver, ID, Mutation, Query, Resolver, Root,
 } from 'type-graphql';
 
 import AWS from 'aws-sdk';
+import { GraphQLUpload } from 'graphql-upload';
 import CategoryCreateInput from '../inputs/CategoryCreateInput';
 import CategoryInput from '../inputs/CategoryInput';
 import Category from '../models/ticket/Category';
