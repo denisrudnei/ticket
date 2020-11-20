@@ -151,11 +151,15 @@ export default {
         };
       });
     },
+    user() {
+      return this.$auth.user;
+    },
+    logged() {
+      return this.$auth.loggedIn;
+    },
     ...mapGetters({
       analysts: 'analyst/getAnalysts',
       notifications: 'notification/getUnread',
-      logged: 'auth/getLoggedIn',
-      user: 'auth/getUser',
       groups: 'group/getGroups',
       ticketsToEdit: 'ticket/getTicketsToEdit',
     }),

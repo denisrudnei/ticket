@@ -62,8 +62,10 @@ export default {
         },
       ];
     },
+    user() {
+      return this.$auth.user;
+    },
     ...mapGetters({
-      user: 'auth/getUser',
       tree: 'ticket/getTree',
     }),
   },

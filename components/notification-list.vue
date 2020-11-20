@@ -54,9 +54,11 @@ export default {
       default: () => [],
     },
   },
-  computed: mapGetters({
-    user: 'auth/getUser',
-  }),
+  computed: {
+    user() {
+      return this.$auth.user;
+    },
+  },
 };
 </script>
 

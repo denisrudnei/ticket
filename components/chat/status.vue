@@ -21,9 +21,11 @@ export default {
       status: [],
     };
   },
-  computed: mapGetters({
-    user: 'auth/getUser',
-  }),
+  computed: {
+    user() {
+      return this.$auth.user;
+    },
+  },
   created() {
     this.$apollo
       .query({

@@ -56,8 +56,6 @@ export default {
       await this.$apollo.mutate({
         mutation: logout,
       });
-
-      this.$router.push('/auth/');
       this.$store.commit('logout/setLogout', false);
     },
     back() {

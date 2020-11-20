@@ -2,9 +2,11 @@ import { mapGetters } from 'vuex';
 import mergeUser from '~/graphql/mutation/auth/mergeUser';
 
 export default {
-  computed: mapGetters({
-    user: 'auth/getUser',
-  }),
+  computed: {
+    user() {
+      return this.$auth.user;
+    },
+  },
   methods: {
     changeColor(color) {
       this.$vuetify.theme.currentTheme.primary = color || this.$vuetify.theme.currentTheme.primary;
@@ -25,7 +27,7 @@ export default {
           },
         })
         .then((response) => {
-          this.$store.commit('auth/setUser', response.data.MergeUser);
+          this.$store.commit('user/setUser', response.data.MergeUser);
           const { color } = response.data.MergeUser;
           this.changeColor(color);
         });

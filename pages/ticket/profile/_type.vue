@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import ListTicket from '@/components/ticket/list';
 
 export default {
@@ -19,9 +18,11 @@ export default {
       type: params.type,
     };
   },
-  computed: mapGetters({
-    user: 'auth/getUser',
-  }),
+  computed: {
+    user() {
+      return this.$auth.user;
+    },
+  },
   created() {
     this.$store.commit('ticket/setQuery', {
       [this.type]: this.user.id,

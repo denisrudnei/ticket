@@ -162,9 +162,11 @@ export default {
       ],
     };
   },
-  computed: mapGetters({
-    user: 'auth/getUser',
-  }),
+  computed: {
+    user() {
+      return this.$auth.user;
+    },
+  },
   mounted() {
     const lang = localStorage.getItem('language');
     if (lang) {

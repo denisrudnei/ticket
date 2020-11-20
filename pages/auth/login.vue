@@ -55,16 +55,15 @@ export default {
           },
         })
         .then((result) => {
-          this.$store.commit('auth/setUser', result.data.user);
           this.$auth
             .loginWith('local', {
               data: this.userLogin,
             })
             .then(() => {
+              this.$store.commit('user/setUser', result.data.user);
               this.processInfo();
             });
-        })
-        .catch(() => {
+        }).catch(() => {
           this.$toast.error('Falha ao logar', {
             duration: 1000,
             icon: 'error',

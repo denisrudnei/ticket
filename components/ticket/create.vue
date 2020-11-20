@@ -618,8 +618,10 @@ export default {
         this.$store.commit('ticket/setActualTicket', value);
       },
     },
+    user() {
+      return this.$auth.user;
+    },
     ...mapGetters({
-      user: 'auth/getUser',
       ticketsToEdit: 'ticket/getTicketsToEdit',
     }),
     allowedStatus() {

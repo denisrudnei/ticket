@@ -8,7 +8,7 @@ export const state = () => ({
 
 export const getters = {
   getNotifications(state, getters, rootState, rootGetters) {
-    const user = rootGetters['auth/getUser'];
+    const user = rootGetters['user/getUser'];
     return state.notifications
       .filter((notification) => notification.to.map((t) => t.id).includes(user.id.toString()))
       .sort((ntf1, ntf2) => {
@@ -17,13 +17,13 @@ export const getters = {
       });
   },
   getUnread(state, getters, rootState, rootGetters) {
-    const user = rootGetters['auth/getUser'];
+    const user = rootGetters['user/getUser'];
     return getters.getNotifications.filter(
       (notification) => !notification.read.map((r) => r.id).includes(user.id.toString()),
     );
   },
   getRead(state, getters, rootState, rootGetters) {
-    const user = rootGetters['auth/getUser'];
+    const user = rootGetters['user/getUser'];
     return getters.getNotifications.filter(
       (notification) => notification.read.map((r) => r.id).includes(user.id.toString()),
     );

@@ -130,8 +130,6 @@
 <script>
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
-import { mapGetters } from 'vuex';
-
 import createTicket from '@/graphql/mutation/client/ticket/createTicket';
 import category from '@/graphql/query/client/ticket/category';
 import list from '@/graphql/query/client/ticket/searchTicket';
@@ -166,9 +164,11 @@ export default {
       ticket: {},
     };
   },
-  computed: mapGetters({
-    user: 'auth/getUser',
-  }),
+  computed: {
+    user() {
+      return this.$auth.user;
+    },
+  },
   created() {
     this.ticket.fields = this.category.fields;
   },

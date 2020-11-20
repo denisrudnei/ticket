@@ -80,8 +80,10 @@ export default {
     };
   },
   computed: {
+    user() {
+      return this.$auth.user;
+    },
     ...mapGetters({
-      user: 'auth/getUser',
       notifications: 'notification/getNotifications',
     }),
   },

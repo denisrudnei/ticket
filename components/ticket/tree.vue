@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 import tree from '@/graphql/query/profile/path/tree';
 import removePath from '@/graphql/subscription/path/removePath';
 import add from '@/graphql/subscription/path/add';
@@ -39,9 +37,10 @@ export default {
     treeQuery() {
       return tree;
     },
-    ...mapGetters({
-      user: 'auth/getUser',
-    }),
+    user() {
+      return this.$auth.user;
+    },
+
   },
   apollo: {
     $subscribe: {

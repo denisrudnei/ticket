@@ -97,8 +97,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-
 import listTicket from '@/graphql/query/client/ticket/searchTicket';
 
 export default {
@@ -117,9 +115,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      user: 'auth/getUser',
-    }),
+    user() {
+      return this.$auth.user;
+    },
     tickets() {
       return this.ticketsData
         .filter((ticket) => ticket.resume.toLowerCase().includes(this.search.toLowerCase()));

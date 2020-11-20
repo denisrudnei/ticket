@@ -71,9 +71,11 @@ export default {
     Language,
     logout,
   },
-  computed: mapGetters({
-    logged: 'auth/getLoggedIn',
-  }),
+  computed: {
+    logged() {
+      return this.$auth.loggedIn;
+    },
+  },
   methods: {
     logout() {
       this.$store.commit('logout/setLogout', true);

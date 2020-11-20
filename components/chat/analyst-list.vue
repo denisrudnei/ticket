@@ -136,10 +136,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'auth/getUser',
       chats: 'chat/getChats',
       colors: 'chat/getColors',
     }),
+    user() {
+      return this.$auth.user;
+    },
     analysts() {
       return this.$store.getters['analyst/getAnalysts']
         .filter((analyst) => analyst.id !== this.user.id)

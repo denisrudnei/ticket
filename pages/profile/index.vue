@@ -194,16 +194,16 @@ export default {
   },
   methods: {
     ...mapMutations({
-      updateEmail: 'auth/updateEmail',
-      updateAddress: 'auth/updateAddress',
+      updateEmail: 'user/updateEmail',
+      updateAddress: 'user/updateAddress',
     }),
     updatePrimary() {
       this.$vuetify.theme.currentTheme.primary = this.primary;
-      this.$store.commit('auth/setColor', this.primary);
+      this.$store.commit('user/setColor', this.primary);
       this.user.color = this.primary;
     },
     updatePictureMerge(value) {
-      this.$store.commit('auth/updateMergePictureWithExternalAccount', value);
+      this.$store.commit('user/updateMergePictureWithExternalAccount', value);
     },
     save() {
       const {
@@ -239,7 +239,7 @@ export default {
           mutation: removeImage,
         })
         .then(() => {
-          this.$store.commit('auth/removeImage');
+          this.$store.commit('user/removeImage');
           this.$toast.show('Imagem removida com sucesso', {
             duration: 5000,
             icon: 'done',

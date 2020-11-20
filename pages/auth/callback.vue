@@ -16,9 +16,11 @@ import afterLogin from '@/mixins/afterLogin';
 
 export default {
   mixins: [afterLogin],
-  computed: mapGetters({
-    user: 'auth/getUser',
-  }),
+  computed: {
+    user() {
+      return this.$auth.user;
+    },
+  },
   async mounted() {
     const token = this.$route.hash.split('#')[1].split('&')[0].split('=')[1];
     const { data } = await this.$axios.get(

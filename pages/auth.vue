@@ -95,31 +95,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 
 export default {
-  computed: mapGetters({
-    logged: 'auth/getLoggedIn',
-  }),
-  watch: {
-    logged() {
-      this.verifyPath();
-    },
-  },
-  mounted() {
-    this.verifyPath();
-  },
   methods: {
-    verifyPath() {
-      const path = /^\/auth\/+(|login|login\/)$/;
-      if (path.test(this.$router.currentRoute.path) && this.logged) {
-        const { query } = this.$route;
-        this.$router.push({
-          path: '/',
-          query,
-        });
-      }
-    },
     login() {
       this.$auth.loginWith('auth0').catch((e) => {
         this.$toast.error('Falha ao logar', {

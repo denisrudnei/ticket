@@ -97,15 +97,21 @@ export default {
       text: '',
     };
   },
-  computed: mapGetters({
-    user: 'auth/getUser',
-    analysts: 'analyst/getAnalysts',
-    messages: 'chat/getMessages',
-    chat: 'chat/getActive',
-    chats: 'chat/getChats',
-    visible: 'chat/getVisible',
-    logged: 'auth/getLogged',
-  }),
+  computed: {
+    user() {
+      return this.$auth.user;
+    },
+    logged() {
+      return this.$auth.loggedIn;
+    },
+    ...mapGetters({
+      analysts: 'analyst/getAnalysts',
+      messages: 'chat/getMessages',
+      chat: 'chat/getActive',
+      chats: 'chat/getChats',
+      visible: 'chat/getVisible',
+    }),
+  },
   apollo: {
     $subscribe: {
       newMessage: {

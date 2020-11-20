@@ -242,10 +242,14 @@ export default {
         },
       ];
     },
+    logged() {
+      return this.$auth.loggedIn;
+    },
+    user() {
+      return this.$auth.user;
+    },
     ...mapGetters({
       tickets: 'ticket/getTickets',
-      logged: 'auth/getLoggedIn',
-      user: 'auth/getUser',
       groups: 'group/getGroups',
       ticketsToEdit: 'ticket/getTicketsToEdit',
       query: 'ticket/getQuery',

@@ -73,7 +73,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import list from '@/graphql/query/config/role/list';
 import UpdateRole from '@/graphql/mutation/config/permissions/edit';
 
@@ -110,9 +109,9 @@ export default {
         },
       ];
     },
-    ...mapGetters({
-      user: 'auth/getUser',
-    }),
+    user() {
+      return this.$auth.user;
+    },
   },
   methods: {
     updateRole(analystId) {

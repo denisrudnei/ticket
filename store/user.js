@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-shadow */
 export const getters = {
