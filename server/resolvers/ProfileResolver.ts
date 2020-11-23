@@ -2,7 +2,7 @@
 import {
   Authorized, Ctx, Query, Resolver,
 } from 'type-graphql';
-import { ExpressContext } from '~/server/types/UserSession';
+import { CustomExpressContext } from '~/server/types/UserSession';
 
 import PathService from '../services/path/PathService';
 import ProfileInfo from '../services/path/ProfileInfo';
@@ -12,7 +12,7 @@ import Ref from '../services/path/Ref';
 class ProfileResolver {
   @Query(() => ProfileInfo)
   @Authorized('user')
-  ProfileInfo(@Ctx() context: ExpressContext) {
+  ProfileInfo(@Ctx() context: CustomExpressContext) {
     const userId = context.req.session!.authUser!.id;
     return PathService.getProfileInfo(userId);
   }

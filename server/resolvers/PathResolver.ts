@@ -2,7 +2,7 @@
 import {
   Arg, Authorized, Ctx, ID, Mutation, PubSub, PubSubEngine, Query, Resolver, Root, Subscription,
 } from 'type-graphql';
-import { ExpressContext } from '~/server/types/UserSession';
+import { CustomExpressContext } from '~/server/types/UserSession';
 
 import PathEnum from '../enums/PathEnum';
 import PathInput from '../inputs/PathInput';
@@ -15,14 +15,14 @@ import PathTree from '../services/path/PathTree';
 class PathResolver {
   @Query(() => [Path])
   @Authorized('user')
-  Path(@Ctx() { req }: ExpressContext) {
+  Path(@Ctx() { req }: CustomExpressContext) {
     const userId = req!.session!.authUser!.id;
     return PathService.getPaths(userId);
   }
 
   @Query(() => [PathTree])
   @Authorized('user')
-  PathTree(@Ctx() { req }: ExpressContext) {
+  PathTree(@Ctx() { req }: CustomExpressContext) {
     const userId = req!.session!.authUser!.id;
     return PathService.getPathsTree(userId);
   }
@@ -31,7 +31,7 @@ class PathResolver {
   @Authorized('user')
   async AddPath(
     @Arg('path', () => PathInput) path: Path,
-    @Ctx() context: ExpressContext,
+    @Ctx() context: CustomExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ) {
     const userId = context.req!.session!.authUser!.id;

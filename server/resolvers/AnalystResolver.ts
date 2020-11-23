@@ -4,7 +4,7 @@ import { GraphQLUpload } from 'graphql-upload';
 import {
   Arg, Authorized, Ctx, FieldResolver, ID, Mutation, Query, Resolver, Root,
 } from 'type-graphql';
-import { ExpressContext } from '~/server/types/UserSession';
+import { CustomExpressContext } from '~/server/types/UserSession';
 
 import AnalystInput from '../inputs/AnalystInput';
 import SoundInput from '../inputs/SoundInput';
@@ -34,7 +34,7 @@ class AnalystResolver {
   @Authorized('user')
   UpdateAnalyst(
     @Arg('analyst', () => AnalystInput) analyst: AnalystInput,
-    @Ctx() context: ExpressContext,
+    @Ctx() context: CustomExpressContext,
   ): Promise<Analyst> {
     const { id } = context.req!.session!.authUser!;
     return AnalystService.updateAnalyst(id, analyst);
@@ -42,7 +42,7 @@ class AnalystResolver {
 
   @Mutation(() => Analyst)
   @Authorized('user')
-  RemoveImage(@Ctx() context: ExpressContext): Promise<Analyst> {
+  RemoveImage(@Ctx() context: CustomExpressContext): Promise<Analyst> {
     const { id } = context.req!.session!.authUser!;
     return AnalystService.removeImage(id);
   }
@@ -51,7 +51,7 @@ class AnalystResolver {
   @Authorized('user')
   UpdateImage(
     @Arg('file', () => GraphQLUpload) file: UploadedFile,
-    @Ctx() context: ExpressContext,
+    @Ctx() context: CustomExpressContext,
   ): Promise<Analyst> {
     const { id } = context!.req!.session!.authUser!;
     return AnalystService.updateImage(id, file);
@@ -61,7 +61,7 @@ class AnalystResolver {
   @Authorized('user')
   SetSoundConfig(
     @Arg('config', () => [SoundInput]) config: SoundInput[],
-    @Ctx() context: ExpressContext,
+    @Ctx() context: CustomExpressContext,
   ) {
     const userId = context.req!.session!.authUser!.id;
     const newConfig = config.map((sound) => {

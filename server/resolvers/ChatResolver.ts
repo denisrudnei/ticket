@@ -13,7 +13,7 @@ import {
   Root,
   Subscription,
 } from 'type-graphql';
-import { ExpressContext } from '~/server/types/UserSession';
+import { CustomExpressContext } from '~/server/types/UserSession';
 
 import ChatEnum from '../enums/ChatEnum';
 import Analyst from '../models/Analyst';
@@ -27,7 +27,7 @@ import StatusColor from '../enums/StatusColor';
 class ChatResolver {
   @Query(() => [Chat])
   @Authorized('user')
-  Chat(@Ctx() { req }: ExpressContext) {
+  Chat(@Ctx() { req }: CustomExpressContext) {
     const from = req!.session!.authUser!.id;
     return ChatService.getChats(from);
   }
@@ -36,7 +36,7 @@ class ChatResolver {
   @Authorized('user')
   GetOneChat(
     @Arg('to', () => ID) to: Analyst['id'],
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
   ) {
     const from = req!.session!.authUser!.id;
     return ChatService.getOne(from, to);
@@ -46,7 +46,7 @@ class ChatResolver {
   @Authorized('user')
   ChangeChatStatus(
     @Arg('status', () => AnalystStatus) status: AnalystStatus,
-    @Ctx() context: ExpressContext,
+    @Ctx() context: CustomExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ) {
     const userId = context.req.session!.authUser!.id;
@@ -59,7 +59,7 @@ class ChatResolver {
   @Authorized('user')
   GetUnReadMessagesFromChat(
     @Arg('chatId', () => ID) chatId: Chat['id'],
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
   ) {
     const fromId = req!.session!.authUser!.id;
     return ChatService.getUnReadMessagesFromChat(chatId, fromId);
@@ -80,7 +80,7 @@ class ChatResolver {
   SendMessage(
     @Arg('to', () => ID) to: Analyst['id'],
     @Arg('message') message: string,
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ): Promise<Message> {
     const from = req!.session!.authUser!.id;

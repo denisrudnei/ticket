@@ -15,7 +15,7 @@ import {
   Root,
   Subscription,
 } from 'type-graphql';
-import { ExpressContext } from '~/server/types/UserSession';
+import { CustomExpressContext } from '~/server/types/UserSession';
 
 import Ticket from '../../server/models/ticket/Ticket';
 import NotificationEnum from '../enums/NotificationEnum';
@@ -194,7 +194,7 @@ class TicketResolver {
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
     @Arg('statusId', () => ID) statusId: Status['id'],
     @Ctx('pubSub') pubSub: PubSubEngine,
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
   ): Promise<Ticket> {
     const user = req!.session!.authUser!;
     const ticket = await TicketService.changeStatus(ticketId, statusId);
@@ -233,7 +233,7 @@ class TicketResolver {
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
     @Arg('groupId', () => ID) groupId: Group['id'],
     @PubSub() pubSub: PubSubEngine,
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
   ): Promise<Ticket> {
     const user = req!.session!.authUser!;
     const ticket = await TicketService.transferToGroup(ticketId, groupId);
@@ -252,7 +252,7 @@ class TicketResolver {
   @Authorized('user')
   async CreateTicket(
     @Arg('ticket', () => TicketCreateInput) ticket: Ticket,
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket> {
     const newTicket = Ticket.create(ticket);
@@ -272,7 +272,7 @@ class TicketResolver {
   EditTicket(
     @Arg('id', () => ID) id: Ticket['id'],
     @Arg('ticket', () => TicketInput) ticket: Ticket,
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket> {
     const userId = req!.session!.authUser!.id;
@@ -286,7 +286,7 @@ class TicketResolver {
   @Authorized('user')
   CopyTicket(
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket> {
     const userId = req!.session!.authUser!.id;
@@ -324,7 +324,7 @@ class TicketResolver {
   CommentOnTicket(
     @Arg('ticketId', () => ID) ticketId: Ticket['id'],
     @Arg('content') content: string,
-    @Ctx() context: ExpressContext,
+    @Ctx() context: CustomExpressContext,
   ) {
     const userId = context.req.session!.authUser!.id;
     return TicketService.commentOnTicket(ticketId, userId, content);
@@ -397,7 +397,7 @@ class TicketResolver {
   //   }
   //   SlaUpdate: {
   //     subscribe: withFilter(
-  //       (_: any, __: any, { pubSub }: ExpressContext) => {
+  //       (_: any, __: any, { pubSub }: CustomExpressContext) => {
   //         return pubSub.asyncIterator(TicketEnum.SLA_UPDATE)
   //       },
   //       async (payload, { tickets }) => {

@@ -2,7 +2,7 @@
 import {
   Ctx, Query, Resolver, Authorized,
 } from 'type-graphql';
-import { ExpressContext } from '~/server/types/UserSession';
+import { CustomExpressContext } from '~/server/types/UserSession';
 
 import SoundType from '../enums/SoundTypeEnum';
 import Analyst from '../models/Analyst';
@@ -17,7 +17,7 @@ class SoundResolver {
 
   @Query(() => [Sound])
   @Authorized('user')
-  async GetSounds(@Ctx() context: ExpressContext): Promise<Sound[]> {
+  async GetSounds(@Ctx() context: CustomExpressContext): Promise<Sound[]> {
     const { id } = context.req!.session!.authUser!;
 
     const { sounds } = (await Analyst.findOne(id, { relations: ['sounds'] }) as Analyst);

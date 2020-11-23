@@ -12,7 +12,7 @@ declare module 'express' {
   }
 }
 
-export interface ExpressContext {
+export interface CustomExpressContext {
   req: express.Request & Request;
   res: express.Response;
 }

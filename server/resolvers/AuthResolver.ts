@@ -4,7 +4,7 @@ import {
 } from 'type-graphql';
 
 import { Raw } from 'typeorm';
-import { ExpressContext } from '~/server/types/UserSession';
+import { CustomExpressContext } from '~/server/types/UserSession';
 import AnalystMergeInput from '../inputs/AnalystMergeInput';
 import Analyst from '../models/Analyst';
 import AuthService from '../services/AuthService';
@@ -15,7 +15,7 @@ class AuthResolver {
   async Login(
     @Arg('email') email: string,
     @Arg('password') password: string,
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
   ) {
     const logged = await AuthService.login(email, password);
 
@@ -26,7 +26,7 @@ class AuthResolver {
 
   @Query(() => Analyst)
   @Authorized('user')
-  async GetLogged(@Ctx() { req }: ExpressContext) {
+  async GetLogged(@Ctx() { req }: CustomExpressContext) {
     const { id } = req.session!.authUser!;
     const logged = await Analyst.findOne(id);
     return logged;
@@ -38,7 +38,7 @@ class AuthResolver {
   async MergeUser(
     @Arg('email') email: string,
     @Arg('user', () => AnalystMergeInput) user: Analyst,
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
   ) {
     req!.session!.authUser = await Analyst.findOne({
       where: {
@@ -65,7 +65,7 @@ class AuthResolver {
   }
 
   @Mutation(() => Boolean)
-  Logout(@Ctx() context: ExpressContext) {
+  Logout(@Ctx() context: CustomExpressContext) {
     const { req } = context;
     delete req!.session!.authUser;
     return true;
@@ -74,7 +74,7 @@ class AuthResolver {
   @Mutation(() => String)
   GenerateEmailToReset(
     @Arg('email') email: string,
-    @Ctx() context: ExpressContext,
+    @Ctx() context: CustomExpressContext,
   ): Promise<string> {
     return AuthService.generateEmailToReset(email, context.req);
   }
@@ -83,7 +83,7 @@ class AuthResolver {
   ResetPassword(
     @Arg('newPassword') newPassword: string,
     @Arg('oldPassword') oldPassword: string,
-    @Ctx() context: ExpressContext,
+    @Ctx() context: CustomExpressContext,
   ) {
     const userId = context.req!.session!.authUser!.id;
     return AuthService.resetPassword(userId, oldPassword, newPassword);

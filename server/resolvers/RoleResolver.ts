@@ -9,7 +9,7 @@ import {
   ID,
 } from 'type-graphql';
 
-import { ExpressContext } from '~/server/types/UserSession';
+import { CustomExpressContext } from '~/server/types/UserSession';
 import Role from '../models/Role';
 import RoleService from '../services/RoleService';
 import RoleInput from '../inputs/RoleInput';
@@ -43,7 +43,7 @@ class RoleResolver {
   UpdateRole(
     @Arg('userId', () => ID) userId: Analyst['id'],
     @Arg('roleId', () => ID) roleId: Role['id'],
-    @Ctx() context: ExpressContext,
+    @Ctx() context: CustomExpressContext,
   ) {
     return RoleService.setAnalystRole(userId, roleId);
   }

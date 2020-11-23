@@ -15,7 +15,7 @@ import {
   Root,
   Subscription,
 } from 'type-graphql';
-import { ExpressContext } from '~/server/types/UserSession';
+import { CustomExpressContext } from '~/server/types/UserSession';
 
 import Analyst from '../models/Analyst';
 import Notification from '../models/Notification';
@@ -24,7 +24,7 @@ import Notification from '../models/Notification';
 class NotificationResolver {
   @Query(() => [Notification])
   @Authorized('user')
-  Notification(@Ctx() { req }: ExpressContext) {
+  Notification(@Ctx() { req }: CustomExpressContext) {
     return NotificationService.getAll(req!.session!.authUser!.id);
   }
 
@@ -38,7 +38,7 @@ class NotificationResolver {
   @Authorized('user')
   async ReadNotification(
     @Arg('id', () => ID) id: Notification['id'],
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ) {
     const userId = req!.session!.authUser!.id;
@@ -50,7 +50,7 @@ class NotificationResolver {
   @Mutation(() => [Notification])
   @Authorized('user')
   async ReadAllNotifications(
-    @Ctx() { req }: ExpressContext,
+    @Ctx() { req }: CustomExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ) {
     const userId = req!.session!.authUser!.id;
