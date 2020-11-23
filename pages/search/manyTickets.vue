@@ -83,7 +83,7 @@ export default {
       if (evt.key === 'Enter') {
         const numbers = Array.from(
           new Set(
-            this.ticketsText.split(/[^\d]/).filter((number) => !Math.isNaN(parseInt(number, 10))),
+            this.ticketsText.split(/[^\d]/).filter((number) => !Number.isNaN(parseInt(number, 10))),
           ),
         );
         this.ticketsNumbers = Array.from(
