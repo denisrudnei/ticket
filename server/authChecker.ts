@@ -13,7 +13,7 @@ export const customAuthChecker: AuthChecker<CustomExpressContext> = ({
 }) => {
   const { req } = context;
   const { session } = req;
-  if (!req.headers.authorization && session!.authUser) return false;
+  if (!req.headers.authorization && !session!.authUser) return false;
   if (session && session.authUser) return true;
   const items = req.headers.authorization!.split(' ');
   const token = items[items.length - 1];

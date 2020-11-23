@@ -3,7 +3,7 @@ import express from 'express';
 import Analyst from '~/server/models/Analyst';
 
 type Content = {
-  authUser?: Analyst
+  authUser?: Partial<Analyst>
 };
 
 declare module 'express' {
