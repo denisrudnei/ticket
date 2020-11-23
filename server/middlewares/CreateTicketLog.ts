@@ -8,7 +8,7 @@ async function createTicketLog(
   next: express.NextFunction,
 ) {
   const ticket = await TicketService.getOne(parseInt(req.params.id, 10));
-  const user = req.session!.authUser.id;
+  const user = req.session!.authUser!.id;
   await LogService.createTicketLog(user, ticket.id);
   next();
 }

@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import {
   Arg, Authorized, Ctx, Mutation, Query, Resolver,
 } from 'type-graphql';
 
 import { Raw } from 'typeorm';
+import { ExpressContext } from '~/server/types/UserSession';
 import AnalystMergeInput from '../inputs/AnalystMergeInput';
 import Analyst from '../models/Analyst';
 import AuthService from '../services/AuthService';
@@ -27,7 +27,7 @@ class AuthResolver {
   @Query(() => Analyst)
   @Authorized('user')
   async GetLogged(@Ctx() { req }: ExpressContext) {
-    const { id } = req.session!.authUser;
+    const { id } = req.session!.authUser!;
     const logged = await Analyst.findOne(id);
     return logged;
   }
@@ -85,7 +85,7 @@ class AuthResolver {
     @Arg('oldPassword') oldPassword: string,
     @Ctx() context: ExpressContext,
   ) {
-    const userId = context.req!.session!.authUser.id;
+    const userId = context.req!.session!.authUser!.id;
     return AuthService.resetPassword(userId, oldPassword, newPassword);
   }
 

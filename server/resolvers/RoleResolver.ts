@@ -9,7 +9,7 @@ import {
   ID,
 } from 'type-graphql';
 
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
+import { ExpressContext } from '~/server/types/UserSession';
 import Role from '../models/Role';
 import RoleService from '../services/RoleService';
 import RoleInput from '../inputs/RoleInput';

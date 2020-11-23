@@ -1,8 +1,8 @@
 /* eslint-disable class-methods-use-this */
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import {
   Arg, Authorized, Ctx, ID, Mutation, PubSub, PubSubEngine, Query, Resolver, Root, Subscription,
 } from 'type-graphql';
+import { ExpressContext } from '~/server/types/UserSession';
 
 import PathEnum from '../enums/PathEnum';
 import PathInput from '../inputs/PathInput';
@@ -16,14 +16,14 @@ class PathResolver {
   @Query(() => [Path])
   @Authorized('user')
   Path(@Ctx() { req }: ExpressContext) {
-    const userId = req!.session!.authUser.id;
+    const userId = req!.session!.authUser!.id;
     return PathService.getPaths(userId);
   }
 
   @Query(() => [PathTree])
   @Authorized('user')
   PathTree(@Ctx() { req }: ExpressContext) {
-    const userId = req!.session!.authUser.id;
+    const userId = req!.session!.authUser!.id;
     return PathService.getPathsTree(userId);
   }
 
@@ -34,7 +34,7 @@ class PathResolver {
     @Ctx() context: ExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ) {
-    const userId = context.req!.session!.authUser.id;
+    const userId = context.req!.session!.authUser!.id;
     const result = await PathService.create(path, userId);
     await pubSub.publish(PathEnum.NEW_PATH_ADDED, result);
     return result;

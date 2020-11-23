@@ -97,6 +97,18 @@
 <script>
 
 export default {
+  watch: {
+    '$auth.loggedIn': {
+      deep: true,
+      handler(to, from) {
+        // FIXME
+        if (['/auth/', '/auth/login'].includes(from.path)) {
+          console.log('redirectionar para a HOME');
+        }
+        // if (this.$auth.loggedIn) this.$router.push('/');
+      },
+    },
+  },
   methods: {
     login() {
       this.$auth.loginWith('auth0').catch((e) => {

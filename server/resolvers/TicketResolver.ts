@@ -1,6 +1,5 @@
 /* eslint-disable class-methods-use-this */
 import NotificationService from '@/server/services/NotificationService';
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import {
   Arg,
   Authorized,
@@ -16,6 +15,7 @@ import {
   Root,
   Subscription,
 } from 'type-graphql';
+import { ExpressContext } from '~/server/types/UserSession';
 
 import Ticket from '../../server/models/ticket/Ticket';
 import NotificationEnum from '../enums/NotificationEnum';
@@ -196,7 +196,7 @@ class TicketResolver {
     @Ctx('pubSub') pubSub: PubSubEngine,
     @Ctx() { req }: ExpressContext,
   ): Promise<Ticket> {
-    const user = req!.session!.authUser;
+    const user = req!.session!.authUser!;
     const ticket = await TicketService.changeStatus(ticketId, statusId);
     LogService.createTicketLog(user.id, ticket!.id);
     pubSub.publish(TicketEnum.TICKET_CHANGE_STATUS, ticket);
@@ -235,7 +235,7 @@ class TicketResolver {
     @PubSub() pubSub: PubSubEngine,
     @Ctx() { req }: ExpressContext,
   ): Promise<Ticket> {
-    const user = req!.session!.authUser;
+    const user = req!.session!.authUser!;
     const ticket = await TicketService.transferToGroup(ticketId, groupId);
     const notification = await NotificationService.triggerForTicketTransfer(
       ticket.id,
@@ -257,7 +257,7 @@ class TicketResolver {
   ): Promise<Ticket> {
     const newTicket = Ticket.create(ticket);
 
-    newTicket.openedBy = req!.session!.authUser;
+    newTicket.openedBy = req!.session!.authUser!;
 
     const createdTicket = await TicketService.create(newTicket);
     const notification = await NotificationService.triggerForTicketCreation(
@@ -275,7 +275,7 @@ class TicketResolver {
     @Ctx() { req }: ExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket> {
-    const userId = req!.session!.authUser.id;
+    const userId = req!.session!.authUser!.id;
     LogService.createTicketLog(userId, ticket.id);
     const editedTicket = TicketService.updateOne(id, ticket);
     pubSub.publish(TicketEnum.TICKET_EDIT, editedTicket);
@@ -289,7 +289,7 @@ class TicketResolver {
     @Ctx() { req }: ExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ): Promise<Ticket> {
-    const userId = req!.session!.authUser.id;
+    const userId = req!.session!.authUser!.id;
     const ticket = TicketService.copyTicket(ticketId, userId);
     pubSub.publish(TicketEnum.TICKET_COPY, ticket);
     return ticket;

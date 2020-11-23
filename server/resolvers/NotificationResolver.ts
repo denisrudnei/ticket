@@ -1,7 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import NotificationEnum from '@/server/enums/NotificationEnum';
 import NotificationService from '@/server/services/NotificationService';
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import {
   Arg,
   Authorized,
@@ -16,6 +15,7 @@ import {
   Root,
   Subscription,
 } from 'type-graphql';
+import { ExpressContext } from '~/server/types/UserSession';
 
 import Analyst from '../models/Analyst';
 import Notification from '../models/Notification';
@@ -25,7 +25,7 @@ class NotificationResolver {
   @Query(() => [Notification])
   @Authorized('user')
   Notification(@Ctx() { req }: ExpressContext) {
-    return NotificationService.getAll(req!.session!.authUser.id);
+    return NotificationService.getAll(req!.session!.authUser!.id);
   }
 
   @Query(() => Notification)
@@ -41,7 +41,7 @@ class NotificationResolver {
     @Ctx() { req }: ExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ) {
-    const userId = req!.session!.authUser.id;
+    const userId = req!.session!.authUser!.id;
     const notification = await NotificationService.toggleRead(userId, id);
     pubSub.publish(NotificationEnum.UPDATE_NOTIFICATION, notification);
     return notification;
@@ -53,7 +53,7 @@ class NotificationResolver {
     @Ctx() { req }: ExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ) {
-    const userId = req!.session!.authUser.id;
+    const userId = req!.session!.authUser!.id;
     const notifications = await NotificationService.readall(userId);
     pubSub.publish(NotificationEnum.READ_ALL_NOTIFICATIONS, notifications);
     return notifications;

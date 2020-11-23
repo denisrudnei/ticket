@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
-import { AuthChecker } from 'type-graphql';
 import jwt from 'jsonwebtoken';
+import { AuthChecker } from 'type-graphql';
+import { ExpressContext } from '~/server/types/UserSession';
+
+import Analyst from './models/Analyst';
 
 export const customAuthChecker: AuthChecker<ExpressContext> = ({
   root,
@@ -11,12 +13,12 @@ export const customAuthChecker: AuthChecker<ExpressContext> = ({
 }) => {
   const { req } = context;
   const { session } = req;
-  if (!req.headers.authorization && !req.session!.authUser) return false;
+  if (!req.headers.authorization && session!.authUser) return false;
   if (session && session.authUser) return true;
   const items = req.headers.authorization!.split(' ');
   const token = items[items.length - 1];
 
-  const data = jwt.decode(token);
+  const data = jwt.decode(token) as Analyst;
 
   req.session!.authUser = data;
 

@@ -2,6 +2,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import express from 'express';
 import AuthService from '~/server/services/AuthService';
 import Analyst from '~/server/models/Analyst';
+import '~/server/types/UserSession';
 
 export default {
   login: (req: express.Request, res: express.Response) => {
@@ -32,7 +33,7 @@ export default {
   },
 
   logout: (req: express.Request, res: express.Response) => {
-    delete req.session!.authUser;
+    delete req.session.authUser;
     res.sendStatus(200);
   },
 
@@ -82,7 +83,7 @@ export default {
   },
 
   reset: (req: express.Request, res: express.Response) => {
-    const userId = req.session!.authUser.id;
+    const userId = req.session!.authUser!.id;
     AuthService.resetPassword(
       userId,
       req.body.oldPassword,

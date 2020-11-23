@@ -1,10 +1,10 @@
 /* eslint-disable class-methods-use-this */
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import { UploadedFile } from 'express-fileupload';
 import { GraphQLUpload } from 'graphql-upload';
 import {
   Arg, Authorized, Ctx, FieldResolver, ID, Mutation, Query, Resolver, Root,
 } from 'type-graphql';
+import { ExpressContext } from '~/server/types/UserSession';
 
 import AnalystInput from '../inputs/AnalystInput';
 import SoundInput from '../inputs/SoundInput';
@@ -36,14 +36,14 @@ class AnalystResolver {
     @Arg('analyst', () => AnalystInput) analyst: AnalystInput,
     @Ctx() context: ExpressContext,
   ): Promise<Analyst> {
-    const { id } = context.req!.session!.authUser;
+    const { id } = context.req!.session!.authUser!;
     return AnalystService.updateAnalyst(id, analyst);
   }
 
   @Mutation(() => Analyst)
   @Authorized('user')
   RemoveImage(@Ctx() context: ExpressContext): Promise<Analyst> {
-    const { id } = context.req!.session!.authUser;
+    const { id } = context.req!.session!.authUser!;
     return AnalystService.removeImage(id);
   }
 
@@ -53,7 +53,7 @@ class AnalystResolver {
     @Arg('file', () => GraphQLUpload) file: UploadedFile,
     @Ctx() context: ExpressContext,
   ): Promise<Analyst> {
-    const { id } = context!.req!.session!.authUser;
+    const { id } = context!.req!.session!.authUser!;
     return AnalystService.updateImage(id, file);
   }
 
@@ -63,7 +63,7 @@ class AnalystResolver {
     @Arg('config', () => [SoundInput]) config: SoundInput[],
     @Ctx() context: ExpressContext,
   ) {
-    const userId = context.req!.session!.authUser.id;
+    const userId = context.req!.session!.authUser!.id;
     const newConfig = config.map((sound) => {
       const toReturn = new Sound(sound.type, userId);
       toReturn.muted = sound.muted;

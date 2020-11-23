@@ -1,8 +1,8 @@
 /* eslint-disable class-methods-use-this */
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import {
   Authorized, Ctx, Query, Resolver,
 } from 'type-graphql';
+import { ExpressContext } from '~/server/types/UserSession';
 
 import PathService from '../services/path/PathService';
 import ProfileInfo from '../services/path/ProfileInfo';
@@ -13,7 +13,7 @@ class ProfileResolver {
   @Query(() => ProfileInfo)
   @Authorized('user')
   ProfileInfo(@Ctx() context: ExpressContext) {
-    const userId = context.req.session!.authUser.id;
+    const userId = context.req.session!.authUser!.id;
     return PathService.getProfileInfo(userId);
   }
 

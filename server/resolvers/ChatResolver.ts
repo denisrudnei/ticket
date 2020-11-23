@@ -1,5 +1,4 @@
 /* eslint-disable class-methods-use-this */
-import { ExpressContext } from 'apollo-server-express/dist/ApolloServer';
 import {
   Arg,
   Authorized,
@@ -14,6 +13,7 @@ import {
   Root,
   Subscription,
 } from 'type-graphql';
+import { ExpressContext } from '~/server/types/UserSession';
 
 import ChatEnum from '../enums/ChatEnum';
 import Analyst from '../models/Analyst';
@@ -28,7 +28,7 @@ class ChatResolver {
   @Query(() => [Chat])
   @Authorized('user')
   Chat(@Ctx() { req }: ExpressContext) {
-    const from = req!.session!.authUser.id;
+    const from = req!.session!.authUser!.id;
     return ChatService.getChats(from);
   }
 
@@ -38,7 +38,7 @@ class ChatResolver {
     @Arg('to', () => ID) to: Analyst['id'],
     @Ctx() { req }: ExpressContext,
   ) {
-    const from = req!.session!.authUser.id;
+    const from = req!.session!.authUser!.id;
     return ChatService.getOne(from, to);
   }
 
@@ -61,7 +61,7 @@ class ChatResolver {
     @Arg('chatId', () => ID) chatId: Chat['id'],
     @Ctx() { req }: ExpressContext,
   ) {
-    const fromId = req!.session!.authUser.id;
+    const fromId = req!.session!.authUser!.id;
     return ChatService.getUnReadMessagesFromChat(chatId, fromId);
   }
 
@@ -83,7 +83,7 @@ class ChatResolver {
     @Ctx() { req }: ExpressContext,
     @PubSub() pubSub: PubSubEngine,
   ): Promise<Message> {
-    const from = req!.session!.authUser.id;
+    const from = req!.session!.authUser!.id;
     const result = ChatService.addMessage(from, to, message);
 
     pubSub.publish(ChatEnum.NEW_CHAT_MESSAGE, result);
