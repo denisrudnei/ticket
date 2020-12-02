@@ -84,6 +84,4 @@ dist
 sw.*
 
 # NPM
-package-lock.json
-
 test/server/schema.graphql
