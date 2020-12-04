@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <iframe
-        src="/graphql"
+        :src="url"
         frameborder="0"
       />
     </v-col>
@@ -10,7 +10,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      url: process.env.url,
+    };
+  },
+};
 </script>
 
 <style>

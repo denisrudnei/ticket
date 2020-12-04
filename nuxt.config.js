@@ -10,6 +10,10 @@ module.exports = {
     fallback: true,
   },
 
+  env: {
+    url: process.env.GRAPHQL,
+  },
+
   /*
    ** Headers of the page
    */
