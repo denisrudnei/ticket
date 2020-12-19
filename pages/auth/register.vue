@@ -53,6 +53,7 @@
 import register from '@/graphql/mutation/auth/register';
 
 export default {
+  auth: false,
   data() {
     return {
       errors: {},

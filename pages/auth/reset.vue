@@ -23,6 +23,7 @@
 import sendEmailToReset from '@/graphql/mutation/auth/sendEmailToReset';
 
 export default {
+  auth: false,
   data() {
     return {
       email: '',

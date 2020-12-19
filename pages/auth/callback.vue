@@ -15,6 +15,7 @@ import { mapGetters } from 'vuex';
 import afterLogin from '@/mixins/afterLogin';
 
 export default {
+  auth: false,
   mixins: [afterLogin],
   computed: {
     user() {
