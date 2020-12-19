@@ -118,25 +118,25 @@ module.exports = {
   auth: {
     redirect: {
       login: '/auth/login',
-      logout: '/auth/logout',
-      callback: '/auth/callback',
+      logout: '/auth/login',
+      callback: '/auth/login',
       home: '/',
     },
     strategies: {
       local: {
         endpoints: {
           login: {
-            url: 'auth/login',
+            url: '/auth/login',
             method: 'post',
             propertyName: 'user',
           },
           user: {
-            url: 'auth/user',
+            url: '/auth/user',
             method: 'post',
             propertyName: 'user',
           },
           logout: {
-            url: 'auth/logout',
+            url: '/auth/logout',
             method: 'post',
           },
         },

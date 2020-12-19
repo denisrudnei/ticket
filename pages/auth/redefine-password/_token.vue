@@ -22,7 +22,6 @@
 import resetPasswordWithToken from '@/graphql/mutation/auth/resetPasswordWithToken';
 
 export default {
-  auth: false,
   data() {
     return {
       password: '',
