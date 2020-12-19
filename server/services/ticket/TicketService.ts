@@ -21,7 +21,8 @@ type sortOrder = {
 
 class TicketService {
   static async startBull(pubSub: PubSubEngine): Promise<void> {
-    const queue = new Bull<null>('sla check', process.env.REDIS_URL || 'redis://127.0.0.1:6379');
+    const queue = new Bull<null>('slaCheck', process.env.REDIS_URL || 'redis://127.0.0.1:6379');
+
     // eslint-disable-next-line consistent-return
     queue.process(async () => {
       const statusWithSlaAbleToRun = await Status.find({
@@ -30,7 +31,7 @@ class TicketService {
 
       if (statusWithSlaAbleToRun.length === 0) { return Promise.resolve(); }
 
-      Ticket.createQueryBuilder()
+      await Ticket.createQueryBuilder()
         .update(Ticket)
         .set({
           slaCount: new Date(),
