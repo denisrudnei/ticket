@@ -56,6 +56,7 @@
               <v-btn
                 to="/ticket/create"
                 class="primary white--text"
+                elevation="0"
                 tile
                 block
               >
@@ -69,6 +70,7 @@
               <v-btn
                 to="/search"
                 class="primary white--text"
+                elevation="0"
                 tile
                 block
               >
@@ -83,6 +85,7 @@
                 class="primary white--text"
                 to="/knowledge"
                 tile
+                elevation="0"
                 block
               >
                 {{ $t('knowledge_base') }}
@@ -95,6 +98,7 @@
               <v-btn
                 class="primary white--text"
                 to="/reports"
+                elevation="0"
                 tile
                 block
               >
