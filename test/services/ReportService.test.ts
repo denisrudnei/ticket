@@ -13,7 +13,7 @@ describe('Report', () => {
 
   it('Should return filtered report by status', async () => {
     const status = await Status.findOne();
-    await ReportService.reportGrouped({ status: { id: 16 } }, 'status');
+    await ReportService.reportGrouped({ status: [16] }, 'status');
   });
 
   it('Should return report by date', async () => {

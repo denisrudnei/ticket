@@ -1,7 +1,7 @@
 import Ticket from '@/server/models/ticket/Ticket';
 import { getDate, getMonth, getYear } from 'date-fns';
 import lodash from 'lodash';
-import { Between, In } from 'typeorm';
+import { Between, In, Raw } from 'typeorm';
 import ReportAttributes from '~/server/inputs/ReportAttributes';
 
 import ComposedDate from './ComposedDate';
@@ -16,13 +16,13 @@ export enum TicketTimeField {
 
 class ReportService {
   static async reportGrouped(
-    attributes: ReportAttributes,
+    attributes: Partial<ReportAttributes>,
     field: string,
   ): Promise<GroupedResult[]> {
     const findAttributes = Object.entries(attributes).map((item) => {
       const [key, value] = item;
       return {
-        [key]: In(value),
+        [key]: value && value.length > 1 ? In(value) : Raw(() => 'TRUE'),
       };
     });
     const tickets = await Ticket.find({
