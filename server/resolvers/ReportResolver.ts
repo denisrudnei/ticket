@@ -4,7 +4,6 @@ import {
 } from 'type-graphql';
 
 import ReportAttributes from '../inputs/ReportAttributes';
-import Ticket from '../models/ticket/Ticket';
 import GroupedResult from '../services/ticket/report/GroupedResult';
 import ReportByDate from '../services/ticket/report/ReportByDate';
 import ReportService, { TicketTimeField } from '../services/ticket/report/ReportService';
@@ -14,7 +13,7 @@ class ReportResolver {
   @Query(() => [GroupedResult])
   @Authorized('user')
   TicketReport(
-    @Arg('attributes', () => ReportAttributes) attributes: Ticket,
+    @Arg('attributes', () => ReportAttributes) attributes: ReportAttributes,
     @Arg('field') field: TicketTimeField,
   ): Promise<GroupedResult[]> {
     return ReportService.reportGrouped(attributes, field);

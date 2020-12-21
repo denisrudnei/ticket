@@ -3,25 +3,10 @@ import { ObjectType, Field } from 'type-graphql';
 @ObjectType()
 class DatabaseItemsCount {
   @Field()
-  ticket!: number;
+  name!: string;
 
   @Field()
-  analyst!: number;
-
-  @Field()
-  category!: number;
-
-  @Field()
-  status!: number;
-
-  @Field()
-  knowledge!: number;
-
-  @Field()
-  group!: number;
-
-  @Field()
-  priority!: number;
+  total!: number;
 }
 
 export default DatabaseItemsCount;

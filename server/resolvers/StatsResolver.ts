@@ -5,7 +5,7 @@ import DatabaseItemsCount from '../models/DatabaseItemsCount';
 
 @Resolver()
 class StatsResolver {
-  @Query(() => DatabaseItemsCount)
+  @Query(() => [DatabaseItemsCount])
   DatabaseItemsCount() {
     return StatsService.getDatabaseItemsCount();
   }

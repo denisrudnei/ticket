@@ -1,6 +1,8 @@
 import Ticket from '@/server/models/ticket/Ticket';
+import { getDate, getMonth, getYear } from 'date-fns';
 import lodash from 'lodash';
-import { DeepPartial } from 'typeorm';
+import { Between, In } from 'typeorm';
+import ReportAttributes from '~/server/inputs/ReportAttributes';
 
 import ComposedDate from './ComposedDate';
 import GroupedResult from './GroupedResult';
@@ -14,11 +16,18 @@ export enum TicketTimeField {
 
 class ReportService {
   static async reportGrouped(
-    attributes: DeepPartial<Ticket>,
+    attributes: ReportAttributes,
     field: string,
   ): Promise<GroupedResult[]> {
-    // attributes
-    const tickets = await Ticket.find({});
+    const findAttributes = Object.entries(attributes).map((item) => {
+      const [key, value] = item;
+      return {
+        [key]: In(value),
+      };
+    });
+    const tickets = await Ticket.find({
+      where: findAttributes,
+    });
     const grouped = lodash.groupBy(tickets, `${field}.name`);
     const result = Object.keys(grouped).map(
       (name) => new GroupedResult(name, grouped[name].length),
@@ -29,21 +38,19 @@ class ReportService {
   static async reportByDate(
     field: TicketTimeField,
     start = new Date(),
-    end = new Date(),
+    finish = new Date(),
   ): Promise<ReportByDate[]> {
-    // {
-    //   where: {
-    //     [field]: MoreThanOrEqual(start),
-    //     [field]: LessThanOrEqual(end)
-    //   }
-    // }
-    const tickets = await Ticket.find();
+    const tickets = await Ticket.find({
+      where: {
+        [field]: Between(start, finish),
+      },
+    });
+
     const ticketsWithNewDates = tickets.map((ticket) => {
-      const [year, month, day] = ticket[field]
-        .toISOString()
-        .split('T')[0]
-        .split('-')
-        .map((value) => parseInt(value, 10));
+      const year = getYear(ticket[field]);
+      const month = getMonth(ticket[field]) + 1;
+      const day = getDate(ticket[field]);
+
       const composedDate = new ComposedDate(day, month, year);
 
       return new TicketWithComposedDate(ticket, composedDate);

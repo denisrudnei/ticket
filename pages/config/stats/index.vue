@@ -35,15 +35,9 @@ export default {
   asyncData({ app }) {
     return app.apolloProvider.defaultClient.query({
       query: statsList,
-    }).then((response) => {
-      const databaseItemsCount = Object.entries(response.data.databaseItemsCount).map((value) => {
-        const [name, total] = value;
-        return { name, total };
-      }).filter((value) => value.name !== '__typename');
-      return {
-        databaseItemsCount,
-      };
-    });
+    }).then((response) => ({
+      databaseItemsCount: response.data.databaseItemsCount,
+    }));
   },
 };
 </script>

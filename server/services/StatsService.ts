@@ -7,16 +7,16 @@ import Group from '../models/ticket/Group';
 import DatabaseItemsCount from '../models/DatabaseItemsCount';
 
 class StatsService {
-  static async getDatabaseItemsCount(): Promise<DatabaseItemsCount> {
-    return {
-      ticket: await Ticket.count(),
-      analyst: await Analyst.count(),
-      category: await Category.count(),
-      knowledge: await Knowledge.count(),
-      status: await Status.count(),
-      group: await Group.count(),
-      priority: await Group.count(),
-    };
+  static async getDatabaseItemsCount(): Promise<DatabaseItemsCount[]> {
+    return [
+      { name: 'Ticket', total: await Ticket.count() },
+      { name: 'Analyst', total: await Analyst.count() },
+      { name: 'Category', total: await Category.count() },
+      { name: 'Knowledge', total: await Knowledge.count() },
+      { name: 'Status', total: await Status.count() },
+      { name: 'Group', total: await Group.count() },
+      { name: 'Priority', total: await Group.count() },
+    ];
   }
 }
 
