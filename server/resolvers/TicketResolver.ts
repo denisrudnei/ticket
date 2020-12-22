@@ -39,9 +39,10 @@ import TicketService from '../services/ticket/TicketService';
 class TicketResolver {
   @Query(() => Ticket)
   TicketById(@Arg('id', () => ID) id: Ticket['id']) {
-    return TicketService.getOne(id);
+    const ticket = TicketService.getOne(id);
+    if (!ticket) throw new Error('Ticket not found');
+    return ticket;
   }
-  // FIXME
 
   @FieldResolver()
   async logs(@Root() ticket: Ticket): Promise<Log[]> {
@@ -381,34 +382,6 @@ class TicketResolver {
   CopyTicketSubscription(@Root() ticketPayload: Ticket): Ticket {
     return ticketPayload;
   }
-
-  //   }
-  //   EditTicket: {
-  //     subscribe: withFilter(
-  //       (_: any, __, { pubSub }) => {
-  //         return pubSub.asyncIterator(TicketEnum.TICKET_EDIT)
-  //       },
-  //       async (payload, { tickets }) => {
-  //         const { EditTicket } = await payload
-  //         const value = await EditTicket
-  //         return tickets.includes(value.id.toString())
-  //       }
-  //     )
-  //   }
-  //   SlaUpdate: {
-  //     subscribe: withFilter(
-  //       (_: any, __: any, { pubSub }: CustomExpressContext) => {
-  //         return pubSub.asyncIterator(TicketEnum.SLA_UPDATE)
-  //       },
-  //       async (payload, { tickets }) => {
-  //         const { SlaUpdate } = await payload
-
-  //         const value = await SlaUpdate
-
-  //         return tickets.includes(value.id.toString())
-  //       }
-  //     )
-  //   }
 }
 
 export default TicketResolver;
