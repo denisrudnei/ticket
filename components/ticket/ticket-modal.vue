@@ -12,7 +12,6 @@
           >
             <ticket-list
               v-if="showModal"
-              :url="`/search/`"
               :modal="true"
             />
           </v-col>

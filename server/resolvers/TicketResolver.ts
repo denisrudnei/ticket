@@ -34,6 +34,7 @@ import Status from '../models/ticket/Status';
 import TicketField from '../models/ticket/TicketField';
 import LogService from '../services/ticket/LogService';
 import TicketService from '../services/ticket/TicketService';
+import { transformToSort } from '../utils/sortUtils';
 
 @Resolver((of) => Ticket)
 class TicketResolver {
@@ -168,11 +169,11 @@ class TicketResolver {
   @Query(() => [Ticket])
   @Authorized('user')
   Tickets(
-    @Arg('sortBy', () => String, {
+    @Arg('sortBy', () => [String], {
       nullable: true,
-      defaultValue: 'id',
+      defaultValue: ['id'],
     })
-      sortBy: string,
+      sortBy: string[],
     @Arg('descending', { nullable: true, defaultValue: -1 })
       descending: number,
     @Arg('page', () => Int, { nullable: true, defaultValue: 0 }) page: number,
@@ -180,10 +181,7 @@ class TicketResolver {
   ) {
     return TicketService.getTickets(
       {},
-      {
-        sortBy,
-        descending,
-      },
+      transformToSort(sortBy, descending),
       page,
       limit,
     );

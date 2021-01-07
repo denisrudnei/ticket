@@ -19,7 +19,7 @@
         must-sort
         :loading="loading"
         :footer-props.sync="footerProps"
-        :server-items-length.sync="totalItems"
+        :server-items-length="options.totalItems"
         :options.sync="options"
       >
         <template #item.actions="{ item }">
@@ -145,7 +145,6 @@
         </template>
       </v-data-table>
     </v-col>
-
     <v-col
       v-if="selected.length > 0"
       cols="12"
@@ -221,31 +220,21 @@ export default {
   },
   data() {
     return {
-      loading: false,
       selected: [],
       showUpdateMany: false,
       selectedStatus: undefined,
       selectedGroup: undefined,
       currentGroup: {},
       currentStatus: {},
-      totalItems: 0,
       footerProps: {
         itemsPerPageOptions: [10, 15, 25, 50],
         itemsPerPage: 10,
-      },
-      options: {
-        sortBy: ['id'],
-        descending: true,
-        sortDesc: [true],
-        totalItems: 0,
-        itemsPerPage: 10,
-        page: 1,
       },
     };
   },
   head() {
     return {
-      title: `Page ${this.options.page}, total ${this.totalItems}`,
+      title: `Page ${this.options.page}, total ${this.options.totalItems}`,
     };
   },
   computed: {
@@ -299,6 +288,14 @@ export default {
         },
       ];
     },
+    options: {
+      get() {
+        return this.$store.getters['ticket/getPagination'];
+      },
+      set(value) {
+        this.updateOptions(value);
+      },
+    },
     query: {
       get() {
         if (this.modal) return this.$store.getters['ticket/getModalQuery'];
@@ -310,9 +307,6 @@ export default {
     },
     tickets: {
       get() {
-        if (this.modal) return this.$store.getters['ticket/getModalTickets'];
-
-        if (this.url === '/search/') return this.$store.getters['ticket/getSearch'];
         return this.$store.getters['ticket/getTickets'];
       },
       set(value) {
@@ -320,6 +314,7 @@ export default {
       },
     },
     ...mapGetters({
+      loading: 'ticket/getLoading',
       status: 'status/getStatus',
       groups: 'group/getGroups',
       dialog: 'ticket/getDialog',
@@ -333,34 +328,13 @@ export default {
       if (value || this.query.ticket) {
         query.ticket = value || this.query.ticket;
       }
-
       this.$store.commit('ticket/setQuery', query);
-    },
-    options: {
-      deep: true,
-      handler(newValue, old) {
-        if (
-          old.page === newValue.page
-          && old.sortBy === newValue.sortBy
-          && old.sortDesc === newValue.sortDesc
-          && old.itemsPerPage === newValue.itemsPerPage
-          && old.descending === newValue.descending
-        ) return;
-
-        this.loading = 'primary';
-        this.updateOptions(newValue);
-      },
-    },
-    async $route(value) {
-      this.query = value.query;
-      await this.update();
     },
   },
   async mounted() {
     const { query } = this.$route;
-
     this.setQuery(query);
-    this.options.page = query.page || 1;
+    this.$store.commit('ticket/setPage', query.page || 1);
     if (query.ticket !== undefined && query.ticket !== null) {
       await this.$store.dispatch('ticket/findTicket', query.ticket);
       this.addTicketsToEdit(this.actualTicket);
@@ -398,16 +372,25 @@ export default {
       }
     },
     updateOptions(value) {
-      const sortBy = Array.isArray(value.sortBy) ? value.sortBy[0] : value.sortBy;
-
+      const update = value.page !== this.options.page;
       const query = {
         ...this.query,
         page: value.page,
-        limit: this.options.itemsPerPage,
-        sortBy,
-        descending: value.sortDesc[0] ? -1 : 1,
+        limit: value.itemsPerPage,
+        sortBy: value.sortBy,
+        descending: value.sortDesc.some((value) => !!value) ? -1 : 1,
       };
+
+      this.$store.commit('ticket/setPagination', {
+        ...value,
+        page: value.page,
+        sortBy: value.sortBy,
+        limit: value.itemsPerPage,
+        descending: query.descending,
+        totalItems: value.totalItems,
+      });
       this.setQuery(query);
+      this.$emit('updatePagination');
     },
     getTicketAttributes() {
       this.$apollo
@@ -441,33 +424,7 @@ export default {
           attributes[key] = query[key];
         }
       });
-      await this.$apollo
-        .query({
-          query: ticketSearch,
-          fetchPolicy: 'network-only',
-          variables: {
-            sortBy: query.sortBy || 'id',
-            page: parseInt(query.page, 10) || 1,
-            limit: parseInt(query.limit, 10) || 10,
-            descending: parseInt(query.descending, 10) || -1,
-            attributes,
-          },
-        })
-        .then((response) => {
-          const {
-            docs, total, limit, page,
-          } = response.data.Tickets;
-          if (this.modal) {
-            this.$store.commit('ticket/setModalTickets', docs);
-          } else {
-            this.$store.commit('ticket/setTickets', docs);
-            this.$store.commit('ticket/setSearch', docs);
-          }
-          this.totalItems = parseInt(total, 10);
-          this.options.page = parseInt(page, 10);
-          this.options.itemsPerPage = parseInt(limit, 10);
-          this.loading = false;
-        });
+      this.$emit('updateAttributes', attributes);
     },
     setQuery(query) {
       if (this.modal) {
@@ -475,7 +432,6 @@ export default {
       } else {
         this.$store.commit('ticket/setQuery', query);
       }
-      this.update();
     },
     modifyStatus(ticket) {
       this.$apollo
@@ -524,7 +480,6 @@ export default {
       this.$store.commit('ticket/setDialog', id);
     },
   },
-
 };
 </script>
 <style>

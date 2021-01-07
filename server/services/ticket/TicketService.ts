@@ -14,10 +14,7 @@ import Group from '~/server/models/ticket/Group';
 import Status from '~/server/models/ticket/Status';
 import Ticket from '~/server/models/ticket/Ticket';
 
-type sortOrder = {
-  sortBy: string;
-  descending: number;
-};
+import { sortTicket } from '../../types/SortOrder';
 
 class TicketService {
   static async startBull(pubSub: PubSubEngine): Promise<void> {
@@ -60,7 +57,7 @@ class TicketService {
 
   static async getTickets(
     filter: Partial<TicketAttributes>,
-    sortInfo: sortOrder,
+    sortInfo: sortTicket,
     page: number,
     limit: number,
   ): Promise<Ticket[]> {
@@ -68,9 +65,7 @@ class TicketService {
       take: limit,
       skip: (page === 0 ? 1 : page - 1) * limit,
       where: filter,
-      order: {
-        [sortInfo.sortBy]: sortInfo.descending,
-      },
+      order: sortInfo,
     });
   }
 

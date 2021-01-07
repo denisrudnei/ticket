@@ -7,7 +7,7 @@
       />
     </v-col>
     <v-col cols="12">
-      <ticket-list :url="'/search/'" />
+      <ticket-list @updatePagination="update" />
     </v-col>
   </v-row>
 </template>
@@ -18,6 +18,7 @@ import { mapGetters } from 'vuex';
 import TicketCreate from '@/components/ticket/create';
 import TicketList from '@/components/ticket/list';
 import searchQuery from '@/graphql/query/ticket/search';
+import ticketSearch from '@/graphql/query/search/ticket';
 
 export default {
   components: {
@@ -38,6 +39,7 @@ export default {
   },
   data() {
     return {
+      newTicket: {},
       data: null,
       list: [],
       headers: [
@@ -58,6 +60,7 @@ export default {
     category: 'category/getCategories',
     openedBy: 'analyst/getAnalysts',
     ticket: 'ticket/getActualTicket',
+    pagination: 'ticket/getPagination',
   }),
   watch: {
     $route(to, from) {
@@ -71,23 +74,44 @@ export default {
     this.data = this.$router.currentRoute.query;
   },
   methods: {
+    update() {
+      this.$apollo.query({
+        query: ticketSearch,
+        variables: {
+          page: this.pagination.page,
+          limit: this.pagination.itemsPerPage,
+          attributes: this.newTicket,
+        },
+      }).then((response) => {
+        const {
+          docs, total, page, limit,
+        } = response.data.Tickets;
+        this.$store.commit('ticket/setTickets', docs);
+        this.$store.commit('ticket/setPagination', {
+          page: parseInt(page, 10),
+          itemsPerPage: parseInt(limit, 10),
+          totalItems: parseInt(total, 10),
+        });
+      });
+    },
     search(ticket) {
-      const newTicket = {};
+      this.newTicket = {};
       Object.keys(ticket).forEach((k) => {
         if (
           ticket[k] !== undefined
           && Object.prototype.hasOwnProperty.call(ticket[k], 'id')
         ) {
-          newTicket[k] = ticket[k].id;
+          this.newTicket[k] = ticket[k].id;
         }
       });
       const fieldsToExclude = ['created', 'modified', 'resume', 'content'];
       fieldsToExclude.forEach((f) => {
-        delete newTicket[f];
+        delete this.newTicket[f];
       });
       this.$router.push({
-        query: newTicket,
+        query: this.newTicket,
       });
+      this.update();
     },
   },
 };

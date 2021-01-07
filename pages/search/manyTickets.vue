@@ -59,13 +59,17 @@
       </v-btn>
     </v-col>
     <v-col>
-      <ticket-list :url="'/search/'" />
+      <ticket-list
+        @updatePagination="search"
+      />
     </v-col>
   </v-row>
 </template>
 
 <script>
 import TicketList from '@/components/ticket/list';
+import { SearchByIds } from '@/graphql/query/search/SearchByIds';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -77,6 +81,10 @@ export default {
       ticketsNumbers: [],
     };
   },
+  computed: mapGetters({
+    query: 'ticket/getQuery',
+    pagination: 'ticket/getPagination',
+  }),
   methods: {
     update(evt) {
       this.ticketsText = this.ticketsText.replace(/[^\d|,| |\n]/g, '');
@@ -93,10 +101,36 @@ export default {
       }
     },
     search() {
-      const query = {
-        id: this.ticketsNumbers.map((n) => parseInt(n, 10)),
-      };
-      this.$store.commit('ticket/setQuery', query);
+      const {
+        page, itemsPerPage, sortBy, descending,
+      } = this.pagination;
+      this.$apollo.query({
+        query: SearchByIds,
+        variables: {
+          ids: this.ticketsNumbers.map((n) => parseInt(n, 10)),
+          page,
+          limit: itemsPerPage,
+          descending,
+          sortBy,
+        },
+      }).then((response) => {
+        const { data } = response;
+        const {
+          page, pages, limit, total, docs,
+        } = data.SearchByIds;
+        this.$store.commit('ticket/setQuery', {
+          ...this.query,
+          page,
+          pages,
+          limit,
+          total,
+        });
+        this.$store.commit('ticket/setTickets', docs);
+        this.$store.commit('ticket/setPagination', {
+          page: parseInt(page, 10),
+          totalItems: parseInt(total, 10),
+        });
+      });
     },
     removeNumber(value) {
       this.ticketsNumbers = this.ticketsNumbers.filter((number) => number !== value);

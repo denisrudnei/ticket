@@ -15,6 +15,19 @@ export const state = () => ({
   modalList: false,
   actualTicket: {},
   ticketsToEdit: [],
+  attributes: {},
+  loading: false,
+  pagination: {
+    groupBy: [],
+    groupDesc: [],
+    multiSort: false,
+    mustSort: true,
+    sortBy: ['id'],
+    sortDesc: ['id'],
+    totalItems: 0,
+    page: 1,
+    itemsPerPage: 10,
+  },
 });
 
 export const getters = {
@@ -68,6 +81,15 @@ export const getters = {
       created: undefined,
       modified: undefined,
     };
+  },
+  getLoading(state) {
+    return state.loading;
+  },
+  getPagination(state) {
+    return state.pagination;
+  },
+  getAttributes(state) {
+    return state.attributes;
   },
 };
 
@@ -180,6 +202,18 @@ export const mutations = {
   },
   removeChildren(state, children) {
     state.actualTicket.children = state.actualTicket.children.filter((c) => c.id !== children.id);
+  },
+  setLoading(state, loading) {
+    state.loading = loading;
+  },
+  setPagination(state, pagination) {
+    state.pagination = { ...state.pagination, ...pagination };
+  },
+  setPage(state, page) {
+    state.pagination.page = parseInt(page, 10);
+  },
+  setAttributes(state, attributes) {
+    state.attributes = attributes;
   },
 };
 

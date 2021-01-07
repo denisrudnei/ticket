@@ -357,6 +357,10 @@ export default {
     }
   },
   created() {
+    if (this.$auth.loggedIn) {
+      this.$store.commit('user/setUser', this.$auth.user);
+    }
+
     this.$store.commit('hotkeys/setHotkeys', [
       'hotkey.profile',
       'ALT + B | Base de conhecimento',

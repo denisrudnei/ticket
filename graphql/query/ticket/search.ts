@@ -2,10 +2,13 @@ import ggl from 'graphql-tag';
 
 const query = ggl`
 query {
-  id
   status: Status {
     id
     name
+    allowedStatus {
+      id
+      name
+    }
   }
   group: Group {
     id

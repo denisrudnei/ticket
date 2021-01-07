@@ -6,6 +6,7 @@ import TicketAttributes from '../inputs/TicketAttributes';
 import TicketPagination from '../models/TicketPagination';
 import SearchService from '../services/ticket/SearchService';
 import Ticket from '../models/ticket/Ticket';
+import { transformToSort } from '../utils/sortUtils';
 
 @Resolver()
 class SearchResolver {
@@ -18,18 +19,15 @@ class SearchResolver {
       attributes: TicketAttributes,
     @Arg('descending', () => Int, { nullable: true, defaultValue: -1 })
       descending: number,
-    @Arg('sortBy', {
+    @Arg('sortBy', () => [String], {
       nullable: true,
-      defaultValue: 'id',
+      defaultValue: ['id'],
     })
-      sortBy: string,
+      sortBy: [string],
   ): Promise<TicketPagination> {
     return SearchService.getTickets(
       attributes,
-      {
-        sortBy,
-        descending,
-      },
+      transformToSort(sortBy, descending),
       page,
       limit,
     );
@@ -43,18 +41,15 @@ class SearchResolver {
     @Arg('ids', () => [ID], { nullable: true }) attributes: Ticket['id'][],
     @Arg('descending', () => Int, { nullable: true, defaultValue: -1 })
       descending: number,
-    @Arg('sortBy', {
+    @Arg('sortBy', () => [String], {
       nullable: true,
       defaultValue: 'id',
     })
-      sortBy: string,
+      sortBy: string[],
   ): Promise<TicketPagination> {
     return SearchService.getTicketsByIds(
       attributes,
-      {
-        sortBy,
-        descending,
-      },
+      transformToSort(sortBy, descending),
       page,
       limit,
     );
