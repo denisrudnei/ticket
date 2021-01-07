@@ -8,6 +8,7 @@ import Analyst from '../../server/models/Analyst';
 import Category from '../../server/models/ticket/Category';
 import Address from '~/server/models/Address';
 import Priority from '~/server/models/ticket/Priority';
+import { transformToSort } from '~/server/utils/sortUtils';
 
 let idWithFile = 0;
 
@@ -43,10 +44,10 @@ describe('Ticket', () => {
 
   it('Get All tickets', async () => {
     const sort = {
-      sortBy: 'category',
+      sortBy: ['category'],
       descending: -1,
     };
-    await TicketService.getTickets({}, sort, 1, 10);
+    await TicketService.getTickets({}, transformToSort(sort.sortBy, sort.descending), 1, 10);
   });
 
   it('Get one ticket by id', async () => {
