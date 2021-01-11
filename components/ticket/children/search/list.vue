@@ -7,6 +7,8 @@
         :headers="headers"
         show-select
         item-key="id"
+        :options.sync="pagination"
+        :server-items-length="pagination.totalItems"
       >
         <template #item.id="{ item }">
           {{ item.id }}
@@ -75,6 +77,15 @@ export default {
     };
   },
   computed: {
+    pagination: {
+      get() {
+        return this.$store.getters['ticket/getPagination'];
+      },
+      set(value) {
+        this.$store.commit('ticket/setPagination', value);
+        this.$emit('updatePagination');
+      },
+    },
     headers() {
       return [
         {

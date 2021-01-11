@@ -50,13 +50,14 @@
                     <create
                       name="TicketCreate"
                       search
-                      @input="search"
+                      @input="setTicketToSearch"
                     />
                   </v-stepper-content>
                   <v-stepper-content step="2">
                     <list
                       v-model="tickets"
                       @input="addChildren"
+                      @updatePagination="search"
                     />
                   </v-stepper-content>
                 </v-stepper>
@@ -130,6 +131,7 @@ export default {
       dialog: false,
       step: 1,
       tickets: [],
+      ticket: {},
     };
   },
   computed: {
@@ -179,20 +181,25 @@ export default {
     },
     ...mapGetters({
       actualTicket: 'ticket/getActualTicket',
+      pagination: 'ticket/getPagination',
     }),
   },
   created() {
     this.$options.components.create = create;
   },
   methods: {
-    search(ticket) {
+    setTicketToSearch(ticket) {
+      this.ticket = ticket;
+      this.search();
+    },
+    search() {
       const newTicket = {};
-      Object.keys(ticket).forEach((k) => {
+      Object.keys(this.ticket).forEach((k) => {
         if (
-          ticket[k] !== undefined
-          && Object.prototype.hasOwnProperty.call(ticket[k], 'id')
+          this.ticket[k] !== undefined
+          && Object.prototype.hasOwnProperty.call(this.ticket[k], 'id')
         ) {
-          newTicket[k] = ticket[k].id;
+          newTicket[k] = this.ticket[k].id;
         }
       });
       const fieldsToExclude = ['CreateTicketd', 'modified', 'resume', 'content'];
@@ -204,11 +211,25 @@ export default {
           query: search,
           variables: {
             attributes: newTicket,
+            page: this.pagination.page,
+            limit: this.pagination.itemsPerPage,
+            orderBy: this.pagination.orderBy,
+            descending: this.pagination.descending,
           },
         })
         .then((response) => {
-          this.tickets = response.data.Tickets.docs;
+          const {
+            docs, limit, page, total,
+          } = response.data.Tickets;
+          this.tickets = docs;
           this.step = 2;
+          this.$store.commit('ticket/setPagination', {
+            orderBy: this.pagination.orderBy,
+            descending: this.pagination.descending,
+            page,
+            itemsPerPage: limit,
+            totalItems: total,
+          });
         });
     },
     addChildren(children) {

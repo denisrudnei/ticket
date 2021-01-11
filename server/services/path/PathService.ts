@@ -89,7 +89,7 @@ class PathService {
       .filter((value) => value !== 'undefined')
       .map((k) => new PathTree(
         `(${base[k].length}) ${k}`,
-        `/search?${path!.objectName}=${getId(base[k], path!.objectName)}`,
+        `/search/by-type/${path!.objectName}/${getId(base[k], path!.objectName)}`,
         [],
       ));
     return new PathTree(path!.name, '', children);

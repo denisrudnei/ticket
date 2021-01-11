@@ -17,6 +17,7 @@
           <span v-if="item.children.length > 0">{{ item.name }}</span>
           <nuxt-link
             v-if="item.children.length === 0"
+            exact
             :to="item.url"
           >
             {{ item.name }}
