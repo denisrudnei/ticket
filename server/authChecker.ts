@@ -4,25 +4,24 @@ import { AuthChecker } from 'type-graphql';
 import { CustomExpressContext } from '~/server/types/UserSession';
 
 import Analyst from './models/Analyst';
+import Role from './models/Role';
 
 export const customAuthChecker: AuthChecker<CustomExpressContext> = ({
   root,
   args,
   context,
   info,
-}) => {
+}, roles) => {
   const { req } = context;
   const { session } = req;
   if (!req.headers.authorization && !session!.authUser) return false;
-  if (session && session.authUser) return true;
-  const items = req.headers.authorization!.split(' ');
-  const token = items[items.length - 1];
+  if (session && session.authUser) {
+    const user = req.session.authUser!;
+    if (user.role.name === 'admin') return true;
+    return roles.includes(user.role.name);
+  }
 
-  const data = jwt.decode(token) as Analyst;
-
-  req.session!.authUser = data;
-
-  return true;
+  return false;
 };
 
 export default customAuthChecker;
