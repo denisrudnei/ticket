@@ -18,7 +18,12 @@ class AppController {
   }
 
   middlewares() {
-    this.express.use(cors());
+    this.express.use(cors({
+      credentials: true,
+      origin: (_, callback) => {
+        callback(null, true);
+      },
+    }));
     this.express.use(bodyParser.json());
     this.express.use(compression());
     this.express.use(
@@ -26,6 +31,12 @@ class AppController {
         secret: process.env.SESSION_KEY as string,
         resave: false,
         saveUninitialized: false,
+        proxy: true,
+        cookie:
+          process.env.NODE_ENV === 'production' ? {
+            sameSite: 'none',
+            secure: true,
+          } : undefined,
       }),
     );
 

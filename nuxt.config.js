@@ -77,7 +77,9 @@ module.exports = {
 
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: process.env.API,
+    prefix: process.env.API,
+    proxy: true,
+    credentials: true,
   },
 
   vuetify: {
@@ -159,10 +161,11 @@ module.exports = {
       default: {
         httpEndpoint: process.env.GRAPHQL || 'http://localhost:3000/graphql',
         wsEndpoint: process.env.SUBSCRIPTIONS || 'ws://localhost:3000/subscriptions',
+        httpLinkOptions: {
+          credentials: 'include',
+        },
       },
     },
-    tokenName: 'auth._token.local',
-    authenticationType: 'Bearer',
   },
 
   /*

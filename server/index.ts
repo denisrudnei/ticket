@@ -18,6 +18,7 @@ async function start() {
   await createConnection;
   const server = new ApolloServer({
     introspection: true,
+    tracing: true,
     schema: await buildSchema({
       resolvers: [path.resolve(__dirname, 'resolvers/**/*')],
       authChecker: customAuthChecker,
@@ -42,7 +43,7 @@ async function start() {
 
   const httpServer = http.createServer(app);
   server.installSubscriptionHandlers(httpServer);
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: false });
 
   const { PORT, HOST } = process.env;
 
