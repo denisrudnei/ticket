@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import jwt from 'jsonwebtoken';
 import { AuthChecker } from 'type-graphql';
 import { CustomExpressContext } from '~/server/types/UserSession';
-
-import Analyst from './models/Analyst';
-import Role from './models/Role';
 
 export const customAuthChecker: AuthChecker<CustomExpressContext> = ({
   root,
