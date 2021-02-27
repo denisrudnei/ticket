@@ -21,9 +21,8 @@ export default {
   },
 
   getUser: (req: express.Request, res: express.Response) => {
-    if (req.headers.authorization) {
-      const token = req.headers.authorization.replace('Bearer ', '');
-      const user = (jsonwebtoken.decode(token) as Analyst);
+    if (req.session.authUser) {
+      const user = req.session.authUser;
       res.json({
         user,
       });
