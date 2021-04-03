@@ -4,95 +4,101 @@
       cols="12"
       pa-3
     >
-      <v-menu
-        v-if="readOnlyData"
-        v-model="action.active"
-        offset-y
-        :close-on-content-click="false"
-        :nudge-width="500"
-        max-height="45vw"
-      >
-        <template #activator="{ on }">
-          <v-btn
-            tile
-            class="primary white--text"
-            v-on="on"
+      <v-row>
+        <v-col cols="12">
+          <v-menu
+            v-if="readOnlyData"
+            v-model="action.active"
+            offset-y
+            :close-on-content-click="false"
+            :nudge-width="500"
+            max-height="45vw"
+            class="ma-2"
           >
-            {{ $t('actions') }}
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-text>
-            <v-tabs icons-and-text>
-              <v-tab>
-                {{ $t('add_comment') }}
-                <v-icon>
-                  chat
-                </v-icon>
-              </v-tab>
-              <v-tab-item>
-                <v-textarea
-                  v-model="comment"
-                  filled
-                  :label="$t('comment')"
-                />
-                <v-btn
-                  icon
-                  class="primary white--text"
-                  @click="addComment()"
-                >
-                  <v-icon>
-                    send
-                  </v-icon>
-                </v-btn>
-              </v-tab-item>
-              <v-tab>
-                {{ $t('add_file') }}
-                <v-icon>
-                  attach_file
-                </v-icon>
-              </v-tab>
-              <v-tab-item>
-                <file-include :ticket-data="ticket" />
-              </v-tab-item>
-              <v-tab>
-                {{ $t('transfer') }}
-                <v-icon>
-                  send
-                </v-icon>
-              </v-tab>
-              <v-tab-item>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    pa-3
-                  >
-                    <v-autocomplete
+            <template #activator="{ on }">
+              <v-btn
+                tile
+                class="primary white--text"
+                v-on="on"
+              >
+                {{ $t('actions') }}
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-text>
+                <v-tabs icons-and-text>
+                  <v-tab>
+                    {{ $t('add_comment') }}
+                    <v-icon>
+                      chat
+                    </v-icon>
+                  </v-tab>
+                  <v-tab-item>
+                    <v-textarea
+                      v-model="comment"
                       filled
-                      :items="groups.map((g) => ({ text: g.name, value: g }))"
-                      :label="$t('group')"
+                      :label="$t('comment')"
                     />
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    pa-3
-                  >
                     <v-btn
-                      class="primary white--text"
                       icon
+                      class="primary white--text"
+                      @click="addComment()"
                     >
                       <v-icon>
                         send
                       </v-icon>
                     </v-btn>
-                  </v-col>
-                </v-row>
-              </v-tab-item>
-              <v-tab-item />
-            </v-tabs>
-          </v-card-text>
-        </v-card>
-      </v-menu>
+                  </v-tab-item>
+                  <v-tab>
+                    {{ $t('add_file') }}
+                    <v-icon>
+                      attach_file
+                    </v-icon>
+                  </v-tab>
+                  <v-tab-item>
+                    <file-include :ticket-data="ticket" />
+                  </v-tab-item>
+                  <v-tab>
+                    {{ $t('transfer') }}
+                    <v-icon>
+                      send
+                    </v-icon>
+                  </v-tab>
+                  <v-tab-item>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        pa-3
+                      >
+                        <v-autocomplete
+                          filled
+                          :items="groups.map((g) => ({ text: g.name, value: g }))"
+                          :label="$t('group')"
+                        />
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        pa-3
+                      >
+                        <v-btn
+                          class="primary white--text"
+                          icon
+                        >
+                          <v-icon>
+                            send
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-tab-item>
+                  <v-tab-item />
+                </v-tabs>
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </v-col>
+      </v-row>
+
       <v-form
         ref="form"
         lazy-validation

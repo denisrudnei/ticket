@@ -60,18 +60,9 @@
           @ready="configureEditor"
         />
       </client-only>
-      <input
-        ref="file"
-        type="file"
-        style="display: none;"
-      >
-      <v-btn
-        class="primary white--text"
-        @click="addFile()"
-      >
-        <v-icon>attach_file</v-icon>
-        {{ $t('add_file') }}
-      </v-btn>
+    </v-col>
+    <v-col cols="12">
+      <v-file-input filled />
       <v-btn
         tile
         :disabled="disabled"
@@ -148,9 +139,7 @@ export default {
     save() {
       this.$emit('change', this.knowledge);
     },
-    addFile() {
-      this.$refs.file.click();
-    },
+
     configureEditor(editor) {
       editor.plugins.get('FileRepository').createUploadAdapter = (loader) => new ImageUploadAdapter(loader, this.$axios);
     },

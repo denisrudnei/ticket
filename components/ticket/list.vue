@@ -83,7 +83,7 @@
               <v-row>
                 <v-col
                   cols="12"
-                  pa-4
+                  class="mt-2"
                 >
                   <v-select
                     v-if="status.find((s) => {
@@ -114,7 +114,7 @@
               <v-row>
                 <v-col
                   cols="12"
-                  pa-1
+                  class="mt-2"
                 >
                   <v-select
                     v-model="currentGroup"
