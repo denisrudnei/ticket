@@ -28,6 +28,9 @@ test:
     - echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
     - apt-get update -q -y
     - apt-get install -y google-chrome-stable
+    
+    - useradd test
+    - su test
 
     - npm install
     - npm run test
@@ -51,6 +54,9 @@ coverage:
     - echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
     - apt-get update -q -y
     - apt-get install -y google-chrome-stable
+    
+    - useradd test
+    - su test
 
     - npm install
     - npm run test
