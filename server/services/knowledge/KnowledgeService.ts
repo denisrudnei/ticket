@@ -1,11 +1,12 @@
 import AWS from 'aws-sdk';
 import fileUpload from 'express-fileupload';
-import pdf from 'html-pdf';
+import { launch } from 'puppeteer';
 import Group from '../../models/ticket/Group';
 import Knowledge from '~/server/models/knowledge/Knowledge';
 import KnowledgeFile from '~/server/models/knowledge/KnowledgeFile';
 import S3 from '~/plugins/S3';
 import '~/server/models/knowledge/KnowledgeStatus';
+import { PuppeteerRenderer } from '../../utils/PupperteerRenderer';
 
 class KnowledgeService {
   static async getAll(): Promise<Knowledge[]> {
@@ -181,15 +182,9 @@ class KnowledgeService {
 
   static async generatePDF(knowledgeId: Knowledge['id']): Promise<Buffer> {
     const knowledge = await KnowledgeService.getOne(knowledgeId);
-    const pdfCreated = pdf.create(knowledge.description, {
-      format: 'A4',
-    });
-    return new Promise((resolve, reject) => {
-      pdfCreated.toBuffer((err: Error, result: Buffer) => {
-        if (err) reject(err);
-        resolve(result);
-      });
-    });
+    const browser = await launch();
+    const page = browser.newPage();
+    return new PuppeteerRenderer().renderFromHtml(knowledge.description);
   }
 }
 
