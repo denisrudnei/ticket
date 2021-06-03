@@ -24,7 +24,7 @@
           >
             <v-text-field
               v-model="category.name"
-              :placeholder="this.$t('name')"
+              :placeholder="$t('name')"
               filled
             />
           </v-col>
@@ -101,7 +101,7 @@
           >
             <v-file-input
               v-model="category.image"
-              placeholder="Arquivo"
+              :placeholder="$('file')"
               @change="updatePreview"
             />
           </v-col>
