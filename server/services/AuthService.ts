@@ -60,7 +60,6 @@ class AuthService {
     }
 
     Object.assign(analyst, userBody);
-
     return analyst.save();
   }
 

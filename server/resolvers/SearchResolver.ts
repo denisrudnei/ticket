@@ -43,7 +43,7 @@ class SearchResolver {
       descending: number,
     @Arg('sortBy', () => [String], {
       nullable: true,
-      defaultValue: 'id',
+      defaultValue: ['id'],
     })
       sortBy: string[],
   ): Promise<TicketPagination> {

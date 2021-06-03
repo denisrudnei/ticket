@@ -81,7 +81,7 @@ class Analyst extends BaseEntity {
   @Field()
   public picture: string = '/user.svg';
 
-  @Column()
+  @Column({ default: '#673ab7' })
   @Field()
   public color: string = '#673ab7';
 
