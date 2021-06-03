@@ -11,31 +11,31 @@ import Ticket from '../models/ticket/Ticket';
 @InputType()
 class TicketAttributes {
   @Field(() => ID, { nullable: true })
-  actualUser!: Analyst['id'];
+  actualUser?: Analyst['id'];
 
   @Field(() => ID, { nullable: true })
-  openedBy!: Analyst['id'];
+  openedBy?: Analyst['id'];
 
   @Field(() => ID, { nullable: true })
-  affectedUser!: Analyst['id'];
+  affectedUser?: Analyst['id'];
 
   @Field(() => ID, { nullable: true })
-  address!: Address['id'];
+  address?: Address['id'];
 
   @Field(() => ID, { nullable: true })
-  category!: Category['id'];
+  category?: Category['id'];
 
   @Field(() => ID, { nullable: true })
-  status!: Status['id'];
+  status?: Status['id'];
 
   @Field(() => ID, { nullable: true })
-  group!: Group['id'];
+  group?: Group['id'];
 
   @Field(() => ID, { nullable: true })
-  priority!: Priority['id'];
+  priority?: Priority['id'];
 
   @Field(() => ID, { nullable: true })
-  id!: Ticket['id'][];
+  id?: Ticket['id'][];
 }
 
 export default TicketAttributes;

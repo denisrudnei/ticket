@@ -2,6 +2,7 @@
 import {
   Arg, Authorized, Int, Query, Resolver, ID,
 } from 'type-graphql';
+import { forEach } from 'lodash';
 import TicketAttributes from '../inputs/TicketAttributes';
 import TicketPagination from '../models/TicketPagination';
 import SearchService from '../services/ticket/SearchService';
@@ -12,18 +13,18 @@ import { transformToSort } from '../utils/sortUtils';
 class SearchResolver {
   @Query(() => TicketPagination)
   @Authorized('user')
-  SearchTicket(
-    @Arg('page', () => Int, { nullable: true, defaultValue: 1 }) page: number,
-    @Arg('limit', () => Int, { nullable: true, defaultValue: 10 }) limit: number,
+  public async SearchTicket(
+    @Arg('page', () => Int, { nullable: true, defaultValue: 1 }) page: number = 1,
+    @Arg('limit', () => Int, { nullable: true, defaultValue: 10 }) limit: number = 10,
     @Arg('attributes', () => TicketAttributes, { nullable: true, defaultValue: {} })
-      attributes: TicketAttributes,
+    attributes: TicketAttributes = {},
     @Arg('descending', () => Int, { nullable: true, defaultValue: -1 })
-      descending: number,
+    descending: number = -1,
     @Arg('sortBy', () => [String], {
       nullable: true,
       defaultValue: ['id'],
     })
-      sortBy: [string],
+    sortBy: string[] = ['id'],
   ): Promise<TicketPagination> {
     return SearchService.getTickets(
       attributes,

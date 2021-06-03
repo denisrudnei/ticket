@@ -6,11 +6,16 @@ import { sortTicket } from '../../types/SortOrder';
 
 class SearchService {
   static async getTickets(
-    query: Partial<TicketAttributes> = {},
+    query: TicketAttributes = {},
     sort: sortTicket,
     page = 1,
     limit = 10,
   ): Promise<TicketPagination> {
+    Object.keys(query).forEach((item) => {
+      if (!query[item as keyof TicketAttributes]) {
+        delete query[item as keyof TicketAttributes];
+      }
+    });
     const total = await Ticket.count({ where: query });
     const pages = Math.ceil(total / limit);
     const result = await Ticket.find({
