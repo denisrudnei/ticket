@@ -53,7 +53,7 @@ export class PuppeteerRenderer {
   private static async getBrowserAndPage() {
     const browser = await launch({
       headless: true,
-      args: ['--no-sandbox'],
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 
