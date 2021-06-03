@@ -5,18 +5,21 @@
         v-if="data"
         :items="data.tree"
         open-on-click
-        item-key="id"
+
+        item-key="name"
         activatable
+        transition
       >
         <template #prepend="{ item }">
-          <v-icon v-if="item.children.length === 0">
+          <v-icon v-if="item.url">
             layers
           </v-icon>
         </template>
         <template #label="{ item }">
-          <span v-if="item.children.length > 0">{{ item.name }}</span>
+          <span v-show="false">{{ item.url }}</span>
+          <span v-if="!item.url">{{ item.name }}</span>
           <nuxt-link
-            v-if="item.children.length === 0"
+            v-if="item.url"
             exact
             :to="item.url"
           >
@@ -41,7 +44,6 @@ export default {
     user() {
       return this.$auth.user;
     },
-
   },
   apollo: {
     $subscribe: {
