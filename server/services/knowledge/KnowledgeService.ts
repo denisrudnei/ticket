@@ -6,7 +6,7 @@ import Knowledge from '~/server/models/knowledge/Knowledge';
 import KnowledgeFile from '~/server/models/knowledge/KnowledgeFile';
 import S3 from '~/plugins/S3';
 import '~/server/models/knowledge/KnowledgeStatus';
-import { PuppeteerRenderer } from '../../utils/PupperteerRenderer';
+import { PuppeteerRenderer } from '../../utils/PuppeteerRenderer';
 
 class KnowledgeService {
   static async getAll(): Promise<Knowledge[]> {

@@ -8,9 +8,6 @@ export interface PuppeteerOptions {
 }
 
 export class PuppeteerRenderer {
-  private options: PuppeteerOptions = {}
-;
-
   public defaultOptions: PuppeteerOptions = {
     pdf: {
       format: 'a4',
@@ -18,11 +15,11 @@ export class PuppeteerRenderer {
   };
 
   public async renderFromHtml(html: string) {
-    const { browser, page } = await this.getBrowserAndPage();
+    const { browser, page } = await PuppeteerRenderer.getBrowserAndPage();
 
     await page.setContent(html, {});
 
-    const pdfOptions: PDFOptions = this.options?.pdf ?? {};
+    const pdfOptions: PDFOptions = {};
     const buffer = await page.pdf({
       ...this.defaultOptions,
       ...pdfOptions,
@@ -40,11 +37,11 @@ export class PuppeteerRenderer {
    *  the PDF won't be saved to the disk.
    */
   public async renderFromHtmlToFile(html: string, path: string) {
-    const { browser, page } = await this.getBrowserAndPage();
+    const { browser, page } = await PuppeteerRenderer.getBrowserAndPage();
 
     await page.setContent(html, {});
 
-    const pdfOptions: PDFOptions = this.options?.pdf ?? {};
+    const pdfOptions: PDFOptions = {};
     await page.pdf({
       ...this.defaultOptions,
       ...pdfOptions,
@@ -53,8 +50,10 @@ export class PuppeteerRenderer {
     await browser.close();
   }
 
-  private async getBrowserAndPage() {
-    const browser = await launch(this.options?.launch ?? {});
+  private static async getBrowserAndPage() {
+    const browser = await launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
     const page = await browser.newPage();
 
     return { browser, page };
