@@ -23,6 +23,7 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
+        <v-card-title />
         <v-card-text>
           <v-row>
             <v-col
