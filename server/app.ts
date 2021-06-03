@@ -12,7 +12,7 @@ import connectRedis from 'connect-redis';
 import routes from '~/server/routes/index';
 
 const RedisStore = connectRedis(session);
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({ url: process.env.REDIS_URL });
 
 class AppController {
   express: express.Application;
