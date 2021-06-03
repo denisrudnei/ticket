@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col>
+    <v-col cols="12">
       <v-tabs show-arrows>
         <v-tab to="/search/ticket">
           Tickets
@@ -18,6 +18,8 @@
           {{ $t('groups') }}
         </v-tab>
       </v-tabs>
+    </v-col>
+    <v-col cols="12">
       <nuxt-child />
     </v-col>
   </v-row>
