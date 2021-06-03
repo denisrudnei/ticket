@@ -6,7 +6,13 @@ import compression from 'compression';
 import acl from 'express-acl';
 import fileUploader from 'express-fileupload';
 import cors from 'cors';
+
+import redis from 'redis';
+import connectRedis from 'connect-redis';
 import routes from '~/server/routes/index';
+
+const RedisStore = connectRedis(session);
+const redisClient = redis.createClient();
 
 class AppController {
   express: express.Application;
@@ -32,6 +38,7 @@ class AppController {
         resave: false,
         saveUninitialized: false,
         proxy: true,
+        store: new RedisStore({ client: redisClient }),
         cookie:
           process.env.NODE_ENV === 'production' ? {
             sameSite: 'none',
