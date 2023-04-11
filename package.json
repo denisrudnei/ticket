@@ -95,7 +95,7 @@
     "snyk": "^1.540.0",
     "tsconfig-paths": "^3.9.0",
     "type-graphql": "^1.1.1",
-    "typeorm": "^0.2.32",
+    "typeorm": "^0.3.14",
     "v-hotkey": "^0.9.0",
     "vue-apexcharts": "^1.6.1",
     "vue-apollo": "^3.0.7",
