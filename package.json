@@ -92,7 +92,7 @@
     "puppeteer": "^10.0.0",
     "redis": "^3.1.2",
     "reflect-metadata": "^0.1.13",
-    "snyk": "^1.540.0",
+    "snyk": "^1.675.0",
     "tsconfig-paths": "^3.9.0",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.32",
